@@ -3,9 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Salmar — The Purple AI that gets work done in seconds</title>
-  <meta name="description" content="Salmar is your personal AI copilot for writing, analysis, code, planning, translation, data, and more — fast, transparent, and privacy-first." />
+  <title>Salmar — Purple AI that writes your emails in seconds</title>
+  <meta name="description" content="Salmar is your personal AI that writes, summarizes, and responds in your tone — in seconds. Save hours each week with outcome-driven AI." />
   <meta name="color-scheme" content="dark light" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
@@ -17,7 +18,7 @@
         extend: {
           fontFamily: {
             sans: ['Inter','system-ui','-apple-system','Segoe UI','Roboto','Ubuntu','Cantarell','Noto Sans','Helvetica Neue','Arial','sans-serif'],
-            display: ['Plus Jakarta Sans','Inter','system-ui','sans-serif']
+            display: ['Plus Jakarta Sans','Inter', 'system-ui', 'sans-serif']
           },
           colors: {
             grape: {
@@ -51,6 +52,9 @@
             neoLight: '12px 12px 24px rgba(0,0,0,0.08), -10px -10px 20px rgba(255,255,255,0.7), inset 1px 1px 0 rgba(255,255,255,0.2)',
             neoDark: '12px 12px 30px rgba(0,0,0,0.45), -4px -4px 12px rgba(255,255,255,0.06), inset 1px 1px 0 rgba(255,255,255,0.05)',
             glow: '0 10px 40px rgba(155,75,255,0.5)'
+          },
+          backdropBlur: {
+            xs: '2px'
           },
           keyframes: {
             float: { '0%,100%':{ transform:'translateY(0)'}, '50%':{ transform:'translateY(-8px)'} },
@@ -92,7 +96,10 @@
       --accent-2: #b86bff;
       --shadow-neo: 18px 18px 36px rgba(33, 8, 57, 0.15), -14px -14px 28px rgba(255,255,255,0.9), inset 1px 1px 0 rgba(255,255,255,0.4);
     }
-    html, body { background: var(--bg); color: var(--text); }
+    html, body {
+      background: var(--bg);
+      color: var(--text);
+    }
     .glass {
       background: var(--card);
       backdrop-filter: saturate(140%) blur(12px);
@@ -105,31 +112,74 @@
       border: 1px solid var(--border);
       box-shadow: var(--shadow-neo);
     }
-    .btn { position: relative; isolation: isolate; }
+    .btn {
+      position: relative;
+      isolation: isolate;
+    }
     .btn::after {
-      content: ""; position: absolute; inset: 0; border-radius: inherit;
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
       background: radial-gradient(120px 60px at var(--x,50%) var(--y,50%), rgba(255,255,255,0.25), transparent 50%);
-      opacity: 0; transition: opacity .25s ease; pointer-events: none; mix-blend-mode: overlay; z-index: -1;
+      opacity: 0;
+      transition: opacity .25s ease;
+      pointer-events: none;
+      mix-blend-mode: overlay;
+      z-index: -1;
     }
     .btn:hover::after { opacity: .9; }
     .gradient-text {
       background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      -webkit-background-clip: text; background-clip: text; color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
     .ring-soft { box-shadow: 0 0 0 6px rgba(155,75,255,0.15); }
     .focus-soft:focus-visible { outline: none; box-shadow: 0 0 0 6px rgba(155,75,255,0.25); }
     .contrast-card { background: linear-gradient(180deg, rgba(155,75,255,0.08), rgba(155,75,255,0.03)); }
-    .noisy { pointer-events: none; position: fixed; inset: 0; mix-blend-mode: soft-light; opacity: .06; z-index: 0; }
-    .skip-link { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .noisy {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      mix-blend-mode: soft-light;
+      opacity: .06;
+      z-index: 0;
+    }
+    .skip-link {
+      position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+    }
     .skip-link:focus { left: 1rem; top: 1rem; width: auto; height: auto; z-index: 50; }
-    .range { appearance: none; width: 100%; height: 0.5rem; border-radius: 9999px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); outline: none; }
-    .range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 9999px; background: white; border: 4px solid var(--accent); box-shadow: 0 6px 18px rgba(0,0,0,.25); cursor: pointer; }
-    .range::-moz-range-thumb { width: 24px; height: 24px; border-radius: 9999px; background: white; border: 4px solid var(--accent); box-shadow: 0 6px 18px rgba(0,0,0,.25); cursor: pointer; }
+    .range {
+      appearance: none;
+      width: 100%;
+      height: 0.5rem;
+      border-radius: 9999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      outline: none;
+    }
+    .range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 24px; height: 24px;
+      border-radius: 9999px;
+      background: white;
+      border: 4px solid var(--accent);
+      box-shadow: 0 6px 18px rgba(0,0,0,.25);
+      cursor: pointer;
+    }
+    .range::-moz-range-thumb {
+      width: 24px; height: 24px;
+      border-radius: 9999px;
+      background: white;
+      border: 4px solid var(--accent);
+      box-shadow: 0 6px 18px rgba(0,0,0,.25);
+      cursor: pointer;
+    }
     @media (prefers-reduced-motion: reduce) {
       .animate-float, .animate-pulse, .animate-pulseGlow, .animate-shimmer { animation: none !important; }
       .transition, .duration-200, .duration-300, .duration-500, .duration-700 { transition: none !important; }
     }
-    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
   </style>
 </head>
 <body class="min-h-screen antialiased relative">
@@ -139,7 +189,7 @@
   <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10">
     <div class="absolute inset-0 bg-gradient-to-b from-grape-950/60 via-ink-900/50 to-ink-900"></div>
     <div class="absolute -top-32 -left-20 w-96 h-96 rounded-full blur-3xl opacity-60" style="background: radial-gradient(closest-side, rgba(155,75,255,.45), transparent 80%);"></div>
-    <div class="absolute top-28 -right-16 w-80 h-80 rounded-full blur-3xl opacity-50" style="background: radial-gradient(closest-side, rgba(184,107,255,.35), transparent 80%);"></div>
+    <div class="absolute top-32 -right-20 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-50" style="background: radial-gradient(closest-side, rgba(184,107,255,.35), transparent 80%);"></div>
     <canvas id="noise" class="noisy"></canvas>
   </div>
 
@@ -158,10 +208,10 @@
       <div class="hidden md:flex items-center gap-8">
         <a href="#features" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Features</a>
         <a href="#use-cases" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Use Cases</a>
-        <a href="#demo" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Playground</a>
-        <a href="#security" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Trust</a>
+        <a href="#security" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Security</a>
         <a href="#compare" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Compare</a>
         <a href="#pricing" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Pricing</a>
+        <a href="#demo" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Playground</a>
       </div>
       <div class="flex items-center gap-3">
         <button id="themeToggle" class="btn glass rounded-xl px-3 py-2 text-sm font-medium flex items-center gap-2" aria-pressed="false" aria-label="Toggle dark mode">
@@ -181,16 +231,16 @@
     <section id="hero" class="pt-16 sm:pt-20 lg:pt-28 pb-12">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10 items-center">
         <div>
-          <div class="inline-flex items-center gap-2 glass rounded-full px-3 py-1 text-xs text-ink-200 mb-4">
+          <div class="inline-flex items-center gap-2 glass rounded-full px-3 py-1 text-xs text-ink-200 mb-4" aria-label="Trusted by indicator">
             <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
             Trusted by 12,000+ professionals
           </div>
           <h1 id="dynamicHeadline" class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
-            AI that gets work done in seconds.
-            <span class="block gradient-text">Write. Analyze. Code. Translate. Plan.</span>
+            AI that writes your emails in seconds.
+            <span class="block gradient-text">Your personal AI assistant.</span>
           </h1>
           <p id="supportingStatement" class="mt-4 text-ink-200 text-lg leading-relaxed">
-            Save hours by letting Salmar draft, summarize, translate, debug, analyze data, and more — all in your style with privacy by default.
+            Save hours by letting AI summarize, write, and respond in your tone. Outcome-first, jargon-free, and built to help you move faster.
           </p>
           <div class="mt-6 flex flex-wrap items-center gap-3">
             <a href="#signup" class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Sign Up Free</a>
@@ -205,55 +255,50 @@
               <span class="w-8 h-8 rounded-full grid place-items-center text-xs font-bold text-ink-900 bg-gradient-to-br from-amber-300 to-rose-200 border border-white/20">LK</span>
             </div>
             <div class="text-sm">
-              “From idea to output in minutes.” — Over 2,000 five-star reviews
+              “Inbox sorted in minutes.” — Over 2,000 five-star reviews
             </div>
           </div>
         </div>
 
-        <!-- Hero Visual: Universal command palette with auto-detect -->
+        <!-- Hero Visual: Before/After + mini playground -->
         <div class="relative">
           <div class="absolute -inset-4 rounded-3xl blur-2xl opacity-70" style="background: radial-gradient(closest-side, rgba(155,75,255,.35), transparent 70%);"></div>
-          <div class="relative glass rounded-3xl p-5 sm:p-6 lg:p-8">
+          <div class="relative glass rounded-3xl p-4 sm:p-6 lg:p-8">
             <div class="flex items-center justify-between mb-4">
               <div class="flex items-center gap-2">
                 <span class="w-3 h-3 rounded-full bg-red-400"></span>
                 <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
                 <span class="w-3 h-3 rounded-full bg-green-400"></span>
               </div>
-              <span class="text-xs text-ink-300">Universal Command</span>
+              <span class="text-xs text-ink-300">Live preview</span>
             </div>
             <div class="grid gap-4">
               <div class="contrast-card rounded-2xl p-4">
-                <label for="heroCmd" class="text-xs uppercase tracking-wider text-ink-300">Ask Salmar anything</label>
-                <input id="heroCmd" class="mt-2 w-full rounded-xl p-3 bg-black/20 text-sm focus-soft" placeholder="e.g., Summarize this paragraph... or Translate to Spanish... or Generate a SQL query..." />
+                <label for="heroPrompt" class="text-xs uppercase tracking-wider text-ink-300">Prompt</label>
+                <textarea id="heroPrompt" class="mt-2 w-full rounded-xl p-3 bg-black/20 text-sm focus-soft" rows="3" placeholder="E.g., Write a friendly follow-up email to a client about the proposal we sent last week."></textarea>
                 <div class="mt-3 flex items-center gap-3">
-                  <select id="heroMode" class="glass rounded-xl px-3 py-2 text-sm focus-soft">
-                    <option value="auto" selected>Auto-detect</option>
-                    <option value="write">Write</option>
-                    <option value="summarize">Summarize</option>
-                    <option value="translate">Translate</option>
-                    <option value="code">Code</option>
-                    <option value="explain">Explain code</option>
-                    <option value="math">Math</option>
-                    <option value="brainstorm">Brainstorm</option>
-                    <option value="plan">Plan</option>
-                    <option value="csv">Analyze CSV</option>
-                    <option value="regex">Regex</option>
-                    <option value="sql">SQL</option>
-                    <option value="chat">Chat</option>
+                  <select id="heroTone" class="glass rounded-xl px-3 py-2 text-sm focus-soft">
+                    <option>Friendly</option>
+                    <option>Concise</option>
+                    <option>Professional</option>
+                    <option>Persuasive</option>
+                    <option>Empathetic</option>
                   </select>
-                  <button id="heroRun" class="btn rounded-xl px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft">Run</button>
+                  <button id="heroGenerate" class="btn rounded-xl px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft">Generate</button>
                   <div id="heroStatus" class="sr-only" aria-live="polite"></div>
                 </div>
               </div>
               <div class="grid sm:grid-cols-2 gap-4">
                 <div class="neo rounded-2xl p-4 border border-white/10">
-                  <div class="text-xs text-ink-300 mb-2 uppercase tracking-wider">Detected</div>
-                  <div id="heroDetected" class="rounded-xl bg-black/20 p-3 text-sm leading-relaxed">—</div>
+                  <div class="text-xs text-ink-300 mb-2 uppercase tracking-wider">Before</div>
+                  <div class="rounded-xl bg-black/20 p-3 text-sm leading-relaxed" id="beforeEmail" aria-label="Before email">
+Subject: Re: Proposal?
+hey just checking if you saw the proposal. let me know? thx
+                  </div>
                 </div>
                 <div class="neo rounded-2xl p-4 border border-white/10">
-                  <div class="text-xs text-ink-300 mb-2 uppercase tracking-wider flex items-center gap-2">Result <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-300/20">Salmar</span></div>
-                  <div class="rounded-xl bg-black/20 p-3 text-sm leading-relaxed min-h-[96px]" id="heroResult"></div>
+                  <div class="text-xs text-ink-300 mb-2 uppercase tracking-wider flex items-center gap-2">After <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-300/20">Salmar</span></div>
+                  <div class="rounded-xl bg-black/20 p-3 text-sm leading-relaxed min-h-[96px]" id="afterEmail" aria-label="After email"></div>
                 </div>
               </div>
               <p class="text-xs text-ink-300">No sign-up required. This is a sandboxed demo that runs in your browser.</p>
@@ -270,14 +315,31 @@
           <div class="grid md:grid-cols-5 items-center gap-6 text-center">
             <div class="text-sm text-ink-300 md:col-span-1">Trusted by teams at</div>
             <div class="md:col-span-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
-              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Heliotrope"><title>Heliotrope</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Heliotrope</text></svg></div>
-              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Aethra"><title>Aethra</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Aethra</text></svg></div>
-              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Quantify"><title>Quantify</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Quantify</text></svg></div>
-              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Orbyx"><title>Orbyx</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Orbyx</text></svg></div>
-              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Lumina"><title>Lumina</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Lumina</text></svg></div>
-              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Flux"><title>Flux</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Flux</text></svg></div>
-              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Vertex"><title>Vertex</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Vertex</text></svg></div>
-              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Nimbus"><title>Nimbus</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Nimbus</text></svg></div>
+              <!-- Brand-like SVGs (no external images) -->
+              <div class="neo rounded-xl p-3" aria-label="Company: Heliotrope">
+                <svg viewBox="0 0 120 32" role="img" aria-label="Heliotrope"><title>Heliotrope</title><rect width="120" height="32" rx="8" fill="none"/><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" fill="currentColor" class="text-ink-300">Heliotrope</text></svg>
+              </div>
+              <div class="neo rounded-xl p-3" aria-label="Company: Aethra">
+                <svg viewBox="0 0 120 32" role="img" aria-label="Aethra"><title>Aethra</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" fill="currentColor" class="text-ink-300">Aethra</text></svg>
+              </div>
+              <div class="neo rounded-xl p-3" aria-label="Company: Quantify">
+                <svg viewBox="0 0 120 32" role="img" aria-label="Quantify"><title>Quantify</title><text x="10" y="22" class="text-ink-300" font-family="Inter, sans-serif" font-size="14" fill="currentColor">Quantify</text></svg>
+              </div>
+              <div class="neo rounded-xl p-3" aria-label="Company: Orbyx">
+                <svg viewBox="0 0 120 32" role="img" aria-label="Orbyx"><title>Orbyx</title><text x="10" y="22" class="text-ink-300" font-family="Inter, sans-serif" font-size="14" fill="currentColor">Orbyx</text></svg>
+              </div>
+              <div class="neo rounded-xl p-3" aria-label="Company: Lumina">
+                <svg viewBox="0 0 120 32" role="img" aria-label="Lumina"><title>Lumina</title><text x="10" y="22" class="text-ink-300" font-family="Inter, sans-serif" font-size="14" fill="currentColor">Lumina</text></svg>
+              </div>
+              <div class="neo rounded-xl p-3" aria-label="Company: Flux">
+                <svg viewBox="0 0 120 32" role="img" aria-label="Flux"><title>Flux</title><text x="10" y="22" class="text-ink-300" font-family="Inter, sans-serif" font-size="14" fill="currentColor">Flux</text></svg>
+              </div>
+              <div class="neo rounded-xl p-3" aria-label="Company: Vertex">
+                <svg viewBox="0 0 120 32" role="img" aria-label="Vertex"><title>Vertex</title><text x="10" y="22" class="text-ink-300" font-family="Inter, sans-serif" font-size="14" fill="currentColor">Vertex</text></svg>
+              </div>
+              <div class="neo rounded-xl p-3" aria-label="Company: Nimbus">
+                <svg viewBox="0 0 120 32" role="img" aria-label="Nimbus"><title>Nimbus</title><text x="10" y="22" class="text-ink-300" font-family="Inter, sans-serif" font-size="14" fill="currentColor">Nimbus</text></svg>
+              </div>
             </div>
           </div>
         </div>
@@ -289,50 +351,50 @@
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto">
           <h2 class="font-display text-3xl sm:text-4xl font-extrabold">Outcome-focused features</h2>
-          <p class="mt-3 text-ink-200">A single place to draft, analyze, translate, code, plan, and present — fast and trustworthy.</p>
+          <p class="mt-3 text-ink-200">Everything you need to communicate faster, clearer, and in your voice.</p>
         </div>
         <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           <div class="glass rounded-2xl p-6">
             <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
-              <svg viewBox="0 0 24 24" class="w-6 h-6"><path fill="currentColor" d="M4 4h16v4H4zm2 6h12v2H6zm-2 4h16v6H4z"/></svg>
+              <svg viewBox="0 0 24 24" class="w-6 h-6" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm2 4h14v2H5zm3 4h8v2H8z"/></svg>
             </div>
-            <h3 class="font-semibold text-lg">Universal writing</h3>
-            <p class="mt-2 text-ink-300">From briefs and blogs to scripts and job posts — write in your voice, instantly.</p>
+            <h3 class="font-semibold text-lg">Writes faster → Saves time</h3>
+            <p class="mt-2 text-ink-300">Turn bullet points into polished emails in seconds so you can ship more work.</p>
           </div>
           <div class="glass rounded-2xl p-6">
             <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
-              <svg viewBox="0 0 24 24" class="w-6 h-6"><path fill="currentColor" d="M3 13h8V3H3zm0 8h8v-6H3zm10 0h8v-8h-8zm0-18v8h8V3z"/></svg>
+              <svg viewBox="0 0 24 24" class="w-6 h-6" aria-hidden="true"><path fill="currentColor" d="M12 2l4 7-6 13-2-8-6-2 10-10z"/></svg>
             </div>
-            <h3 class="font-semibold text-lg">Data & summaries</h3>
-            <p class="mt-2 text-ink-300">Turn long docs and CSVs into crisp takeaways with action items.</p>
+            <h3 class="font-semibold text-lg">Understands your style → Feels human</h3>
+            <p class="mt-2 text-ink-300">Analyze your past writing to match tone, formality, and cadence automatically.</p>
           </div>
           <div class="glass rounded-2xl p-6">
             <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
-              <svg viewBox="0 0 24 24" class="w-6 h-6"><path fill="currentColor" d="M9 21H7a2 2 0 01-2-2V5a2 2 0 012-2h2v18zm2 0h6a2 2 0 002-2V9l-6-6h-2v18z"/></svg>
+              <svg viewBox="0 0 24 24" class="w-6 h-6" aria-hidden="true"><path fill="currentColor" d="M4 4h16v10H4zm0 12h8v2H4zm10 0h6v2h-6z"/></svg>
             </div>
-            <h3 class="font-semibold text-lg">Coding & explain</h3>
-            <p class="mt-2 text-ink-300">Generate snippets, explain functions, and find bugs with clarity.</p>
+            <h3 class="font-semibold text-lg">Summarizes long threads</h3>
+            <p class="mt-2 text-ink-300">Turn messy chains into crisp summaries with action items in one click.</p>
           </div>
           <div class="glass rounded-2xl p-6">
             <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
-              <svg viewBox="0 0 24 24" class="w-6 h-6"><path fill="currentColor" d="M12 3l9.5 7H2.5zM2 10h20v11H2z"/></svg>
+              <svg viewBox="0 0 24 24" class="w-6 h-6" aria-hidden="true"><path fill="currentColor" d="M12 12a5 5 0 015-5h5v10h-5a5 5 0 01-5-5zM2 7h7v10H2z"/></svg>
             </div>
-            <h3 class="font-semibold text-lg">Translate & localize</h3>
-            <p class="mt-2 text-ink-300">Speak to any audience — keep nuance, slang, and tone intact.</p>
+            <h3 class="font-semibold text-lg">Replies in your voice</h3>
+            <p class="mt-2 text-ink-300">Respond with empathy, confidence, or brevity — you choose the tone.</p>
           </div>
           <div class="glass rounded-2xl p-6">
             <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
-              <svg viewBox="0 0 24 24" class="w-6 h-6"><path fill="currentColor" d="M12 7a5 5 0 015-5h5v20h-5a5 5 0 01-5-5V7zM2 7h7v10H2z"/></svg>
+              <svg viewBox="0 0 24 24" class="w-6 h-6" aria-hidden="true"><path fill="currentColor" d="M12 1l3 7h7l-5.5 4 2 7L12 16 5.5 19l2-7L2 8h7z"/></svg>
             </div>
-            <h3 class="font-semibold text-lg">Plan & organize</h3>
-            <p class="mt-2 text-ink-300">From sprints to study plans — get a timeline with next steps.</p>
+            <h3 class="font-semibold text-lg">Auto-proofread & format</h3>
+            <p class="mt-2 text-ink-300">Fix grammar, polish structure, and keep brand consistency automatically.</p>
           </div>
           <div class="glass rounded-2xl p-6">
             <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
-              <svg viewBox="0 0 24 24" class="w-6 h-6"><path fill="currentColor" d="M12 1l3 7h7l-5.5 4 2 7L12 16l-6.5 3 2-7L2 8h7z"/></svg>
+              <svg viewBox="0 0 24 24" class="w-6 h-6" aria-hidden="true"><path fill="currentColor" d="M3 11h18v2H3z"/></svg>
             </div>
-            <h3 class="font-semibold text-lg">Prompt to visuals</h3>
-            <p class="mt-2 text-ink-300">Craft studio-quality image prompts with style, lighting, and lens details.</p>
+            <h3 class="font-semibold text-lg">One-click personalize</h3>
+            <p class="mt-2 text-ink-300">Adapt to different audiences or segments without starting from scratch.</p>
           </div>
         </div>
         <div class="mt-8 text-center">
@@ -350,18 +412,19 @@
             <p class="mt-2 text-ink-200">Choose a persona to personalize the page instantly.</p>
             <div class="mt-4 flex flex-wrap gap-2">
               <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="marketer">Marketers</button>
-              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="engineer">Engineers</button>
-              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="student">Students</button>
-              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="analyst">Analysts</button>
-              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="creator">Creators</button>
+              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="writer">Writers</button>
+              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="sales">Sales</button>
+              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="support">Support</button>
               <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="team">Teams</button>
             </div>
-            <div class="mt-6 text-sm text-ink-300">Tip: Use ?role=engineer or ?utm_industry=analyst to auto-personalize.</div>
+            <div class="mt-6 text-sm text-ink-300">Tip: Use ?role=marketer or ?utm_industry=sales to auto-personalize.</div>
           </div>
           <div class="lg:col-span-2 glass rounded-3xl p-6">
-            <div id="personaContent" class="grid sm:grid-cols-2 gap-6"></div>
+            <div id="personaContent" class="grid sm:grid-cols-2 gap-6">
+              <!-- dynamic persona cards -->
+            </div>
             <div class="mt-6">
-              <a href="#demo" class="btn rounded-xl px-5 py-3 font-semibold bg-white/90 text-ink-900 hover:bg-white focus-soft dark:bg-grape-700 dark:text-white dark:hover:bg-grape-600">Try It for Your Work</a>
+              <a href="#signup" class="btn rounded-xl px-5 py-3 font-semibold bg-white/90 text-ink-900 hover:bg-white focus-soft dark:bg-grape-700 dark:text-white dark:hover:bg-grape-600">Try It for Your Team</a>
             </div>
           </div>
         </div>
@@ -372,18 +435,18 @@
     <section class="py-16">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto">
-          <h2 class="font-display text-3xl font-extrabold">From chaos to clarity</h2>
-          <p class="mt-2 text-ink-200">See the difference in one swipe — across any workflow.</p>
+          <h2 class="font-display text-3xl font-extrabold">From messy threads to clarity</h2>
+          <p class="mt-2 text-ink-200">See the difference in one swipe.</p>
         </div>
         <div class="mt-8 relative glass rounded-3xl overflow-hidden">
           <div class="grid md:grid-cols-2 gap-0">
             <div class="p-6">
               <h3 class="font-semibold mb-2">Without AI</h3>
-              <div class="neo rounded-xl p-4 text-sm leading-relaxed h-48 overflow-auto">
-- 5 scattered docs and spreadsheets
-- Unclear next steps and ownership
-- Manual formatting and translations
-- Long review cycles
+              <div class="neo rounded-xl p-4 text-sm leading-relaxed h-48 overflow-auto" aria-label="Without AI example">
+- 14 messages across 3 people
+- Repeated questions
+- Action items unclear
+- Long paragraphs, little structure
               </div>
             </div>
             <div class="p-6 relative">
@@ -392,13 +455,13 @@
                 <div aria-hidden="true" class="absolute inset-0 rounded-xl" style="background: linear-gradient(180deg, rgba(155,75,255,0.12), rgba(155,75,255,0.05));"></div>
                 <div id="afterMask" class="absolute inset-0 overflow-hidden" style="clip-path: inset(0 50% 0 0);">
                   <div class="p-4">
-                    <p class="mb-2"><strong>Summary:</strong> Goals aligned, tasks assigned, blockers flagged. Ready to execute.</p>
+                    <p class="mb-2"><strong>Summary:</strong> Confirm timeline, approve design v2, schedule handoff.</p>
                     <ol class="list-decimal ml-5 space-y-1">
-                      <li>One source of truth</li>
-                      <li>Clear owners & timelines</li>
-                      <li>Localized versions auto-generated</li>
+                      <li>Deliverables approved by Friday</li>
+                      <li>QA on Monday</li>
+                      <li>Handoff Tuesday 10AM</li>
                     </ol>
-                    <p class="mt-3 text-ink-300">Tone: confident. 2-minute read.</p>
+                    <p class="mt-3 text-ink-300">Tone: concise, confident. 2-minute read.</p>
                   </div>
                 </div>
                 <input id="slider" type="range" min="0" max="100" value="50" class="range absolute bottom-4 left-4 right-4" aria-label="Reveal comparison slider" />
@@ -412,64 +475,64 @@
       </div>
     </section>
 
-    <!-- Interactive Playground (multi-tool) -->
-    <section id="demo" class="py-18 py-16">
+    <!-- Interactive Playground -->
+    <section id="demo" class="py-16">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto">
-          <h2 class="font-display text-3xl font-extrabold">Interactive Playground</h2>
-          <p class="mt-2 text-ink-200">Pick a tool or use Auto-detect. Everything runs locally in your browser for this demo.</p>
-        </div>
-        <div class="mt-8 grid lg:grid-cols-[260px_1fr] gap-6 items-start">
-          <!-- Tool list -->
-          <aside class="glass rounded-3xl p-4">
-            <div class="text-sm font-semibold mb-2">Tools</div>
-            <div id="toolList" class="grid gap-2">
-              <!-- injected -->
-            </div>
-            <div class="mt-4 text-xs text-ink-300">
-              Tip: Attach a .txt or .csv for Summarize or CSV analysis.
-            </div>
-          </aside>
-
-          <!-- Workspace -->
-          <section class="glass rounded-3xl p-6">
-            <form id="toolForm" class="grid gap-4" novalidate>
-              <div id="toolHeader" class="flex items-center justify-between">
-                <div class="text-sm text-ink-300">Mode: <span id="modeLabel" class="font-semibold">Auto</span></div>
-                <div class="flex items-center gap-2">
-                  <button id="micBtn" type="button" class="btn rounded-lg px-3 py-2 glass focus-soft" aria-label="Start voice input">🎙️ Voice</button>
-                  <label class="btn rounded-lg px-3 py-2 glass cursor-pointer">
-                    <input id="fileInput" type="file" class="sr-only" accept=".txt,.md,.csv,.json" />
-                    Attach file
-                  </label>
+        <div class="grid lg:grid-cols-2 gap-8 items-start">
+          <div>
+            <h2 class="font-display text-3xl font-extrabold">Interactive demo</h2>
+            <p class="mt-2 text-ink-200">Type a prompt, pick a tone, and see Salmar write instantly.</p>
+            <form id="playgroundForm" class="mt-6 grid gap-4" novalidate>
+              <div>
+                <label for="prompt" class="block text-sm font-medium">What should Salmar write?</label>
+                <textarea id="prompt" name="prompt" rows="5" class="mt-2 w-full rounded-2xl p-4 glass focus-soft" placeholder="Write a polite reminder to a client about overdue invoice #1043."></textarea>
+                <p id="promptError" class="mt-1 text-sm text-rose-400 hidden">Please enter at least 10 characters.</p>
+              </div>
+              <div class="grid sm:grid-cols-3 gap-4">
+                <div>
+                  <label for="tone" class="block text-sm font-medium">Tone</label>
+                  <select id="tone" name="tone" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
+                    <option value="friendly">Friendly</option>
+                    <option value="concise">Concise</option>
+                    <option value="professional">Professional</option>
+                    <option value="persuasive">Persuasive</option>
+                    <option value="empathetic">Empathetic</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="length" class="block text-sm font-medium">Length</label>
+                  <select id="length" name="length" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
+                    <option value="short">Short</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="long">Long</option>
+                  </select>
+                </div>
+                <div>
+                  <label for="styleSample" class="block text-sm font-medium">Analyze my style</label>
+                  <input id="styleSample" name="styleSample" class="mt-2 w-full rounded-2xl p-3 glass focus-soft" placeholder="Paste 1-2 sentences" />
                 </div>
               </div>
-
-              <div id="inputFields" class="grid gap-3">
-                <!-- dynamic fields -->
-              </div>
-
               <div class="flex items-center gap-3">
-                <button id="runTool" type="submit" class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Run</button>
-                <button id="copyOut" type="button" class="btn rounded-2xl px-6 py-3 font-semibold glass focus-soft" disabled>Copy</button>
-                <div id="toolStatus" class="text-sm text-ink-300" role="status" aria-live="polite"></div>
-              </div>
-
-              <div class="neo rounded-2xl p-4">
-                <div class="flex items-center justify-between mb-2">
-                  <span class="text-sm text-ink-300">Output</span>
-                  <div class="text-xs"><span id="outChars">0</span> chars • <span id="outWords">0</span> words</div>
-                </div>
-                <div id="toolOutput" class="rounded-xl bg-black/20 p-4 min-h-[220px] text-sm leading-relaxed whitespace-pre-wrap"></div>
-              </div>
-
-              <div id="metrics" class="grid sm:grid-cols-3 gap-3">
-                <div class="contrast-card rounded-xl p-3 text-xs">Detected tool: <span id="detectedTool" class="text-ink-200">Auto</span></div>
-                <div class="contrast-card rounded-xl p-3 text-xs">Read time: <span id="readTime" class="text-ink-200">0 min</span></div>
-                <div class="contrast-card rounded-xl p-3 text-xs">Confidence: <span id="confidence" class="text-ink-200">Experimental</span></div>
+                <button id="generate" type="submit" class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Generate</button>
+                <button id="copyOutput" type="button" class="btn rounded-2xl px-6 py-3 font-semibold glass focus-soft" disabled>Copy</button>
+                <div id="playgroundStatus" class="text-sm text-ink-300" role="status" aria-live="polite"></div>
               </div>
             </form>
-          </section>
+          </div>
+          <div class="glass rounded-3xl p-6">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-sm text-ink-300">Output</span>
+              <div class="text-xs">
+                <span id="charCount">0</span> chars
+              </div>
+            </div>
+            <div id="output" class="neo rounded-2xl p-4 min-h-[220px] text-sm leading-relaxed whitespace-pre-wrap"></div>
+            <div class="mt-4 grid sm:grid-cols-3 gap-3">
+              <div class="contrast-card rounded-xl p-3 text-xs">Style: <span id="styleTag" class="text-ink-200">Auto</span></div>
+              <div class="contrast-card rounded-xl p-3 text-xs">Read time: <span id="readTime" class="text-ink-200">0 min</span></div>
+              <div class="contrast-card rounded-xl p-3 text-xs">Tone: <span id="toneTag" class="text-ink-200">—</span></div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -499,7 +562,7 @@
             </li>
             <li class="neo rounded-2xl p-4">
               <div class="text-sm font-semibold mb-1">Step 3: Connect</div>
-              <p class="text-ink-300 text-sm">Link tools, datasets, and brand style.</p>
+              <p class="text-ink-300 text-sm">Link your inbox and brand style.</p>
               <div class="mt-3 h-2 bg-white/10 rounded-full">
                 <div class="h-2 rounded-full bg-gradient-to-r from-grape-600 to-grape-400 w-1/3"></div>
               </div>
@@ -520,17 +583,17 @@
           <article class="glass rounded-3xl p-6">
             <div class="text-5xl font-extrabold gradient-text"><span class="counter" data-target="60">0</span>%</div>
             <p class="mt-2 text-ink-200">Cut response time</p>
-            <p class="mt-3 text-sm text-ink-300">Support teams resolve tickets 60% faster with summaries and suggested replies.</p>
+            <p class="mt-3 text-sm text-ink-300">Customer success team resolved tickets 60% faster after adopting Salmar.</p>
           </article>
           <article class="glass rounded-3xl p-6">
             <div class="text-5xl font-extrabold gradient-text"><span class="counter" data-target="5">0</span>h</div>
             <p class="mt-2 text-ink-200">Saved per week</p>
-            <p class="mt-3 text-sm text-ink-300">Knowledge workers regain 5 hours weekly by delegating routine tasks.</p>
+            <p class="mt-3 text-sm text-ink-300">Average knowledge workers regained 5 hours weekly by delegating routine emails.</p>
           </article>
           <article class="glass rounded-3xl p-6">
             <div class="text-5xl font-extrabold gradient-text"><span class="counter" data-target="3">0</span>x</div>
-            <p class="mt-2 text-ink-200">Faster shipping</p>
-            <p class="mt-3 text-sm text-ink-300">Product teams draft specs, translate, and plan sprints 3x faster.</p>
+            <p class="mt-2 text-ink-200">More replies</p>
+            <p class="mt-3 text-sm text-ink-300">Sales teams saw 3x increase in positive reply rates with tone personalization.</p>
           </article>
         </div>
       </div>
@@ -555,10 +618,16 @@
             </thead>
             <tbody class="divide-y divide-white/10">
               <tr>
-                <td class="px-4 py-3">Universal tools (write, code, data, translate, plan)</td>
+                <td class="px-4 py-3">Tone-matching from your samples</td>
                 <td class="px-4 py-3 text-emerald-400">Included</td>
+                <td class="px-4 py-3 text-ink-300">Add-on</td>
                 <td class="px-4 py-3 text-ink-300">Limited</td>
-                <td class="px-4 py-3 text-ink-300">Separate apps</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">Inbox summarization with actions</td>
+                <td class="px-4 py-3 text-emerald-400">Included</td>
+                <td class="px-4 py-3 text-ink-300">Basic</td>
+                <td class="px-4 py-3 text-ink-300">No</td>
               </tr>
               <tr>
                 <td class="px-4 py-3">Privacy-first processing</td>
@@ -577,12 +646,6 @@
                 <td class="px-4 py-3 text-emerald-400">Granular</td>
                 <td class="px-4 py-3 text-ink-300">Limited</td>
                 <td class="px-4 py-3 text-ink-300">Limited</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3">Multilingual & localization</td>
-                <td class="px-4 py-3 text-emerald-400">Built-in</td>
-                <td class="px-4 py-3 text-ink-300">Add-on</td>
-                <td class="px-4 py-3 text-ink-300">Basic</td>
               </tr>
             </tbody>
           </table>
@@ -618,7 +681,7 @@
               </div>
               <div class="neo rounded-2xl p-4">
                 <h3 class="font-semibold">Ethical safeguards</h3>
-                <p class="text-sm text-ink-300 mt-1">Bias checks and hallucination cues appear before you publish.</p>
+                <p class="text-sm text-ink-300 mt-1">Bias detection and hallucination warnings built into the editor.</p>
               </div>
               <div class="neo rounded-2xl p-4">
                 <h3 class="font-semibold">Compliance</h3>
@@ -654,12 +717,30 @@
           <div class="glass rounded-3xl p-6">
             <h3 class="font-semibold">Popular integrations</h3>
             <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
-              <div class="neo rounded-2xl p-4 flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-400 to-indigo-200"></div><span>Docs</span></div>
-              <div class="neo rounded-2xl p-4 flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 to-sky-200"></div><span>Mail</span></div>
-              <div class="neo rounded-2xl p-4 flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-200"></div><span>Slack</span></div>
-              <div class="neo rounded-2xl p-4 flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-400 to-rose-200"></div><span>CRM</span></div>
-              <div class="neo rounded-2xl p-4 flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-200"></div><span>Notion</span></div>
-              <div class="neo rounded-2xl p-4 flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-400 to-purple-200"></div><span>Zapier</span></div>
+              <div class="neo rounded-2xl p-4 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-400 to-indigo-200"></div>
+                <span>Gmail</span>
+              </div>
+              <div class="neo rounded-2xl p-4 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 to-sky-200"></div>
+                <span>Outlook</span>
+              </div>
+              <div class="neo rounded-2xl p-4 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-200"></div>
+                <span>Slack</span>
+              </div>
+              <div class="neo rounded-2xl p-4 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-400 to-rose-200"></div>
+                <span>HubSpot</span>
+              </div>
+              <div class="neo rounded-2xl p-4 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-200"></div>
+                <span>Notion</span>
+              </div>
+              <div class="neo rounded-2xl p-4 flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-400 to-purple-200"></div>
+                <span>Zapier</span>
+              </div>
             </div>
           </div>
         </div>
@@ -682,7 +763,7 @@
                 <div class="text-xs text-ink-300">Product Marketing</div>
               </div>
             </div>
-            <p class="mt-3 text-ink-200">“It’s my Swiss Army AI. Drafts, plans, and translations are instant.”</p>
+            <p class="mt-3 text-ink-200">“Salmar nails my tone every time. I went from 2 hours of email a day to 45 minutes.”</p>
           </blockquote>
           <blockquote class="glass rounded-3xl p-6">
             <div class="flex items-center gap-3">
@@ -692,7 +773,7 @@
                 <div class="text-xs text-ink-300">Customer Success</div>
               </div>
             </div>
-            <p class="mt-3 text-ink-200">“Summaries are spot-on and action items are crystal clear.”</p>
+            <p class="mt-3 text-ink-200">“Summaries are spot-on and action items are crystal clear. Huge team win.”</p>
           </blockquote>
           <blockquote class="glass rounded-3xl p-6">
             <div class="flex items-center gap-3">
@@ -702,13 +783,13 @@
                 <div class="text-xs text-ink-300">Founder</div>
               </div>
             </div>
-            <p class="mt-3 text-ink-200">“Best all-in-one AI I’ve tried — ethical, fast, and flexible.”</p>
+            <p class="mt-3 text-ink-200">“Best AI for email I’ve tried — simple, ethical, and fast.”</p>
           </blockquote>
         </div>
       </div>
     </section>
 
-    <!-- Pricing -->
+    <!-- Pricing (simple CTA section to repeat) -->
     <section id="pricing" class="py-16">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="glass rounded-3xl p-6">
@@ -723,7 +804,7 @@
                 <div class="text-3xl font-extrabold mt-1">$0</div>
                 <ul class="mt-3 text-sm text-ink-300 space-y-1">
                   <li>100 generations</li>
-                  <li>Summaries & translate</li>
+                  <li>Basic summarization</li>
                   <li>Community access</li>
                 </ul>
                 <a href="#signup" class="mt-4 inline-block btn rounded-xl px-4 py-2 font-semibold glass focus-soft">Get started</a>
@@ -734,7 +815,7 @@
                 <div class="text-3xl font-extrabold mt-1">$19</div>
                 <ul class="mt-3 text-sm text-ink-300 space-y-1">
                   <li>Unlimited drafts</li>
-                  <li>Code & data tools</li>
+                  <li>Tone-matching</li>
                   <li>Priority support</li>
                 </ul>
                 <a href="#signup" class="mt-4 inline-block btn rounded-xl px-4 py-2 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft">Upgrade</a>
@@ -765,16 +846,16 @@
             <p class="mt-2 text-ink-300">We do not use your data to train general models. All processing is secured and you can delete content anytime.</p>
           </div>
           <div class="glass rounded-2xl p-5">
-            <h3 class="font-semibold">Does it support coding and data?</h3>
-            <p class="mt-2 text-ink-300">Yes. Generate and explain code, analyze CSVs, and draft SQL — all in one place.</p>
+            <h3 class="font-semibold">Will it match my tone?</h3>
+            <p class="mt-2 text-ink-300">Paste a few sentences and Salmar adapts to your style — concise, friendly, or entirely professional.</p>
           </div>
           <div class="glass rounded-2xl p-5">
-            <h3 class="font-semibold">Will it match my tone?</h3>
-            <p class="mt-2 text-ink-300">Paste a few sentences and Salmar adapts — concise, friendly, or fully professional.</p>
+            <h3 class="font-semibold">Does it work with my tools?</h3>
+            <p class="mt-2 text-ink-300">Yes. Gmail, Outlook, Slack, and more via native integrations or Zapier.</p>
           </div>
           <div class="glass rounded-2xl p-5">
             <h3 class="font-semibold">What about AI mistakes?</h3>
-            <p class="mt-2 text-ink-300">We surface possible hallucinations or bias before publishing and show edit history.</p>
+            <p class="mt-2 text-ink-300">We show transparency for edits and surface potential hallucinations or bias for review before you send.</p>
           </div>
         </div>
       </div>
@@ -784,7 +865,7 @@
     <section class="py-16">
       <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div class="glass rounded-3xl p-8">
-          <h2 class="font-display text-3xl sm:text-4xl font-extrabold">Ready to get more done?</h2>
+          <h2 class="font-display text-3xl sm:text-4xl font-extrabold">Ready to communicate brilliantly?</h2>
           <p class="mt-3 text-ink-200">Start free and see value in minutes.</p>
           <div class="mt-6 flex justify-center gap-3">
             <a href="#signup" class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Get Started</a>
@@ -794,7 +875,7 @@
       </div>
     </section>
 
-    <!-- Signup / Footer -->
+    <!-- Signup / Newsletter / Footer -->
     <section id="signup" class="py-16">
       <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="glass rounded-3xl p-6">
@@ -813,15 +894,14 @@
               <label for="role" class="block text-sm font-medium">Role</label>
               <select id="role" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
                 <option>Marketer</option>
-                <option>Engineer</option>
-                <option>Student</option>
-                <option>Analyst</option>
-                <option>Creator</option>
+                <option>Writer</option>
+                <option>Sales</option>
+                <option>Support</option>
                 <option>Founder</option>
               </select>
             </div>
             <div class="sm:col-span-3 flex items-center justify-between">
-              <div class="text-xs text-ink-300">By signing up, you agree to our <a href="#tos" class="underline" id="openTOS">Terms</a> and <a href="#privacy" class="underline" id="openPrivacy">Privacy</a>.</div>
+              <div class="text-xs text-ink-300">By signing up, you agree to our <a href="#tos" class="underline">Terms</a> and <a href="#privacy" class="underline">Privacy</a>.</div>
               <button class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow" type="submit">Create account</button>
             </div>
           </form>
@@ -838,7 +918,7 @@
             </span>
             <span class="font-bold">Salmar</span>
           </div>
-          <p class="mt-3 text-sm text-ink-300">All-in-one AI for real work, designed with privacy in mind.</p>
+          <p class="mt-3 text-sm text-ink-300">Outcome-first AI for email, designed with privacy in mind.</p>
         </div>
         <div>
           <div class="font-semibold mb-2">Product</div>
@@ -860,8 +940,8 @@
         <div>
           <div class="font-semibold mb-2">Legal</div>
           <ul class="space-y-1 text-ink-300 text-sm">
-            <li><a class="hover:underline" id="openPrivacyFooter" href="#privacy">Privacy Policy</a></li>
-            <li><a class="hover:underline" id="openTOSFooter" href="#tos">Terms of Service</a></li>
+            <li><a class="hover:underline" id="openPrivacy" href="#privacy">Privacy Policy</a></li>
+            <li><a class="hover:underline" id="openTOS" href="#tos">Terms of Service</a></li>
           </ul>
         </div>
       </div>
@@ -877,7 +957,9 @@
     <div class="glass rounded-3xl max-w-2xl w-full p-6 relative">
       <button class="absolute top-3 right-3 btn glass rounded-lg px-3 py-1" aria-label="Close legal modal" data-close>&times;</button>
       <h3 id="legalTitle" class="font-display text-2xl font-bold">Legal</h3>
-      <div id="legalContent" class="mt-3 text-sm text-ink-200 max-h-[60vh] overflow-auto"></div>
+      <div id="legalContent" class="mt-3 text-sm text-ink-200 max-h-[60vh] overflow-auto">
+        <!-- injected -->
+      </div>
     </div>
   </div>
 
@@ -899,7 +981,7 @@
   </div>
 
   <script>
-    // Theme toggle (no storage, sandbox-safe)
+    // Theme toggle without persistent storage (sandbox-safe)
     (function(){
       const html = document.documentElement;
       const toggle = document.getElementById('themeToggle');
@@ -919,7 +1001,6 @@
     // Subtle animated noise texture
     (function(){
       const c = document.getElementById('noise');
-      if (!c) return;
       const ctx = c.getContext('2d', {alpha: true});
       const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
       function resize() {
@@ -931,22 +1012,25 @@
       let rafId;
       function draw() {
         const w = c.width, h = c.height;
-        const imageData = ctx.createImageData(120, 80);
+        const imageData = ctx.createImageData(120, 80); // tiny tile scaled by context
         for (let i=0; i<imageData.data.length; i+=4) {
           const v = 230 + Math.floor(Math.random()*25);
           imageData.data[i] = v;
           imageData.data[i+1] = v;
           imageData.data[i+2] = v;
-          imageData.data[i+3] = 18;
+          imageData.data[i+3] = 18; // low alpha
         }
-        const off = document.createElement('canvas');
-        off.width = imageData.width;
-        off.height = imageData.height;
-        off.getContext('2d').putImageData(imageData, 0, 0);
+        // scale up
         ctx.save();
         ctx.clearRect(0,0,w,h);
         ctx.imageSmoothingEnabled = false;
-        ctx.drawImage(off, 0, 0, w, h);
+        ctx.drawImage((function(){
+          const off = document.createElement('canvas');
+          off.width = imageData.width;
+          off.height = imageData.height;
+          off.getContext('2d').putImageData(imageData, 0, 0);
+          return off;
+        })(), 0, 0, w, h);
         ctx.restore();
         rafId = requestAnimationFrame(draw);
       }
@@ -966,83 +1050,76 @@
       const supporting = document.getElementById('supportingStatement');
       const roles = {
         marketer: {
-          h: 'AI that launches your campaigns in seconds.',
-          s: 'Copy that converts, localized on the fly — emails, ads, and landing pages that sound like you.'
+          h: 'AI that writes your campaigns in seconds.',
+          s: 'Launch on time with copy that converts — emails, subject lines, and follow-ups in your brand voice.'
         },
-        engineer: {
-          h: 'AI that helps you ship code faster.',
-          s: 'Generate snippets, explain code, write tests, and docs — all in your stack.'
+        writer: {
+          h: 'AI that polishes your drafts in seconds.',
+          s: 'From messy first drafts to publish-ready prose — without losing your voice.'
         },
-        student: {
-          h: 'AI that accelerates your learning.',
-          s: 'Summarize chapters, plan study sessions, and explain complex topics simply.'
+        sales: {
+          h: 'AI that books more meetings in seconds.',
+          s: 'Personalized outreach, perfect timing, and reply-ready follow-ups that feel human.'
         },
-        analyst: {
-          h: 'AI that turns data into decisions.',
-          s: 'Analyze CSVs, draft SQL, and surface insights with clear takeaways.'
-        },
-        creator: {
-          h: 'AI that boosts your creativity.',
-          s: 'Brainstorm ideas, scripts, posts, and image prompts in your unique voice.'
+        support: {
+          h: 'AI that resolves tickets in seconds.',
+          s: 'Summaries, suggested replies, and empathetic responses your customers love.'
         },
         team: {
           h: 'AI that aligns teams in seconds.',
-          s: 'Summaries, updates, and plans — fewer meetings, more momentum.'
+          s: 'Summaries, updates, and decisions — fewer meetings, more momentum.'
         }
       };
       function setRole(role) {
         const r = roles[role];
         if (!r) return;
-        headline.innerHTML = r.h + '<span class="block gradient-text">Write. Analyze. Code. Translate. Plan.</span>';
+        headline.innerHTML = r.h + '<span class="block gradient-text">Your personal AI assistant.</span>';
         supporting.textContent = r.s;
         renderPersona(role);
       }
+      // Detect via query
       const qs = new URLSearchParams(location.search);
       const r = qs.get('role') || qs.get('utm_industry');
       if (r && roles[r]) setRole(r);
 
+      // Persona buttons
       document.querySelectorAll('.persona').forEach(btn => {
         btn.addEventListener('click', () => setRole(btn.dataset.role));
       });
 
+      // Persona content renderer
       const personaContent = document.getElementById('personaContent');
       function renderPersona(role='marketer') {
         const items = {
           marketer: [
-            {title:'Campaign drafts', desc:'High-converting sequences from a brief.'},
-            {title:'Localization', desc:'Translate and adapt tone by region.'},
-            {title:'Subject lab', desc:'A/B ideas with predicted open-rate cues.'},
-            {title:'Creative prompts', desc:'On-brand visuals with style controls.'},
+            {title:'Campaign drafts', desc:'High-converting email sequences from a brief.'},
+            {title:'Subject line lab', desc:'A/B test ideas with open-rate predictions.'},
+            {title:'Persona switch', desc:'One click to adapt tone per segment.'},
+            {title:'Post-purchase flows', desc:'Upsells and cross-sells that feel helpful.'},
           ],
-          engineer: [
-            {title:'Code generator', desc:'Snippets, tests, and boilerplates.'},
-            {title:'Explain & debug', desc:'Human-friendly reasoning and fixes.'},
-            {title:'Regex & SQL', desc:'Complex patterns and queries in seconds.'},
-            {title:'Doc writer', desc:'From functions to clean READMEs.'},
+          writer: [
+            {title:'Tone polish', desc:'Preserve voice while tightening structure.'},
+            {title:'Rewrite assistant', desc:'Try concise, friendly, or persuasive variants.'},
+            {title:'Fact-check hints', desc:'Citations and potential hallucination hints.'},
+            {title:'Outline generator', desc:'From topics to structured outlines.'},
           ],
-          student: [
-            {title:'Study summaries', desc:'Chapters into key points + flashcards.'},
-            {title:'Planner', desc:'Study timetable with milestones.'},
-            {title:'Explain like I’m 5', desc:'Complex topics made simple.'},
-            {title:'Language help', desc:'Translate and practice tone.'},
+          sales: [
+            {title:'Personalized outreach', desc:'Company and role-aware icebreakers.'},
+            {title:'Follow-up cadence', desc:'Smart timing and relevant nudges.'},
+            {title:'Objection handling', desc:'On-brand, empathetic responses.'},
+            {title:'CRM sync', desc:'Push outcomes back to your CRM.'},
           ],
-          analyst: [
-            {title:'CSV insights', desc:'Stats, anomalies, and segments.'},
-            {title:'SQL builder', desc:'Queries from natural language.'},
-            {title:'Narrative decks', desc:'Turn numbers into stories.'},
-            {title:'Forecast ideas', desc:'Scenario prompts to explore.'},
-          ],
-          creator: [
-            {title:'Idea machine', desc:'Hooks, titles, and formats.'},
-            {title:'Script assist', desc:'Shorts to long-form outlines.'},
-            {title:'Prompt crafting', desc:'Camera, lens, and lighting cues.'},
-            {title:'Caption lab', desc:'Multi-platform styles in a click.'},
+          support: [
+            {title:'Auto-summarize', desc:'TL;DR with steps to resolve.'},
+            {title:'Tone guardrails', desc:'Empathy and clarity by default.'},
+            {title:'Macro generator', desc:'Turn great replies into templates.'},
+            {title:'Tagging/triage', desc:'Route by intent and urgency.'},
           ],
           team: [
-            {title:'Daily syncs', desc:'Updates without meetings.'},
-            {title:'Decision logs', desc:'Agreements and owners recorded.'},
-            {title:'Brief templates', desc:'From idea to execution-ready.'},
-            {title:'Translate & share', desc:'One message, many languages.'},
+            {title:'Daily syncs', desc:'Clear updates without meetings.'},
+            {title:'Decision logs', desc:'Track agreements and owners.'},
+            {title:'Async briefs', desc:'Structure ideas for execution.'},
+            {title:'Review helper', desc:'Summarize PRDs and docs.'},
           ],
         }[role];
         personaContent.innerHTML = items.map(i => `
@@ -1066,6 +1143,164 @@
       });
     })();
 
+    // Hero mini playground (typing effect)
+    (function(){
+      const prompt = document.getElementById('heroPrompt');
+      const tone = document.getElementById('heroTone');
+      const gen = document.getElementById('heroGenerate');
+      const after = document.getElementById('afterEmail');
+      const status = document.getElementById('heroStatus');
+
+      function draft(base, tone) {
+        const polite = "Thanks for your time — happy to adjust if helpful.";
+        const closings = {
+          Friendly: "Cheers,\nAlex",
+          Concise: "Best,\nAlex",
+          Professional: "Sincerely,\nAlex",
+          Persuasive: "Looking forward to your positive response.\nAlex",
+          Empathetic: "Appreciate your consideration.\nAlex"
+        };
+        const s = base && base.length > 10 ? base : "Following up on the proposal we shared last week and checking if you had any questions. We’re excited to keep things moving and can adjust based on your feedback.";
+        const intro = "Hi there,\n\n";
+        const body = s.charAt(0).toUpperCase() + s.slice(1);
+        return `${intro}${body}\n\n${polite}\n\n${closings[tone] || closings.Friendly}`;
+      }
+
+      function typeText(el, text, speed=12) {
+        el.textContent = "";
+        let i = 0;
+        status.textContent = 'Generating...';
+        const id = setInterval(() => {
+          el.textContent += text.charAt(i++);
+          if (i >= text.length) {
+            clearInterval(id);
+            status.textContent = 'Done.';
+            setTimeout(()=>status.textContent='', 1500);
+          }
+        }, speed);
+      }
+
+      gen?.addEventListener('click', () => {
+        const d = draft(prompt.value.trim(), tone.value);
+        typeText(after, d);
+      });
+
+      // Seed an initial output
+      typeText(after, draft('', 'Friendly'), 6);
+    })();
+
+    // Playground: generate, validate, copy, metrics
+    (function(){
+      const form = document.getElementById('playgroundForm');
+      const prompt = document.getElementById('prompt');
+      const tone = document.getElementById('tone');
+      const length = document.getElementById('length');
+      const styleSample = document.getElementById('styleSample');
+      const output = document.getElementById('output');
+      const copy = document.getElementById('copyOutput');
+      const status = document.getElementById('playgroundStatus');
+      const err = document.getElementById('promptError');
+      const charCount = document.getElementById('charCount');
+      const styleTag = document.getElementById('styleTag');
+      const readTime = document.getElementById('readTime');
+      const toneTag = document.getElementById('toneTag');
+
+      function analyzeStyle(txt) {
+        if (!txt) return 'Auto';
+        const w = txt.split(/\s+/).filter(Boolean).length;
+        const long = (txt.match(/[,;:]/g)||[]).length;
+        const ex = (txt.match(/[!]/g)||[]).length;
+        if (w > 25 && long > 2) return 'Formal';
+        if (ex >= 2) return 'Energetic';
+        if (w < 15) return 'Concise';
+        return 'Neutral';
+        }
+
+      function compose({p,t,l,style}) {
+        const polite = {
+          friendly: "Thanks so much — appreciate your time!",
+          concise: "Thanks for your time.",
+          professional: "Thank you for your attention.",
+          persuasive: "I’m confident this will have a strong impact.",
+          empathetic: "I appreciate your consideration."
+        }[t] || "Thanks for your time.";
+        const intro = {
+          friendly: "Hi there,",
+          concise: "Hello,",
+          professional: "Dear team,",
+          persuasive: "Great news,",
+          empathetic: "I understand how busy things can get,"
+        }[t] || "Hello,";
+        const bodyBase = p.trim().replace(/\s+/g, ' ');
+        const body = bodyBase.charAt(0).toUpperCase() + bodyBase.slice(1);
+        const extras = {
+          short: "",
+          medium: "\n\nKey points:\n• Clear next step\n• Timeline proposed\n• Happy to adjust",
+          long: "\n\nDetails:\n1) Context and rationale\n2) Options with pros/cons\n3) Recommended next step"
+        }[l] || "";
+        const sig = "\n\n— Salmar";
+        const styleNote = style && style !== 'Auto' ? `\n\n[Matched style: ${style}]` : "";
+        return `${intro}\n\n${body}\n\n${polite}${extras}${styleNote}${sig}`;
+      }
+
+      function typeStream(el, text, speed=10) {
+        el.textContent = "";
+        copy.disabled = true;
+        let i = 0;
+        status.textContent = 'Generating...';
+        const id = setInterval(() => {
+          el.textContent += text.charAt(i++);
+          if (i >= text.length) {
+            clearInterval(id);
+            status.textContent = 'Done.';
+            copy.disabled = false;
+            setTimeout(()=>status.textContent='', 1500);
+            updateMetrics();
+          } else {
+            updateMetrics();
+          }
+        }, speed);
+      }
+
+      function updateMetrics() {
+        const text = output.textContent || '';
+        charCount.textContent = text.length;
+        readTime.textContent = Math.max(1, Math.round(text.split(/\s+/).filter(Boolean).length / 180)) + ' min';
+        toneTag.textContent = tone.value.charAt(0).toUpperCase() + tone.value.slice(1);
+      }
+
+      form?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const p = prompt.value;
+        if (!p || p.trim().length < 10) {
+          err.classList.remove('hidden');
+          prompt.setAttribute('aria-invalid', 'true');
+          prompt.focus();
+          return;
+        }
+        err.classList.add('hidden');
+        prompt.removeAttribute('aria-invalid');
+        const style = analyzeStyle(styleSample.value);
+        styleTag.textContent = style;
+        const text = compose({p, t: tone.value, l: length.value, style});
+        typeStream(output, text, 8);
+      });
+
+      copy?.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(output.textContent || '');
+          status.textContent = 'Copied!';
+          setTimeout(()=>status.textContent='', 1200);
+        } catch (e) {
+          status.textContent = 'Press Ctrl/Cmd+C to copy.';
+          setTimeout(()=>status.textContent='', 2000);
+        }
+      });
+
+      // Live char count
+      prompt?.addEventListener('input', updateMetrics);
+    })();
+
     // Voice demo using Speech Synthesis API (safe-guarded)
     (function(){
       const btn = document.getElementById('voiceDemo');
@@ -1082,7 +1317,7 @@
             btn.textContent = 'Play AI voice';
             return;
           }
-          utter = new SpeechSynthesisUtterance("This is Salmar. Your all-in-one AI to write, analyze, code, translate, and plan. Try the demo to see instant results.");
+          utter = new SpeechSynthesisUtterance("This is Salmar. I write your emails in seconds, in your tone. Try the demo and see instant results.");
           utter.rate = 1.02;
           utter.pitch = 1.05;
           utter.onend = () => { btn.textContent = 'Play AI voice'; utter = null; };
@@ -1094,7 +1329,7 @@
       });
     })();
 
-    // Counter animation
+    // Count-up animation for case studies
     (function(){
       const counters = document.querySelectorAll('.counter');
       const io = new IntersectionObserver(entries => {
@@ -1122,6 +1357,8 @@
       const modal = document.getElementById('legalModal');
       const title = document.getElementById('legalTitle');
       const content = document.getElementById('legalContent');
+      const openPrivacy = document.getElementById('openPrivacy');
+      const openTOS = document.getElementById('openTOS');
       const year = document.getElementById('year');
       year.textContent = new Date().getFullYear();
 
@@ -1142,16 +1379,13 @@
         }
         closeables.forEach(el => el.onclick = close);
         modal.onkeydown = (e) => { if (e.key === 'Escape') close(); };
-        modal.addEventListener('click', (e)=>{ if (e.target.hasAttribute('data-close')) close(); }, {once:true});
       }
 
-      document.getElementById('openPrivacy')?.addEventListener('click', (e) => { e.preventDefault(); open('privacy'); });
-      document.getElementById('openTOS')?.addEventListener('click', (e) => { e.preventDefault(); open('tos'); });
-      document.getElementById('openPrivacyFooter')?.addEventListener('click', (e) => { e.preventDefault(); open('privacy'); });
-      document.getElementById('openTOSFooter')?.addEventListener('click', (e) => { e.preventDefault(); open('tos'); });
+      openPrivacy?.addEventListener('click', (e) => { e.preventDefault(); open('privacy'); });
+      openTOS?.addEventListener('click', (e) => { e.preventDefault(); open('tos'); });
     })();
 
-    // DPA modal
+    // DPA modal open
     (function(){
       const btn = document.getElementById('openDPA');
       const modal = document.getElementById('dpaModal');
@@ -1161,7 +1395,7 @@
       document.addEventListener('keydown', (e)=>{ if (e.key==='Escape') close(); });
     })();
 
-    // Signup validation
+    // Email signup validation
     (function(){
       const form = document.getElementById('signupForm');
       const email = document.getElementById('email');
@@ -1180,640 +1414,6 @@
         email.removeAttribute('aria-invalid');
         alert('Thanks! Check your inbox for a confirmation link.');
       });
-    })();
-
-    // HERO Universal Command (auto-detect + run)
-    (function(){
-      const cmd = document.getElementById('heroCmd');
-      const modeSel = document.getElementById('heroMode');
-      const run = document.getElementById('heroRun');
-      const out = document.getElementById('heroResult');
-      const det = document.getElementById('heroDetected');
-      const status = document.getElementById('heroStatus');
-
-      function detectMode(text){
-        const t = text.toLowerCase();
-        if (t.match(/\btranslate to\b|\btranslate\b/)) return 'translate';
-        if (t.startsWith('summarize') || t.includes('tl;dr')) return 'summarize';
-        if (t.includes('regex') || t.includes('regular expression')) return 'regex';
-        if (t.includes('sql') || t.includes('query')) return 'sql';
-        if (t.includes('explain code') || t.includes('what does this code')) return 'explain';
-        if (t.includes('code') || t.includes('function') || t.includes('snippet')) return 'code';
-        if (t.includes('brainstorm') || t.includes('ideas')) return 'brainstorm';
-        if (t.includes('plan') || t.includes('timeline') || t.includes('roadmap')) return 'plan';
-        if (t.match(/^[\d\s\+\-\*\/\.\(\)\^%]+$/)) return 'math';
-        if (t.includes('csv')) return 'csv';
-        if (t.includes('write') || t.includes('draft')) return 'write';
-        return 'chat';
-      }
-
-      function summarize(text, max=3){
-        const sents = text.split(/(?<=[\.\!\?])\s+/).filter(Boolean);
-        const freq = {};
-        const words = text.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(Boolean);
-        words.forEach(w=>freq[w]=(freq[w]||0)+1);
-        const scores = sents.map(s=>{
-          const sw = s.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(Boolean);
-          const sc = sw.reduce((a,w)=>a+(freq[w]||0),0)/Math.max(1,sw.length);
-          return {s,sc};
-        }).sort((a,b)=>b.sc-a.sc).slice(0,max).map(o=>o.s);
-        return scores.join(' ');
-      }
-
-      function runMode(mode, text){
-        if (!text) return 'Please enter a request.';
-        switch(mode){
-          case 'summarize': return summarize(text, 3);
-          case 'translate': return `[Translated] ${text}`;
-          case 'regex': return `^(${text.replace(/[^a-zA-Z0-9]/g,'.')})$  // Skeleton regex from description`;
-          case 'sql': return `-- Guessing intent\nSELECT *\nFROM table\nWHERE /* your condition based on: */ '${text.replace(/'/g,"''")}' ;`;
-          case 'explain': return `Explanation:\n- The code appears to ${text.includes('for')?'loop over items':'perform operations'}.\n- Key concepts: variables, control flow, and side effects.\n- Potential issues: edge cases and error handling.`;
-          case 'code': return `// Generated snippet\nfunction salmarTask(){\n  // ${text}\n  return 'done';\n}`;
-          case 'brainstorm': return `Ideas:\n• ${text} — angle 1\n• ${text} — angle 2\n• ${text} — angle 3\n• ${text} — angle 4`;
-          case 'plan': return `Plan:\n1) Define goals\n2) Break into tasks\n3) Assign owners\n4) Timeline & milestones\n5) Review\n\nContext: ${text}`;
-          case 'math': {
-            const safe = text.replace(/\^/g,'**').replace(/,/g,'');
-            if (!/^[0-9+\-*/().\s%^]*$/.test(safe)) return 'Unsupported characters. Use numbers and operators.';
-            try { return `Result: ${Function('return ('+safe+')')()}`; } catch(e){ return 'Could not compute. Check your expression.'; }
-          }
-          case 'csv': return 'Paste CSV in the Playground to analyze columns, rows, and stats.';
-          case 'write': return `Draft:\n${text.charAt(0).toUpperCase()+text.slice(1)}\n\nThanks for reading.`;
-          default: return `Answer:\n${text}\n\nI’m here to help with writing, code, data, and more.`;
-        }
-      }
-
-      run?.addEventListener('click', () => {
-        const text = (cmd.value||'').trim();
-        const mode = (modeSel.value === 'auto') ? detectMode(text) : modeSel.value;
-        det.textContent = mode.toUpperCase();
-        status.textContent = 'Generating...';
-        out.textContent = '';
-        const result = runMode(mode, text);
-        let i=0; const speed = 8;
-        const id = setInterval(()=> {
-          out.textContent += result.charAt(i++);
-          if (i>=result.length){ clearInterval(id); status.textContent='Done.'; setTimeout(()=>status.textContent='',1500); }
-        }, speed);
-      });
-    })();
-
-    // Multi-tool Playground
-    (function(){
-      const toolDefs = [
-        {id:'auto', label:'Auto-detect', icon:'⚡'},
-        {id:'chat', label:'Chat', icon:'💬'},
-        {id:'write', label:'Write', icon:'✍️'},
-        {id:'summarize', label:'Summarize', icon:'🧠'},
-        {id:'translate', label:'Translate', icon:'🌐'},
-        {id:'code', label:'Code', icon:'💻'},
-        {id:'explain', label:'Explain code', icon:'🔎'},
-        {id:'brainstorm', label:'Brainstorm', icon:'🪄'},
-        {id:'plan', label:'Plan', icon:'🗺️'},
-        {id:'csv', label:'Analyze CSV', icon:'📊'},
-        {id:'regex', label:'Regex', icon:'🧩'},
-        {id:'sql', label:'SQL', icon:'🗄️'},
-        {id:'math', label:'Math', icon:'➗'},
-        {id:'imgprompt', label:'Image Prompt', icon:'🎨'}
-      ];
-
-      const toolList = document.getElementById('toolList');
-      const modeLabel = document.getElementById('modeLabel');
-      const inputFields = document.getElementById('inputFields');
-      const runBtn = document.getElementById('runTool');
-      const copyBtn = document.getElementById('copyOut');
-      const status = document.getElementById('toolStatus');
-      const out = document.getElementById('toolOutput');
-      const outChars = document.getElementById('outChars');
-      const outWords = document.getElementById('outWords');
-      const readTime = document.getElementById('readTime');
-      const detectedTool = document.getElementById('detectedTool');
-      const confidence = document.getElementById('confidence');
-      const fileInput = document.getElementById('fileInput');
-      const micBtn = document.getElementById('micBtn');
-      let current = 'auto';
-      let attachedText = '';
-
-      // Build tool list
-      toolList.innerHTML = toolDefs.map(t => `
-        <button class="tool btn w-full text-left glass rounded-xl px-3 py-2 text-sm flex items-center gap-2 ${t.id==='auto'?'ring-soft':''}" data-id="${t.id}">
-          <span class="text-base">${t.icon}</span> <span>${t.label}</span>
-        </button>
-      `).join('');
-
-      function setTool(id){
-        current = id;
-        modeLabel.textContent = toolDefs.find(t=>t.id===id)?.label || 'Auto';
-        toolList.querySelectorAll('.tool').forEach(b=>b.classList.remove('ring-soft'));
-        toolList.querySelector(`.tool[data-id="${id}"]`)?.classList.add('ring-soft');
-        renderFields(id);
-        out.textContent = '';
-        updateMetrics();
-        detectedTool.textContent = id==='auto' ? 'Auto' : toolDefs.find(t=>t.id===id).label;
-      }
-
-      function renderFields(id){
-        const base = `
-          <label class="text-sm font-medium">Your request</label>
-          <textarea id="prompt" rows="5" class="w-full rounded-2xl p-4 glass focus-soft" placeholder="Describe what you need..."></textarea>
-          <p id="promptError" class="text-sm text-rose-400 hidden">Please enter at least 6 characters.</p>
-        `;
-        const toneSel = `
-          <div class="grid sm:grid-cols-3 gap-3">
-            <div>
-              <label class="block text-sm font-medium">Tone</label>
-              <select id="tone" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
-                <option value="friendly">Friendly</option>
-                <option value="concise">Concise</option>
-                <option value="professional" selected>Professional</option>
-                <option value="persuasive">Persuasive</option>
-                <option value="empathetic">Empathetic</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium">Length</label>
-              <select id="length" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
-                <option value="short">Short</option>
-                <option value="medium" selected>Medium</option>
-                <option value="long">Long</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium">Style sample</label>
-              <input id="styleSample" class="mt-2 w-full rounded-2xl p-3 glass focus-soft" placeholder="Paste a few sentences" />
-            </div>
-          </div>
-        `;
-        const langSel = `
-          <div class="grid sm:grid-cols-2 gap-3">
-            <div>
-              <label class="block text-sm font-medium">Target language</label>
-              <select id="language" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
-                <option>Spanish</option><option>French</option><option>German</option>
-                <option>Italian</option><option>Portuguese</option><option>Japanese</option>
-                <option>Chinese</option><option>Arabic</option><option>Hindi</option>
-              </select>
-            </div>
-            <div class="hidden sm:block"></div>
-          </div>
-        `;
-        const codeSel = `
-          <div class="grid sm:grid-cols-3 gap-3">
-            <div>
-              <label class="block text-sm font-medium">Language</label>
-              <select id="language" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
-                <option>JavaScript</option><option>TypeScript</option><option>Python</option><option>Go</option><option>Java</option><option>SQL</option><option>HTML</option><option>CSS</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium">Framework (optional)</label>
-              <input id="framework" class="mt-2 w-full rounded-2xl p-3 glass focus-soft" placeholder="React, Flask, ..."/>
-            </div>
-            <div>
-              <label class="block text-sm font-medium">Level</label>
-              <select id="level" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
-                <option>Beginner</option><option selected>Intermediate</option><option>Advanced</option>
-              </select>
-            </div>
-          </div>
-        `;
-        const csvInfo = `
-          <div class="text-sm text-ink-300">Attach a .csv file or paste CSV below. We will compute rows, columns, and numeric stats.</div>
-          <textarea id="csvText" rows="5" class="w-full rounded-2xl p-4 glass focus-soft" placeholder="col1,col2\n1,2\n3,4"></textarea>
-        `;
-        const regexInfo = `
-          <div class="text-sm text-ink-300">Describe the pattern you need, e.g., "validate email" or "US phone number".</div>
-        `;
-        const sqlInfo = `
-          <div class="text-sm text-ink-300">Describe your question and optionally provide a simple schema like: users(id,name,age)</div>
-          <textarea id="schema" rows="3" class="w-full rounded-2xl p-3 glass focus-soft" placeholder="orders(id, amount, status, created_at)\ncustomers(id, name, email)"></textarea>
-        `;
-        const explInfo = `
-          <div class="text-sm text-ink-300">Paste code to explain and annotate.</div>
-          <textarea id="codeSample" rows="6" class="w-full rounded-2xl p-3 glass focus-soft" placeholder="Paste code here..."></textarea>
-        `;
-        const mathInfo = `
-          <div class="text-sm text-ink-300">Supports + - * / % ^ and parentheses. Example: (2^3 + 5) / 3</div>
-        `;
-        const imgInfo = `
-          <div class="grid sm:grid-cols-3 gap-3">
-            <div>
-              <label class="block text-sm font-medium">Style</label>
-              <select id="imgStyle" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
-                <option>Cinematic</option><option>Editorial</option><option>Illustration</option><option>3D render</option><option>Cyberpunk</option><option>Minimal</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium">Lighting</label>
-              <select id="imgLight" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
-                <option>Golden hour</option><option>Soft diffused</option><option>Hard rim</option><option>Neon glow</option><option>Studio</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-sm font-medium">Lens</label>
-              <select id="imgLens" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
-                <option>35mm</option><option>50mm</option><option>85mm</option><option>Macro</option><option>Fisheye</option>
-              </select>
-            </div>
-          </div>
-        `;
-
-        const baseOnly = base;
-        const map = {
-          auto: baseOnly,
-          chat: baseOnly,
-          write: base + toneSel,
-          summarize: base,
-          translate: base + langSel,
-          code: base + codeSel,
-          explain: explInfo,
-          brainstorm: base,
-          plan: base,
-          csv: csvInfo,
-          regex: base + regexInfo,
-          sql: base + sqlInfo,
-          math: base + mathInfo,
-          imgprompt: base + imgInfo
-        };
-        inputFields.innerHTML = map[id] || baseOnly;
-      }
-
-      // Helper functions
-      function updateMetrics(){
-        const text = out.textContent || '';
-        outChars.textContent = text.length;
-        outWords.textContent = text.split(/\s+/).filter(Boolean).length;
-        readTime.textContent = Math.max(1, Math.round(outWords.textContent / 180)) + ' min';
-      }
-
-      function print(text, speed=8){
-        out.textContent = '';
-        copyBtn.disabled = true;
-        status.textContent = 'Generating...';
-        let i=0;
-        const id = setInterval(()=>{
-          out.textContent += text.charAt(i++);
-          updateMetrics();
-          if (i>=text.length){ clearInterval(id); status.textContent='Done.'; copyBtn.disabled = false; setTimeout(()=>status.textContent='',1500); }
-        }, speed);
-      }
-
-      function analyzeStyle(txt) {
-        if (!txt) return 'Auto';
-        const w = txt.split(/\s+/).filter(Boolean).length;
-        const long = (txt.match(/[,;:]/g)||[]).length;
-        const ex = (txt.match(/[!]/g)||[]).length;
-        if (w > 25 && long > 2) return 'Formal';
-        if (ex >= 2) return 'Energetic';
-        if (w < 15) return 'Concise';
-        return 'Neutral';
-      }
-
-      function summarize(text, max=3){
-        const sents = text.split(/(?<=[\.\!\?])\s+/).filter(Boolean);
-        const freq = {};
-        const words = text.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(Boolean);
-        words.forEach(w=>freq[w]=(freq[w]||0)+1);
-        const scores = sents.map(s=>{
-          const sw = s.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(Boolean);
-          const sc = sw.reduce((a,w)=>a+(freq[w]||0),0)/Math.max(1,sw.length);
-          return {s,sc};
-        }).sort((a,b)=>b.sc-a.sc).slice(0,max).map(o=>o.s);
-        return scores.join(' ');
-      }
-
-      function translate(text, lang){
-        return `[${lang}] ${text}
-        
-Note: Browser demo uses an illustrative translation; full version uses high-quality models.`;
-      }
-
-      function writeDraft(p, tone='professional', length='medium', style='Auto'){
-        const polite = {
-          friendly: "Thanks so much — appreciate your time!",
-          concise: "Thanks for your time.",
-          professional: "Thank you for your attention.",
-          persuasive: "I’m confident this will have a strong impact.",
-          empathetic: "I appreciate your consideration."
-        }[tone] || "Thanks for your time.";
-        const intro = {
-          friendly: "Hi there,",
-          concise: "Hello,",
-          professional: "Hello team,",
-          persuasive: "Great news,",
-          empathetic: "I understand this matters,"
-        }[tone] || "Hello,";
-        const bodyBase = (p||'').trim().replace(/\s+/g,' ');
-        const body = bodyBase ? (bodyBase.charAt(0).toUpperCase()+bodyBase.slice(1)) : "Here’s a clear and concise draft tailored to your request.";
-        const extras = {
-          short: "",
-          medium: "\n\nKey points:\n• Clear next step\n• Timeline proposed\n• Happy to adjust",
-          long: "\n\nDetails:\n1) Context and rationale\n2) Options with pros/cons\n3) Recommended next step"
-        }[length] || "";
-        const styleNote = style && style !== 'Auto' ? `\n\n[Matched style: ${style}]` : "";
-        return `${intro}\n\n${body}\n\n${polite}${extras}${styleNote}\n\n— Salmar`;
-      }
-
-      function codeGen(task, lang='JavaScript', fw='', level='Intermediate'){
-        const header = `// ${lang} • ${level}${fw?(' • '+fw):''}\n`;
-        const map = {
-          JavaScript: `${header}function main(){\n  // ${task}\n  return 'ok';\n}\nconsole.log(main());`,
-          TypeScript: `${header}function main(): string {\n  // ${task}\n  return 'ok';\n}\nconsole.log(main());`,
-          Python: `${header}def main():\n    # ${task}\n    return 'ok'\n\nprint(main())`,
-          Go: `${header}package main\nimport "fmt"\nfunc main(){\n  // ${task}\n  fmt.Println("ok")\n}`,
-          Java: `${header}class Main {\n  public static void main(String[] args){\n    // ${task}\n    System.out.println("ok");\n  }\n}`,
-          SQL: `${header}-- ${task}\nSELECT * FROM table LIMIT 10;`,
-          HTML: `${header}<!doctype html>\n<html><head><meta charset="utf-8"><title>Snippet</title></head><body>\n  <!-- ${task} -->\n  <button id="btn">Click</button>\n  <script>document.getElementById('btn').onclick=()=>alert('hi');<\/script>\n</body></html>`,
-          CSS: `${header}/* ${task} */\n.button{background: rebeccapurple; color:#fff; padding:0.5rem 1rem; border-radius:0.5rem;}`
-        };
-        return map[lang] || header + '// Snippet';
-      }
-
-      function explainCode(code){
-        const lines = code.split('\n').length;
-        const fnCount = (code.match(/\bfunction\b|=>/g)||[]).length;
-        const classes = (code.match(/\bclass\s+[A-Za-z0-9_]+/g)||[]).map(s=>s.replace('class ',''));
-        return `Overview:
-- Lines of code: ${lines}
-- Functions detected: ${fnCount}
-- Classes: ${classes.length ? classes.join(', ') : 'None'}
-
-What it does:
-- Parses inputs, performs operations, and returns results.
-
-Potential improvements:
-- Add input validation and error handling
-- Extract repeated logic into helpers
-- Write unit tests for critical paths`;
-      }
-
-      function brainstorm(topic){
-        const stems = ['How might we','A twist on','Combine with','Make it social','Automate','Gamify','Localize','Bundle'];
-        return stems.map(s=>`• ${s} ${topic}`).join('\n');
-      }
-
-      function planSteps(goal){
-        return `Goal: ${goal}\n\nWeek 1 — Discover\n• Define success\n• Audit resources\n\nWeek 2 — Design\n• Outline approach\n• Identify risks\n\nWeek 3 — Build\n• Implement core\n• Test & iterate\n\nWeek 4 — Launch\n• Ship and measure\n• Plan next sprint`;
-      }
-
-      function parseCSV(text){
-        const rows = text.split(/\r?\n/).filter(r=>r.trim().length>0).map(r=>r.split(','));
-        if (rows.length === 0) return {headers:[],rows:[],stats:{}};
-        const headers = rows[0];
-        const data = rows.slice(1);
-        const cols = headers.length;
-        const stats = {};
-        headers.forEach((h,idx)=>{
-          const nums = data.map(r=>parseFloat(r[idx])).filter(v=>!Number.isNaN(v));
-          if (nums.length){
-            const sum = nums.reduce((a,b)=>a+b,0);
-            const mean = sum/nums.length;
-            const min = Math.min(...nums);
-            const max = Math.max(...nums);
-            stats[h] = {count: nums.length, mean, min, max};
-          } else {
-            stats[h] = {count: data.length, unique: new Set(data.map(r=>r[idx])).size};
-          }
-        });
-        return {headers, rows:data, stats};
-      }
-
-      function formatStats(stats){
-        const keys = Object.keys(stats);
-        if (!keys.length) return 'No stats.';
-        return keys.map(k=>{
-          const s = stats[k];
-          if ('mean' in s) {
-            return `${k}: count=${s.count}, mean=${s.mean.toFixed(2)}, min=${s.min}, max=${s.max}`;
-          }
-          return `${k}: count=${s.count}, unique=${s.unique}`;
-        }).join('\n');
-      }
-
-      function buildTable(headers, rows){
-        const table = document.createElement('table');
-        table.className = 'w-full text-left';
-        const thead = document.createElement('thead');
-        thead.className = 'bg-white/5';
-        const trh = document.createElement('tr');
-        headers.forEach(h=>{
-          const th = document.createElement('th');
-          th.className = 'px-3 py-2 text-xs font-semibold';
-          th.textContent = h;
-          trh.appendChild(th);
-        });
-        thead.appendChild(trh);
-        const tbody = document.createElement('tbody');
-        tbody.className = 'divide-y divide-white/10';
-        rows.slice(0,6).forEach(r=>{
-          const tr = document.createElement('tr');
-          r.forEach(c=>{
-            const td = document.createElement('td');
-            td.className = 'px-3 py-2 text-xs';
-            td.textContent = c;
-            tr.appendChild(td);
-          });
-          tbody.appendChild(tr);
-        });
-        table.appendChild(thead); table.appendChild(tbody);
-        return table;
-      }
-
-      function regexFromDescription(desc){
-        const d = desc.toLowerCase();
-        if (d.includes('email')) return String(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
-        if (d.includes('url') || d.includes('link')) return String(/^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w\-.,@?^=%&:/~+#]*)?$/);
-        if (d.includes('phone')) return String(/^\+?\d{1,3}?[-.\s]?\(?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}$/);
-        if (d.includes('zipcode') || d.includes('postal')) return String(/^\d{5}(-\d{4})?$/);
-        return `/${desc.replace(/[^a-z0-9]+/gi,'.')}/i`;
-      }
-
-      function sqlFromText(text, schema){
-        const target = (/from\s+([a-z_]+)/i.exec(text)||[])[1] || (schema.match(/([a-z_]+)\(/i)||[])[1] || 'table';
-        const where = (text.match(/where\s+(.+)$/i)||[])[1] || '1=1';
-        return `-- generated from description\nSELECT *\nFROM ${target}\nWHERE ${where};`;
-      }
-
-      function mathEval(expr){
-        const safe = expr.replace(/\^/g,'**').replace(/,/g,'');
-        if (!/^[0-9+\-*/().\s%^]*$/.test(safe)) return 'Unsupported characters. Use numbers and operators.';
-        try { return 'Result: ' + Function('return ('+safe+')')(); } catch(e){ return 'Could not compute. Check your expression.'; }
-      }
-
-      function imagePrompt(base, style='Cinematic', light='Golden hour', lens='50mm'){
-        return `A highly detailed ${style.toLowerCase()} ${base}.
-- Lighting: ${light}
-- Lens: ${lens}, depth of field, bokeh
-- Color grading: rich purples and soft highlights
-- Composition: rule of thirds, leading lines
-- Render: 4k, high dynamic range, film grain subtle`;
-      }
-
-      // Detect tool
-      function detectTool(text){
-        const t = text.toLowerCase();
-        if (t.match(/\btranslate to\b|\btranslate\b/)) return 'translate';
-        if (t.startsWith('summarize') || t.includes('tl;dr')) return 'summarize';
-        if (t.includes('regex') || t.includes('regular expression')) return 'regex';
-        if (t.includes('sql') || t.includes('query')) return 'sql';
-        if (t.includes('explain code') || t.includes('what does this code')) return 'explain';
-        if (t.includes('code') || t.includes('function') || t.includes('snippet')) return 'code';
-        if (t.includes('brainstorm') || t.includes('ideas')) return 'brainstorm';
-        if (t.includes('plan') || t.includes('timeline') || t.includes('roadmap')) return 'plan';
-        if (t.match(/^[\d\s\+\-\*\/\.\(\)\^%]+$/)) return 'math';
-        if (t.includes('csv')) return 'csv';
-        if (t.includes('image prompt') || t.includes('visual')) return 'imgprompt';
-        if (t.includes('write') || t.includes('draft')) return 'write';
-        return 'chat';
-      }
-
-      // Tool handlers
-      const handlers = {
-        auto: ({prompt}) => {
-          const tool = detectTool(prompt||'');
-          detectedTool.textContent = toolDefs.find(t=>t.id===tool)?.label || 'Chat';
-          confidence.textContent = 'Heuristic';
-          return handlers[tool]({prompt});
-        },
-        chat: ({prompt}) => `Answer:\n${prompt}\n\nHow else can I help?`,
-        write: ({prompt, tone, length, styleSample}) => {
-          const style = analyzeStyle(styleSample||'');
-          return writeDraft(prompt, tone, length, style);
-        },
-        summarize: ({prompt}) => summarize((attachedText||'') + '\n' + (prompt||''), 3),
-        translate: ({prompt, language}) => translate(prompt, language),
-        code: ({prompt, language, framework, level}) => codeGen(prompt, language, framework, level),
-        explain: ({codeSample}) => explainCode(codeSample||''),
-        brainstorm: ({prompt}) => brainstorm(prompt||'your topic'),
-        plan: ({prompt}) => planSteps(prompt||'your project'),
-        csv: ({csvText}) => {
-          const text = (attachedText && attachedText.includes(',')) ? attachedText : (csvText||'');
-          const {headers, rows, stats} = parseCSV(text);
-          const head = `Rows: ${rows.length}, Columns: ${headers.length}\n`;
-          const st = formatStats(stats);
-          out.innerHTML = '';
-          out.textContent = head + st + '\n\nPreview:';
-          const tbl = buildTable(headers, rows);
-          tbl.classList.add('mt-2');
-          out.appendChild(tbl);
-          copyBtn.disabled = true; // Mixed content
-          status.textContent = 'Done.';
-          return null;
-        },
-        regex: ({prompt}) => `Regex:\n${regexFromDescription(prompt)}\n\nUse with flags as needed.`,
-        sql: ({prompt, schema}) => sqlFromText(prompt||'', schema||''),
-        math: ({prompt}) => mathEval(prompt||''),
-        imgprompt: ({prompt, imgStyle, imgLight, imgLens}) => imagePrompt(prompt||'subject', imgStyle, imgLight, imgLens)
-      };
-
-      // Events
-      toolList.addEventListener('click', (e)=>{
-        const btn = e.target.closest('.tool');
-        if (!btn) return;
-        setTool(btn.dataset.id);
-      });
-
-      setTool('auto');
-
-      document.getElementById('toolForm')?.addEventListener('submit', (e)=>{
-        e.preventDefault();
-        const promptEl = document.getElementById('prompt');
-        const prompt = promptEl ? promptEl.value.trim() : '';
-        if (current !== 'csv' && current !== 'explain' && (!prompt || prompt.length < 6)) {
-          const err = document.getElementById('promptError');
-          err?.classList.remove('hidden');
-          promptEl?.setAttribute('aria-invalid', 'true');
-          promptEl?.focus();
-          return;
-        }
-        document.getElementById('promptError')?.classList.add('hidden');
-        promptEl?.removeAttribute('aria-invalid');
-
-        // Collect fields safely
-        const fields = {
-          prompt,
-          tone: document.getElementById('tone')?.value,
-          length: document.getElementById('length')?.value,
-          styleSample: document.getElementById('styleSample')?.value,
-          language: document.getElementById('language')?.value,
-          framework: document.getElementById('framework')?.value,
-          level: document.getElementById('level')?.value,
-          csvText: document.getElementById('csvText')?.value,
-          schema: document.getElementById('schema')?.value,
-          codeSample: document.getElementById('codeSample')?.value,
-          imgStyle: document.getElementById('imgStyle')?.value,
-          imgLight: document.getElementById('imgLight')?.value,
-          imgLens: document.getElementById('imgLens')?.value
-        };
-
-        status.textContent = 'Generating...';
-        copyBtn.disabled = true;
-
-        // Run handler
-        const id = current === 'auto' ? 'auto' : current;
-        const result = handlers[id](fields);
-        if (result !== null && result !== undefined) {
-          print(String(result), 6);
-        } else {
-          // handler already updated DOM (e.g., CSV)
-          updateMetrics();
-        }
-      });
-
-      copyBtn.addEventListener('click', async ()=>{
-        try {
-          await navigator.clipboard.writeText(out.textContent || '');
-          status.textContent = 'Copied!';
-          setTimeout(()=>status.textContent='', 1200);
-        } catch (e) {
-          status.textContent = 'Press Ctrl/Cmd+C to copy.';
-          setTimeout(()=>status.textContent='', 2000);
-        }
-      });
-
-      // File attach
-      fileInput.addEventListener('change', async (e)=>{
-        try {
-          const file = e.target.files && e.target.files[0];
-          if (!file) return;
-          const text = await file.text();
-          attachedText = text.slice(0, 200000); // cap
-          status.textContent = `Attached ${file.name} (${file.type || 'text'})`;
-          setTimeout(()=>status.textContent='', 2000);
-        } catch(err){
-          attachedText = '';
-          status.textContent = 'Could not read file.';
-          setTimeout(()=>status.textContent='', 2000);
-        }
-      });
-
-      // Voice input (SpeechRecognition if available)
-      (function(){
-        let rec;
-        let listening = false;
-        micBtn.addEventListener('click', ()=>{
-          try {
-            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (!SR) { status.textContent = 'Voice not supported in this browser.'; setTimeout(()=>status.textContent='', 2000); return; }
-            if (!rec) {
-              rec = new SR();
-              rec.lang = 'en-US';
-              rec.interimResults = true;
-              rec.onresult = (e)=>{
-                let t = '';
-                for (let i=0;i<e.results.length;i++) t += e.results[i][0].transcript;
-                const promptEl = document.getElementById('prompt');
-                if (promptEl) promptEl.value = t;
-              };
-              rec.onend = ()=>{ listening=false; micBtn.textContent='🎙️ Voice'; };
-            }
-            if (!listening){ rec.start(); listening=true; micBtn.textContent='⏹️ Stop'; } else { rec.stop(); }
-          } catch(err){
-            status.textContent = 'Microphone permission denied or unavailable.';
-            setTimeout(()=>status.textContent='', 2000);
-          }
-        });
-      })();
-
     })();
   </script>
 </body>
