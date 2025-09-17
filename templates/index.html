@@ -1,1420 +1,1196 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Salmar — Purple AI that writes your emails in seconds</title>
-  <meta name="description" content="Salmar is your personal AI that writes, summarizes, and responds in your tone — in seconds. Save hours each week with outcome-driven AI." />
-  <meta name="color-scheme" content="dark light" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+  <title>Salmar — The AI That Does Everything</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <!-- Tailwind (utilities + preflight) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['Inter','system-ui','-apple-system','Segoe UI','Roboto','Ubuntu','Cantarell','Noto Sans','Helvetica Neue','Arial','sans-serif'],
-            display: ['Plus Jakarta Sans','Inter', 'system-ui', 'sans-serif']
-          },
-          colors: {
-            grape: {
-              50: '#faf5ff',
-              100: '#f5e8ff',
-              200: '#e8ccff',
-              300: '#d6a6ff',
-              400: '#b86bff',
-              500: '#9b4bff',
-              600: '#7d2eff',
-              700: '#6822e6',
-              800: '#4f1ab3',
-              900: '#3f138c',
-              950: '#2a0d66',
-            },
-            ink: {
-              50: '#f6f7fb',
-              100: '#eef0f7',
-              200: '#dfe3ee',
-              300: '#c7cfe0',
-              400: '#a5afc8',
-              500: '#7a85a4',
-              600: '#576080',
-              700: '#3f4866',
-              800: '#2e3550',
-              900: '#242a41',
-              950: '#151827',
-            }
-          },
-          boxShadow: {
-            neoLight: '12px 12px 24px rgba(0,0,0,0.08), -10px -10px 20px rgba(255,255,255,0.7), inset 1px 1px 0 rgba(255,255,255,0.2)',
-            neoDark: '12px 12px 30px rgba(0,0,0,0.45), -4px -4px 12px rgba(255,255,255,0.06), inset 1px 1px 0 rgba(255,255,255,0.05)',
-            glow: '0 10px 40px rgba(155,75,255,0.5)'
-          },
-          backdropBlur: {
-            xs: '2px'
-          },
-          keyframes: {
-            float: { '0%,100%':{ transform:'translateY(0)'}, '50%':{ transform:'translateY(-8px)'} },
-            shimmer: { '0%':{ backgroundPosition:'-200% 0'}, '100%':{ backgroundPosition:'200% 0'} },
-            pulseGlow: { '0%,100%':{ boxShadow: '0 0 0 0 rgba(155,75,255,0.5)'}, '50%':{ boxShadow:'0 0 0 12px rgba(155,75,255,0)' } }
-          },
-          animation: {
-            float: 'float 6s ease-in-out infinite',
-            shimmer: 'shimmer 2.5s linear infinite',
-            pulseGlow: 'pulseGlow 2.2s ease-in-out infinite'
-          }
+          fontFamily: { sans: ['Plus Jakarta Sans', 'ui-sans-serif', 'system-ui'] },
+          container: { center: true, padding: '1rem' },
         }
       }
     }
   </script>
+  <!-- GSAP for animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" defer></script>
+  <!-- THREE.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js" defer></script>
+
   <style>
+    /* CSS Variables for Theming */
     :root {
-      --bg: #0b0a12;
-      --panel: #111122;
-      --card: rgba(255,255,255,0.08);
-      --text: #e9e7ff;
-      --muted: #bfb8e7;
-      --border: rgba(255,255,255,0.12);
-      --accent: #9b4bff;
-      --accent-2: #b86bff;
-      --success: #22c55e;
-      --warning: #f59e0b;
-      --danger: #ef4444;
-      --shadow-neo: 20px 20px 40px rgba(0,0,0,0.4), -12px -12px 24px rgba(255,255,255,0.04), inset 1px 1px 0 rgba(255,255,255,0.03);
+      --bg: #0d0618;
+      --bg-2: #0a0312;
+      --glass: rgba(255, 255, 255, 0.06);
+      --text: #efe7ff;
+      --muted: #cbb7ff;
+      --accent: #8a5cff;
+      --accent-2: #b36bff;
+      --neon: #c89cff;
+      --success: #7bf1a8;
+      --danger: #ff6bb9;
+      --glow: 0 0 24px rgba(181, 129, 255, 0.45), 0 0 64px rgba(130, 72, 255, 0.25);
+      --shadow-soft: 12px 12px 24px rgba(0,0,0,0.35), -8px -8px 24px rgba(255,255,255,0.02);
+      --card-border: rgba(209, 178, 255, 0.2);
+      --wave1: #6b2bff;
+      --wave2: #b36bff;
+      --wave3: #ff72d2;
+      --focus: #caa6ff;
     }
-    html:not(.dark) {
-      --bg: #f5f3ff;
-      --panel: #f9f7ff;
-      --card: rgba(255,255,255,0.75);
-      --text: #17132b;
-      --muted: #453c7a;
-      --border: rgba(10,10,20,0.08);
-      --accent: #7d2eff;
-      --accent-2: #b86bff;
-      --shadow-neo: 18px 18px 36px rgba(33, 8, 57, 0.15), -14px -14px 28px rgba(255,255,255,0.9), inset 1px 1px 0 rgba(255,255,255,0.4);
+    body[data-theme="light"] {
+      --bg: #f5f0ff;
+      --bg-2: #ede3ff;
+      --glass: rgba(255, 255, 255, 0.6);
+      --text: #1b042f;
+      --muted: #3a2061;
+      --accent: #6a38ff;
+      --accent-2: #9a5bff;
+      --neon: #742bff;
+      --glow: 0 0 18px rgba(106, 56, 255, 0.35), 0 0 48px rgba(159, 92, 255, 0.2);
+      --shadow-soft: 10px 10px 20px rgba(97,75,146,0.2), -6px -6px 20px rgba(255,255,255,0.7);
+      --card-border: rgba(114, 71, 196, 0.18);
+      --wave1: #6a38ff;
+      --wave2: #9a5bff;
+      --wave3: #ff79da;
+      --focus: #5a21ff;
     }
-    html, body {
-      background: var(--bg);
+    body.future-mode {
+      --glass: rgba(163, 117, 255, 0.1);
+      --card-border: rgba(200, 155, 255, 0.35);
+    }
+
+    /* Base styles */
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      background:
+        radial-gradient(1200px 600px at 80% -10%, rgba(170, 120, 255, 0.25), transparent 60%),
+        radial-gradient(800px 800px at -10% 20%, rgba(115, 72, 255, 0.35), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg-2) 50%, var(--bg));
       color: var(--text);
+      overflow-x: hidden;
+      font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+      letter-spacing: 0.1px;
     }
-    .glass {
-      background: var(--card);
-      backdrop-filter: saturate(140%) blur(12px);
-      -webkit-backdrop-filter: saturate(140%) blur(12px);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-neo);
+    a { color: inherit; text-decoration: none; }
+    button:focus-visible, a:focus-visible, input:focus-visible {
+      outline: 2px solid var(--focus);
+      outline-offset: 2px;
+      border-radius: 0.5rem;
     }
-    .neo {
-      background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(0,0,0,0.08));
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow-neo);
-    }
-    .btn {
-      position: relative;
-      isolation: isolate;
-    }
-    .btn::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      background: radial-gradient(120px 60px at var(--x,50%) var(--y,50%), rgba(255,255,255,0.25), transparent 50%);
-      opacity: 0;
-      transition: opacity .25s ease;
-      pointer-events: none;
-      mix-blend-mode: overlay;
-      z-index: -1;
-    }
-    .btn:hover::after { opacity: .9; }
-    .gradient-text {
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
-    .ring-soft { box-shadow: 0 0 0 6px rgba(155,75,255,0.15); }
-    .focus-soft:focus-visible { outline: none; box-shadow: 0 0 0 6px rgba(155,75,255,0.25); }
-    .contrast-card { background: linear-gradient(180deg, rgba(155,75,255,0.08), rgba(155,75,255,0.03)); }
-    .noisy {
+
+    /* Subtle animated grain/noise overlay (programmatic) */
+    .grain {
       pointer-events: none;
       position: fixed;
       inset: 0;
+      opacity: 0.08;
       mix-blend-mode: soft-light;
-      opacity: .06;
+      z-index: 1;
+    }
+
+    /* Holographic soundwave background (Future Mode) */
+    .soundwave-bg {
+      position: absolute;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          90deg,
+          rgba(163, 117, 255, 0.14) 0px,
+          rgba(163, 117, 255, 0.14) 1px,
+          transparent 1px,
+          transparent 3px
+        );
+      mask-image: radial-gradient(75% 60% at 50% 40%, black, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.8s ease;
       z-index: 0;
     }
-    .skip-link {
-      position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;
+    body.future-mode .soundwave-bg { opacity: 1; }
+
+    /* Header styles */
+    .glass {
+      background: var(--glass);
+      backdrop-filter: saturate(140%) blur(14px);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-soft);
     }
-    .skip-link:focus { left: 1rem; top: 1rem; width: auto; height: auto; z-index: 50; }
-    .range {
-      appearance: none;
-      width: 100%;
-      height: 0.5rem;
-      border-radius: 9999px;
-      background: linear-gradient(90deg, var(--accent), var(--accent-2));
-      outline: none;
+
+    /* Neumorphic card */
+    .neo {
+      background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02));
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-soft);
     }
-    .range::-webkit-slider-thumb {
-      -webkit-appearance: none;
-      appearance: none;
-      width: 24px; height: 24px;
-      border-radius: 9999px;
-      background: white;
-      border: 4px solid var(--accent);
-      box-shadow: 0 6px 18px rgba(0,0,0,.25);
-      cursor: pointer;
+
+    /* Neon glow on hover */
+    .neon-hover {
+      transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
     }
-    .range::-moz-range-thumb {
-      width: 24px; height: 24px;
-      border-radius: 9999px;
-      background: white;
-      border: 4px solid var(--accent);
-      box-shadow: 0 6px 18px rgba(0,0,0,.25);
-      cursor: pointer;
+    .neon-hover:hover {
+      box-shadow: var(--glow);
+      border-color: rgba(200, 155, 255, 0.6);
+      transform: translateY(-2px);
     }
+
+    /* Buttons */
+    .btn-primary {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      padding: 0.85rem 1.25rem;
+      border-radius: 0.9rem;
+      border: 1px solid rgba(255,255,255,0.15);
+      box-shadow: 0 8px 24px rgba(138,92,255,0.35), inset 0 0 18px rgba(255,255,255,0.1);
+      transition: transform 0.25s ease, box-shadow 0.35s ease, filter 0.35s ease;
+      overflow: hidden;
+    }
+    .btn-primary::before {
+      content: "";
+      position: absolute;
+      inset: -60% -20%;
+      background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.2), transparent 30%);
+      transform: rotate(0deg);
+      animation: sweep 5s linear infinite;
+      mix-blend-mode: screen;
+      opacity: 0.5;
+    }
+    @keyframes sweep {
+      to { transform: rotate(360deg); }
+    }
+    .btn-primary:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 12px 28px rgba(138,92,255,0.45), inset 0 0 22px rgba(255,255,255,0.22); }
+    .btn-ghost {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--card-border);
+      padding: 0.85rem 1.25rem;
+      border-radius: 0.9rem;
+      backdrop-filter: blur(10px);
+      transition: transform 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .btn-ghost:hover { transform: translateY(-2px); border-color: rgba(200, 155, 255, 0.55); box-shadow: var(--glow); }
+
+    /* Waves */
+    .hero-waves {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+    }
+    .waves path {
+      transform-origin: center;
+      filter: drop-shadow(0 0 10px rgba(179,107,255,0.35));
+    }
+
+    /* Feature card hover ripple */
+    .ripple {
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(179,107,255,0.25), transparent 35%);
+      opacity: 0;
+      transition: opacity 0.35s ease;
+      pointer-events: none;
+    }
+    .feature:hover .ripple { opacity: 1; }
+
+    /* Tagline morph */
+    .morph {
+      display: inline-block;
+      background: linear-gradient(90deg, var(--muted), var(--neon));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      filter: drop-shadow(0 0 18px rgba(180, 120, 255, 0.25));
+    }
+
+    /* Flow diagram */
+    .pulse {
+      animation: pulseGlow 2.4s ease-in-out infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { filter: drop-shadow(0 0 6px rgba(179,107,255,0.35)) drop-shadow(0 0 18px rgba(179,107,255,0.15)); }
+      50% { filter: drop-shadow(0 0 14px rgba(179,107,255,0.65)) drop-shadow(0 0 30px rgba(179,107,255,0.35)); }
+    }
+
+    /* Constellation map */
+    .node { transition: transform 0.25s ease; }
+    .node:hover { transform: scale(1.08); }
+
+    /* Floating testimonial cards */
+    .floaty { animation: floaty 6s ease-in-out infinite; }
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Black hole CTA swirl */
+    .blackhole {
+      position: relative;
+      background:
+        radial-gradient(180px 120px at 50% 52%, rgba(0,0,0,0.25), transparent 50%),
+        radial-gradient(closest-side, rgba(20,0,40,0.6), transparent 65%),
+        radial-gradient(closest-side, rgba(90,0,120,0.2), transparent 55%);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .blackhole::before {
+      content: "";
+      position: absolute; inset: -50%;
+      background: conic-gradient(from 0deg, rgba(170, 120, 255, 0.1), rgba(255, 121, 218, 0.08), rgba(138, 92, 255, 0.08), rgba(170, 120, 255, 0.1));
+      animation: swirl 14s linear infinite;
+      filter: blur(32px);
+      z-index: -1;
+    }
+    @keyframes swirl { to { transform: rotate(360deg); } }
+
+    /* Utility */
+    .max-w-mega { max-width: 1300px; }
+
+    /* Reduced Motion */
     @media (prefers-reduced-motion: reduce) {
-      .animate-float, .animate-pulse, .animate-pulseGlow, .animate-shimmer { animation: none !important; }
-      .transition, .duration-200, .duration-300, .duration-500, .duration-700 { transition: none !important; }
+      .btn-primary::before, .floaty, .pulse, .blackhole::before { animation: none !important; }
+      .neon-hover, .btn-primary, .btn-ghost { transition: none !important; }
     }
   </style>
 </head>
-<body class="min-h-screen antialiased relative">
-  <a href="#main" class="skip-link glass rounded-lg px-3 py-2 text-sm">Skip to content</a>
+<body class="min-h-screen antialiased relative" data-theme="dark">
+  <!-- Subtle animated grain -->
+  <canvas class="grain" id="grainCanvas" aria-hidden="true"></canvas>
 
-  <!-- Ambient gradient + blob background -->
-  <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10">
-    <div class="absolute inset-0 bg-gradient-to-b from-grape-950/60 via-ink-900/50 to-ink-900"></div>
-    <div class="absolute -top-32 -left-20 w-96 h-96 rounded-full blur-3xl opacity-60" style="background: radial-gradient(closest-side, rgba(155,75,255,.45), transparent 80%);"></div>
-    <div class="absolute top-32 -right-20 w-[28rem] h-[28rem] rounded-full blur-3xl opacity-50" style="background: radial-gradient(closest-side, rgba(184,107,255,.35), transparent 80%);"></div>
-    <canvas id="noise" class="noisy"></canvas>
-  </div>
+  <!-- Decorative soundwave background (future-mode only) -->
+  <div class="soundwave-bg" aria-hidden="true"></div>
 
   <!-- Header -->
-  <header class="sticky top-0 z-40 backdrop-blur-md border-b border-white/10 bg-ink-900/30 dark:bg-ink-900/30">
-    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-3 group focus-soft rounded-lg" aria-label="Salmar home">
-        <span class="relative grid place-items-center w-9 h-9 rounded-xl glass">
-          <svg width="20" height="20" viewBox="0 0 24 24" class="text-grape-300" aria-hidden="true">
-            <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0%" stop-color="#9b4bff"/><stop offset="100%" stop-color="#b86bff"/></linearGradient></defs>
-            <path fill="url(#g)" d="M12 2l2.5 4.5L20 8l-4.5 2.5L13 15l-1 7-1-7-2.5-4.5L4 8l5.5-1.5z"/>
-          </svg>
-        </span>
-        <span class="font-extrabold font-display text-xl tracking-tight">Salmar</span>
-      </a>
-      <div class="hidden md:flex items-center gap-8">
-        <a href="#features" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Features</a>
-        <a href="#use-cases" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Use Cases</a>
-        <a href="#security" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Security</a>
-        <a href="#compare" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Compare</a>
-        <a href="#pricing" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Pricing</a>
-        <a href="#demo" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Playground</a>
+  <header class="sticky top-0 z-40">
+    <div class="glass">
+      <div class="container max-w-mega flex items-center justify-between py-3">
+        <a href="#" class="flex items-center gap-3" aria-label="Salmar Home">
+          <span class="relative flex h-9 w-9 items-center justify-center rounded-xl neo neon-hover">
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+              <defs>
+                <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#9a5bff"/>
+                  <stop offset="100%" stop-color="#ff79da"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#g1)" d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Zm0 2a8 8 0 0 1 0 16 8 8 0 0 1 0-16Zm-2 5.5c0-.828.672-1.5 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5V12c0 .828-.672 1.5-1.5 1.5h-1A1.5 1.5 0 0 1 10 12V9.5Zm1.25 5.75h1.5A2.25 2.25 0 0 1 15 17.5v.25H9v-.25a2.25 2.25 0 0 1 2.25-2.25Z"/>
+            </svg>
+          </span>
+          <div class="leading-tight">
+            <span class="text-lg font-extrabold tracking-tight" style="background:linear-gradient(90deg,#b36bff,#ff79da);-webkit-background-clip:text;background-clip:text;color:transparent;">Salmar</span>
+            <span class="block text-xs text-[color:var(--muted)]">The AI That Does Everything</span>
+          </div>
+        </a>
+
+        <nav aria-label="Primary" class="hidden md:flex items-center gap-2">
+          <a href="#features" class="px-3 py-2 rounded-lg btn-ghost">Features</a>
+          <a href="#how" class="px-3 py-2 rounded-lg btn-ghost">How It Works</a>
+          <a href="#integrations" class="px-3 py-2 rounded-lg btn-ghost">Integrations</a>
+          <a href="#proof" class="px-3 py-2 rounded-lg btn-ghost">Proof</a>
+        </nav>
+
+        <div class="flex items-center gap-2">
+          <!-- Future Mode -->
+          <button id="futureToggle" class="btn-ghost" aria-pressed="false" aria-label="Toggle Future Mode">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <defs>
+                <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#b36bff"/>
+                  <stop offset="100%" stop-color="#ff79da"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#g2)" d="M12 3a9 9 0 1 0 .001 18.001A9 9 0 0 0 12 3Zm0 2c.707 0 1.386.102 2.029.292a7 7 0 1 1-8.737 8.737A7.004 7.004 0 0 1 12 5Z"/>
+            </svg>
+            <span class="ml-1 hidden sm:inline">Future</span>
+          </button>
+          <!-- Theme -->
+          <button id="themeToggle" class="btn-ghost" aria-pressed="true" aria-label="Toggle theme">
+            <svg id="moonIcon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 1 0 9.79 9.79Z"/>
+            </svg>
+            <svg id="sunIcon" width="18" height="18" viewBox="0 0 24 24" class="hidden" aria-hidden="true">
+              <path fill="currentColor" d="M6.76 4.84l-1.8-1.79L3.17 4.84l1.79 1.79 1.8-1.79Zm10.45 1.79l1.79-1.79-1.79-1.79-1.79 1.79 1.79 1.79ZM12 4V1h-0v3Zm0 19v-3h0v3Zm8-8h3v0h-3ZM1 12h3v0H1Zm3.17 7.16l1.79 1.79 1.8-1.79-1.8-1.79-1.79 1.79Zm14.83 0l-1.79 1.79-1.8-1.79 1.8-1.79 1.79 1.79ZM12 7a5 5 0 1 1 0 10A5 5 0 0 1 12 7Z"/>
+            </svg>
+          </button>
+          <a href="#cta" class="btn-primary">Start with Salmar</a>
+        </div>
       </div>
-      <div class="flex items-center gap-3">
-        <button id="themeToggle" class="btn glass rounded-xl px-3 py-2 text-sm font-medium flex items-center gap-2" aria-pressed="false" aria-label="Toggle dark mode">
-          <span class="sr-only">Toggle theme</span>
-          <svg id="sun" class="w-4 h-4 hidden dark:inline text-yellow-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 4V1h-0v3h0zm0 19v-3h-0v3h0zM4 12H1v0h3v0zm19 0h-3v0h3v0zM6.76 19.16l-1.42 1.42-1.79-1.8 1.41-1.41 1.8 1.79zM18.36 4.84l1.4-1.4 1.8 1.79-1.41 1.41-1.79-1.8zM12 7a5 5 0 100 10 5 5 0 000-10z"/></svg>
-          <svg id="moon" class="w-4 h-4 dark:hidden text-ink-800" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.64 13a9 9 0 01-11.35-11A9 9 0 1021.64 13z"/></svg>
-          <span class="hidden sm:inline">Theme</span>
-        </button>
-        <a href="#demo" class="btn rounded-xl px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Try Demo</a>
-        <a href="#signup" class="btn rounded-xl px-4 py-2 text-sm font-semibold bg-white/90 text-ink-900 hover:bg-white focus-soft dark:bg-grape-700 dark:text-white dark:hover:bg-grape-600">Sign Up Free</a>
-      </div>
-    </nav>
+    </div>
   </header>
 
-  <main id="main" class="relative z-10">
-    <!-- HERO -->
-    <section id="hero" class="pt-16 sm:pt-20 lg:pt-28 pb-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10 items-center">
-        <div>
-          <div class="inline-flex items-center gap-2 glass rounded-full px-3 py-1 text-xs text-ink-200 mb-4" aria-label="Trusted by indicator">
-            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-            Trusted by 12,000+ professionals
-          </div>
-          <h1 id="dynamicHeadline" class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
-            AI that writes your emails in seconds.
-            <span class="block gradient-text">Your personal AI assistant.</span>
-          </h1>
-          <p id="supportingStatement" class="mt-4 text-ink-200 text-lg leading-relaxed">
-            Save hours by letting AI summarize, write, and respond in your tone. Outcome-first, jargon-free, and built to help you move faster.
-          </p>
-          <div class="mt-6 flex flex-wrap items-center gap-3">
-            <a href="#signup" class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Sign Up Free</a>
-            <a href="#demo" class="btn rounded-2xl px-6 py-3 font-semibold border border-white/20 bg-white/10 hover:bg-white/20 focus-soft">Try the Live Demo</a>
-            <button id="voiceDemo" class="btn rounded-2xl px-4 py-3 font-medium glass focus-soft" aria-label="Play short voiceover demo">Play AI voice</button>
-          </div>
-          <div class="mt-8 flex items-center gap-6 text-ink-300">
-            <div class="flex -space-x-2" aria-hidden="true">
-              <span class="w-8 h-8 rounded-full grid place-items-center text-xs font-bold text-ink-900 bg-gradient-to-br from-grape-400 to-grape-200 border border-white/20">AM</span>
-              <span class="w-8 h-8 rounded-full grid place-items-center text-xs font-bold text-ink-900 bg-gradient-to-br from-purple-300 to-pink-200 border border-white/20">JS</span>
-              <span class="w-8 h-8 rounded-full grid place-items-center text-xs font-bold text-ink-900 bg-gradient-to-br from-indigo-300 to-cyan-200 border border-white/20">TC</span>
-              <span class="w-8 h-8 rounded-full grid place-items-center text-xs font-bold text-ink-900 bg-gradient-to-br from-amber-300 to-rose-200 border border-white/20">LK</span>
-            </div>
-            <div class="text-sm">
-              “Inbox sorted in minutes.” — Over 2,000 five-star reviews
-            </div>
-          </div>
+  <!-- Hero -->
+  <section class="relative pt-14 md:pt-20">
+    <div class="hero-waves" aria-hidden="true">
+      <svg class="waves w-full h-full" viewBox="0 0 1440 600" preserveAspectRatio="none">
+        <path d="M0,320 C240,260 480,380 720,320 C960,260 1200,380 1440,320 L1440,600 L0,600 Z" fill="url(#wg1)" opacity="0.25"></path>
+        <path d="M0,300 C240,240 480,360 720,300 C960,240 1200,360 1440,300 L1440,600 L0,600 Z" fill="url(#wg2)" opacity="0.20"></path>
+        <path d="M0,340 C240,280 480,400 720,340 C960,280 1200,400 1440,340 L1440,600 L0,600 Z" fill="url(#wg3)" opacity="0.18"></path>
+        <defs>
+          <linearGradient id="wg1" x1="0" x2="1">
+            <stop offset="0%" stop-color="var(--wave1)"/>
+            <stop offset="100%" stop-color="var(--wave2)"/>
+          </linearGradient>
+          <linearGradient id="wg2" x1="0" x2="1">
+            <stop offset="0%" stop-color="var(--wave2)"/>
+            <stop offset="100%" stop-color="var(--wave3)"/>
+          </linearGradient>
+          <linearGradient id="wg3" x1="0" x2="1">
+            <stop offset="0%" stop-color="var(--wave1)"/>
+            <stop offset="100%" stop-color="var(--wave3)"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+
+    <div class="container max-w-mega relative z-10 grid lg:grid-cols-2 gap-10 items-center">
+      <!-- Left: Content -->
+      <div class="relative">
+        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-2xl glass text-sm tracking-wide mb-4 neon-hover" aria-live="polite">
+          <span class="h-2 w-2 rounded-full" style="background: radial-gradient(circle, #7bf1a8 0%, #1ae287 40%, transparent 70%); box-shadow: 0 0 14px rgba(122, 241, 168, 0.8);"></span>
+          Live • Salmar is thinking in real-time
         </div>
 
-        <!-- Hero Visual: Before/After + mini playground -->
-        <div class="relative">
-          <div class="absolute -inset-4 rounded-3xl blur-2xl opacity-70" style="background: radial-gradient(closest-side, rgba(155,75,255,.35), transparent 70%);"></div>
-          <div class="relative glass rounded-3xl p-4 sm:p-6 lg:p-8">
-            <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center gap-2">
-                <span class="w-3 h-3 rounded-full bg-red-400"></span>
-                <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
-                <span class="w-3 h-3 rounded-full bg-green-400"></span>
-              </div>
-              <span class="text-xs text-ink-300">Live preview</span>
-            </div>
-            <div class="grid gap-4">
-              <div class="contrast-card rounded-2xl p-4">
-                <label for="heroPrompt" class="text-xs uppercase tracking-wider text-ink-300">Prompt</label>
-                <textarea id="heroPrompt" class="mt-2 w-full rounded-xl p-3 bg-black/20 text-sm focus-soft" rows="3" placeholder="E.g., Write a friendly follow-up email to a client about the proposal we sent last week."></textarea>
-                <div class="mt-3 flex items-center gap-3">
-                  <select id="heroTone" class="glass rounded-xl px-3 py-2 text-sm focus-soft">
-                    <option>Friendly</option>
-                    <option>Concise</option>
-                    <option>Professional</option>
-                    <option>Persuasive</option>
-                    <option>Empathetic</option>
-                  </select>
-                  <button id="heroGenerate" class="btn rounded-xl px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft">Generate</button>
-                  <div id="heroStatus" class="sr-only" aria-live="polite"></div>
-                </div>
-              </div>
-              <div class="grid sm:grid-cols-2 gap-4">
-                <div class="neo rounded-2xl p-4 border border-white/10">
-                  <div class="text-xs text-ink-300 mb-2 uppercase tracking-wider">Before</div>
-                  <div class="rounded-xl bg-black/20 p-3 text-sm leading-relaxed" id="beforeEmail" aria-label="Before email">
-Subject: Re: Proposal?
-hey just checking if you saw the proposal. let me know? thx
-                  </div>
-                </div>
-                <div class="neo rounded-2xl p-4 border border-white/10">
-                  <div class="text-xs text-ink-300 mb-2 uppercase tracking-wider flex items-center gap-2">After <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-300/20">Salmar</span></div>
-                  <div class="rounded-xl bg-black/20 p-3 text-sm leading-relaxed min-h-[96px]" id="afterEmail" aria-label="After email"></div>
-                </div>
-              </div>
-              <p class="text-xs text-ink-300">No sign-up required. This is a sandboxed demo that runs in your browser.</p>
-            </div>
+        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
+          Meet <span class="morph">Salmar</span> —
+          <span class="block mt-2">The AI That Does <span class="morph" id="morphTagline">Everything.</span></span>
+        </h1>
+        <p class="mt-4 text-lg text-[color:var(--muted)] max-w-xl">
+          One intelligent system, infinite possibilities — your assistant, creator, strategist, and guide.
+        </p>
+
+        <!-- Personas -->
+        <div class="mt-6">
+          <p class="text-sm uppercase tracking-wider text-[color:var(--muted)] mb-3">Choose your pathway</p>
+          <div class="flex flex-wrap gap-2" role="group" aria-label="Select your identity">
+            <!-- persona chips -->
+            <button class="chip btn-ghost" data-persona="Student">Student</button>
+            <button class="chip btn-ghost" data-persona="Entrepreneur">Entrepreneur</button>
+            <button class="chip btn-ghost" data-persona="Creator">Creator</button>
+            <button class="chip btn-ghost" data-persona="Developer">Developer</button>
+            <button class="chip btn-ghost" data-persona="Explorer">Explorer</button>
+          </div>
+          <div id="personaUsecases" class="mt-4 grid sm:grid-cols-2 gap-3"></div>
+        </div>
+
+        <div class="mt-6 flex items-center gap-3">
+          <a href="#cta" class="btn-primary" aria-label="Start with Salmar primary call to action">
+            <span class="relative flex h-2 w-2 rounded-full bg-white/90 shadow-[0_0_18px_rgba(255,255,255,0.8)]"></span>
+            Start with Salmar
+          </a>
+          <a href="#features" class="btn-ghost">Explore Features</a>
+        </div>
+
+        <div class="mt-6 text-sm text-[color:var(--muted)] flex items-center gap-2">
+          <span class="inline-flex items-center gap-1"><span class="h-2 w-2 rounded-full" style="background:radial-gradient(circle,#ff79da 0%,#b36bff 50%,transparent 65%);box-shadow:0 0 12px rgba(255,121,218,0.8)"></span> Response &lt; 1s</span>
+          <span aria-hidden="true">•</span>
+          <span>10M+ prompts answered</span>
+        </div>
+      </div>
+
+      <!-- Right: 3D Orb -->
+      <div class="relative">
+        <div class="absolute -inset-6 blur-3xl opacity-50 pointer-events-none" style="background: radial-gradient(circle at 50% 50%, rgba(179,107,255,0.35), transparent 60%);"></div>
+        <div class="relative neo rounded-3xl p-2">
+          <canvas id="orb" class="w-full h-[380px] md:h-[520px] rounded-2xl block" role="img" aria-label="A rotating purple orb with glowing neural pathways"></canvas>
+          <div class="absolute inset-0 pointer-events-none">
+            <canvas id="particleCanvas" class="w-full h-full"></canvas>
           </div>
         </div>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Social Proof -->
-    <section aria-label="Social proof" class="py-10">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="glass rounded-3xl p-6">
-          <div class="grid md:grid-cols-5 items-center gap-6 text-center">
-            <div class="text-sm text-ink-300 md:col-span-1">Trusted by teams at</div>
-            <div class="md:col-span-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
-              <!-- Brand-like SVGs (no external images) -->
-              <div class="neo rounded-xl p-3" aria-label="Company: Heliotrope">
-                <svg viewBox="0 0 120 32" role="img" aria-label="Heliotrope"><title>Heliotrope</title><rect width="120" height="32" rx="8" fill="none"/><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" fill="currentColor" class="text-ink-300">Heliotrope</text></svg>
-              </div>
-              <div class="neo rounded-xl p-3" aria-label="Company: Aethra">
-                <svg viewBox="0 0 120 32" role="img" aria-label="Aethra"><title>Aethra</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" fill="currentColor" class="text-ink-300">Aethra</text></svg>
-              </div>
-              <div class="neo rounded-xl p-3" aria-label="Company: Quantify">
-                <svg viewBox="0 0 120 32" role="img" aria-label="Quantify"><title>Quantify</title><text x="10" y="22" class="text-ink-300" font-family="Inter, sans-serif" font-size="14" fill="currentColor">Quantify</text></svg>
-              </div>
-              <div class="neo rounded-xl p-3" aria-label="Company: Orbyx">
-                <svg viewBox="0 0 120 32" role="img" aria-label="Orbyx"><title>Orbyx</title><text x="10" y="22" class="text-ink-300" font-family="Inter, sans-serif" font-size="14" fill="currentColor">Orbyx</text></svg>
-              </div>
-              <div class="neo rounded-xl p-3" aria-label="Company: Lumina">
-                <svg viewBox="0 0 120 32" role="img" aria-label="Lumina"><title>Lumina</title><text x="10" y="22" class="text-ink-300" font-family="Inter, sans-serif" font-size="14" fill="currentColor">Lumina</text></svg>
-              </div>
-              <div class="neo rounded-xl p-3" aria-label="Company: Flux">
-                <svg viewBox="0 0 120 32" role="img" aria-label="Flux"><title>Flux</title><text x="10" y="22" class="text-ink-300" font-family="Inter, sans-serif" font-size="14" fill="currentColor">Flux</text></svg>
-              </div>
-              <div class="neo rounded-xl p-3" aria-label="Company: Vertex">
-                <svg viewBox="0 0 120 32" role="img" aria-label="Vertex"><title>Vertex</title><text x="10" y="22" class="text-ink-300" font-family="Inter, sans-serif" font-size="14" fill="currentColor">Vertex</text></svg>
-              </div>
-              <div class="neo rounded-xl p-3" aria-label="Company: Nimbus">
-                <svg viewBox="0 0 120 32" role="img" aria-label="Nimbus"><title>Nimbus</title><text x="10" y="22" class="text-ink-300" font-family="Inter, sans-serif" font-size="14" fill="currentColor">Nimbus</text></svg>
-              </div>
-            </div>
-          </div>
-        </div>
+  <!-- Features -->
+  <section id="features" class="relative py-16 md:py-24">
+    <div class="container max-w-mega">
+      <div class="max-w-2xl">
+        <h2 class="text-3xl md:text-4xl font-extrabold">Everything you need. In one <span class="morph">mind</span>.</h2>
+        <p class="mt-3 text-[color:var(--muted)]">Interactive, glowing, and intelligent — Salmar adapts to you.</p>
       </div>
-    </section>
 
-    <!-- Feature Highlights -->
-    <section id="features" class="py-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto">
-          <h2 class="font-display text-3xl sm:text-4xl font-extrabold">Outcome-focused features</h2>
-          <p class="mt-3 text-ink-200">Everything you need to communicate faster, clearer, and in your voice.</p>
-        </div>
-        <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="glass rounded-2xl p-6">
-            <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
-              <svg viewBox="0 0 24 24" class="w-6 h-6" aria-hidden="true"><path fill="currentColor" d="M3 6h18v2H3zm2 4h14v2H5zm3 4h8v2H8z"/></svg>
-            </div>
-            <h3 class="font-semibold text-lg">Writes faster → Saves time</h3>
-            <p class="mt-2 text-ink-300">Turn bullet points into polished emails in seconds so you can ship more work.</p>
-          </div>
-          <div class="glass rounded-2xl p-6">
-            <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
-              <svg viewBox="0 0 24 24" class="w-6 h-6" aria-hidden="true"><path fill="currentColor" d="M12 2l4 7-6 13-2-8-6-2 10-10z"/></svg>
-            </div>
-            <h3 class="font-semibold text-lg">Understands your style → Feels human</h3>
-            <p class="mt-2 text-ink-300">Analyze your past writing to match tone, formality, and cadence automatically.</p>
-          </div>
-          <div class="glass rounded-2xl p-6">
-            <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
-              <svg viewBox="0 0 24 24" class="w-6 h-6" aria-hidden="true"><path fill="currentColor" d="M4 4h16v10H4zm0 12h8v2H4zm10 0h6v2h-6z"/></svg>
-            </div>
-            <h3 class="font-semibold text-lg">Summarizes long threads</h3>
-            <p class="mt-2 text-ink-300">Turn messy chains into crisp summaries with action items in one click.</p>
-          </div>
-          <div class="glass rounded-2xl p-6">
-            <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
-              <svg viewBox="0 0 24 24" class="w-6 h-6" aria-hidden="true"><path fill="currentColor" d="M12 12a5 5 0 015-5h5v10h-5a5 5 0 01-5-5zM2 7h7v10H2z"/></svg>
-            </div>
-            <h3 class="font-semibold text-lg">Replies in your voice</h3>
-            <p class="mt-2 text-ink-300">Respond with empathy, confidence, or brevity — you choose the tone.</p>
-          </div>
-          <div class="glass rounded-2xl p-6">
-            <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
-              <svg viewBox="0 0 24 24" class="w-6 h-6" aria-hidden="true"><path fill="currentColor" d="M12 1l3 7h7l-5.5 4 2 7L12 16 5.5 19l2-7L2 8h7z"/></svg>
-            </div>
-            <h3 class="font-semibold text-lg">Auto-proofread & format</h3>
-            <p class="mt-2 text-ink-300">Fix grammar, polish structure, and keep brand consistency automatically.</p>
-          </div>
-          <div class="glass rounded-2xl p-6">
-            <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
-              <svg viewBox="0 0 24 24" class="w-6 h-6" aria-hidden="true"><path fill="currentColor" d="M3 11h18v2H3z"/></svg>
-            </div>
-            <h3 class="font-semibold text-lg">One-click personalize</h3>
-            <p class="mt-2 text-ink-300">Adapt to different audiences or segments without starting from scratch.</p>
-          </div>
-        </div>
-        <div class="mt-8 text-center">
-          <a href="#signup" class="btn inline-flex items-center gap-2 rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Get Started</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Use Cases / Persona personalization -->
-    <section id="use-cases" class="py-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-3 gap-8 items-start">
-          <div class="lg:col-span-1">
-            <h2 class="font-display text-3xl font-extrabold">Built for your role</h2>
-            <p class="mt-2 text-ink-200">Choose a persona to personalize the page instantly.</p>
-            <div class="mt-4 flex flex-wrap gap-2">
-              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="marketer">Marketers</button>
-              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="writer">Writers</button>
-              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="sales">Sales</button>
-              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="support">Support</button>
-              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="team">Teams</button>
-            </div>
-            <div class="mt-6 text-sm text-ink-300">Tip: Use ?role=marketer or ?utm_industry=sales to auto-personalize.</div>
-          </div>
-          <div class="lg:col-span-2 glass rounded-3xl p-6">
-            <div id="personaContent" class="grid sm:grid-cols-2 gap-6">
-              <!-- dynamic persona cards -->
-            </div>
-            <div class="mt-6">
-              <a href="#signup" class="btn rounded-xl px-5 py-3 font-semibold bg-white/90 text-ink-900 hover:bg-white focus-soft dark:bg-grape-700 dark:text-white dark:hover:bg-grape-600">Try It for Your Team</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Before / After Comparison -->
-    <section class="py-16">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto">
-          <h2 class="font-display text-3xl font-extrabold">From messy threads to clarity</h2>
-          <p class="mt-2 text-ink-200">See the difference in one swipe.</p>
-        </div>
-        <div class="mt-8 relative glass rounded-3xl overflow-hidden">
-          <div class="grid md:grid-cols-2 gap-0">
-            <div class="p-6">
-              <h3 class="font-semibold mb-2">Without AI</h3>
-              <div class="neo rounded-xl p-4 text-sm leading-relaxed h-48 overflow-auto" aria-label="Without AI example">
-- 14 messages across 3 people
-- Repeated questions
-- Action items unclear
-- Long paragraphs, little structure
-              </div>
-            </div>
-            <div class="p-6 relative">
-              <h3 class="font-semibold mb-2">With Salmar</h3>
-              <div class="neo rounded-xl p-4 text-sm leading-relaxed h-48 overflow-hidden relative">
-                <div aria-hidden="true" class="absolute inset-0 rounded-xl" style="background: linear-gradient(180deg, rgba(155,75,255,0.12), rgba(155,75,255,0.05));"></div>
-                <div id="afterMask" class="absolute inset-0 overflow-hidden" style="clip-path: inset(0 50% 0 0);">
-                  <div class="p-4">
-                    <p class="mb-2"><strong>Summary:</strong> Confirm timeline, approve design v2, schedule handoff.</p>
-                    <ol class="list-decimal ml-5 space-y-1">
-                      <li>Deliverables approved by Friday</li>
-                      <li>QA on Monday</li>
-                      <li>Handoff Tuesday 10AM</li>
-                    </ol>
-                    <p class="mt-3 text-ink-300">Tone: concise, confident. 2-minute read.</p>
-                  </div>
-                </div>
-                <input id="slider" type="range" min="0" max="100" value="50" class="range absolute bottom-4 left-4 right-4" aria-label="Reveal comparison slider" />
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="mt-6 text-center">
-          <a href="#demo" class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Try it now</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Interactive Playground -->
-    <section id="demo" class="py-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-2 gap-8 items-start">
-          <div>
-            <h2 class="font-display text-3xl font-extrabold">Interactive demo</h2>
-            <p class="mt-2 text-ink-200">Type a prompt, pick a tone, and see Salmar write instantly.</p>
-            <form id="playgroundForm" class="mt-6 grid gap-4" novalidate>
-              <div>
-                <label for="prompt" class="block text-sm font-medium">What should Salmar write?</label>
-                <textarea id="prompt" name="prompt" rows="5" class="mt-2 w-full rounded-2xl p-4 glass focus-soft" placeholder="Write a polite reminder to a client about overdue invoice #1043."></textarea>
-                <p id="promptError" class="mt-1 text-sm text-rose-400 hidden">Please enter at least 10 characters.</p>
-              </div>
-              <div class="grid sm:grid-cols-3 gap-4">
-                <div>
-                  <label for="tone" class="block text-sm font-medium">Tone</label>
-                  <select id="tone" name="tone" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
-                    <option value="friendly">Friendly</option>
-                    <option value="concise">Concise</option>
-                    <option value="professional">Professional</option>
-                    <option value="persuasive">Persuasive</option>
-                    <option value="empathetic">Empathetic</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="length" class="block text-sm font-medium">Length</label>
-                  <select id="length" name="length" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
-                    <option value="short">Short</option>
-                    <option value="medium" selected>Medium</option>
-                    <option value="long">Long</option>
-                  </select>
-                </div>
-                <div>
-                  <label for="styleSample" class="block text-sm font-medium">Analyze my style</label>
-                  <input id="styleSample" name="styleSample" class="mt-2 w-full rounded-2xl p-3 glass focus-soft" placeholder="Paste 1-2 sentences" />
-                </div>
-              </div>
-              <div class="flex items-center gap-3">
-                <button id="generate" type="submit" class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Generate</button>
-                <button id="copyOutput" type="button" class="btn rounded-2xl px-6 py-3 font-semibold glass focus-soft" disabled>Copy</button>
-                <div id="playgroundStatus" class="text-sm text-ink-300" role="status" aria-live="polite"></div>
-              </div>
-            </form>
-          </div>
-          <div class="glass rounded-3xl p-6">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-sm text-ink-300">Output</span>
-              <div class="text-xs">
-                <span id="charCount">0</span> chars
-              </div>
-            </div>
-            <div id="output" class="neo rounded-2xl p-4 min-h-[220px] text-sm leading-relaxed whitespace-pre-wrap"></div>
-            <div class="mt-4 grid sm:grid-cols-3 gap-3">
-              <div class="contrast-card rounded-xl p-3 text-xs">Style: <span id="styleTag" class="text-ink-200">Auto</span></div>
-              <div class="contrast-card rounded-xl p-3 text-xs">Read time: <span id="readTime" class="text-ink-200">0 min</span></div>
-              <div class="contrast-card rounded-xl p-3 text-xs">Tone: <span id="toneTag" class="text-ink-200">—</span></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Gamified Progress -->
-    <section class="py-16">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="glass rounded-3xl p-6">
+      <div class="mt-10 grid md:grid-cols-2 xl:grid-cols-4 gap-5">
+        <!-- Card 1 -->
+        <article class="feature group relative rounded-2xl p-5 neo neon-hover focus-within:shadow-lg" tabindex="0" aria-label="Personal Assistant Feature">
+          <div class="ripple"></div>
           <div class="flex items-center justify-between">
-            <h3 class="font-display text-2xl font-bold">Unlock full power</h3>
-            <a href="#signup" class="btn rounded-xl px-5 py-2 text-sm font-semibold bg-white/90 text-ink-900 hover:bg-white focus-soft dark:bg-grape-700 dark:text-white dark:hover:bg-grape-600">Continue</a>
-          </div>
-          <ol class="mt-4 grid sm:grid-cols-3 gap-4">
-            <li class="neo rounded-2xl p-4">
-              <div class="text-sm font-semibold mb-1">Step 1: Try</div>
-              <p class="text-ink-300 text-sm">Use the playground and see the results.</p>
-              <div class="mt-3 h-2 bg-white/10 rounded-full">
-                <div class="h-2 rounded-full bg-gradient-to-r from-grape-600 to-grape-400 w-3/4"></div>
-              </div>
-            </li>
-            <li class="neo rounded-2xl p-4">
-              <div class="text-sm font-semibold mb-1">Step 2: Sign up</div>
-              <p class="text-ink-300 text-sm">Create your workspace in 30 seconds.</p>
-              <div class="mt-3 h-2 bg-white/10 rounded-full">
-                <div class="h-2 rounded-full bg-gradient-to-r from-grape-600 to-grape-400 w-1/2"></div>
-              </div>
-            </li>
-            <li class="neo rounded-2xl p-4">
-              <div class="text-sm font-semibold mb-1">Step 3: Connect</div>
-              <p class="text-ink-300 text-sm">Link your inbox and brand style.</p>
-              <div class="mt-3 h-2 bg-white/10 rounded-full">
-                <div class="h-2 rounded-full bg-gradient-to-r from-grape-600 to-grape-400 w-1/3"></div>
-              </div>
-            </li>
-          </ol>
-        </div>
-      </div>
-    </section>
-
-    <!-- Case Studies -->
-    <section id="case-studies" class="py-16">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto">
-          <h2 class="font-display text-3xl font-extrabold">Real results, not hype</h2>
-          <p class="mt-2 text-ink-200">Teams save hours each week with measurable impact.</p>
-        </div>
-        <div class="mt-10 grid md:grid-cols-3 gap-6">
-          <article class="glass rounded-3xl p-6">
-            <div class="text-5xl font-extrabold gradient-text"><span class="counter" data-target="60">0</span>%</div>
-            <p class="mt-2 text-ink-200">Cut response time</p>
-            <p class="mt-3 text-sm text-ink-300">Customer success team resolved tickets 60% faster after adopting Salmar.</p>
-          </article>
-          <article class="glass rounded-3xl p-6">
-            <div class="text-5xl font-extrabold gradient-text"><span class="counter" data-target="5">0</span>h</div>
-            <p class="mt-2 text-ink-200">Saved per week</p>
-            <p class="mt-3 text-sm text-ink-300">Average knowledge workers regained 5 hours weekly by delegating routine emails.</p>
-          </article>
-          <article class="glass rounded-3xl p-6">
-            <div class="text-5xl font-extrabold gradient-text"><span class="counter" data-target="3">0</span>x</div>
-            <p class="mt-2 text-ink-200">More replies</p>
-            <p class="mt-3 text-sm text-ink-300">Sales teams saw 3x increase in positive reply rates with tone personalization.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- Comparison Grid -->
-    <section id="compare" class="py-16">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-3xl mx-auto">
-          <h2 class="font-display text-3xl font-extrabold">Why Salmar over the rest</h2>
-          <p class="mt-2 text-ink-200">Clarity, control, and speed — without the chaos.</p>
-        </div>
-        <div class="mt-8 overflow-x-auto">
-          <table class="w-full text-left glass rounded-3xl overflow-hidden">
-            <thead class="bg-white/5">
-              <tr>
-                <th class="px-4 py-3 text-sm font-semibold">Feature</th>
-                <th class="px-4 py-3 text-sm font-semibold">Salmar</th>
-                <th class="px-4 py-3 text-sm font-semibold">Competitor A</th>
-                <th class="px-4 py-3 text-sm font-semibold">Competitor B</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-white/10">
-              <tr>
-                <td class="px-4 py-3">Tone-matching from your samples</td>
-                <td class="px-4 py-3 text-emerald-400">Included</td>
-                <td class="px-4 py-3 text-ink-300">Add-on</td>
-                <td class="px-4 py-3 text-ink-300">Limited</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3">Inbox summarization with actions</td>
-                <td class="px-4 py-3 text-emerald-400">Included</td>
-                <td class="px-4 py-3 text-ink-300">Basic</td>
-                <td class="px-4 py-3 text-ink-300">No</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3">Privacy-first processing</td>
-                <td class="px-4 py-3 text-emerald-400">On by default</td>
-                <td class="px-4 py-3 text-ink-300">Opt-in</td>
-                <td class="px-4 py-3 text-ink-300">Unknown</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3">Transparent edits & citations</td>
-                <td class="px-4 py-3 text-emerald-400">Yes</td>
-                <td class="px-4 py-3 text-ink-300">No</td>
-                <td class="px-4 py-3 text-ink-300">No</td>
-              </tr>
-              <tr>
-                <td class="px-4 py-3">Team controls & approvals</td>
-                <td class="px-4 py-3 text-emerald-400">Granular</td>
-                <td class="px-4 py-3 text-ink-300">Limited</td>
-                <td class="px-4 py-3 text-ink-300">Limited</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="mt-6 text-center">
-          <a href="#signup" class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Get Started</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Trust, Security & Transparency -->
-    <section id="security" class="py-16">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="glass rounded-3xl p-6">
-          <div class="grid lg:grid-cols-3 gap-6">
-            <div>
-              <h2 class="font-display text-3xl font-extrabold">Trust & transparency</h2>
-              <p class="mt-2 text-ink-200">Security, privacy, and ethics are built-in — not bolted on.</p>
-              <div class="mt-4 flex gap-2">
-                <span class="text-xs px-3 py-1 rounded-full border border-white/15 bg-white/10">SOC 2</span>
-                <span class="text-xs px-3 py-1 rounded-full border border-white/15 bg-white/10">GDPR</span>
-                <span class="text-xs px-3 py-1 rounded-full border border-white/15 bg-white/10">CCPA</span>
-              </div>
-            </div>
-            <div class="lg:col-span-2 grid sm:grid-cols-2 gap-4">
-              <div class="neo rounded-2xl p-4">
-                <h3 class="font-semibold">Data handling</h3>
-                <p class="text-sm text-ink-300 mt-1">Your content stays yours. We don’t use your data to train generic models. You control retention and deletion.</p>
-              </div>
-              <div class="neo rounded-2xl p-4">
-                <h3 class="font-semibold">Privacy by default</h3>
-                <p class="text-sm text-ink-300 mt-1">Encryption in transit and at rest. SSO/SAML available for teams.</p>
-              </div>
-              <div class="neo rounded-2xl p-4">
-                <h3 class="font-semibold">Ethical safeguards</h3>
-                <p class="text-sm text-ink-300 mt-1">Bias detection and hallucination warnings built into the editor.</p>
-              </div>
-              <div class="neo rounded-2xl p-4">
-                <h3 class="font-semibold">Compliance</h3>
-                <p class="text-sm text-ink-300 mt-1">Data Processing Addendum (DPA) and audit logs available.</p>
-                <button id="openDPA" class="mt-2 btn text-sm rounded-xl px-3 py-2 glass focus-soft">View DPA</button>
-              </div>
-            </div>
-          </div>
-          <div class="mt-6">
-            <a href="#signup" class="btn rounded-xl px-5 py-3 font-semibold bg-white/90 text-ink-900 hover:bg-white focus-soft dark:bg-grape-700 dark:text-white dark:hover:bg-grape-600">Book a security review</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Community & Integrations -->
-    <section id="community" class="py-16">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid lg:grid-cols-2 gap-8 items-center">
-          <div>
-            <h2 class="font-display text-3xl font-extrabold">Join the Salmar community</h2>
-            <p class="mt-2 text-ink-200">Be part of a growing ecosystem — Slack group, templates, and integrations.</p>
-            <ul class="mt-4 space-y-2 text-ink-200">
-              <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> 5,000+ members in Slack</li>
-              <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Share templates and prompts</li>
-              <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Integrations with your favorite tools</li>
-            </ul>
-            <div class="mt-6 flex gap-3">
-              <a href="#signup" class="btn rounded-xl px-5 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Join Slack</a>
-              <a href="#signup" class="btn rounded-xl px-5 py-3 font-semibold glass focus-soft">See integrations</a>
-            </div>
-          </div>
-          <div class="glass rounded-3xl p-6">
-            <h3 class="font-semibold">Popular integrations</h3>
-            <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
-              <div class="neo rounded-2xl p-4 flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-400 to-indigo-200"></div>
-                <span>Gmail</span>
-              </div>
-              <div class="neo rounded-2xl p-4 flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 to-sky-200"></div>
-                <span>Outlook</span>
-              </div>
-              <div class="neo rounded-2xl p-4 flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-200"></div>
-                <span>Slack</span>
-              </div>
-              <div class="neo rounded-2xl p-4 flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-400 to-rose-200"></div>
-                <span>HubSpot</span>
-              </div>
-              <div class="neo rounded-2xl p-4 flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-200"></div>
-                <span>Notion</span>
-              </div>
-              <div class="neo rounded-2xl p-4 flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-400 to-purple-200"></div>
-                <span>Zapier</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Testimonials -->
-    <section id="testimonials" class="py-16">
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto">
-          <h2 class="font-display text-3xl font-extrabold">Loved by professionals</h2>
-          <p class="mt-2 text-ink-200">What our users say</p>
-        </div>
-        <div class="mt-8 grid md:grid-cols-3 gap-6">
-          <blockquote class="glass rounded-3xl p-6">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full grid place-items-center font-bold bg-gradient-to-br from-grape-400 to-grape-200 text-ink-900">RK</div>
-              <div>
-                <div class="font-semibold">Ravi Kumar</div>
-                <div class="text-xs text-ink-300">Product Marketing</div>
-              </div>
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl glass">
+                <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="currentColor" d="M12 3a6 6 0 0 0-6 6v2a4 4 0 0 0-4 4v1h20v-1a4 4 0 0 0-4-4V9a6 6 0 0 0-6-6Zm0 18a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3Z"/>
+                </svg>
+              </span>
+              <h3 class="font-semibold">Personal Assistant</h3>
             </div>
-            <p class="mt-3 text-ink-200">“Salmar nails my tone every time. I went from 2 hours of email a day to 45 minutes.”</p>
-          </blockquote>
-          <blockquote class="glass rounded-3xl p-6">
+          </div>
+          <p class="mt-3 text-sm text-[color:var(--muted)]">Manage life, reminders, knowledge, and conversations seamlessly.</p>
+          <ul class="mt-3 text-sm space-y-1">
+            <li>• Smart scheduling + memory</li>
+            <li>• Context-aware conversations</li>
+            <li>• Ambient reminders</li>
+          </ul>
+          <div class="absolute inset-0 pointer-events-none rounded-2xl" style="box-shadow: inset 0 0 40px rgba(179,107,255,0.08);"></div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="feature group relative rounded-2xl p-5 neo neon-hover" tabindex="0" aria-label="Creative Partner Feature">
+          <div class="ripple"></div>
+          <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full grid place-items-center font-bold bg-gradient-to-br from-indigo-400 to-indigo-200 text-ink-900">AM</div>
-              <div>
-                <div class="font-semibold">Ava Martinez</div>
-                <div class="text-xs text-ink-300">Customer Success</div>
-              </div>
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl glass">
+                <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25Zm2.92 1.83l-.99-.99 9.19-9.19.99.99-9.19 9.19ZM20.71 7.04a1.003 1.003 0 0 0 0-1.42L18.37 3.29a1.003 1.003 0 0 0-1.42 0l-1.34 1.34 3.75 3.75 1.35-1.34Z"/>
+                </svg>
+              </span>
+              <h3 class="font-semibold">Creative Partner</h3>
             </div>
-            <p class="mt-3 text-ink-200">“Summaries are spot-on and action items are crystal clear. Huge team win.”</p>
-          </blockquote>
-          <blockquote class="glass rounded-3xl p-6">
+          </div>
+          <p class="mt-3 text-sm text-[color:var(--muted)]">Write, brainstorm, design, compose — with you, not just for you.</p>
+          <ul class="mt-3 text-sm space-y-1">
+            <li>• Story ideation & editing</li>
+            <li>• Visual & audio prompts</li>
+            <li>• Moodboards & styles</li>
+          </ul>
+          <div class="absolute inset-0 pointer-events-none rounded-2xl" style="box-shadow: inset 0 0 40px rgba(255,121,218,0.08);"></div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="feature group relative rounded-2xl p-5 neo neon-hover" tabindex="0" aria-label="Business Genius Feature">
+          <div class="ripple"></div>
+          <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-full grid place-items-center font-bold bg-gradient-to-br from-rose-400 to-rose-200 text-ink-900">DL</div>
-              <div>
-                <div class="font-semibold">Daniel Lee</div>
-                <div class="text-xs text-ink-300">Founder</div>
-              </div>
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl glass">
+                <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="currentColor" d="M3 13h2v8H3v-8Zm4-4h2v12H7V9Zm4-6h2v18h-2V3Zm4 8h2v10h-2V11Zm4-4h2v14h-2V7Z"/>
+                </svg>
+              </span>
+              <h3 class="font-semibold">Business Genius</h3>
             </div>
-            <p class="mt-3 text-ink-200">“Best AI for email I’ve tried — simple, ethical, and fast.”</p>
-          </blockquote>
-        </div>
-      </div>
-    </section>
+          </div>
+          <p class="mt-3 text-sm text-[color:var(--muted)]">Automate workflows, analyze data, and support customers 24/7.</p>
+          <ul class="mt-3 text-sm space-y-1">
+            <li>• KPI dashboards</li>
+            <li>• Automations & agents</li>
+            <li>• Customer support copilot</li>
+          </ul>
+          <div class="absolute inset-0 pointer-events-none rounded-2xl" style="box-shadow: inset 0 0 40px rgba(138,92,255,0.08);"></div>
+        </article>
 
-    <!-- Pricing (simple CTA section to repeat) -->
-    <section id="pricing" class="py-16">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="glass rounded-3xl p-6">
-          <div class="grid md:grid-cols-3 gap-6 items-center">
-            <div class="md:col-span-1">
-              <h3 class="font-display text-2xl font-extrabold">Start free. Upgrade anytime.</h3>
-              <p class="mt-2 text-ink-200">No credit card required. Cancel anytime.</p>
-            </div>
-            <div class="md:col-span-2 grid sm:grid-cols-3 gap-4">
-              <div class="neo rounded-2xl p-4">
-                <div class="font-semibold">Free</div>
-                <div class="text-3xl font-extrabold mt-1">$0</div>
-                <ul class="mt-3 text-sm text-ink-300 space-y-1">
-                  <li>100 generations</li>
-                  <li>Basic summarization</li>
-                  <li>Community access</li>
-                </ul>
-                <a href="#signup" class="mt-4 inline-block btn rounded-xl px-4 py-2 font-semibold glass focus-soft">Get started</a>
-              </div>
-              <div class="neo rounded-2xl p-4 border-2 border-grape-500/40 relative">
-                <div class="absolute -top-3 right-4 text-[10px] px-2 py-1 rounded-full bg-gradient-to-r from-grape-600 to-grape-400 text-white">Popular</div>
-                <div class="font-semibold">Pro</div>
-                <div class="text-3xl font-extrabold mt-1">$19</div>
-                <ul class="mt-3 text-sm text-ink-300 space-y-1">
-                  <li>Unlimited drafts</li>
-                  <li>Tone-matching</li>
-                  <li>Priority support</li>
-                </ul>
-                <a href="#signup" class="mt-4 inline-block btn rounded-xl px-4 py-2 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft">Upgrade</a>
-              </div>
-              <div class="neo rounded-2xl p-4">
-                <div class="font-semibold">Teams</div>
-                <div class="text-3xl font-extrabold mt-1">Custom</div>
-                <ul class="mt-3 text-sm text-ink-300 space-y-1">
-                  <li>SSO/SAML</li>
-                  <li>Admin controls</li>
-                  <li>Security review</li>
-                </ul>
-                <a href="#signup" class="mt-4 inline-block btn rounded-xl px-4 py-2 font-semibold glass focus-soft">Talk to sales</a>
-              </div>
+        <!-- Card 4 -->
+        <article class="feature group relative rounded-2xl p-5 neo neon-hover" tabindex="0" aria-label="Universal Connector Feature">
+          <div class="ripple"></div>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl glass">
+                <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
+                  <path fill="currentColor" d="M7 2h10v2H7V2Zm0 18h10v2H7v-2ZM4 7h2v10H4V7Zm14 0h2v10h-2V7ZM8 9h8v6H8V9Z"/>
+                </svg>
+              </span>
+              <h3 class="font-semibold">Universal Connector</h3>
             </div>
           </div>
-        </div>
+          <p class="mt-3 text-sm text-[color:var(--muted)]">Integrate tools, apps, and APIs — effortlessly and securely.</p>
+          <ul class="mt-3 text-sm space-y-1">
+            <li>• OAuth & Webhooks</li>
+            <li>• Multi-app actions</li>
+            <li>• One-click recipes</li>
+          </ul>
+          <div class="absolute inset-0 pointer-events-none rounded-2xl" style="box-shadow: inset 0 0 40px rgba(106,56,255,0.08);"></div>
+        </article>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- FAQ -->
-    <section id="faq" class="py-16">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 class="font-display text-3xl font-extrabold text-center">Frequently asked questions</h2>
-        <div class="mt-8 grid sm:grid-cols-2 gap-6">
-          <div class="glass rounded-2xl p-5">
-            <h3 class="font-semibold">How does Salmar handle my data?</h3>
-            <p class="mt-2 text-ink-300">We do not use your data to train general models. All processing is secured and you can delete content anytime.</p>
-          </div>
-          <div class="glass rounded-2xl p-5">
-            <h3 class="font-semibold">Will it match my tone?</h3>
-            <p class="mt-2 text-ink-300">Paste a few sentences and Salmar adapts to your style — concise, friendly, or entirely professional.</p>
-          </div>
-          <div class="glass rounded-2xl p-5">
-            <h3 class="font-semibold">Does it work with my tools?</h3>
-            <p class="mt-2 text-ink-300">Yes. Gmail, Outlook, Slack, and more via native integrations or Zapier.</p>
-          </div>
-          <div class="glass rounded-2xl p-5">
-            <h3 class="font-semibold">What about AI mistakes?</h3>
-            <p class="mt-2 text-ink-300">We show transparency for edits and surface potential hallucinations or bias for review before you send.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Final CTA -->
-    <section class="py-16">
-      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <div class="glass rounded-3xl p-8">
-          <h2 class="font-display text-3xl sm:text-4xl font-extrabold">Ready to communicate brilliantly?</h2>
-          <p class="mt-3 text-ink-200">Start free and see value in minutes.</p>
-          <div class="mt-6 flex justify-center gap-3">
-            <a href="#signup" class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Get Started</a>
-            <a href="#demo" class="btn rounded-2xl px-6 py-3 font-semibold glass focus-soft">Try the Demo</a>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Signup / Newsletter / Footer -->
-    <section id="signup" class="py-16">
-      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="glass rounded-3xl p-6">
-          <h2 class="font-display text-3xl font-extrabold">Create your free account</h2>
-          <form id="signupForm" class="mt-6 grid sm:grid-cols-3 gap-4" novalidate>
-            <div class="sm:col-span-1">
-              <label for="email" class="block text-sm font-medium">Work email</label>
-              <input id="email" type="email" class="mt-2 w-full rounded-2xl p-3 glass focus-soft" placeholder="you@company.com" required />
-              <p id="emailError" class="mt-1 text-sm text-rose-400 hidden">Please enter a valid email address.</p>
-            </div>
-            <div class="sm:col-span-1">
-              <label for="company" class="block text-sm font-medium">Company</label>
-              <input id="company" type="text" class="mt-2 w-full rounded-2xl p-3 glass focus-soft" placeholder="Company Inc." />
-            </div>
-            <div class="sm:col-span-1">
-              <label for="role" class="block text-sm font-medium">Role</label>
-              <select id="role" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
-                <option>Marketer</option>
-                <option>Writer</option>
-                <option>Sales</option>
-                <option>Support</option>
-                <option>Founder</option>
-              </select>
-            </div>
-            <div class="sm:col-span-3 flex items-center justify-between">
-              <div class="text-xs text-ink-300">By signing up, you agree to our <a href="#tos" class="underline">Terms</a> and <a href="#privacy" class="underline">Privacy</a>.</div>
-              <button class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow" type="submit">Create account</button>
-            </div>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <footer class="border-t border-white/10 py-12">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-4 gap-8">
+  <!-- How It Works -->
+  <section id="how" class="relative py-16 md:py-24">
+    <div class="container max-w-mega">
+      <div class="grid lg:grid-cols-2 gap-12 items-center">
         <div>
-          <div class="flex items-center gap-2">
-            <span class="w-8 h-8 rounded-xl glass grid place-items-center">
-              <svg width="18" height="18" viewBox="0 0 24 24" class="text-grape-300" aria-hidden="true"><path fill="currentColor" d="M12 2l2.5 4.5L20 8l-4.5 2.5L13 15l-1 7-1-7-2.5-4.5L4 8l5.5-1.5z"/></svg>
+          <h2 class="text-3xl md:text-4xl font-extrabold mb-3">How Salmar thinks</h2>
+          <p class="text-[color:var(--muted)]">Transparency first: every result flows through a clear pipeline built for accuracy, speed, and control.</p>
+          <ul class="mt-6 space-y-3 text-sm">
+            <li class="neo p-4 rounded-xl">Input — Your natural language, files, data, or APIs</li>
+            <li class="neo p-4 rounded-xl">Salmar Thinks — reasoning, planning, and tool-using agents</li>
+            <li class="neo p-4 rounded-xl">Your Result — precise, contextual, and ready-to-use</li>
+          </ul>
+        </div>
+        <div class="relative">
+          <div class="absolute -inset-6 blur-3xl opacity-50 pointer-events-none" style="background: radial-gradient(circle at 50% 50%, rgba(179,107,255,0.25), transparent 60%);"></div>
+          <svg class="w-full neo rounded-2xl p-4" viewBox="0 0 800 380" role="img" aria-label="Animated flow diagram showing Input to Salmar Thinks to Result">
+            <defs>
+              <linearGradient id="flow" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#6a38ff"/>
+                <stop offset="100%" stop-color="#ff79da"/>
+              </linearGradient>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+                <feMerge>
+                  <feMergeNode in="coloredBlur"/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+            </defs>
+
+            <!-- Nodes -->
+            <g class="pulse">
+              <rect x="50" y="120" rx="16" ry="16" width="180" height="140" fill="url(#flow)" opacity="0.12" stroke="url(#flow)" stroke-opacity="0.6"></rect>
+              <text x="140" y="195" text-anchor="middle" fill="var(--text)" font-size="18" font-weight="700">Input</text>
+            </g>
+
+            <g class="pulse">
+              <rect x="310" y="80" rx="16" ry="16" width="180" height="220" fill="url(#flow)" opacity="0.12" stroke="url(#flow)" stroke-opacity="0.6"></rect>
+              <text x="400" y="160" text-anchor="middle" fill="var(--text)" font-size="18" font-weight="700">Salmar</text>
+              <text x="400" y="185" text-anchor="middle" fill="var(--text)" font-size="16" font-weight="500">Thinks</text>
+            </g>
+
+            <g class="pulse">
+              <rect x="570" y="120" rx="16" ry="16" width="180" height="140" fill="url(#flow)" opacity="0.12" stroke="url(#flow)" stroke-opacity="0.6"></rect>
+              <text x="660" y="195" text-anchor="middle" fill="var(--text)" font-size="18" font-weight="700">Your Result</text>
+            </g>
+
+            <!-- Flow lines -->
+            <path id="line1" d="M230,190 C280,190 300,190 310,190" stroke="url(#flow)" stroke-width="3" fill="none" filter="url(#glow)"></path>
+            <path id="line2" d="M490,190 C520,190 550,190 570,190" stroke="url(#flow)" stroke-width="3" fill="none" filter="url(#glow)"></path>
+
+            <!-- Energy particles -->
+            <circle id="p1" r="6" fill="url(#flow)"></circle>
+            <circle id="p2" r="6" fill="url(#flow)"></circle>
+            <script>
+              (function(){
+                const p1 = document.getElementById('p1');
+                const p2 = document.getElementById('p2');
+                const l1 = document.getElementById('line1');
+                const l2 = document.getElementById('line2');
+                function animateParticle(circle, path, dur) {
+                  const len = path.getTotalLength();
+                  let start = null;
+                  const loop = (t) => {
+                    if (!start) start = t;
+                    const d = (t - start) / dur;
+                    const p = path.getPointAtLength((d % 1) * len);
+                    circle.setAttribute('cx', p.x);
+                    circle.setAttribute('cy', p.y);
+                    requestAnimationFrame(loop);
+                  };
+                  requestAnimationFrame(loop);
+                }
+                if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                animateParticle(p1, l1, 1800);
+                animateParticle(p2, l2, 1800);
+              })();
+            </script>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integration Universe Map -->
+  <section id="integrations" class="relative py-16 md:py-24">
+    <div class="container max-w-mega">
+      <div class="max-w-2xl">
+        <h2 class="text-3xl md:text-4xl font-extrabold">Integration Universe</h2>
+        <p class="mt-3 text-[color:var(--muted)]">A constellation of tools connected by Salmar — hover to discover benefits.</p>
+      </div>
+      <div class="relative mt-10 neo rounded-2xl p-2">
+        <div class="absolute -inset-8 blur-3xl opacity-40 pointer-events-none" style="background: radial-gradient(50% 50% at 50% 50%, rgba(138,92,255,0.35), transparent 70%);"></div>
+
+        <div id="tooltip" role="tooltip" class="hidden absolute z-20 px-3 py-2 rounded-lg glass text-sm pointer-events-none"></div>
+
+        <svg id="constellation" class="w-full rounded-xl block" viewBox="0 0 1100 540" role="img" aria-label="Constellation map of integrations">
+          <defs>
+            <radialGradient id="nodeGlow" r="65%">
+              <stop offset="0%" stop-color="#ffffff"/>
+              <stop offset="100%" stop-color="#b36bff"/>
+            </radialGradient>
+            <linearGradient id="link" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#6a38ff"/>
+              <stop offset="100%" stop-color="#ff79da"/>
+            </linearGradient>
+            <filter id="softGlow"><feGaussianBlur stdDeviation="2"/></filter>
+          </defs>
+
+          <!-- Links (pre-drawn) -->
+          <g id="links" stroke="url(#link)" stroke-opacity="0.55"></g>
+
+          <!-- Nodes -->
+          <g id="nodes"></g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Proof -->
+  <section id="proof" class="relative py-16 md:py-24">
+    <div class="container max-w-mega">
+      <div class="grid lg:grid-cols-2 gap-10 items-start">
+        <div>
+          <h2 class="text-3xl md:text-4xl font-extrabold">Loved by teams and creators</h2>
+          <p class="mt-3 text-[color:var(--muted)]">From fast-growing startups to global enterprises.</p>
+
+          <div class="mt-6 grid sm:grid-cols-2 gap-4">
+            <div class="neo rounded-xl p-4 floaty">
+              <p class="text-sm">“Salmar redefined how I run my business. It’s my strategist, writer, and operator — all in one.”</p>
+              <div class="mt-3 flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full neo flex items-center justify-center font-bold">AR</div>
+                <span class="text-sm text-[color:var(--muted)]">Amira R. — Founder</span>
+              </div>
+            </div>
+            <div class="neo rounded-xl p-4 floaty" style="animation-delay: .6s">
+              <p class="text-sm">“As a developer, it became my universal connector. Integrations that took days now take minutes.”</p>
+              <div class="mt-3 flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full neo flex items-center justify-center font-bold">JS</div>
+                <span class="text-sm text-[color:var(--muted)]">J. Sun — Software Engineer</span>
+              </div>
+            </div>
+            <div class="neo rounded-xl p-4 floaty" style="animation-delay: .2s">
+              <p class="text-sm">“Creative flow on tap. Brainstorms feel like co-writing with a genius collaborator.”</p>
+              <div class="mt-3 flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full neo flex items-center justify-center font-bold">LT</div>
+                <span class="text-sm text-[color:var(--muted)]">L. Tran — Creator</span>
+              </div>
+            </div>
+            <div class="neo rounded-xl p-4 floaty" style="animation-delay: .8s">
+              <p class="text-sm">“Support, analytics, automation — truly all of AI, in one place.”</p>
+              <div class="mt-3 flex items-center gap-3">
+                <div class="h-8 w-8 rounded-full neo flex items-center justify-center font-bold">GH</div>
+                <span class="text-sm text-[color:var(--muted)]">Global Holdings — Ops</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="grid grid-cols-2 gap-4">
+            <div class="neo rounded-xl p-5 text-center">
+              <div class="text-3xl font-extrabold">10M+</div>
+              <div class="text-sm text-[color:var(--muted)]">prompts answered</div>
+            </div>
+            <div class="neo rounded-xl p-5 text-center">
+              <div class="text-3xl font-extrabold">&lt;1s</div>
+              <div class="text-sm text-[color:var(--muted)]">avg response</div>
+            </div>
+            <div class="neo rounded-xl p-5 text-center">
+              <div class="text-3xl font-extrabold">Trusted</div>
+              <div class="text-sm text-[color:var(--muted)]">by global companies</div>
+            </div>
+            <div class="neo rounded-xl p-5 text-center">
+              <div class="text-3xl font-extrabold">Secure</div>
+              <div class="text-sm text-[color:var(--muted)]">privacy-first design</div>
+            </div>
+          </div>
+
+          <div class="mt-6 grid grid-cols-3 gap-3">
+            <div class="neo rounded-xl p-4 text-center text-xs">🟣 Speedster</div>
+            <div class="neo rounded-xl p-4 text-center text-xs">🟣 Trusted</div>
+            <div class="neo rounded-xl p-4 text-center text-xs">🟣 Genius Planner</div>
+            <div class="neo rounded-xl p-4 text-center text-xs">🟣 Creator’s Ally</div>
+            <div class="neo rounded-xl p-4 text-center text-xs">🟣 Connector</div>
+            <div class="neo rounded-xl p-4 text-center text-xs">🟣 Always-On</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Black Hole -->
+  <section id="cta" class="relative py-20">
+    <div class="container max-w-mega">
+      <div class="blackhole neo rounded-3xl p-10 md:p-16 text-center">
+        <h2 class="text-3xl md:text-5xl font-extrabold">The Future is Purple. The Future is Salmar.</h2>
+        <p class="mt-4 text-[color:var(--muted)] max-w-2xl mx-auto">Start building with an AI that adapts to your goals — from thought to result, instantly.</p>
+        <div class="mt-8 flex justify-center">
+          <a href="#" class="btn-primary text-lg">
+            <span class="relative h-2 w-2 rounded-full bg-white/90 shadow-[0_0_18px_rgba(255,255,255,0.8)]"></span>
+            Get Early Access
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="relative py-12">
+    <div class="container max-w-mega">
+      <div class="grid md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center gap-2 mb-3">
+            <span class="relative flex h-8 w-8 items-center justify-center rounded-xl neo">
+              <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="url(#g1)" d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Z"/>
+              </svg>
             </span>
-            <span class="font-bold">Salmar</span>
+            <span class="font-extrabold" style="background:linear-gradient(90deg,#b36bff,#ff79da);-webkit-background-clip:text;background-clip:text;color:transparent;">Salmar</span>
           </div>
-          <p class="mt-3 text-sm text-ink-300">Outcome-first AI for email, designed with privacy in mind.</p>
+          <p class="text-sm text-[color:var(--muted)]">One intelligent system, infinite possibilities.</p>
         </div>
-        <div>
-          <div class="font-semibold mb-2">Product</div>
-          <ul class="space-y-1 text-ink-300 text-sm">
-            <li><a class="hover:underline" href="#features">Features</a></li>
-            <li><a class="hover:underline" href="#demo">Playground</a></li>
-            <li><a class="hover:underline" href="#compare">Compare</a></li>
-            <li><a class="hover:underline" href="#pricing">Pricing</a></li>
+        <nav aria-label="Footer">
+          <h3 class="font-semibold mb-3">Product</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a class="btn-ghost block text-left" href="#features">Features</a></li>
+            <li><a class="btn-ghost block text-left" href="#how">How it works</a></li>
+            <li><a class="btn-ghost block text-left" href="#integrations">Integrations</a></li>
           </ul>
-        </div>
-        <div>
-          <div class="font-semibold mb-2">Company</div>
-          <ul class="space-y-1 text-ink-300 text-sm">
-            <li><a class="hover:underline" href="#community">Community</a></li>
-            <li><a class="hover:underline" href="#case-studies">Case Studies</a></li>
-            <li><a class="hover:underline" href="#testimonials">Testimonials</a></li>
+        </nav>
+        <nav aria-label="Company">
+          <h3 class="font-semibold mb-3">Company</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a class="btn-ghost block text-left" href="#">Blog</a></li>
+            <li><a class="btn-ghost block text-left" href="#">Careers</a></li>
+            <li><a class="btn-ghost block text-left" href="#">Press</a></li>
           </ul>
-        </div>
-        <div>
-          <div class="font-semibold mb-2">Legal</div>
-          <ul class="space-y-1 text-ink-300 text-sm">
-            <li><a class="hover:underline" id="openPrivacy" href="#privacy">Privacy Policy</a></li>
-            <li><a class="hover:underline" id="openTOS" href="#tos">Terms of Service</a></li>
+        </nav>
+        <nav aria-label="Legal">
+          <h3 class="font-semibold mb-3">Legal</h3>
+          <ul class="space-y-2 text-sm">
+            <li><a class="btn-ghost block text-left" href="#">Privacy Policy</a></li>
+            <li><a class="btn-ghost block text-left" href="#">Terms of Service</a></li>
+            <li><a class="btn-ghost block text-left" href="#">Security</a></li>
           </ul>
-        </div>
+        </nav>
       </div>
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 text-sm text-ink-300">
-        © <span id="year"></span> Salmar. All rights reserved.
-      </div>
-    </footer>
-  </main>
 
-  <!-- Legal Modal -->
-  <div id="legalModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/60" data-close></div>
-    <div class="glass rounded-3xl max-w-2xl w-full p-6 relative">
-      <button class="absolute top-3 right-3 btn glass rounded-lg px-3 py-1" aria-label="Close legal modal" data-close>&times;</button>
-      <h3 id="legalTitle" class="font-display text-2xl font-bold">Legal</h3>
-      <div id="legalContent" class="mt-3 text-sm text-ink-200 max-h-[60vh] overflow-auto">
-        <!-- injected -->
+      <div class="mt-10 flex items-center justify-between border-t border-[color:var(--card-border)] pt-6">
+        <p class="text-xs text-[color:var(--muted)]">© <span id="year"></span> Salmar. All rights reserved.</p>
+        <div class="flex items-center gap-2">
+          <a href="#" class="btn-ghost" aria-label="Twitter">
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 5.8c-.8.3-1.6.6-2.5.7c.9-.5 1.6-1.3 2-2.3c-.9.5-1.9.9-3 1.1C17.6 4.5 16.3 4 15 4c-2.7 0-4.8 2.3-4.2 4.9C7.2 8.8 4.1 7.2 2 4.7c-1 1.8-.5 4.1 1.2 5.3c-.7 0-1.3-.2-1.8-.5c0 2.1 1.5 3.9 3.5 4.3c-.6.2-1.3.2-1.9.1c.6 1.8 2.3 3.1 4.3 3.1C5.9 18.9 3.7 19.6 2 19c2 1.3 4.5 2 7.1 2c8.6 0 13.5-7.4 13.2-14.1c.9-.6 1.6-1.3 2.2-2.1Z"/></svg>
+          </a>
+          <a href="#" class="btn-ghost" aria-label="Discord">
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 4.3A16.2 16.2 0 0 0 15.9 3l-.4.8c-1.3-.2-2.6-.2-3.9 0L11.2 3c-1.5.3-2.9.8-4.2 1.4a17.1 17.1 0 0 0-2.9 14.9A16.8 16.8 0 0 0 9 21l.6-.8c-1.7-.6-3.3-1.4-4.7-2.5l1.1.6c.4.3.9.5 1.4.7c1 .4 2 .7 3 .9l.3-.6c1.3.2 2.6.2 3.9 0l.3.6c1-.2 2-.5 3-.9c.5-.2 1-.5 1.4-.7l1.1-.6c-1.4 1.1-3 2-4.7 2.5l.6.8a16.8 16.8 0 0 0 4.9-1.7A17.1 17.1 0 0 0 20.3 4.3ZM9.6 14c-.8 0-1.5-.7-1.5-1.6c0-.9.7-1.6 1.5-1.6c.9 0 1.6.7 1.6 1.6c0 .9-.7 1.6-1.6 1.6Zm4.8 0c-.9 0-1.6-.7-1.6-1.6c0-.9.7-1.6 1.6-1.6c.8 0 1.5.7 1.5 1.6c-.1.9-.7 1.6-1.5 1.6Z"/></svg>
+          </a>
+          <a href="#" class="btn-ghost" aria-label="GitHub">
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.4 2.9 8.1 6.9 9.4c.5.1.7-.2.7-.5v-2c-2.8.6-3.4-1.2-3.4-1.2c-.5-1.1-1.1-1.4-1.1-1.4c-.9-.6.1-.6.1-.6c1 .1 1.6 1 1.6 1c.9 1.6 2.5 1.1 3.1.8c.1-.7.3-1.1.5-1.4c-2.2-.2-4.6-1.1-4.6-5c0-1.1.4-2 1-2.7c-.1-.3-.4-1.4.1-2.9c0 0 .8-.2 2.8 1c.8-.2 1.7-.3 2.6-.3s1.8.1 2.6.3c2-1.2 2.8-1 2.8-1c.5 1.5.2 2.6.1 2.9c.6.7 1 1.6 1 2.7c0 4-2.3 4.8-4.6 5c.3.3.6.8.6 1.6v2.3c0 .2.2.6.7.5C19.1 20.1 22 16.4 22 12A10 10 0 0 0 12 2Z"/></svg>
+          </a>
+        </div>
       </div>
     </div>
-  </div>
-
-  <!-- DPA Modal -->
-  <div id="dpaModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
-    <div class="absolute inset-0 bg-black/60" data-close></div>
-    <div class="glass rounded-3xl max-w-2xl w-full p-6 relative">
-      <button class="absolute top-3 right-3 btn glass rounded-lg px-3 py-1" aria-label="Close DPA modal" data-close>&times;</button>
-      <h3 class="font-display text-2xl font-bold">Data Processing Addendum</h3>
-      <div class="mt-3 text-sm text-ink-200 max-h-[60vh] overflow-auto">
-        <p>We process data solely to provide the Salmar service. Data is encrypted at rest and in transit. You can request deletion at any time. Subprocessors and regions available on request.</p>
-        <ul class="list-disc ml-6 mt-3 space-y-1">
-          <li>Purpose limitation and data minimization</li>
-          <li>Security measures and incident response</li>
-          <li>Access controls and audit logs</li>
-        </ul>
-      </div>
-    </div>
-  </div>
+  </footer>
 
   <script>
-    // Theme toggle without persistent storage (sandbox-safe)
-    (function(){
-      const html = document.documentElement;
-      const toggle = document.getElementById('themeToggle');
-      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (prefersDark) html.classList.add('dark');
-      toggle?.addEventListener('pointermove', (e) => {
-        const rect = toggle.getBoundingClientRect();
-        toggle.style.setProperty('--x', (e.clientX - rect.left) + 'px');
-        toggle.style.setProperty('--y', (e.clientY - rect.top) + 'px');
+    // Utilities
+    const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Theme toggle (no storage to avoid sandbox issues)
+    const themeToggle = document.getElementById('themeToggle');
+    const moonIcon = document.getElementById('moonIcon');
+    const sunIcon = document.getElementById('sunIcon');
+    function setTheme(mode) {
+      document.body.setAttribute('data-theme', mode);
+      const dark = mode === 'dark';
+      themeToggle.setAttribute('aria-pressed', dark ? 'true' : 'false');
+      moonIcon.classList.toggle('hidden', !dark);
+      sunIcon.classList.toggle('hidden', dark);
+    }
+    themeToggle.addEventListener('click', () => {
+      const current = document.body.getAttribute('data-theme') || 'dark';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    // Future mode toggle
+    const futureToggle = document.getElementById('futureToggle');
+    futureToggle.addEventListener('click', () => {
+      const active = document.body.classList.toggle('future-mode');
+      futureToggle.setAttribute('aria-pressed', active ? 'true' : 'false');
+    });
+
+    // Persona pathways
+    const personaData = {
+      'Student': ['Summarize research instantly', 'Auto-generate study plans', 'Explain concepts simply', 'Prep for exams with quizzes'],
+      'Entrepreneur': ['Draft investor updates', 'Automate CRM tasks', 'Market analysis & insights', 'Blueprint new products'],
+      'Creator': ['Daily content ideas', 'Captions & hooks', 'Storyboard your video', 'Remix styles & tones'],
+      'Developer': ['Generate tests & docs', 'Design API flows', 'Code reviews & refactors', 'Integrate tools via recipes'],
+      'Explorer': ['Discover hidden patterns', 'Build knowledge graphs', 'Plan routes & trips', 'Learn faster with context']
+    };
+    const personaUsecases = document.getElementById('personaUsecases');
+    const chips = document.querySelectorAll('.chip');
+    let activePersona = 'Developer';
+    function renderUsecases(persona) {
+      personaUsecases.innerHTML = '';
+      personaData[persona].forEach((u, i) => {
+        const li = document.createElement('div');
+        li.className = 'glass rounded-xl p-3 text-sm';
+        li.textContent = '• ' + u;
+        li.style.transitionDelay = (i * 60) + 'ms';
+        personaUsecases.appendChild(li);
       });
-      toggle?.addEventListener('click', () => {
-        html.classList.toggle('dark');
-        toggle.setAttribute('aria-pressed', html.classList.contains('dark') ? 'true' : 'false');
+    }
+    chips.forEach(chip => {
+      chip.addEventListener('click', () => {
+        activePersona = chip.dataset.persona;
+        chips.forEach(c => c.classList.remove('ring-2', 'ring-[color:var(--focus)]'));
+        chip.classList.add('ring-2', 'ring-[color:var(--focus)]');
+        renderUsecases(activePersona);
       });
-    })();
+    });
+    // init
+    chips.forEach(c => { if (c.dataset.persona === activePersona) c.click(); });
 
-    // Subtle animated noise texture
-    (function(){
-      const c = document.getElementById('noise');
-      const ctx = c.getContext('2d', {alpha: true});
-      const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-      function resize() {
-        c.width = window.innerWidth * DPR;
-        c.height = window.innerHeight * DPR;
-        c.style.width = window.innerWidth + 'px';
-        c.style.height = window.innerHeight + 'px';
-      }
-      let rafId;
-      function draw() {
-        const w = c.width, h = c.height;
-        const imageData = ctx.createImageData(120, 80); // tiny tile scaled by context
-        for (let i=0; i<imageData.data.length; i+=4) {
-          const v = 230 + Math.floor(Math.random()*25);
-          imageData.data[i] = v;
-          imageData.data[i+1] = v;
-          imageData.data[i+2] = v;
-          imageData.data[i+3] = 18; // low alpha
-        }
-        // scale up
-        ctx.save();
-        ctx.clearRect(0,0,w,h);
-        ctx.imageSmoothingEnabled = false;
-        ctx.drawImage((function(){
-          const off = document.createElement('canvas');
-          off.width = imageData.width;
-          off.height = imageData.height;
-          off.getContext('2d').putImageData(imageData, 0, 0);
-          return off;
-        })(), 0, 0, w, h);
-        ctx.restore();
-        rafId = requestAnimationFrame(draw);
-      }
-      function start() {
-        resize();
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        cancelAnimationFrame(rafId);
-        draw();
-      }
-      window.addEventListener('resize', resize);
-      start();
-    })();
-
-    // Headline personalization via query params and persona selection
-    (function(){
-      const headline = document.getElementById('dynamicHeadline');
-      const supporting = document.getElementById('supportingStatement');
-      const roles = {
-        marketer: {
-          h: 'AI that writes your campaigns in seconds.',
-          s: 'Launch on time with copy that converts — emails, subject lines, and follow-ups in your brand voice.'
-        },
-        writer: {
-          h: 'AI that polishes your drafts in seconds.',
-          s: 'From messy first drafts to publish-ready prose — without losing your voice.'
-        },
-        sales: {
-          h: 'AI that books more meetings in seconds.',
-          s: 'Personalized outreach, perfect timing, and reply-ready follow-ups that feel human.'
-        },
-        support: {
-          h: 'AI that resolves tickets in seconds.',
-          s: 'Summaries, suggested replies, and empathetic responses your customers love.'
-        },
-        team: {
-          h: 'AI that aligns teams in seconds.',
-          s: 'Summaries, updates, and decisions — fewer meetings, more momentum.'
-        }
-      };
-      function setRole(role) {
-        const r = roles[role];
-        if (!r) return;
-        headline.innerHTML = r.h + '<span class="block gradient-text">Your personal AI assistant.</span>';
-        supporting.textContent = r.s;
-        renderPersona(role);
-      }
-      // Detect via query
-      const qs = new URLSearchParams(location.search);
-      const r = qs.get('role') || qs.get('utm_industry');
-      if (r && roles[r]) setRole(r);
-
-      // Persona buttons
-      document.querySelectorAll('.persona').forEach(btn => {
-        btn.addEventListener('click', () => setRole(btn.dataset.role));
+    // Tagline morph
+    const taglines = [
+      'Everything.',
+      'Your Mind, Amplified.',
+      'All of AI, in One Place.'
+    ];
+    let taglineIndex = 0;
+    const morphTagline = document.getElementById('morphTagline');
+    async function cycleTaglines() {
+      if (prefersReduced) return;
+      const next = () => taglines[(taglineIndex + 1) % taglines.length];
+      const animateOut = () => new Promise(res => {
+        morphTagline.style.transition = 'opacity .35s ease, filter .35s ease';
+        morphTagline.style.opacity = '0';
+        morphTagline.style.filter = 'blur(6px)';
+        setTimeout(res, 360);
       });
-
-      // Persona content renderer
-      const personaContent = document.getElementById('personaContent');
-      function renderPersona(role='marketer') {
-        const items = {
-          marketer: [
-            {title:'Campaign drafts', desc:'High-converting email sequences from a brief.'},
-            {title:'Subject line lab', desc:'A/B test ideas with open-rate predictions.'},
-            {title:'Persona switch', desc:'One click to adapt tone per segment.'},
-            {title:'Post-purchase flows', desc:'Upsells and cross-sells that feel helpful.'},
-          ],
-          writer: [
-            {title:'Tone polish', desc:'Preserve voice while tightening structure.'},
-            {title:'Rewrite assistant', desc:'Try concise, friendly, or persuasive variants.'},
-            {title:'Fact-check hints', desc:'Citations and potential hallucination hints.'},
-            {title:'Outline generator', desc:'From topics to structured outlines.'},
-          ],
-          sales: [
-            {title:'Personalized outreach', desc:'Company and role-aware icebreakers.'},
-            {title:'Follow-up cadence', desc:'Smart timing and relevant nudges.'},
-            {title:'Objection handling', desc:'On-brand, empathetic responses.'},
-            {title:'CRM sync', desc:'Push outcomes back to your CRM.'},
-          ],
-          support: [
-            {title:'Auto-summarize', desc:'TL;DR with steps to resolve.'},
-            {title:'Tone guardrails', desc:'Empathy and clarity by default.'},
-            {title:'Macro generator', desc:'Turn great replies into templates.'},
-            {title:'Tagging/triage', desc:'Route by intent and urgency.'},
-          ],
-          team: [
-            {title:'Daily syncs', desc:'Clear updates without meetings.'},
-            {title:'Decision logs', desc:'Track agreements and owners.'},
-            {title:'Async briefs', desc:'Structure ideas for execution.'},
-            {title:'Review helper', desc:'Summarize PRDs and docs.'},
-          ],
-        }[role];
-        personaContent.innerHTML = items.map(i => `
-          <div class="neo rounded-2xl p-5 border border-white/10">
-            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-grape-600 to-grape-400 mb-3"></div>
-            <div class="font-semibold">${i.title}</div>
-            <p class="text-sm text-ink-300 mt-1">${i.desc}</p>
-          </div>
-        `).join('');
-      }
-      renderPersona();
-    })();
-
-    // Before/After slider
-    (function(){
-      const slider = document.getElementById('slider');
-      const mask = document.getElementById('afterMask');
-      slider?.addEventListener('input', () => {
-        const v = slider.value;
-        mask.style.clipPath = `inset(0 ${100 - v}% 0 0)`;
-      });
-    })();
-
-    // Hero mini playground (typing effect)
-    (function(){
-      const prompt = document.getElementById('heroPrompt');
-      const tone = document.getElementById('heroTone');
-      const gen = document.getElementById('heroGenerate');
-      const after = document.getElementById('afterEmail');
-      const status = document.getElementById('heroStatus');
-
-      function draft(base, tone) {
-        const polite = "Thanks for your time — happy to adjust if helpful.";
-        const closings = {
-          Friendly: "Cheers,\nAlex",
-          Concise: "Best,\nAlex",
-          Professional: "Sincerely,\nAlex",
-          Persuasive: "Looking forward to your positive response.\nAlex",
-          Empathetic: "Appreciate your consideration.\nAlex"
-        };
-        const s = base && base.length > 10 ? base : "Following up on the proposal we shared last week and checking if you had any questions. We’re excited to keep things moving and can adjust based on your feedback.";
-        const intro = "Hi there,\n\n";
-        const body = s.charAt(0).toUpperCase() + s.slice(1);
-        return `${intro}${body}\n\n${polite}\n\n${closings[tone] || closings.Friendly}`;
-      }
-
-      function typeText(el, text, speed=12) {
-        el.textContent = "";
-        let i = 0;
-        status.textContent = 'Generating...';
-        const id = setInterval(() => {
-          el.textContent += text.charAt(i++);
-          if (i >= text.length) {
-            clearInterval(id);
-            status.textContent = 'Done.';
-            setTimeout(()=>status.textContent='', 1500);
-          }
-        }, speed);
-      }
-
-      gen?.addEventListener('click', () => {
-        const d = draft(prompt.value.trim(), tone.value);
-        typeText(after, d);
-      });
-
-      // Seed an initial output
-      typeText(after, draft('', 'Friendly'), 6);
-    })();
-
-    // Playground: generate, validate, copy, metrics
-    (function(){
-      const form = document.getElementById('playgroundForm');
-      const prompt = document.getElementById('prompt');
-      const tone = document.getElementById('tone');
-      const length = document.getElementById('length');
-      const styleSample = document.getElementById('styleSample');
-      const output = document.getElementById('output');
-      const copy = document.getElementById('copyOutput');
-      const status = document.getElementById('playgroundStatus');
-      const err = document.getElementById('promptError');
-      const charCount = document.getElementById('charCount');
-      const styleTag = document.getElementById('styleTag');
-      const readTime = document.getElementById('readTime');
-      const toneTag = document.getElementById('toneTag');
-
-      function analyzeStyle(txt) {
-        if (!txt) return 'Auto';
-        const w = txt.split(/\s+/).filter(Boolean).length;
-        const long = (txt.match(/[,;:]/g)||[]).length;
-        const ex = (txt.match(/[!]/g)||[]).length;
-        if (w > 25 && long > 2) return 'Formal';
-        if (ex >= 2) return 'Energetic';
-        if (w < 15) return 'Concise';
-        return 'Neutral';
-        }
-
-      function compose({p,t,l,style}) {
-        const polite = {
-          friendly: "Thanks so much — appreciate your time!",
-          concise: "Thanks for your time.",
-          professional: "Thank you for your attention.",
-          persuasive: "I’m confident this will have a strong impact.",
-          empathetic: "I appreciate your consideration."
-        }[t] || "Thanks for your time.";
-        const intro = {
-          friendly: "Hi there,",
-          concise: "Hello,",
-          professional: "Dear team,",
-          persuasive: "Great news,",
-          empathetic: "I understand how busy things can get,"
-        }[t] || "Hello,";
-        const bodyBase = p.trim().replace(/\s+/g, ' ');
-        const body = bodyBase.charAt(0).toUpperCase() + bodyBase.slice(1);
-        const extras = {
-          short: "",
-          medium: "\n\nKey points:\n• Clear next step\n• Timeline proposed\n• Happy to adjust",
-          long: "\n\nDetails:\n1) Context and rationale\n2) Options with pros/cons\n3) Recommended next step"
-        }[l] || "";
-        const sig = "\n\n— Salmar";
-        const styleNote = style && style !== 'Auto' ? `\n\n[Matched style: ${style}]` : "";
-        return `${intro}\n\n${body}\n\n${polite}${extras}${styleNote}${sig}`;
-      }
-
-      function typeStream(el, text, speed=10) {
-        el.textContent = "";
-        copy.disabled = true;
-        let i = 0;
-        status.textContent = 'Generating...';
-        const id = setInterval(() => {
-          el.textContent += text.charAt(i++);
-          if (i >= text.length) {
-            clearInterval(id);
-            status.textContent = 'Done.';
-            copy.disabled = false;
-            setTimeout(()=>status.textContent='', 1500);
-            updateMetrics();
-          } else {
-            updateMetrics();
-          }
-        }, speed);
-      }
-
-      function updateMetrics() {
-        const text = output.textContent || '';
-        charCount.textContent = text.length;
-        readTime.textContent = Math.max(1, Math.round(text.split(/\s+/).filter(Boolean).length / 180)) + ' min';
-        toneTag.textContent = tone.value.charAt(0).toUpperCase() + tone.value.slice(1);
-      }
-
-      form?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const p = prompt.value;
-        if (!p || p.trim().length < 10) {
-          err.classList.remove('hidden');
-          prompt.setAttribute('aria-invalid', 'true');
-          prompt.focus();
-          return;
-        }
-        err.classList.add('hidden');
-        prompt.removeAttribute('aria-invalid');
-        const style = analyzeStyle(styleSample.value);
-        styleTag.textContent = style;
-        const text = compose({p, t: tone.value, l: length.value, style});
-        typeStream(output, text, 8);
-      });
-
-      copy?.addEventListener('click', async () => {
-        try {
-          await navigator.clipboard.writeText(output.textContent || '');
-          status.textContent = 'Copied!';
-          setTimeout(()=>status.textContent='', 1200);
-        } catch (e) {
-          status.textContent = 'Press Ctrl/Cmd+C to copy.';
-          setTimeout(()=>status.textContent='', 2000);
-        }
-      });
-
-      // Live char count
-      prompt?.addEventListener('input', updateMetrics);
-    })();
-
-    // Voice demo using Speech Synthesis API (safe-guarded)
-    (function(){
-      const btn = document.getElementById('voiceDemo');
-      let utter;
-      btn?.addEventListener('click', () => {
-        try {
-          if (!('speechSynthesis' in window)) {
-            btn.textContent = 'Voice not supported';
-            return;
-          }
-          if (utter) {
-            window.speechSynthesis.cancel();
-            utter = null;
-            btn.textContent = 'Play AI voice';
-            return;
-          }
-          utter = new SpeechSynthesisUtterance("This is Salmar. I write your emails in seconds, in your tone. Try the demo and see instant results.");
-          utter.rate = 1.02;
-          utter.pitch = 1.05;
-          utter.onend = () => { btn.textContent = 'Play AI voice'; utter = null; };
-          btn.textContent = 'Stop voice';
-          window.speechSynthesis.speak(utter);
-        } catch (e) {
-          console.warn('Speech synthesis unavailable', e);
-        }
-      });
-    })();
-
-    // Count-up animation for case studies
-    (function(){
-      const counters = document.querySelectorAll('.counter');
-      const io = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            const el = entry.target;
-            const target = parseFloat(el.dataset.target);
-            const start = performance.now();
-            const dur = 1200;
-            function tick(now){
-              const p = Math.min(1, (now - start) / dur);
-              el.textContent = Math.floor(target * p);
-              if (p < 1) requestAnimationFrame(tick);
-            }
-            requestAnimationFrame(tick);
-            io.unobserve(el);
-          }
+      const animateIn = () => new Promise(res => {
+        morphTagline.textContent = next();
+        taglineIndex = (taglineIndex + 1) % taglines.length;
+        morphTagline.style.opacity = '0';
+        morphTagline.style.filter = 'blur(6px)';
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            morphTagline.style.opacity = '1';
+            morphTagline.style.filter = 'blur(0)';
+            setTimeout(res, 900);
+          });
         });
-      }, {threshold: 0.4});
-      counters.forEach(c => io.observe(c));
-    })();
-
-    // Legal modals
-    (function(){
-      const modal = document.getElementById('legalModal');
-      const title = document.getElementById('legalTitle');
-      const content = document.getElementById('legalContent');
-      const openPrivacy = document.getElementById('openPrivacy');
-      const openTOS = document.getElementById('openTOS');
-      const year = document.getElementById('year');
-      year.textContent = new Date().getFullYear();
-
-      function open(kind){
-        title.textContent = kind === 'privacy' ? 'Privacy Policy' : 'Terms of Service';
-        content.innerHTML = kind === 'privacy' ? `
-          <p>We respect your privacy. Salmar does not use your content to train general-purpose AI models. You control retention, deletion, and export. See our DPA for details.</p>
-          <p class="mt-2">We use essential cookies only to provide core functionality. No tracking cookies by default.</p>
-        ` : `
-          <p>By using Salmar, you agree to use the service ethically and within applicable laws. We provide the service "as is" with reasonable uptime commitments. Contact us for enterprise SLAs.</p>
-        `;
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        const closeables = modal.querySelectorAll('[data-close]');
-        function close(){
-          modal.classList.add('hidden');
-          modal.classList.remove('flex');
-        }
-        closeables.forEach(el => el.onclick = close);
-        modal.onkeydown = (e) => { if (e.key === 'Escape') close(); };
+      });
+      while (true) {
+        await new Promise(r => setTimeout(r, 1600));
+        await animateOut(); await animateIn();
       }
+    }
+    cycleTaglines();
 
-      openPrivacy?.addEventListener('click', (e) => { e.preventDefault(); open('privacy'); });
-      openTOS?.addEventListener('click', (e) => { e.preventDefault(); open('tos'); });
-    })();
+    // Feature ripple hover
+    document.querySelectorAll('.feature').forEach(card => {
+      const ripple = card.querySelector('.ripple');
+      card.addEventListener('pointermove', e => {
+        const rect = card.getBoundingClientRect();
+        ripple.style.setProperty('--x', (e.clientX - rect.left) + 'px');
+        ripple.style.setProperty('--y', (e.clientY - rect.top) + 'px');
+      });
+    });
 
-    // DPA modal open
-    (function(){
-      const btn = document.getElementById('openDPA');
-      const modal = document.getElementById('dpaModal');
-      function close(){ modal.classList.add('hidden'); modal.classList.remove('flex'); }
-      btn?.addEventListener('click', ()=>{ modal.classList.remove('hidden'); modal.classList.add('flex'); });
-      modal?.addEventListener('click', (e)=>{ if (e.target.hasAttribute('data-close')) close(); });
-      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape') close(); });
-    })();
+    // Grain generator (programmatic)
+    const grainCanvas = document.getElementById('grainCanvas');
+    const gctx = grainCanvas.getContext('2d');
+    function resizeGrain() {
+      grainCanvas.width = window.innerWidth;
+      grainCanvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeGrain);
+    resizeGrain();
+    let grainFrame = 0;
+    function drawGrain() {
+      const w = grainCanvas.width, h = grainCanvas.height;
+      const img = gctx.createImageData(120, 80);
+      for (let i = 0; i < img.data.length; i += 4) {
+        const v = Math.random() * 255;
+        img.data[i] = v; img.data[i+1] = v; img.data[i+2] = v; img.data[i+3] = 16;
+      }
+      gctx.clearRect(0, 0, w, h);
+      gctx.imageSmoothingEnabled = false;
+      gctx.drawImage((() => { const c = document.createElement('canvas'); c.width=120; c.height=80; c.getContext('2d').putImageData(img,0,0); return c; })(), 0, 0, w, h);
+      grainFrame++;
+      if (!prefersReduced) requestAnimationFrame(drawGrain);
+    }
+    if (!prefersReduced) drawGrain();
 
-    // Email signup validation
-    (function(){
-      const form = document.getElementById('signupForm');
-      const email = document.getElementById('email');
-      const err = document.getElementById('emailError');
-      form?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        const v = (email.value || '').trim();
-        const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
-        if (!ok) {
-          err.classList.remove('hidden');
-          email.setAttribute('aria-invalid', 'true');
-          email.focus();
-          return;
+    // Particles over hero orb
+    const particleCanvas = document.getElementById('particleCanvas');
+    const pctx = particleCanvas.getContext('2d');
+    function resizeParticles() {
+      const rect = particleCanvas.getBoundingClientRect();
+      particleCanvas.width = rect.width * devicePixelRatio;
+      particleCanvas.height = rect.height * devicePixelRatio;
+      pctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
+    }
+    const particles = [];
+    function initParticles() {
+      particles.length = 0;
+      const rect = particleCanvas.getBoundingClientRect();
+      for (let i = 0; i < 60; i++) {
+        particles.push({
+          x: Math.random() * rect.width,
+          y: Math.random() * rect.height,
+          vx: (Math.random() - 0.5) * 0.6,
+          vy: (Math.random() - 0.5) * 0.6,
+          r: Math.random() * 2 + 0.5
+        });
+      }
+    }
+    let mouse = { x: 0, y: 0, active: false };
+    particleCanvas.addEventListener('pointerenter', () => mouse.active = true);
+    particleCanvas.addEventListener('pointerleave', () => mouse.active = false);
+    particleCanvas.addEventListener('pointermove', e => {
+      const rect = particleCanvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+    function stepParticles() {
+      const rect = particleCanvas.getBoundingClientRect();
+      pctx.clearRect(0, 0, rect.width, rect.height);
+      for (const p of particles) {
+        if (mouse.active) {
+          const dx = p.x - mouse.x, dy = p.y - mouse.y;
+          const d2 = dx*dx + dy*dy;
+          const f = Math.min(50 / (d2 + 10), 0.3);
+          p.vx += dx * f; p.vy += dy * f;
         }
-        err.classList.add('hidden');
-        email.removeAttribute('aria-invalid');
-        alert('Thanks! Check your inbox for a confirmation link.');
+        p.x += p.vx; p.y += p.vy;
+        p.vx *= 0.98; p.vy *= 0.98;
+        if (p.x < 0 || p.x > rect.width) p.vx *= -1;
+        if (p.y < 0 || p.y > rect.height) p.vy *= -1;
+        pctx.beginPath();
+        const grad = pctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r*4);
+        grad.addColorStop(0, 'rgba(200,155,255,0.8)');
+        grad.addColorStop(1, 'rgba(200,155,255,0.0)');
+        pctx.fillStyle = grad;
+        pctx.arc(p.x, p.y, p.r*3, 0, Math.PI*2);
+        pctx.fill();
+      }
+      if (!prefersReduced) requestAnimationFrame(stepParticles);
+    }
+    function setupParticles() { resizeParticles(); initParticles(); if (!prefersReduced) stepParticles(); }
+    new ResizeObserver(setupParticles).observe(particleCanvas);
+
+    // 3D Orb with THREE.js
+    window.addEventListener('load', () => {
+      const canvas = document.getElementById('orb');
+      const rect = canvas.getBoundingClientRect();
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, rect.width / rect.height, 0.1, 100);
+      camera.position.z = 3.2;
+      const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(rect.width, rect.height);
+
+      // Shader material for glow & lines effect
+      const uniforms = {
+        uTime: { value: 0 },
+        uMouse: { value: new THREE.Vector2(0, 0) },
+        uColorA: { value: new THREE.Color(0.58, 0.35, 1.0) }, // #943fff-ish
+        uColorB: { value: new THREE.Color(1.0, 0.48, 0.85) }  // #ff79da-ish
+      };
+      const vertex = `
+        varying vec3 vPos;
+        varying vec3 vNormal;
+        varying vec2 vUv;
+        uniform float uTime;
+        uniform vec2 uMouse;
+
+        // Simple noise
+        float hash(float n){return fract(sin(n)*43758.5453);}
+        float noise(vec3 x){
+          vec3 p=floor(x);
+          vec3 f=fract(x);
+          f = f*f*(3.0-2.0*f);
+          float n = p.x + p.y*57.0 + 113.0*p.z;
+          return mix(mix(mix(hash(n+0.0),hash(n+1.0),f.x),
+                        mix(hash(n+57.0),hash(n+58.0),f.x),f.y),
+                     mix(mix(hash(n+113.0),hash(n+114.0),f.x),
+                        mix(hash(n+170.0),hash(n+171.0),f.x),f.y),f.z);
+        }
+
+        void main(){
+          vUv = uv;
+          vNormal = normal;
+          vec3 pos = position;
+
+          // gentle breathing + mouse pull
+          float n = noise(pos*2.0 + vec3(uTime*0.2));
+          float bulge = (n-0.5)*0.06;
+          pos += normal * bulge;
+
+          // mouse reactive wobble
+          float m = length(uMouse);
+          pos += normal * m * 0.05;
+
+          vPos = pos;
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(pos, 1.0);
+        }
+      `;
+      const fragment = `
+        precision highp float;
+        varying vec3 vPos;
+        varying vec3 vNormal;
+        varying vec2 vUv;
+        uniform vec3 uColorA;
+        uniform vec3 uColorB;
+        uniform float uTime;
+
+        void main(){
+          // gradient
+          float shade = vUv.y;
+          vec3 base = mix(uColorA, uColorB, smoothstep(0.0,1.0,shade));
+
+          // neural pathways: lat-long sin lines
+          float lat = abs(sin((vUv.y*3.1415*12.0) + uTime*1.2));
+          float lon = abs(sin((vUv.x*3.1415*12.0) + uTime*1.2));
+          float grid = smoothstep(0.97, 0.999, max(lat, lon));
+
+          // rim glow
+          float rim = pow(1.0 - abs(dot(normalize(vNormal), vec3(0.0,0.0,1.0))), 2.0);
+
+          vec3 color = base + grid*0.6 + rim*0.3;
+          color += vec3(0.1,0.06,0.2)*rim;
+
+          gl_FragColor = vec4(color, 1.0);
+        }
+      `;
+      const mat = new THREE.ShaderMaterial({ uniforms, vertexShader: vertex, fragmentShader: fragment });
+      const geo = new THREE.SphereGeometry(1.0, 128, 128);
+      const orb = new THREE.Mesh(geo, mat);
+      scene.add(orb);
+
+      // wireframe overlay for "neural pathways"
+      const wire = new THREE.Mesh(
+        new THREE.SphereGeometry(1.005, 32, 32),
+        new THREE.MeshBasicMaterial({ color: 0xd3a6ff, wireframe: true, transparent: true, opacity: 0.12 })
+      );
+      scene.add(wire);
+
+      // Mouse reactive rotation
+      const state = { mx: 0, my: 0 };
+      canvas.addEventListener('pointermove', (e) => {
+        const r = canvas.getBoundingClientRect();
+        state.mx = ((e.clientX - r.left)/r.width - 0.5) * 2;
+        state.my = ((e.clientY - r.top)/r.height - 0.5) * 2;
+      });
+
+      function onResize() {
+        const r = canvas.getBoundingClientRect();
+        camera.aspect = r.width / r.height;
+        camera.updateProjectionMatrix();
+        renderer.setSize(r.width, r.height);
+      }
+      window.addEventListener('resize', onResize);
+
+      let t = 0;
+      function animate() {
+        if (!prefersReduced) requestAnimationFrame(animate);
+        t += 0.016;
+        uniforms.uTime.value = t;
+        uniforms.uMouse.value.set(state.mx, state.my);
+        orb.rotation.y += 0.002 + state.mx * 0.004;
+        orb.rotation.x += 0.001 - state.my * 0.003;
+        wire.rotation.copy(orb.rotation);
+        renderer.render(scene, camera);
+      }
+      if (!prefersReduced) animate();
+    });
+
+    // Constellation Map
+    (function(){
+      const svg = document.getElementById('constellation');
+      const nodesG = document.getElementById('nodes');
+      const linksG = document.getElementById('links');
+      const tooltip = document.getElementById('tooltip');
+      const nodes = [
+        { id: 'Google', x: 540, y: 80, info: 'Search, Drive, Calendar, and more — unified actions.' },
+        { id: 'Slack', x: 840, y: 140, info: 'Summaries and actions, right in your channels.' },
+        { id: 'Discord', x: 890, y: 320, info: 'Automate community support & bots.' },
+        { id: 'Notion', x: 760, y: 420, info: 'Docs that think with you.' },
+        { id: 'GitHub', x: 460, y: 460, info: 'PR reviews, tests, and deployments.' },
+        { id: 'Zapier', x: 280, y: 380, info: 'Connect thousands of apps in minutes.' },
+        { id: 'Stripe', x: 210, y: 210, info: 'Payment insights & workflows.' },
+        { id: 'Gmail', x: 300, y: 90, info: 'Inbox zero with AI triage.' },
+        { id: 'Calendar', x: 650, y: 240, info: 'Smart scheduling across timezones.' },
+        { id: 'APIs', x: 540, y: 260, info: 'Plug in any API with recipes.' }
+      ];
+      const links = [
+        ['APIs','Google'], ['APIs','Slack'], ['APIs','Discord'], ['APIs','Notion'], ['APIs','GitHub'], ['APIs','Zapier'], ['APIs','Stripe'], ['APIs','Gmail'], ['APIs','Calendar'],
+        ['Google','Gmail'], ['Google','Calendar'], ['GitHub','Slack'], ['Notion','Slack'], ['Zapier','Gmail']
+      ];
+
+      // Draw links
+      links.forEach(([a,b]) => {
+        const A = nodes.find(n => n.id===a), B = nodes.find(n => n.id===b);
+        const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+        line.setAttribute('x1', A.x); line.setAttribute('y1', A.y);
+        line.setAttribute('x2', B.x); line.setAttribute('y2', B.y);
+        line.setAttribute('stroke-width', '1.6');
+        line.setAttribute('filter', 'url(#softGlow)');
+        linksG.appendChild(line);
+      });
+
+      // Draw nodes
+      nodes.forEach(({id, x, y, info}) => {
+        const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+        g.setAttribute('class', 'node');
+        g.setAttribute('tabindex', '0');
+        g.setAttribute('role', 'button');
+        g.setAttribute('aria-label', id + ' integration');
+
+        const glow = document.createElementNS('http://www.w3.org/2000/svg','circle');
+        glow.setAttribute('cx', x); glow.setAttribute('cy', y); glow.setAttribute('r', 18);
+        glow.setAttribute('fill', 'url(#nodeGlow)'); glow.setAttribute('opacity','0.35');
+
+        const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+        circle.setAttribute('cx', x); circle.setAttribute('cy', y); circle.setAttribute('r', 8.5);
+        circle.setAttribute('fill', 'url(#nodeGlow)');
+        circle.setAttribute('stroke', 'white');
+        circle.setAttribute('stroke-opacity', '0.35');
+
+        const label = document.createElementNS('http://www.w3.org/2000/svg','text');
+        label.setAttribute('x', x + 14); label.setAttribute('y', y + 4);
+        label.setAttribute('fill', 'var(--text)'); label.setAttribute('font-size', '12');
+        label.textContent = id;
+
+        g.appendChild(glow); g.appendChild(circle); g.appendChild(label);
+        nodesG.appendChild(g);
+
+        const showTip = (clientX, clientY) => {
+          tooltip.textContent = info;
+          tooltip.style.left = clientX + 12 + 'px';
+          tooltip.style.top = clientY + 12 + 'px';
+          tooltip.classList.remove('hidden');
+        };
+        const hideTip = () => tooltip.classList.add('hidden');
+        g.addEventListener('pointerenter', e => showTip(e.clientX, e.clientY));
+        g.addEventListener('pointermove', e => showTip(e.clientX, e.clientY));
+        g.addEventListener('pointerleave', hideTip);
+        g.addEventListener('focus', (e) => { const bb = svg.getBoundingClientRect(); showTip(bb.left + x, bb.top + y); });
+        g.addEventListener('blur', hideTip);
       });
     })();
+
+    // Section reveal animations (GSAP, optional)
+    window.addEventListener('load', () => {
+      if (prefersReduced || !window.gsap || !window.ScrollTrigger) return;
+      gsap.registerPlugin(ScrollTrigger);
+      gsap.utils.toArray('section').forEach((sec, i) => {
+        gsap.fromTo(sec.querySelectorAll('.neo, h2, p, .feature'),
+          { y: 24, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.9, stagger: 0.05, ease: 'power2.out',
+            scrollTrigger: { trigger: sec, start: 'top 80%' }
+          }
+        );
+      });
+    });
+
+    // Accessibility: keyboard focus visible fix on mouse click
+    document.addEventListener('mousedown', () => document.body.classList.add('using-mouse'));
+    document.addEventListener('keydown', e => { if (e.key === 'Tab') document.body.classList.remove('using-mouse'); });
   </script>
 </body>
 </html>
