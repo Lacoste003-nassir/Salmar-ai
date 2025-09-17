@@ -1,0 +1,1820 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Salmar — The Purple AI that gets work done in seconds</title>
+  <meta name="description" content="Salmar is your personal AI copilot for writing, analysis, code, planning, translation, data, and more — fast, transparent, and privacy-first." />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter','system-ui','-apple-system','Segoe UI','Roboto','Ubuntu','Cantarell','Noto Sans','Helvetica Neue','Arial','sans-serif'],
+            display: ['Plus Jakarta Sans','Inter','system-ui','sans-serif']
+          },
+          colors: {
+            grape: {
+              50: '#faf5ff',
+              100: '#f5e8ff',
+              200: '#e8ccff',
+              300: '#d6a6ff',
+              400: '#b86bff',
+              500: '#9b4bff',
+              600: '#7d2eff',
+              700: '#6822e6',
+              800: '#4f1ab3',
+              900: '#3f138c',
+              950: '#2a0d66',
+            },
+            ink: {
+              50: '#f6f7fb',
+              100: '#eef0f7',
+              200: '#dfe3ee',
+              300: '#c7cfe0',
+              400: '#a5afc8',
+              500: '#7a85a4',
+              600: '#576080',
+              700: '#3f4866',
+              800: '#2e3550',
+              900: '#242a41',
+              950: '#151827',
+            }
+          },
+          boxShadow: {
+            neoLight: '12px 12px 24px rgba(0,0,0,0.08), -10px -10px 20px rgba(255,255,255,0.7), inset 1px 1px 0 rgba(255,255,255,0.2)',
+            neoDark: '12px 12px 30px rgba(0,0,0,0.45), -4px -4px 12px rgba(255,255,255,0.06), inset 1px 1px 0 rgba(255,255,255,0.05)',
+            glow: '0 10px 40px rgba(155,75,255,0.5)'
+          },
+          keyframes: {
+            float: { '0%,100%':{ transform:'translateY(0)'}, '50%':{ transform:'translateY(-8px)'} },
+            shimmer: { '0%':{ backgroundPosition:'-200% 0'}, '100%':{ backgroundPosition:'200% 0'} },
+            pulseGlow: { '0%,100%':{ boxShadow: '0 0 0 0 rgba(155,75,255,0.5)'}, '50%':{ boxShadow:'0 0 0 12px rgba(155,75,255,0)' } }
+          },
+          animation: {
+            float: 'float 6s ease-in-out infinite',
+            shimmer: 'shimmer 2.5s linear infinite',
+            pulseGlow: 'pulseGlow 2.2s ease-in-out infinite'
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      --bg: #0b0a12;
+      --panel: #111122;
+      --card: rgba(255,255,255,0.08);
+      --text: #e9e7ff;
+      --muted: #bfb8e7;
+      --border: rgba(255,255,255,0.12);
+      --accent: #9b4bff;
+      --accent-2: #b86bff;
+      --success: #22c55e;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --shadow-neo: 20px 20px 40px rgba(0,0,0,0.4), -12px -12px 24px rgba(255,255,255,0.04), inset 1px 1px 0 rgba(255,255,255,0.03);
+    }
+    html:not(.dark) {
+      --bg: #f5f3ff;
+      --panel: #f9f7ff;
+      --card: rgba(255,255,255,0.75);
+      --text: #17132b;
+      --muted: #453c7a;
+      --border: rgba(10,10,20,0.08);
+      --accent: #7d2eff;
+      --accent-2: #b86bff;
+      --shadow-neo: 18px 18px 36px rgba(33, 8, 57, 0.15), -14px -14px 28px rgba(255,255,255,0.9), inset 1px 1px 0 rgba(255,255,255,0.4);
+    }
+    html, body { background: var(--bg); color: var(--text); }
+    .glass {
+      background: var(--card);
+      backdrop-filter: saturate(140%) blur(12px);
+      -webkit-backdrop-filter: saturate(140%) blur(12px);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-neo);
+    }
+    .neo {
+      background: linear-gradient(145deg, rgba(255,255,255,0.08), rgba(0,0,0,0.08));
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-neo);
+    }
+    .btn { position: relative; isolation: isolate; }
+    .btn::after {
+      content: ""; position: absolute; inset: 0; border-radius: inherit;
+      background: radial-gradient(120px 60px at var(--x,50%) var(--y,50%), rgba(255,255,255,0.25), transparent 50%);
+      opacity: 0; transition: opacity .25s ease; pointer-events: none; mix-blend-mode: overlay; z-index: -1;
+    }
+    .btn:hover::after { opacity: .9; }
+    .gradient-text {
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .ring-soft { box-shadow: 0 0 0 6px rgba(155,75,255,0.15); }
+    .focus-soft:focus-visible { outline: none; box-shadow: 0 0 0 6px rgba(155,75,255,0.25); }
+    .contrast-card { background: linear-gradient(180deg, rgba(155,75,255,0.08), rgba(155,75,255,0.03)); }
+    .noisy { pointer-events: none; position: fixed; inset: 0; mix-blend-mode: soft-light; opacity: .06; z-index: 0; }
+    .skip-link { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
+    .skip-link:focus { left: 1rem; top: 1rem; width: auto; height: auto; z-index: 50; }
+    .range { appearance: none; width: 100%; height: 0.5rem; border-radius: 9999px; background: linear-gradient(90deg, var(--accent), var(--accent-2)); outline: none; }
+    .range::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; border-radius: 9999px; background: white; border: 4px solid var(--accent); box-shadow: 0 6px 18px rgba(0,0,0,.25); cursor: pointer; }
+    .range::-moz-range-thumb { width: 24px; height: 24px; border-radius: 9999px; background: white; border: 4px solid var(--accent); box-shadow: 0 6px 18px rgba(0,0,0,.25); cursor: pointer; }
+    @media (prefers-reduced-motion: reduce) {
+      .animate-float, .animate-pulse, .animate-pulseGlow, .animate-shimmer { animation: none !important; }
+      .transition, .duration-200, .duration-300, .duration-500, .duration-700 { transition: none !important; }
+    }
+    code, pre { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+  </style>
+</head>
+<body class="min-h-screen antialiased relative">
+  <a href="#main" class="skip-link glass rounded-lg px-3 py-2 text-sm">Skip to content</a>
+
+  <!-- Ambient gradient + blob background -->
+  <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10">
+    <div class="absolute inset-0 bg-gradient-to-b from-grape-950/60 via-ink-900/50 to-ink-900"></div>
+    <div class="absolute -top-32 -left-20 w-96 h-96 rounded-full blur-3xl opacity-60" style="background: radial-gradient(closest-side, rgba(155,75,255,.45), transparent 80%);"></div>
+    <div class="absolute top-28 -right-16 w-80 h-80 rounded-full blur-3xl opacity-50" style="background: radial-gradient(closest-side, rgba(184,107,255,.35), transparent 80%);"></div>
+    <canvas id="noise" class="noisy"></canvas>
+  </div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 backdrop-blur-md border-b border-white/10 bg-ink-900/30 dark:bg-ink-900/30">
+    <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3 group focus-soft rounded-lg" aria-label="Salmar home">
+        <span class="relative grid place-items-center w-9 h-9 rounded-xl glass">
+          <svg width="20" height="20" viewBox="0 0 24 24" class="text-grape-300" aria-hidden="true">
+            <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0%" stop-color="#9b4bff"/><stop offset="100%" stop-color="#b86bff"/></linearGradient></defs>
+            <path fill="url(#g)" d="M12 2l2.5 4.5L20 8l-4.5 2.5L13 15l-1 7-1-7-2.5-4.5L4 8l5.5-1.5z"/>
+          </svg>
+        </span>
+        <span class="font-extrabold font-display text-xl tracking-tight">Salmar</span>
+      </a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#features" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Features</a>
+        <a href="#use-cases" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Use Cases</a>
+        <a href="#demo" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Playground</a>
+        <a href="#security" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Trust</a>
+        <a href="#compare" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Compare</a>
+        <a href="#pricing" class="text-ink-200 hover:text-white transition focus-soft rounded-md px-2 py-1">Pricing</a>
+      </div>
+      <div class="flex items-center gap-3">
+        <button id="themeToggle" class="btn glass rounded-xl px-3 py-2 text-sm font-medium flex items-center gap-2" aria-pressed="false" aria-label="Toggle dark mode">
+          <span class="sr-only">Toggle theme</span>
+          <svg id="sun" class="w-4 h-4 hidden dark:inline text-yellow-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zm10.45 14.32l1.79 1.8 1.41-1.41-1.8-1.79-1.4 1.4zM12 4V1h-0v3h0zm0 19v-3h-0v3h0zM4 12H1v0h3v0zm19 0h-3v0h3v0zM6.76 19.16l-1.42 1.42-1.79-1.8 1.41-1.41 1.8 1.79zM18.36 4.84l1.4-1.4 1.8 1.79-1.41 1.41-1.79-1.8zM12 7a5 5 0 100 10 5 5 0 000-10z"/></svg>
+          <svg id="moon" class="w-4 h-4 dark:hidden text-ink-800" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M21.64 13a9 9 0 01-11.35-11A9 9 0 1021.64 13z"/></svg>
+          <span class="hidden sm:inline">Theme</span>
+        </button>
+        <a href="#demo" class="btn rounded-xl px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Try Demo</a>
+        <a href="#signup" class="btn rounded-xl px-4 py-2 text-sm font-semibold bg-white/90 text-ink-900 hover:bg-white focus-soft dark:bg-grape-700 dark:text-white dark:hover:bg-grape-600">Sign Up Free</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="main" class="relative z-10">
+    <!-- HERO -->
+    <section id="hero" class="pt-16 sm:pt-20 lg:pt-28 pb-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid lg:grid-cols-2 gap-10 items-center">
+        <div>
+          <div class="inline-flex items-center gap-2 glass rounded-full px-3 py-1 text-xs text-ink-200 mb-4">
+            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+            Trusted by 12,000+ professionals
+          </div>
+          <h1 id="dynamicHeadline" class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
+            AI that gets work done in seconds.
+            <span class="block gradient-text">Write. Analyze. Code. Translate. Plan.</span>
+          </h1>
+          <p id="supportingStatement" class="mt-4 text-ink-200 text-lg leading-relaxed">
+            Save hours by letting Salmar draft, summarize, translate, debug, analyze data, and more — all in your style with privacy by default.
+          </p>
+          <div class="mt-6 flex flex-wrap items-center gap-3">
+            <a href="#signup" class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Sign Up Free</a>
+            <a href="#demo" class="btn rounded-2xl px-6 py-3 font-semibold border border-white/20 bg-white/10 hover:bg-white/20 focus-soft">Try the Live Demo</a>
+            <button id="voiceDemo" class="btn rounded-2xl px-4 py-3 font-medium glass focus-soft" aria-label="Play short voiceover demo">Play AI voice</button>
+          </div>
+          <div class="mt-8 flex items-center gap-6 text-ink-300">
+            <div class="flex -space-x-2" aria-hidden="true">
+              <span class="w-8 h-8 rounded-full grid place-items-center text-xs font-bold text-ink-900 bg-gradient-to-br from-grape-400 to-grape-200 border border-white/20">AM</span>
+              <span class="w-8 h-8 rounded-full grid place-items-center text-xs font-bold text-ink-900 bg-gradient-to-br from-purple-300 to-pink-200 border border-white/20">JS</span>
+              <span class="w-8 h-8 rounded-full grid place-items-center text-xs font-bold text-ink-900 bg-gradient-to-br from-indigo-300 to-cyan-200 border border-white/20">TC</span>
+              <span class="w-8 h-8 rounded-full grid place-items-center text-xs font-bold text-ink-900 bg-gradient-to-br from-amber-300 to-rose-200 border border-white/20">LK</span>
+            </div>
+            <div class="text-sm">
+              “From idea to output in minutes.” — Over 2,000 five-star reviews
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Visual: Universal command palette with auto-detect -->
+        <div class="relative">
+          <div class="absolute -inset-4 rounded-3xl blur-2xl opacity-70" style="background: radial-gradient(closest-side, rgba(155,75,255,.35), transparent 70%);"></div>
+          <div class="relative glass rounded-3xl p-5 sm:p-6 lg:p-8">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-red-400"></span>
+                <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
+                <span class="w-3 h-3 rounded-full bg-green-400"></span>
+              </div>
+              <span class="text-xs text-ink-300">Universal Command</span>
+            </div>
+            <div class="grid gap-4">
+              <div class="contrast-card rounded-2xl p-4">
+                <label for="heroCmd" class="text-xs uppercase tracking-wider text-ink-300">Ask Salmar anything</label>
+                <input id="heroCmd" class="mt-2 w-full rounded-xl p-3 bg-black/20 text-sm focus-soft" placeholder="e.g., Summarize this paragraph... or Translate to Spanish... or Generate a SQL query..." />
+                <div class="mt-3 flex items-center gap-3">
+                  <select id="heroMode" class="glass rounded-xl px-3 py-2 text-sm focus-soft">
+                    <option value="auto" selected>Auto-detect</option>
+                    <option value="write">Write</option>
+                    <option value="summarize">Summarize</option>
+                    <option value="translate">Translate</option>
+                    <option value="code">Code</option>
+                    <option value="explain">Explain code</option>
+                    <option value="math">Math</option>
+                    <option value="brainstorm">Brainstorm</option>
+                    <option value="plan">Plan</option>
+                    <option value="csv">Analyze CSV</option>
+                    <option value="regex">Regex</option>
+                    <option value="sql">SQL</option>
+                    <option value="chat">Chat</option>
+                  </select>
+                  <button id="heroRun" class="btn rounded-xl px-4 py-2 text-sm font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft">Run</button>
+                  <div id="heroStatus" class="sr-only" aria-live="polite"></div>
+                </div>
+              </div>
+              <div class="grid sm:grid-cols-2 gap-4">
+                <div class="neo rounded-2xl p-4 border border-white/10">
+                  <div class="text-xs text-ink-300 mb-2 uppercase tracking-wider">Detected</div>
+                  <div id="heroDetected" class="rounded-xl bg-black/20 p-3 text-sm leading-relaxed">—</div>
+                </div>
+                <div class="neo rounded-2xl p-4 border border-white/10">
+                  <div class="text-xs text-ink-300 mb-2 uppercase tracking-wider flex items-center gap-2">Result <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-300/20">Salmar</span></div>
+                  <div class="rounded-xl bg-black/20 p-3 text-sm leading-relaxed min-h-[96px]" id="heroResult"></div>
+                </div>
+              </div>
+              <p class="text-xs text-ink-300">No sign-up required. This is a sandboxed demo that runs in your browser.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section aria-label="Social proof" class="py-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass rounded-3xl p-6">
+          <div class="grid md:grid-cols-5 items-center gap-6 text-center">
+            <div class="text-sm text-ink-300 md:col-span-1">Trusted by teams at</div>
+            <div class="md:col-span-4 grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-4">
+              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Heliotrope"><title>Heliotrope</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Heliotrope</text></svg></div>
+              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Aethra"><title>Aethra</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Aethra</text></svg></div>
+              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Quantify"><title>Quantify</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Quantify</text></svg></div>
+              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Orbyx"><title>Orbyx</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Orbyx</text></svg></div>
+              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Lumina"><title>Lumina</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Lumina</text></svg></div>
+              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Flux"><title>Flux</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Flux</text></svg></div>
+              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Vertex"><title>Vertex</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Vertex</text></svg></div>
+              <div class="neo rounded-xl p-3"><svg viewBox="0 0 120 32" aria-label="Nimbus"><title>Nimbus</title><text x="10" y="22" font-family="Inter, sans-serif" font-size="14" class="text-ink-300" fill="currentColor">Nimbus</text></svg></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Feature Highlights -->
+    <section id="features" class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto">
+          <h2 class="font-display text-3xl sm:text-4xl font-extrabold">Outcome-focused features</h2>
+          <p class="mt-3 text-ink-200">A single place to draft, analyze, translate, code, plan, and present — fast and trustworthy.</p>
+        </div>
+        <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div class="glass rounded-2xl p-6">
+            <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
+              <svg viewBox="0 0 24 24" class="w-6 h-6"><path fill="currentColor" d="M4 4h16v4H4zm2 6h12v2H6zm-2 4h16v6H4z"/></svg>
+            </div>
+            <h3 class="font-semibold text-lg">Universal writing</h3>
+            <p class="mt-2 text-ink-300">From briefs and blogs to scripts and job posts — write in your voice, instantly.</p>
+          </div>
+          <div class="glass rounded-2xl p-6">
+            <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
+              <svg viewBox="0 0 24 24" class="w-6 h-6"><path fill="currentColor" d="M3 13h8V3H3zm0 8h8v-6H3zm10 0h8v-8h-8zm0-18v8h8V3z"/></svg>
+            </div>
+            <h3 class="font-semibold text-lg">Data & summaries</h3>
+            <p class="mt-2 text-ink-300">Turn long docs and CSVs into crisp takeaways with action items.</p>
+          </div>
+          <div class="glass rounded-2xl p-6">
+            <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
+              <svg viewBox="0 0 24 24" class="w-6 h-6"><path fill="currentColor" d="M9 21H7a2 2 0 01-2-2V5a2 2 0 012-2h2v18zm2 0h6a2 2 0 002-2V9l-6-6h-2v18z"/></svg>
+            </div>
+            <h3 class="font-semibold text-lg">Coding & explain</h3>
+            <p class="mt-2 text-ink-300">Generate snippets, explain functions, and find bugs with clarity.</p>
+          </div>
+          <div class="glass rounded-2xl p-6">
+            <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
+              <svg viewBox="0 0 24 24" class="w-6 h-6"><path fill="currentColor" d="M12 3l9.5 7H2.5zM2 10h20v11H2z"/></svg>
+            </div>
+            <h3 class="font-semibold text-lg">Translate & localize</h3>
+            <p class="mt-2 text-ink-300">Speak to any audience — keep nuance, slang, and tone intact.</p>
+          </div>
+          <div class="glass rounded-2xl p-6">
+            <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
+              <svg viewBox="0 0 24 24" class="w-6 h-6"><path fill="currentColor" d="M12 7a5 5 0 015-5h5v20h-5a5 5 0 01-5-5V7zM2 7h7v10H2z"/></svg>
+            </div>
+            <h3 class="font-semibold text-lg">Plan & organize</h3>
+            <p class="mt-2 text-ink-300">From sprints to study plans — get a timeline with next steps.</p>
+          </div>
+          <div class="glass rounded-2xl p-6">
+            <div class="w-12 h-12 rounded-xl grid place-items-center bg-gradient-to-br from-grape-600 to-grape-400 text-white mb-4 shadow-glow">
+              <svg viewBox="0 0 24 24" class="w-6 h-6"><path fill="currentColor" d="M12 1l3 7h7l-5.5 4 2 7L12 16l-6.5 3 2-7L2 8h7z"/></svg>
+            </div>
+            <h3 class="font-semibold text-lg">Prompt to visuals</h3>
+            <p class="mt-2 text-ink-300">Craft studio-quality image prompts with style, lighting, and lens details.</p>
+          </div>
+        </div>
+        <div class="mt-8 text-center">
+          <a href="#signup" class="btn inline-flex items-center gap-2 rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Get Started</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Use Cases / Persona personalization -->
+    <section id="use-cases" class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-3 gap-8 items-start">
+          <div class="lg:col-span-1">
+            <h2 class="font-display text-3xl font-extrabold">Built for your role</h2>
+            <p class="mt-2 text-ink-200">Choose a persona to personalize the page instantly.</p>
+            <div class="mt-4 flex flex-wrap gap-2">
+              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="marketer">Marketers</button>
+              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="engineer">Engineers</button>
+              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="student">Students</button>
+              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="analyst">Analysts</button>
+              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="creator">Creators</button>
+              <button class="persona btn glass rounded-full px-4 py-2 text-sm" data-role="team">Teams</button>
+            </div>
+            <div class="mt-6 text-sm text-ink-300">Tip: Use ?role=engineer or ?utm_industry=analyst to auto-personalize.</div>
+          </div>
+          <div class="lg:col-span-2 glass rounded-3xl p-6">
+            <div id="personaContent" class="grid sm:grid-cols-2 gap-6"></div>
+            <div class="mt-6">
+              <a href="#demo" class="btn rounded-xl px-5 py-3 font-semibold bg-white/90 text-ink-900 hover:bg-white focus-soft dark:bg-grape-700 dark:text-white dark:hover:bg-grape-600">Try It for Your Work</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Before / After Comparison -->
+    <section class="py-16">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto">
+          <h2 class="font-display text-3xl font-extrabold">From chaos to clarity</h2>
+          <p class="mt-2 text-ink-200">See the difference in one swipe — across any workflow.</p>
+        </div>
+        <div class="mt-8 relative glass rounded-3xl overflow-hidden">
+          <div class="grid md:grid-cols-2 gap-0">
+            <div class="p-6">
+              <h3 class="font-semibold mb-2">Without AI</h3>
+              <div class="neo rounded-xl p-4 text-sm leading-relaxed h-48 overflow-auto">
+- 5 scattered docs and spreadsheets
+- Unclear next steps and ownership
+- Manual formatting and translations
+- Long review cycles
+              </div>
+            </div>
+            <div class="p-6 relative">
+              <h3 class="font-semibold mb-2">With Salmar</h3>
+              <div class="neo rounded-xl p-4 text-sm leading-relaxed h-48 overflow-hidden relative">
+                <div aria-hidden="true" class="absolute inset-0 rounded-xl" style="background: linear-gradient(180deg, rgba(155,75,255,0.12), rgba(155,75,255,0.05));"></div>
+                <div id="afterMask" class="absolute inset-0 overflow-hidden" style="clip-path: inset(0 50% 0 0);">
+                  <div class="p-4">
+                    <p class="mb-2"><strong>Summary:</strong> Goals aligned, tasks assigned, blockers flagged. Ready to execute.</p>
+                    <ol class="list-decimal ml-5 space-y-1">
+                      <li>One source of truth</li>
+                      <li>Clear owners & timelines</li>
+                      <li>Localized versions auto-generated</li>
+                    </ol>
+                    <p class="mt-3 text-ink-300">Tone: confident. 2-minute read.</p>
+                  </div>
+                </div>
+                <input id="slider" type="range" min="0" max="100" value="50" class="range absolute bottom-4 left-4 right-4" aria-label="Reveal comparison slider" />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-6 text-center">
+          <a href="#demo" class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Try it now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Interactive Playground (multi-tool) -->
+    <section id="demo" class="py-18 py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto">
+          <h2 class="font-display text-3xl font-extrabold">Interactive Playground</h2>
+          <p class="mt-2 text-ink-200">Pick a tool or use Auto-detect. Everything runs locally in your browser for this demo.</p>
+        </div>
+        <div class="mt-8 grid lg:grid-cols-[260px_1fr] gap-6 items-start">
+          <!-- Tool list -->
+          <aside class="glass rounded-3xl p-4">
+            <div class="text-sm font-semibold mb-2">Tools</div>
+            <div id="toolList" class="grid gap-2">
+              <!-- injected -->
+            </div>
+            <div class="mt-4 text-xs text-ink-300">
+              Tip: Attach a .txt or .csv for Summarize or CSV analysis.
+            </div>
+          </aside>
+
+          <!-- Workspace -->
+          <section class="glass rounded-3xl p-6">
+            <form id="toolForm" class="grid gap-4" novalidate>
+              <div id="toolHeader" class="flex items-center justify-between">
+                <div class="text-sm text-ink-300">Mode: <span id="modeLabel" class="font-semibold">Auto</span></div>
+                <div class="flex items-center gap-2">
+                  <button id="micBtn" type="button" class="btn rounded-lg px-3 py-2 glass focus-soft" aria-label="Start voice input">🎙️ Voice</button>
+                  <label class="btn rounded-lg px-3 py-2 glass cursor-pointer">
+                    <input id="fileInput" type="file" class="sr-only" accept=".txt,.md,.csv,.json" />
+                    Attach file
+                  </label>
+                </div>
+              </div>
+
+              <div id="inputFields" class="grid gap-3">
+                <!-- dynamic fields -->
+              </div>
+
+              <div class="flex items-center gap-3">
+                <button id="runTool" type="submit" class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Run</button>
+                <button id="copyOut" type="button" class="btn rounded-2xl px-6 py-3 font-semibold glass focus-soft" disabled>Copy</button>
+                <div id="toolStatus" class="text-sm text-ink-300" role="status" aria-live="polite"></div>
+              </div>
+
+              <div class="neo rounded-2xl p-4">
+                <div class="flex items-center justify-between mb-2">
+                  <span class="text-sm text-ink-300">Output</span>
+                  <div class="text-xs"><span id="outChars">0</span> chars • <span id="outWords">0</span> words</div>
+                </div>
+                <div id="toolOutput" class="rounded-xl bg-black/20 p-4 min-h-[220px] text-sm leading-relaxed whitespace-pre-wrap"></div>
+              </div>
+
+              <div id="metrics" class="grid sm:grid-cols-3 gap-3">
+                <div class="contrast-card rounded-xl p-3 text-xs">Detected tool: <span id="detectedTool" class="text-ink-200">Auto</span></div>
+                <div class="contrast-card rounded-xl p-3 text-xs">Read time: <span id="readTime" class="text-ink-200">0 min</span></div>
+                <div class="contrast-card rounded-xl p-3 text-xs">Confidence: <span id="confidence" class="text-ink-200">Experimental</span></div>
+              </div>
+            </form>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gamified Progress -->
+    <section class="py-16">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass rounded-3xl p-6">
+          <div class="flex items-center justify-between">
+            <h3 class="font-display text-2xl font-bold">Unlock full power</h3>
+            <a href="#signup" class="btn rounded-xl px-5 py-2 text-sm font-semibold bg-white/90 text-ink-900 hover:bg-white focus-soft dark:bg-grape-700 dark:text-white dark:hover:bg-grape-600">Continue</a>
+          </div>
+          <ol class="mt-4 grid sm:grid-cols-3 gap-4">
+            <li class="neo rounded-2xl p-4">
+              <div class="text-sm font-semibold mb-1">Step 1: Try</div>
+              <p class="text-ink-300 text-sm">Use the playground and see the results.</p>
+              <div class="mt-3 h-2 bg-white/10 rounded-full">
+                <div class="h-2 rounded-full bg-gradient-to-r from-grape-600 to-grape-400 w-3/4"></div>
+              </div>
+            </li>
+            <li class="neo rounded-2xl p-4">
+              <div class="text-sm font-semibold mb-1">Step 2: Sign up</div>
+              <p class="text-ink-300 text-sm">Create your workspace in 30 seconds.</p>
+              <div class="mt-3 h-2 bg-white/10 rounded-full">
+                <div class="h-2 rounded-full bg-gradient-to-r from-grape-600 to-grape-400 w-1/2"></div>
+              </div>
+            </li>
+            <li class="neo rounded-2xl p-4">
+              <div class="text-sm font-semibold mb-1">Step 3: Connect</div>
+              <p class="text-ink-300 text-sm">Link tools, datasets, and brand style.</p>
+              <div class="mt-3 h-2 bg-white/10 rounded-full">
+                <div class="h-2 rounded-full bg-gradient-to-r from-grape-600 to-grape-400 w-1/3"></div>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- Case Studies -->
+    <section id="case-studies" class="py-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto">
+          <h2 class="font-display text-3xl font-extrabold">Real results, not hype</h2>
+          <p class="mt-2 text-ink-200">Teams save hours each week with measurable impact.</p>
+        </div>
+        <div class="mt-10 grid md:grid-cols-3 gap-6">
+          <article class="glass rounded-3xl p-6">
+            <div class="text-5xl font-extrabold gradient-text"><span class="counter" data-target="60">0</span>%</div>
+            <p class="mt-2 text-ink-200">Cut response time</p>
+            <p class="mt-3 text-sm text-ink-300">Support teams resolve tickets 60% faster with summaries and suggested replies.</p>
+          </article>
+          <article class="glass rounded-3xl p-6">
+            <div class="text-5xl font-extrabold gradient-text"><span class="counter" data-target="5">0</span>h</div>
+            <p class="mt-2 text-ink-200">Saved per week</p>
+            <p class="mt-3 text-sm text-ink-300">Knowledge workers regain 5 hours weekly by delegating routine tasks.</p>
+          </article>
+          <article class="glass rounded-3xl p-6">
+            <div class="text-5xl font-extrabold gradient-text"><span class="counter" data-target="3">0</span>x</div>
+            <p class="mt-2 text-ink-200">Faster shipping</p>
+            <p class="mt-3 text-sm text-ink-300">Product teams draft specs, translate, and plan sprints 3x faster.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comparison Grid -->
+    <section id="compare" class="py-16">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-3xl mx-auto">
+          <h2 class="font-display text-3xl font-extrabold">Why Salmar over the rest</h2>
+          <p class="mt-2 text-ink-200">Clarity, control, and speed — without the chaos.</p>
+        </div>
+        <div class="mt-8 overflow-x-auto">
+          <table class="w-full text-left glass rounded-3xl overflow-hidden">
+            <thead class="bg-white/5">
+              <tr>
+                <th class="px-4 py-3 text-sm font-semibold">Feature</th>
+                <th class="px-4 py-3 text-sm font-semibold">Salmar</th>
+                <th class="px-4 py-3 text-sm font-semibold">Competitor A</th>
+                <th class="px-4 py-3 text-sm font-semibold">Competitor B</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/10">
+              <tr>
+                <td class="px-4 py-3">Universal tools (write, code, data, translate, plan)</td>
+                <td class="px-4 py-3 text-emerald-400">Included</td>
+                <td class="px-4 py-3 text-ink-300">Limited</td>
+                <td class="px-4 py-3 text-ink-300">Separate apps</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">Privacy-first processing</td>
+                <td class="px-4 py-3 text-emerald-400">On by default</td>
+                <td class="px-4 py-3 text-ink-300">Opt-in</td>
+                <td class="px-4 py-3 text-ink-300">Unknown</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">Transparent edits & citations</td>
+                <td class="px-4 py-3 text-emerald-400">Yes</td>
+                <td class="px-4 py-3 text-ink-300">No</td>
+                <td class="px-4 py-3 text-ink-300">No</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">Team controls & approvals</td>
+                <td class="px-4 py-3 text-emerald-400">Granular</td>
+                <td class="px-4 py-3 text-ink-300">Limited</td>
+                <td class="px-4 py-3 text-ink-300">Limited</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3">Multilingual & localization</td>
+                <td class="px-4 py-3 text-emerald-400">Built-in</td>
+                <td class="px-4 py-3 text-ink-300">Add-on</td>
+                <td class="px-4 py-3 text-ink-300">Basic</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="mt-6 text-center">
+          <a href="#signup" class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Get Started</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust, Security & Transparency -->
+    <section id="security" class="py-16">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass rounded-3xl p-6">
+          <div class="grid lg:grid-cols-3 gap-6">
+            <div>
+              <h2 class="font-display text-3xl font-extrabold">Trust & transparency</h2>
+              <p class="mt-2 text-ink-200">Security, privacy, and ethics are built-in — not bolted on.</p>
+              <div class="mt-4 flex gap-2">
+                <span class="text-xs px-3 py-1 rounded-full border border-white/15 bg-white/10">SOC 2</span>
+                <span class="text-xs px-3 py-1 rounded-full border border-white/15 bg-white/10">GDPR</span>
+                <span class="text-xs px-3 py-1 rounded-full border border-white/15 bg-white/10">CCPA</span>
+              </div>
+            </div>
+            <div class="lg:col-span-2 grid sm:grid-cols-2 gap-4">
+              <div class="neo rounded-2xl p-4">
+                <h3 class="font-semibold">Data handling</h3>
+                <p class="text-sm text-ink-300 mt-1">Your content stays yours. We don’t use your data to train generic models. You control retention and deletion.</p>
+              </div>
+              <div class="neo rounded-2xl p-4">
+                <h3 class="font-semibold">Privacy by default</h3>
+                <p class="text-sm text-ink-300 mt-1">Encryption in transit and at rest. SSO/SAML available for teams.</p>
+              </div>
+              <div class="neo rounded-2xl p-4">
+                <h3 class="font-semibold">Ethical safeguards</h3>
+                <p class="text-sm text-ink-300 mt-1">Bias checks and hallucination cues appear before you publish.</p>
+              </div>
+              <div class="neo rounded-2xl p-4">
+                <h3 class="font-semibold">Compliance</h3>
+                <p class="text-sm text-ink-300 mt-1">Data Processing Addendum (DPA) and audit logs available.</p>
+                <button id="openDPA" class="mt-2 btn text-sm rounded-xl px-3 py-2 glass focus-soft">View DPA</button>
+              </div>
+            </div>
+          </div>
+          <div class="mt-6">
+            <a href="#signup" class="btn rounded-xl px-5 py-3 font-semibold bg-white/90 text-ink-900 hover:bg-white focus-soft dark:bg-grape-700 dark:text-white dark:hover:bg-grape-600">Book a security review</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Community & Integrations -->
+    <section id="community" class="py-16">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-8 items-center">
+          <div>
+            <h2 class="font-display text-3xl font-extrabold">Join the Salmar community</h2>
+            <p class="mt-2 text-ink-200">Be part of a growing ecosystem — Slack group, templates, and integrations.</p>
+            <ul class="mt-4 space-y-2 text-ink-200">
+              <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> 5,000+ members in Slack</li>
+              <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Share templates and prompts</li>
+              <li class="flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Integrations with your favorite tools</li>
+            </ul>
+            <div class="mt-6 flex gap-3">
+              <a href="#signup" class="btn rounded-xl px-5 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Join Slack</a>
+              <a href="#signup" class="btn rounded-xl px-5 py-3 font-semibold glass focus-soft">See integrations</a>
+            </div>
+          </div>
+          <div class="glass rounded-3xl p-6">
+            <h3 class="font-semibold">Popular integrations</h3>
+            <div class="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-4">
+              <div class="neo rounded-2xl p-4 flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-400 to-indigo-200"></div><span>Docs</span></div>
+              <div class="neo rounded-2xl p-4 flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-sky-400 to-sky-200"></div><span>Mail</span></div>
+              <div class="neo rounded-2xl p-4 flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-400 to-amber-200"></div><span>Slack</span></div>
+              <div class="neo rounded-2xl p-4 flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-rose-400 to-rose-200"></div><span>CRM</span></div>
+              <div class="neo rounded-2xl p-4 flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-emerald-400 to-emerald-200"></div><span>Notion</span></div>
+              <div class="neo rounded-2xl p-4 flex items-center gap-3"><div class="w-9 h-9 rounded-xl bg-gradient-to-br from-purple-400 to-purple-200"></div><span>Zapier</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section id="testimonials" class="py-16">
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto">
+          <h2 class="font-display text-3xl font-extrabold">Loved by professionals</h2>
+          <p class="mt-2 text-ink-200">What our users say</p>
+        </div>
+        <div class="mt-8 grid md:grid-cols-3 gap-6">
+          <blockquote class="glass rounded-3xl p-6">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full grid place-items-center font-bold bg-gradient-to-br from-grape-400 to-grape-200 text-ink-900">RK</div>
+              <div>
+                <div class="font-semibold">Ravi Kumar</div>
+                <div class="text-xs text-ink-300">Product Marketing</div>
+              </div>
+            </div>
+            <p class="mt-3 text-ink-200">“It’s my Swiss Army AI. Drafts, plans, and translations are instant.”</p>
+          </blockquote>
+          <blockquote class="glass rounded-3xl p-6">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full grid place-items-center font-bold bg-gradient-to-br from-indigo-400 to-indigo-200 text-ink-900">AM</div>
+              <div>
+                <div class="font-semibold">Ava Martinez</div>
+                <div class="text-xs text-ink-300">Customer Success</div>
+              </div>
+            </div>
+            <p class="mt-3 text-ink-200">“Summaries are spot-on and action items are crystal clear.”</p>
+          </blockquote>
+          <blockquote class="glass rounded-3xl p-6">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-full grid place-items-center font-bold bg-gradient-to-br from-rose-400 to-rose-200 text-ink-900">DL</div>
+              <div>
+                <div class="font-semibold">Daniel Lee</div>
+                <div class="text-xs text-ink-300">Founder</div>
+              </div>
+            </div>
+            <p class="mt-3 text-ink-200">“Best all-in-one AI I’ve tried — ethical, fast, and flexible.”</p>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing -->
+    <section id="pricing" class="py-16">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass rounded-3xl p-6">
+          <div class="grid md:grid-cols-3 gap-6 items-center">
+            <div class="md:col-span-1">
+              <h3 class="font-display text-2xl font-extrabold">Start free. Upgrade anytime.</h3>
+              <p class="mt-2 text-ink-200">No credit card required. Cancel anytime.</p>
+            </div>
+            <div class="md:col-span-2 grid sm:grid-cols-3 gap-4">
+              <div class="neo rounded-2xl p-4">
+                <div class="font-semibold">Free</div>
+                <div class="text-3xl font-extrabold mt-1">$0</div>
+                <ul class="mt-3 text-sm text-ink-300 space-y-1">
+                  <li>100 generations</li>
+                  <li>Summaries & translate</li>
+                  <li>Community access</li>
+                </ul>
+                <a href="#signup" class="mt-4 inline-block btn rounded-xl px-4 py-2 font-semibold glass focus-soft">Get started</a>
+              </div>
+              <div class="neo rounded-2xl p-4 border-2 border-grape-500/40 relative">
+                <div class="absolute -top-3 right-4 text-[10px] px-2 py-1 rounded-full bg-gradient-to-r from-grape-600 to-grape-400 text-white">Popular</div>
+                <div class="font-semibold">Pro</div>
+                <div class="text-3xl font-extrabold mt-1">$19</div>
+                <ul class="mt-3 text-sm text-ink-300 space-y-1">
+                  <li>Unlimited drafts</li>
+                  <li>Code & data tools</li>
+                  <li>Priority support</li>
+                </ul>
+                <a href="#signup" class="mt-4 inline-block btn rounded-xl px-4 py-2 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft">Upgrade</a>
+              </div>
+              <div class="neo rounded-2xl p-4">
+                <div class="font-semibold">Teams</div>
+                <div class="text-3xl font-extrabold mt-1">Custom</div>
+                <ul class="mt-3 text-sm text-ink-300 space-y-1">
+                  <li>SSO/SAML</li>
+                  <li>Admin controls</li>
+                  <li>Security review</li>
+                </ul>
+                <a href="#signup" class="mt-4 inline-block btn rounded-xl px-4 py-2 font-semibold glass focus-soft">Talk to sales</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="py-16">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 class="font-display text-3xl font-extrabold text-center">Frequently asked questions</h2>
+        <div class="mt-8 grid sm:grid-cols-2 gap-6">
+          <div class="glass rounded-2xl p-5">
+            <h3 class="font-semibold">How does Salmar handle my data?</h3>
+            <p class="mt-2 text-ink-300">We do not use your data to train general models. All processing is secured and you can delete content anytime.</p>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <h3 class="font-semibold">Does it support coding and data?</h3>
+            <p class="mt-2 text-ink-300">Yes. Generate and explain code, analyze CSVs, and draft SQL — all in one place.</p>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <h3 class="font-semibold">Will it match my tone?</h3>
+            <p class="mt-2 text-ink-300">Paste a few sentences and Salmar adapts — concise, friendly, or fully professional.</p>
+          </div>
+          <div class="glass rounded-2xl p-5">
+            <h3 class="font-semibold">What about AI mistakes?</h3>
+            <p class="mt-2 text-ink-300">We surface possible hallucinations or bias before publishing and show edit history.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-16">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <div class="glass rounded-3xl p-8">
+          <h2 class="font-display text-3xl sm:text-4xl font-extrabold">Ready to get more done?</h2>
+          <p class="mt-3 text-ink-200">Start free and see value in minutes.</p>
+          <div class="mt-6 flex justify-center gap-3">
+            <a href="#signup" class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow">Get Started</a>
+            <a href="#demo" class="btn rounded-2xl px-6 py-3 font-semibold glass focus-soft">Try the Demo</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Signup / Footer -->
+    <section id="signup" class="py-16">
+      <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass rounded-3xl p-6">
+          <h2 class="font-display text-3xl font-extrabold">Create your free account</h2>
+          <form id="signupForm" class="mt-6 grid sm:grid-cols-3 gap-4" novalidate>
+            <div class="sm:col-span-1">
+              <label for="email" class="block text-sm font-medium">Work email</label>
+              <input id="email" type="email" class="mt-2 w-full rounded-2xl p-3 glass focus-soft" placeholder="you@company.com" required />
+              <p id="emailError" class="mt-1 text-sm text-rose-400 hidden">Please enter a valid email address.</p>
+            </div>
+            <div class="sm:col-span-1">
+              <label for="company" class="block text-sm font-medium">Company</label>
+              <input id="company" type="text" class="mt-2 w-full rounded-2xl p-3 glass focus-soft" placeholder="Company Inc." />
+            </div>
+            <div class="sm:col-span-1">
+              <label for="role" class="block text-sm font-medium">Role</label>
+              <select id="role" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
+                <option>Marketer</option>
+                <option>Engineer</option>
+                <option>Student</option>
+                <option>Analyst</option>
+                <option>Creator</option>
+                <option>Founder</option>
+              </select>
+            </div>
+            <div class="sm:col-span-3 flex items-center justify-between">
+              <div class="text-xs text-ink-300">By signing up, you agree to our <a href="#tos" class="underline" id="openTOS">Terms</a> and <a href="#privacy" class="underline" id="openPrivacy">Privacy</a>.</div>
+              <button class="btn rounded-2xl px-6 py-3 font-semibold text-white bg-gradient-to-r from-grape-600 to-grape-400 hover:to-grape-300 focus-soft shadow-glow" type="submit">Create account</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <footer class="border-t border-white/10 py-12">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-xl glass grid place-items-center">
+              <svg width="18" height="18" viewBox="0 0 24 24" class="text-grape-300" aria-hidden="true"><path fill="currentColor" d="M12 2l2.5 4.5L20 8l-4.5 2.5L13 15l-1 7-1-7-2.5-4.5L4 8l5.5-1.5z"/></svg>
+            </span>
+            <span class="font-bold">Salmar</span>
+          </div>
+          <p class="mt-3 text-sm text-ink-300">All-in-one AI for real work, designed with privacy in mind.</p>
+        </div>
+        <div>
+          <div class="font-semibold mb-2">Product</div>
+          <ul class="space-y-1 text-ink-300 text-sm">
+            <li><a class="hover:underline" href="#features">Features</a></li>
+            <li><a class="hover:underline" href="#demo">Playground</a></li>
+            <li><a class="hover:underline" href="#compare">Compare</a></li>
+            <li><a class="hover:underline" href="#pricing">Pricing</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-semibold mb-2">Company</div>
+          <ul class="space-y-1 text-ink-300 text-sm">
+            <li><a class="hover:underline" href="#community">Community</a></li>
+            <li><a class="hover:underline" href="#case-studies">Case Studies</a></li>
+            <li><a class="hover:underline" href="#testimonials">Testimonials</a></li>
+          </ul>
+        </div>
+        <div>
+          <div class="font-semibold mb-2">Legal</div>
+          <ul class="space-y-1 text-ink-300 text-sm">
+            <li><a class="hover:underline" id="openPrivacyFooter" href="#privacy">Privacy Policy</a></li>
+            <li><a class="hover:underline" id="openTOSFooter" href="#tos">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-8 text-sm text-ink-300">
+        © <span id="year"></span> Salmar. All rights reserved.
+      </div>
+    </footer>
+  </main>
+
+  <!-- Legal Modal -->
+  <div id="legalModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60" data-close></div>
+    <div class="glass rounded-3xl max-w-2xl w-full p-6 relative">
+      <button class="absolute top-3 right-3 btn glass rounded-lg px-3 py-1" aria-label="Close legal modal" data-close>&times;</button>
+      <h3 id="legalTitle" class="font-display text-2xl font-bold">Legal</h3>
+      <div id="legalContent" class="mt-3 text-sm text-ink-200 max-h-[60vh] overflow-auto"></div>
+    </div>
+  </div>
+
+  <!-- DPA Modal -->
+  <div id="dpaModal" class="fixed inset-0 z-50 hidden items-center justify-center p-4">
+    <div class="absolute inset-0 bg-black/60" data-close></div>
+    <div class="glass rounded-3xl max-w-2xl w-full p-6 relative">
+      <button class="absolute top-3 right-3 btn glass rounded-lg px-3 py-1" aria-label="Close DPA modal" data-close>&times;</button>
+      <h3 class="font-display text-2xl font-bold">Data Processing Addendum</h3>
+      <div class="mt-3 text-sm text-ink-200 max-h-[60vh] overflow-auto">
+        <p>We process data solely to provide the Salmar service. Data is encrypted at rest and in transit. You can request deletion at any time. Subprocessors and regions available on request.</p>
+        <ul class="list-disc ml-6 mt-3 space-y-1">
+          <li>Purpose limitation and data minimization</li>
+          <li>Security measures and incident response</li>
+          <li>Access controls and audit logs</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Theme toggle (no storage, sandbox-safe)
+    (function(){
+      const html = document.documentElement;
+      const toggle = document.getElementById('themeToggle');
+      const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (prefersDark) html.classList.add('dark');
+      toggle?.addEventListener('pointermove', (e) => {
+        const rect = toggle.getBoundingClientRect();
+        toggle.style.setProperty('--x', (e.clientX - rect.left) + 'px');
+        toggle.style.setProperty('--y', (e.clientY - rect.top) + 'px');
+      });
+      toggle?.addEventListener('click', () => {
+        html.classList.toggle('dark');
+        toggle.setAttribute('aria-pressed', html.classList.contains('dark') ? 'true' : 'false');
+      });
+    })();
+
+    // Subtle animated noise texture
+    (function(){
+      const c = document.getElementById('noise');
+      if (!c) return;
+      const ctx = c.getContext('2d', {alpha: true});
+      const DPR = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+      function resize() {
+        c.width = window.innerWidth * DPR;
+        c.height = window.innerHeight * DPR;
+        c.style.width = window.innerWidth + 'px';
+        c.style.height = window.innerHeight + 'px';
+      }
+      let rafId;
+      function draw() {
+        const w = c.width, h = c.height;
+        const imageData = ctx.createImageData(120, 80);
+        for (let i=0; i<imageData.data.length; i+=4) {
+          const v = 230 + Math.floor(Math.random()*25);
+          imageData.data[i] = v;
+          imageData.data[i+1] = v;
+          imageData.data[i+2] = v;
+          imageData.data[i+3] = 18;
+        }
+        const off = document.createElement('canvas');
+        off.width = imageData.width;
+        off.height = imageData.height;
+        off.getContext('2d').putImageData(imageData, 0, 0);
+        ctx.save();
+        ctx.clearRect(0,0,w,h);
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(off, 0, 0, w, h);
+        ctx.restore();
+        rafId = requestAnimationFrame(draw);
+      }
+      function start() {
+        resize();
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        cancelAnimationFrame(rafId);
+        draw();
+      }
+      window.addEventListener('resize', resize);
+      start();
+    })();
+
+    // Headline personalization via query params and persona selection
+    (function(){
+      const headline = document.getElementById('dynamicHeadline');
+      const supporting = document.getElementById('supportingStatement');
+      const roles = {
+        marketer: {
+          h: 'AI that launches your campaigns in seconds.',
+          s: 'Copy that converts, localized on the fly — emails, ads, and landing pages that sound like you.'
+        },
+        engineer: {
+          h: 'AI that helps you ship code faster.',
+          s: 'Generate snippets, explain code, write tests, and docs — all in your stack.'
+        },
+        student: {
+          h: 'AI that accelerates your learning.',
+          s: 'Summarize chapters, plan study sessions, and explain complex topics simply.'
+        },
+        analyst: {
+          h: 'AI that turns data into decisions.',
+          s: 'Analyze CSVs, draft SQL, and surface insights with clear takeaways.'
+        },
+        creator: {
+          h: 'AI that boosts your creativity.',
+          s: 'Brainstorm ideas, scripts, posts, and image prompts in your unique voice.'
+        },
+        team: {
+          h: 'AI that aligns teams in seconds.',
+          s: 'Summaries, updates, and plans — fewer meetings, more momentum.'
+        }
+      };
+      function setRole(role) {
+        const r = roles[role];
+        if (!r) return;
+        headline.innerHTML = r.h + '<span class="block gradient-text">Write. Analyze. Code. Translate. Plan.</span>';
+        supporting.textContent = r.s;
+        renderPersona(role);
+      }
+      const qs = new URLSearchParams(location.search);
+      const r = qs.get('role') || qs.get('utm_industry');
+      if (r && roles[r]) setRole(r);
+
+      document.querySelectorAll('.persona').forEach(btn => {
+        btn.addEventListener('click', () => setRole(btn.dataset.role));
+      });
+
+      const personaContent = document.getElementById('personaContent');
+      function renderPersona(role='marketer') {
+        const items = {
+          marketer: [
+            {title:'Campaign drafts', desc:'High-converting sequences from a brief.'},
+            {title:'Localization', desc:'Translate and adapt tone by region.'},
+            {title:'Subject lab', desc:'A/B ideas with predicted open-rate cues.'},
+            {title:'Creative prompts', desc:'On-brand visuals with style controls.'},
+          ],
+          engineer: [
+            {title:'Code generator', desc:'Snippets, tests, and boilerplates.'},
+            {title:'Explain & debug', desc:'Human-friendly reasoning and fixes.'},
+            {title:'Regex & SQL', desc:'Complex patterns and queries in seconds.'},
+            {title:'Doc writer', desc:'From functions to clean READMEs.'},
+          ],
+          student: [
+            {title:'Study summaries', desc:'Chapters into key points + flashcards.'},
+            {title:'Planner', desc:'Study timetable with milestones.'},
+            {title:'Explain like I’m 5', desc:'Complex topics made simple.'},
+            {title:'Language help', desc:'Translate and practice tone.'},
+          ],
+          analyst: [
+            {title:'CSV insights', desc:'Stats, anomalies, and segments.'},
+            {title:'SQL builder', desc:'Queries from natural language.'},
+            {title:'Narrative decks', desc:'Turn numbers into stories.'},
+            {title:'Forecast ideas', desc:'Scenario prompts to explore.'},
+          ],
+          creator: [
+            {title:'Idea machine', desc:'Hooks, titles, and formats.'},
+            {title:'Script assist', desc:'Shorts to long-form outlines.'},
+            {title:'Prompt crafting', desc:'Camera, lens, and lighting cues.'},
+            {title:'Caption lab', desc:'Multi-platform styles in a click.'},
+          ],
+          team: [
+            {title:'Daily syncs', desc:'Updates without meetings.'},
+            {title:'Decision logs', desc:'Agreements and owners recorded.'},
+            {title:'Brief templates', desc:'From idea to execution-ready.'},
+            {title:'Translate & share', desc:'One message, many languages.'},
+          ],
+        }[role];
+        personaContent.innerHTML = items.map(i => `
+          <div class="neo rounded-2xl p-5 border border-white/10">
+            <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-grape-600 to-grape-400 mb-3"></div>
+            <div class="font-semibold">${i.title}</div>
+            <p class="text-sm text-ink-300 mt-1">${i.desc}</p>
+          </div>
+        `).join('');
+      }
+      renderPersona();
+    })();
+
+    // Before/After slider
+    (function(){
+      const slider = document.getElementById('slider');
+      const mask = document.getElementById('afterMask');
+      slider?.addEventListener('input', () => {
+        const v = slider.value;
+        mask.style.clipPath = `inset(0 ${100 - v}% 0 0)`;
+      });
+    })();
+
+    // Voice demo using Speech Synthesis API (safe-guarded)
+    (function(){
+      const btn = document.getElementById('voiceDemo');
+      let utter;
+      btn?.addEventListener('click', () => {
+        try {
+          if (!('speechSynthesis' in window)) {
+            btn.textContent = 'Voice not supported';
+            return;
+          }
+          if (utter) {
+            window.speechSynthesis.cancel();
+            utter = null;
+            btn.textContent = 'Play AI voice';
+            return;
+          }
+          utter = new SpeechSynthesisUtterance("This is Salmar. Your all-in-one AI to write, analyze, code, translate, and plan. Try the demo to see instant results.");
+          utter.rate = 1.02;
+          utter.pitch = 1.05;
+          utter.onend = () => { btn.textContent = 'Play AI voice'; utter = null; };
+          btn.textContent = 'Stop voice';
+          window.speechSynthesis.speak(utter);
+        } catch (e) {
+          console.warn('Speech synthesis unavailable', e);
+        }
+      });
+    })();
+
+    // Counter animation
+    (function(){
+      const counters = document.querySelectorAll('.counter');
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const el = entry.target;
+            const target = parseFloat(el.dataset.target);
+            const start = performance.now();
+            const dur = 1200;
+            function tick(now){
+              const p = Math.min(1, (now - start) / dur);
+              el.textContent = Math.floor(target * p);
+              if (p < 1) requestAnimationFrame(tick);
+            }
+            requestAnimationFrame(tick);
+            io.unobserve(el);
+          }
+        });
+      }, {threshold: 0.4});
+      counters.forEach(c => io.observe(c));
+    })();
+
+    // Legal modals
+    (function(){
+      const modal = document.getElementById('legalModal');
+      const title = document.getElementById('legalTitle');
+      const content = document.getElementById('legalContent');
+      const year = document.getElementById('year');
+      year.textContent = new Date().getFullYear();
+
+      function open(kind){
+        title.textContent = kind === 'privacy' ? 'Privacy Policy' : 'Terms of Service';
+        content.innerHTML = kind === 'privacy' ? `
+          <p>We respect your privacy. Salmar does not use your content to train general-purpose AI models. You control retention, deletion, and export. See our DPA for details.</p>
+          <p class="mt-2">We use essential cookies only to provide core functionality. No tracking cookies by default.</p>
+        ` : `
+          <p>By using Salmar, you agree to use the service ethically and within applicable laws. We provide the service "as is" with reasonable uptime commitments. Contact us for enterprise SLAs.</p>
+        `;
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+        const closeables = modal.querySelectorAll('[data-close]');
+        function close(){
+          modal.classList.add('hidden');
+          modal.classList.remove('flex');
+        }
+        closeables.forEach(el => el.onclick = close);
+        modal.onkeydown = (e) => { if (e.key === 'Escape') close(); };
+        modal.addEventListener('click', (e)=>{ if (e.target.hasAttribute('data-close')) close(); }, {once:true});
+      }
+
+      document.getElementById('openPrivacy')?.addEventListener('click', (e) => { e.preventDefault(); open('privacy'); });
+      document.getElementById('openTOS')?.addEventListener('click', (e) => { e.preventDefault(); open('tos'); });
+      document.getElementById('openPrivacyFooter')?.addEventListener('click', (e) => { e.preventDefault(); open('privacy'); });
+      document.getElementById('openTOSFooter')?.addEventListener('click', (e) => { e.preventDefault(); open('tos'); });
+    })();
+
+    // DPA modal
+    (function(){
+      const btn = document.getElementById('openDPA');
+      const modal = document.getElementById('dpaModal');
+      function close(){ modal.classList.add('hidden'); modal.classList.remove('flex'); }
+      btn?.addEventListener('click', ()=>{ modal.classList.remove('hidden'); modal.classList.add('flex'); });
+      modal?.addEventListener('click', (e)=>{ if (e.target.hasAttribute('data-close')) close(); });
+      document.addEventListener('keydown', (e)=>{ if (e.key==='Escape') close(); });
+    })();
+
+    // Signup validation
+    (function(){
+      const form = document.getElementById('signupForm');
+      const email = document.getElementById('email');
+      const err = document.getElementById('emailError');
+      form?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const v = (email.value || '').trim();
+        const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+        if (!ok) {
+          err.classList.remove('hidden');
+          email.setAttribute('aria-invalid', 'true');
+          email.focus();
+          return;
+        }
+        err.classList.add('hidden');
+        email.removeAttribute('aria-invalid');
+        alert('Thanks! Check your inbox for a confirmation link.');
+      });
+    })();
+
+    // HERO Universal Command (auto-detect + run)
+    (function(){
+      const cmd = document.getElementById('heroCmd');
+      const modeSel = document.getElementById('heroMode');
+      const run = document.getElementById('heroRun');
+      const out = document.getElementById('heroResult');
+      const det = document.getElementById('heroDetected');
+      const status = document.getElementById('heroStatus');
+
+      function detectMode(text){
+        const t = text.toLowerCase();
+        if (t.match(/\btranslate to\b|\btranslate\b/)) return 'translate';
+        if (t.startsWith('summarize') || t.includes('tl;dr')) return 'summarize';
+        if (t.includes('regex') || t.includes('regular expression')) return 'regex';
+        if (t.includes('sql') || t.includes('query')) return 'sql';
+        if (t.includes('explain code') || t.includes('what does this code')) return 'explain';
+        if (t.includes('code') || t.includes('function') || t.includes('snippet')) return 'code';
+        if (t.includes('brainstorm') || t.includes('ideas')) return 'brainstorm';
+        if (t.includes('plan') || t.includes('timeline') || t.includes('roadmap')) return 'plan';
+        if (t.match(/^[\d\s\+\-\*\/\.\(\)\^%]+$/)) return 'math';
+        if (t.includes('csv')) return 'csv';
+        if (t.includes('write') || t.includes('draft')) return 'write';
+        return 'chat';
+      }
+
+      function summarize(text, max=3){
+        const sents = text.split(/(?<=[\.\!\?])\s+/).filter(Boolean);
+        const freq = {};
+        const words = text.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(Boolean);
+        words.forEach(w=>freq[w]=(freq[w]||0)+1);
+        const scores = sents.map(s=>{
+          const sw = s.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(Boolean);
+          const sc = sw.reduce((a,w)=>a+(freq[w]||0),0)/Math.max(1,sw.length);
+          return {s,sc};
+        }).sort((a,b)=>b.sc-a.sc).slice(0,max).map(o=>o.s);
+        return scores.join(' ');
+      }
+
+      function runMode(mode, text){
+        if (!text) return 'Please enter a request.';
+        switch(mode){
+          case 'summarize': return summarize(text, 3);
+          case 'translate': return `[Translated] ${text}`;
+          case 'regex': return `^(${text.replace(/[^a-zA-Z0-9]/g,'.')})$  // Skeleton regex from description`;
+          case 'sql': return `-- Guessing intent\nSELECT *\nFROM table\nWHERE /* your condition based on: */ '${text.replace(/'/g,"''")}' ;`;
+          case 'explain': return `Explanation:\n- The code appears to ${text.includes('for')?'loop over items':'perform operations'}.\n- Key concepts: variables, control flow, and side effects.\n- Potential issues: edge cases and error handling.`;
+          case 'code': return `// Generated snippet\nfunction salmarTask(){\n  // ${text}\n  return 'done';\n}`;
+          case 'brainstorm': return `Ideas:\n• ${text} — angle 1\n• ${text} — angle 2\n• ${text} — angle 3\n• ${text} — angle 4`;
+          case 'plan': return `Plan:\n1) Define goals\n2) Break into tasks\n3) Assign owners\n4) Timeline & milestones\n5) Review\n\nContext: ${text}`;
+          case 'math': {
+            const safe = text.replace(/\^/g,'**').replace(/,/g,'');
+            if (!/^[0-9+\-*/().\s%^]*$/.test(safe)) return 'Unsupported characters. Use numbers and operators.';
+            try { return `Result: ${Function('return ('+safe+')')()}`; } catch(e){ return 'Could not compute. Check your expression.'; }
+          }
+          case 'csv': return 'Paste CSV in the Playground to analyze columns, rows, and stats.';
+          case 'write': return `Draft:\n${text.charAt(0).toUpperCase()+text.slice(1)}\n\nThanks for reading.`;
+          default: return `Answer:\n${text}\n\nI’m here to help with writing, code, data, and more.`;
+        }
+      }
+
+      run?.addEventListener('click', () => {
+        const text = (cmd.value||'').trim();
+        const mode = (modeSel.value === 'auto') ? detectMode(text) : modeSel.value;
+        det.textContent = mode.toUpperCase();
+        status.textContent = 'Generating...';
+        out.textContent = '';
+        const result = runMode(mode, text);
+        let i=0; const speed = 8;
+        const id = setInterval(()=> {
+          out.textContent += result.charAt(i++);
+          if (i>=result.length){ clearInterval(id); status.textContent='Done.'; setTimeout(()=>status.textContent='',1500); }
+        }, speed);
+      });
+    })();
+
+    // Multi-tool Playground
+    (function(){
+      const toolDefs = [
+        {id:'auto', label:'Auto-detect', icon:'⚡'},
+        {id:'chat', label:'Chat', icon:'💬'},
+        {id:'write', label:'Write', icon:'✍️'},
+        {id:'summarize', label:'Summarize', icon:'🧠'},
+        {id:'translate', label:'Translate', icon:'🌐'},
+        {id:'code', label:'Code', icon:'💻'},
+        {id:'explain', label:'Explain code', icon:'🔎'},
+        {id:'brainstorm', label:'Brainstorm', icon:'🪄'},
+        {id:'plan', label:'Plan', icon:'🗺️'},
+        {id:'csv', label:'Analyze CSV', icon:'📊'},
+        {id:'regex', label:'Regex', icon:'🧩'},
+        {id:'sql', label:'SQL', icon:'🗄️'},
+        {id:'math', label:'Math', icon:'➗'},
+        {id:'imgprompt', label:'Image Prompt', icon:'🎨'}
+      ];
+
+      const toolList = document.getElementById('toolList');
+      const modeLabel = document.getElementById('modeLabel');
+      const inputFields = document.getElementById('inputFields');
+      const runBtn = document.getElementById('runTool');
+      const copyBtn = document.getElementById('copyOut');
+      const status = document.getElementById('toolStatus');
+      const out = document.getElementById('toolOutput');
+      const outChars = document.getElementById('outChars');
+      const outWords = document.getElementById('outWords');
+      const readTime = document.getElementById('readTime');
+      const detectedTool = document.getElementById('detectedTool');
+      const confidence = document.getElementById('confidence');
+      const fileInput = document.getElementById('fileInput');
+      const micBtn = document.getElementById('micBtn');
+      let current = 'auto';
+      let attachedText = '';
+
+      // Build tool list
+      toolList.innerHTML = toolDefs.map(t => `
+        <button class="tool btn w-full text-left glass rounded-xl px-3 py-2 text-sm flex items-center gap-2 ${t.id==='auto'?'ring-soft':''}" data-id="${t.id}">
+          <span class="text-base">${t.icon}</span> <span>${t.label}</span>
+        </button>
+      `).join('');
+
+      function setTool(id){
+        current = id;
+        modeLabel.textContent = toolDefs.find(t=>t.id===id)?.label || 'Auto';
+        toolList.querySelectorAll('.tool').forEach(b=>b.classList.remove('ring-soft'));
+        toolList.querySelector(`.tool[data-id="${id}"]`)?.classList.add('ring-soft');
+        renderFields(id);
+        out.textContent = '';
+        updateMetrics();
+        detectedTool.textContent = id==='auto' ? 'Auto' : toolDefs.find(t=>t.id===id).label;
+      }
+
+      function renderFields(id){
+        const base = `
+          <label class="text-sm font-medium">Your request</label>
+          <textarea id="prompt" rows="5" class="w-full rounded-2xl p-4 glass focus-soft" placeholder="Describe what you need..."></textarea>
+          <p id="promptError" class="text-sm text-rose-400 hidden">Please enter at least 6 characters.</p>
+        `;
+        const toneSel = `
+          <div class="grid sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-sm font-medium">Tone</label>
+              <select id="tone" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
+                <option value="friendly">Friendly</option>
+                <option value="concise">Concise</option>
+                <option value="professional" selected>Professional</option>
+                <option value="persuasive">Persuasive</option>
+                <option value="empathetic">Empathetic</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Length</label>
+              <select id="length" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
+                <option value="short">Short</option>
+                <option value="medium" selected>Medium</option>
+                <option value="long">Long</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Style sample</label>
+              <input id="styleSample" class="mt-2 w-full rounded-2xl p-3 glass focus-soft" placeholder="Paste a few sentences" />
+            </div>
+          </div>
+        `;
+        const langSel = `
+          <div class="grid sm:grid-cols-2 gap-3">
+            <div>
+              <label class="block text-sm font-medium">Target language</label>
+              <select id="language" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
+                <option>Spanish</option><option>French</option><option>German</option>
+                <option>Italian</option><option>Portuguese</option><option>Japanese</option>
+                <option>Chinese</option><option>Arabic</option><option>Hindi</option>
+              </select>
+            </div>
+            <div class="hidden sm:block"></div>
+          </div>
+        `;
+        const codeSel = `
+          <div class="grid sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-sm font-medium">Language</label>
+              <select id="language" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
+                <option>JavaScript</option><option>TypeScript</option><option>Python</option><option>Go</option><option>Java</option><option>SQL</option><option>HTML</option><option>CSS</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Framework (optional)</label>
+              <input id="framework" class="mt-2 w-full rounded-2xl p-3 glass focus-soft" placeholder="React, Flask, ..."/>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Level</label>
+              <select id="level" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
+                <option>Beginner</option><option selected>Intermediate</option><option>Advanced</option>
+              </select>
+            </div>
+          </div>
+        `;
+        const csvInfo = `
+          <div class="text-sm text-ink-300">Attach a .csv file or paste CSV below. We will compute rows, columns, and numeric stats.</div>
+          <textarea id="csvText" rows="5" class="w-full rounded-2xl p-4 glass focus-soft" placeholder="col1,col2\n1,2\n3,4"></textarea>
+        `;
+        const regexInfo = `
+          <div class="text-sm text-ink-300">Describe the pattern you need, e.g., "validate email" or "US phone number".</div>
+        `;
+        const sqlInfo = `
+          <div class="text-sm text-ink-300">Describe your question and optionally provide a simple schema like: users(id,name,age)</div>
+          <textarea id="schema" rows="3" class="w-full rounded-2xl p-3 glass focus-soft" placeholder="orders(id, amount, status, created_at)\ncustomers(id, name, email)"></textarea>
+        `;
+        const explInfo = `
+          <div class="text-sm text-ink-300">Paste code to explain and annotate.</div>
+          <textarea id="codeSample" rows="6" class="w-full rounded-2xl p-3 glass focus-soft" placeholder="Paste code here..."></textarea>
+        `;
+        const mathInfo = `
+          <div class="text-sm text-ink-300">Supports + - * / % ^ and parentheses. Example: (2^3 + 5) / 3</div>
+        `;
+        const imgInfo = `
+          <div class="grid sm:grid-cols-3 gap-3">
+            <div>
+              <label class="block text-sm font-medium">Style</label>
+              <select id="imgStyle" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
+                <option>Cinematic</option><option>Editorial</option><option>Illustration</option><option>3D render</option><option>Cyberpunk</option><option>Minimal</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Lighting</label>
+              <select id="imgLight" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
+                <option>Golden hour</option><option>Soft diffused</option><option>Hard rim</option><option>Neon glow</option><option>Studio</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-sm font-medium">Lens</label>
+              <select id="imgLens" class="mt-2 w-full rounded-2xl p-3 glass focus-soft">
+                <option>35mm</option><option>50mm</option><option>85mm</option><option>Macro</option><option>Fisheye</option>
+              </select>
+            </div>
+          </div>
+        `;
+
+        const baseOnly = base;
+        const map = {
+          auto: baseOnly,
+          chat: baseOnly,
+          write: base + toneSel,
+          summarize: base,
+          translate: base + langSel,
+          code: base + codeSel,
+          explain: explInfo,
+          brainstorm: base,
+          plan: base,
+          csv: csvInfo,
+          regex: base + regexInfo,
+          sql: base + sqlInfo,
+          math: base + mathInfo,
+          imgprompt: base + imgInfo
+        };
+        inputFields.innerHTML = map[id] || baseOnly;
+      }
+
+      // Helper functions
+      function updateMetrics(){
+        const text = out.textContent || '';
+        outChars.textContent = text.length;
+        outWords.textContent = text.split(/\s+/).filter(Boolean).length;
+        readTime.textContent = Math.max(1, Math.round(outWords.textContent / 180)) + ' min';
+      }
+
+      function print(text, speed=8){
+        out.textContent = '';
+        copyBtn.disabled = true;
+        status.textContent = 'Generating...';
+        let i=0;
+        const id = setInterval(()=>{
+          out.textContent += text.charAt(i++);
+          updateMetrics();
+          if (i>=text.length){ clearInterval(id); status.textContent='Done.'; copyBtn.disabled = false; setTimeout(()=>status.textContent='',1500); }
+        }, speed);
+      }
+
+      function analyzeStyle(txt) {
+        if (!txt) return 'Auto';
+        const w = txt.split(/\s+/).filter(Boolean).length;
+        const long = (txt.match(/[,;:]/g)||[]).length;
+        const ex = (txt.match(/[!]/g)||[]).length;
+        if (w > 25 && long > 2) return 'Formal';
+        if (ex >= 2) return 'Energetic';
+        if (w < 15) return 'Concise';
+        return 'Neutral';
+      }
+
+      function summarize(text, max=3){
+        const sents = text.split(/(?<=[\.\!\?])\s+/).filter(Boolean);
+        const freq = {};
+        const words = text.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(Boolean);
+        words.forEach(w=>freq[w]=(freq[w]||0)+1);
+        const scores = sents.map(s=>{
+          const sw = s.toLowerCase().replace(/[^a-z0-9\s]/g,'').split(/\s+/).filter(Boolean);
+          const sc = sw.reduce((a,w)=>a+(freq[w]||0),0)/Math.max(1,sw.length);
+          return {s,sc};
+        }).sort((a,b)=>b.sc-a.sc).slice(0,max).map(o=>o.s);
+        return scores.join(' ');
+      }
+
+      function translate(text, lang){
+        return `[${lang}] ${text}
+        
+Note: Browser demo uses an illustrative translation; full version uses high-quality models.`;
+      }
+
+      function writeDraft(p, tone='professional', length='medium', style='Auto'){
+        const polite = {
+          friendly: "Thanks so much — appreciate your time!",
+          concise: "Thanks for your time.",
+          professional: "Thank you for your attention.",
+          persuasive: "I’m confident this will have a strong impact.",
+          empathetic: "I appreciate your consideration."
+        }[tone] || "Thanks for your time.";
+        const intro = {
+          friendly: "Hi there,",
+          concise: "Hello,",
+          professional: "Hello team,",
+          persuasive: "Great news,",
+          empathetic: "I understand this matters,"
+        }[tone] || "Hello,";
+        const bodyBase = (p||'').trim().replace(/\s+/g,' ');
+        const body = bodyBase ? (bodyBase.charAt(0).toUpperCase()+bodyBase.slice(1)) : "Here’s a clear and concise draft tailored to your request.";
+        const extras = {
+          short: "",
+          medium: "\n\nKey points:\n• Clear next step\n• Timeline proposed\n• Happy to adjust",
+          long: "\n\nDetails:\n1) Context and rationale\n2) Options with pros/cons\n3) Recommended next step"
+        }[length] || "";
+        const styleNote = style && style !== 'Auto' ? `\n\n[Matched style: ${style}]` : "";
+        return `${intro}\n\n${body}\n\n${polite}${extras}${styleNote}\n\n— Salmar`;
+      }
+
+      function codeGen(task, lang='JavaScript', fw='', level='Intermediate'){
+        const header = `// ${lang} • ${level}${fw?(' • '+fw):''}\n`;
+        const map = {
+          JavaScript: `${header}function main(){\n  // ${task}\n  return 'ok';\n}\nconsole.log(main());`,
+          TypeScript: `${header}function main(): string {\n  // ${task}\n  return 'ok';\n}\nconsole.log(main());`,
+          Python: `${header}def main():\n    # ${task}\n    return 'ok'\n\nprint(main())`,
+          Go: `${header}package main\nimport "fmt"\nfunc main(){\n  // ${task}\n  fmt.Println("ok")\n}`,
+          Java: `${header}class Main {\n  public static void main(String[] args){\n    // ${task}\n    System.out.println("ok");\n  }\n}`,
+          SQL: `${header}-- ${task}\nSELECT * FROM table LIMIT 10;`,
+          HTML: `${header}<!doctype html>\n<html><head><meta charset="utf-8"><title>Snippet</title></head><body>\n  <!-- ${task} -->\n  <button id="btn">Click</button>\n  <script>document.getElementById('btn').onclick=()=>alert('hi');<\/script>\n</body></html>`,
+          CSS: `${header}/* ${task} */\n.button{background: rebeccapurple; color:#fff; padding:0.5rem 1rem; border-radius:0.5rem;}`
+        };
+        return map[lang] || header + '// Snippet';
+      }
+
+      function explainCode(code){
+        const lines = code.split('\n').length;
+        const fnCount = (code.match(/\bfunction\b|=>/g)||[]).length;
+        const classes = (code.match(/\bclass\s+[A-Za-z0-9_]+/g)||[]).map(s=>s.replace('class ',''));
+        return `Overview:
+- Lines of code: ${lines}
+- Functions detected: ${fnCount}
+- Classes: ${classes.length ? classes.join(', ') : 'None'}
+
+What it does:
+- Parses inputs, performs operations, and returns results.
+
+Potential improvements:
+- Add input validation and error handling
+- Extract repeated logic into helpers
+- Write unit tests for critical paths`;
+      }
+
+      function brainstorm(topic){
+        const stems = ['How might we','A twist on','Combine with','Make it social','Automate','Gamify','Localize','Bundle'];
+        return stems.map(s=>`• ${s} ${topic}`).join('\n');
+      }
+
+      function planSteps(goal){
+        return `Goal: ${goal}\n\nWeek 1 — Discover\n• Define success\n• Audit resources\n\nWeek 2 — Design\n• Outline approach\n• Identify risks\n\nWeek 3 — Build\n• Implement core\n• Test & iterate\n\nWeek 4 — Launch\n• Ship and measure\n• Plan next sprint`;
+      }
+
+      function parseCSV(text){
+        const rows = text.split(/\r?\n/).filter(r=>r.trim().length>0).map(r=>r.split(','));
+        if (rows.length === 0) return {headers:[],rows:[],stats:{}};
+        const headers = rows[0];
+        const data = rows.slice(1);
+        const cols = headers.length;
+        const stats = {};
+        headers.forEach((h,idx)=>{
+          const nums = data.map(r=>parseFloat(r[idx])).filter(v=>!Number.isNaN(v));
+          if (nums.length){
+            const sum = nums.reduce((a,b)=>a+b,0);
+            const mean = sum/nums.length;
+            const min = Math.min(...nums);
+            const max = Math.max(...nums);
+            stats[h] = {count: nums.length, mean, min, max};
+          } else {
+            stats[h] = {count: data.length, unique: new Set(data.map(r=>r[idx])).size};
+          }
+        });
+        return {headers, rows:data, stats};
+      }
+
+      function formatStats(stats){
+        const keys = Object.keys(stats);
+        if (!keys.length) return 'No stats.';
+        return keys.map(k=>{
+          const s = stats[k];
+          if ('mean' in s) {
+            return `${k}: count=${s.count}, mean=${s.mean.toFixed(2)}, min=${s.min}, max=${s.max}`;
+          }
+          return `${k}: count=${s.count}, unique=${s.unique}`;
+        }).join('\n');
+      }
+
+      function buildTable(headers, rows){
+        const table = document.createElement('table');
+        table.className = 'w-full text-left';
+        const thead = document.createElement('thead');
+        thead.className = 'bg-white/5';
+        const trh = document.createElement('tr');
+        headers.forEach(h=>{
+          const th = document.createElement('th');
+          th.className = 'px-3 py-2 text-xs font-semibold';
+          th.textContent = h;
+          trh.appendChild(th);
+        });
+        thead.appendChild(trh);
+        const tbody = document.createElement('tbody');
+        tbody.className = 'divide-y divide-white/10';
+        rows.slice(0,6).forEach(r=>{
+          const tr = document.createElement('tr');
+          r.forEach(c=>{
+            const td = document.createElement('td');
+            td.className = 'px-3 py-2 text-xs';
+            td.textContent = c;
+            tr.appendChild(td);
+          });
+          tbody.appendChild(tr);
+        });
+        table.appendChild(thead); table.appendChild(tbody);
+        return table;
+      }
+
+      function regexFromDescription(desc){
+        const d = desc.toLowerCase();
+        if (d.includes('email')) return String(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+        if (d.includes('url') || d.includes('link')) return String(/^(https?:\/\/)?([\w-]+\.)+[\w-]{2,}(\/[\w\-.,@?^=%&:/~+#]*)?$/);
+        if (d.includes('phone')) return String(/^\+?\d{1,3}?[-.\s]?\(?\d{2,4}\)?[-.\s]?\d{3,4}[-.\s]?\d{3,4}$/);
+        if (d.includes('zipcode') || d.includes('postal')) return String(/^\d{5}(-\d{4})?$/);
+        return `/${desc.replace(/[^a-z0-9]+/gi,'.')}/i`;
+      }
+
+      function sqlFromText(text, schema){
+        const target = (/from\s+([a-z_]+)/i.exec(text)||[])[1] || (schema.match(/([a-z_]+)\(/i)||[])[1] || 'table';
+        const where = (text.match(/where\s+(.+)$/i)||[])[1] || '1=1';
+        return `-- generated from description\nSELECT *\nFROM ${target}\nWHERE ${where};`;
+      }
+
+      function mathEval(expr){
+        const safe = expr.replace(/\^/g,'**').replace(/,/g,'');
+        if (!/^[0-9+\-*/().\s%^]*$/.test(safe)) return 'Unsupported characters. Use numbers and operators.';
+        try { return 'Result: ' + Function('return ('+safe+')')(); } catch(e){ return 'Could not compute. Check your expression.'; }
+      }
+
+      function imagePrompt(base, style='Cinematic', light='Golden hour', lens='50mm'){
+        return `A highly detailed ${style.toLowerCase()} ${base}.
+- Lighting: ${light}
+- Lens: ${lens}, depth of field, bokeh
+- Color grading: rich purples and soft highlights
+- Composition: rule of thirds, leading lines
+- Render: 4k, high dynamic range, film grain subtle`;
+      }
+
+      // Detect tool
+      function detectTool(text){
+        const t = text.toLowerCase();
+        if (t.match(/\btranslate to\b|\btranslate\b/)) return 'translate';
+        if (t.startsWith('summarize') || t.includes('tl;dr')) return 'summarize';
+        if (t.includes('regex') || t.includes('regular expression')) return 'regex';
+        if (t.includes('sql') || t.includes('query')) return 'sql';
+        if (t.includes('explain code') || t.includes('what does this code')) return 'explain';
+        if (t.includes('code') || t.includes('function') || t.includes('snippet')) return 'code';
+        if (t.includes('brainstorm') || t.includes('ideas')) return 'brainstorm';
+        if (t.includes('plan') || t.includes('timeline') || t.includes('roadmap')) return 'plan';
+        if (t.match(/^[\d\s\+\-\*\/\.\(\)\^%]+$/)) return 'math';
+        if (t.includes('csv')) return 'csv';
+        if (t.includes('image prompt') || t.includes('visual')) return 'imgprompt';
+        if (t.includes('write') || t.includes('draft')) return 'write';
+        return 'chat';
+      }
+
+      // Tool handlers
+      const handlers = {
+        auto: ({prompt}) => {
+          const tool = detectTool(prompt||'');
+          detectedTool.textContent = toolDefs.find(t=>t.id===tool)?.label || 'Chat';
+          confidence.textContent = 'Heuristic';
+          return handlers[tool]({prompt});
+        },
+        chat: ({prompt}) => `Answer:\n${prompt}\n\nHow else can I help?`,
+        write: ({prompt, tone, length, styleSample}) => {
+          const style = analyzeStyle(styleSample||'');
+          return writeDraft(prompt, tone, length, style);
+        },
+        summarize: ({prompt}) => summarize((attachedText||'') + '\n' + (prompt||''), 3),
+        translate: ({prompt, language}) => translate(prompt, language),
+        code: ({prompt, language, framework, level}) => codeGen(prompt, language, framework, level),
+        explain: ({codeSample}) => explainCode(codeSample||''),
+        brainstorm: ({prompt}) => brainstorm(prompt||'your topic'),
+        plan: ({prompt}) => planSteps(prompt||'your project'),
+        csv: ({csvText}) => {
+          const text = (attachedText && attachedText.includes(',')) ? attachedText : (csvText||'');
+          const {headers, rows, stats} = parseCSV(text);
+          const head = `Rows: ${rows.length}, Columns: ${headers.length}\n`;
+          const st = formatStats(stats);
+          out.innerHTML = '';
+          out.textContent = head + st + '\n\nPreview:';
+          const tbl = buildTable(headers, rows);
+          tbl.classList.add('mt-2');
+          out.appendChild(tbl);
+          copyBtn.disabled = true; // Mixed content
+          status.textContent = 'Done.';
+          return null;
+        },
+        regex: ({prompt}) => `Regex:\n${regexFromDescription(prompt)}\n\nUse with flags as needed.`,
+        sql: ({prompt, schema}) => sqlFromText(prompt||'', schema||''),
+        math: ({prompt}) => mathEval(prompt||''),
+        imgprompt: ({prompt, imgStyle, imgLight, imgLens}) => imagePrompt(prompt||'subject', imgStyle, imgLight, imgLens)
+      };
+
+      // Events
+      toolList.addEventListener('click', (e)=>{
+        const btn = e.target.closest('.tool');
+        if (!btn) return;
+        setTool(btn.dataset.id);
+      });
+
+      setTool('auto');
+
+      document.getElementById('toolForm')?.addEventListener('submit', (e)=>{
+        e.preventDefault();
+        const promptEl = document.getElementById('prompt');
+        const prompt = promptEl ? promptEl.value.trim() : '';
+        if (current !== 'csv' && current !== 'explain' && (!prompt || prompt.length < 6)) {
+          const err = document.getElementById('promptError');
+          err?.classList.remove('hidden');
+          promptEl?.setAttribute('aria-invalid', 'true');
+          promptEl?.focus();
+          return;
+        }
+        document.getElementById('promptError')?.classList.add('hidden');
+        promptEl?.removeAttribute('aria-invalid');
+
+        // Collect fields safely
+        const fields = {
+          prompt,
+          tone: document.getElementById('tone')?.value,
+          length: document.getElementById('length')?.value,
+          styleSample: document.getElementById('styleSample')?.value,
+          language: document.getElementById('language')?.value,
+          framework: document.getElementById('framework')?.value,
+          level: document.getElementById('level')?.value,
+          csvText: document.getElementById('csvText')?.value,
+          schema: document.getElementById('schema')?.value,
+          codeSample: document.getElementById('codeSample')?.value,
+          imgStyle: document.getElementById('imgStyle')?.value,
+          imgLight: document.getElementById('imgLight')?.value,
+          imgLens: document.getElementById('imgLens')?.value
+        };
+
+        status.textContent = 'Generating...';
+        copyBtn.disabled = true;
+
+        // Run handler
+        const id = current === 'auto' ? 'auto' : current;
+        const result = handlers[id](fields);
+        if (result !== null && result !== undefined) {
+          print(String(result), 6);
+        } else {
+          // handler already updated DOM (e.g., CSV)
+          updateMetrics();
+        }
+      });
+
+      copyBtn.addEventListener('click', async ()=>{
+        try {
+          await navigator.clipboard.writeText(out.textContent || '');
+          status.textContent = 'Copied!';
+          setTimeout(()=>status.textContent='', 1200);
+        } catch (e) {
+          status.textContent = 'Press Ctrl/Cmd+C to copy.';
+          setTimeout(()=>status.textContent='', 2000);
+        }
+      });
+
+      // File attach
+      fileInput.addEventListener('change', async (e)=>{
+        try {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          const text = await file.text();
+          attachedText = text.slice(0, 200000); // cap
+          status.textContent = `Attached ${file.name} (${file.type || 'text'})`;
+          setTimeout(()=>status.textContent='', 2000);
+        } catch(err){
+          attachedText = '';
+          status.textContent = 'Could not read file.';
+          setTimeout(()=>status.textContent='', 2000);
+        }
+      });
+
+      // Voice input (SpeechRecognition if available)
+      (function(){
+        let rec;
+        let listening = false;
+        micBtn.addEventListener('click', ()=>{
+          try {
+            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (!SR) { status.textContent = 'Voice not supported in this browser.'; setTimeout(()=>status.textContent='', 2000); return; }
+            if (!rec) {
+              rec = new SR();
+              rec.lang = 'en-US';
+              rec.interimResults = true;
+              rec.onresult = (e)=>{
+                let t = '';
+                for (let i=0;i<e.results.length;i++) t += e.results[i][0].transcript;
+                const promptEl = document.getElementById('prompt');
+                if (promptEl) promptEl.value = t;
+              };
+              rec.onend = ()=>{ listening=false; micBtn.textContent='🎙️ Voice'; };
+            }
+            if (!listening){ rec.start(); listening=true; micBtn.textContent='⏹️ Stop'; } else { rec.stop(); }
+          } catch(err){
+            status.textContent = 'Microphone permission denied or unavailable.';
+            setTimeout(()=>status.textContent='', 2000);
+          }
+        });
+      })();
+
+    })();
+  </script>
+</body>
+</html>
