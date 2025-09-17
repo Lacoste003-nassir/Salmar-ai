@@ -1,545 +1,992 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SecureAI Pro | Advanced Login System</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            transition: all 0.3s ease;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Salmar — The AI That Does Everything | Login</title>
 
-        :root {
-            --primary-color: #4f46e5;
-            --secondary-color: #818cf8;
-            --success-color: #22c55e;
-            --error-color: #ef4444;
-            --warning-color: #f59e0b;
-            --text-primary: #1f2937;
-            --text-secondary: #4b5563;
-            --bg-primary: #ffffff;
-            --bg-secondary: #f3f4f6;
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --shadow-color: rgba(0, 0, 0, 0.1);
-            --border-color: #e5e7eb;
-            --glass-bg: rgba(255, 255, 255, 0.7);
-        }
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
 
-        .dark-mode {
-            --primary-color: #818cf8;
-            --secondary-color: #6366f1;
-            --text-primary: #f9fafb;
-            --text-secondary: #e5e7eb;
-            --bg-primary: #111827;
-            --bg-secondary: #1f2937;
-            --card-bg: rgba(17, 24, 39, 0.95);
-            --shadow-color: rgba(0, 0, 0, 0.3);
-            --border-color: #374151;
-            --glass-bg: rgba(17, 24, 39, 0.7);
-        }
+  <!-- GSAP for animations -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-f2M8+dF6qUqBqLMF+Xz2oPPKocK/2r5v9f8DO/vyGaTnQwo0YWZ5B6CGeSUX7lM2o5iFQkX2+7x7C3gSqcE4XA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-        body {
-            min-height: 100vh;
-            background: var(--bg-primary);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow-x: hidden;
-            position: relative;
-        }
+  <!-- Three.js for 3D orb -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r155/three.min.js" integrity="sha512-2l9Qh26/e3pA8qnmncEl1svbw21Y2GZ0t3+3/Qm3X8F7F4Ww+0W8hEAY2uS8/KFxtwwnlrCL0xq3X8p5kN1q9Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
+  <style>
+    /* CSS Variables for themes */
+    :root {
+      --bg-1: #0b0013;     /* deep space */
+      --bg-2: #2b0051;     /* cosmic purple */
+      --bg-3: #51007e;     /* nebula accent */
+      --accent: #a56cff;   /* neon lavender */
+      --accent-2: #8a2cff; /* neon purple */
+      --text: #f4efff;
+      --muted: #cbb6ff;
+      --glass: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(165, 108, 255, 0.35);
+      --shadow-strong: 0 10px 30px rgba(119, 56, 255, 0.35), 0 2px 8px rgba(0, 0, 0, 0.35);
+      --shadow-soft: 0 8px 24px rgba(165, 108, 255, 0.25), inset 0 1px 0 rgba(255,255,255,0.08);
+      --ring: 0 0 0 3px rgba(165, 108, 255, 0.45);
+      --outline: rgba(165,108,255,.65);
+    }
+    .theme-light {
+      --bg-1: #f6f2ff;
+      --bg-2: #eae0ff;
+      --bg-3: #d8c6ff;
+      --accent: #6b3dfc;
+      --accent-2: #8a2cff;
+      --text: #231a3a;
+      --muted: #4a3f66;
+      --glass: rgba(255, 255, 255, 0.55);
+      --glass-border: rgba(107, 61, 252, 0.25);
+      --shadow-strong: 0 10px 30px rgba(107, 61, 252, 0.25), 0 2px 8px rgba(0, 0, 0, 0.08);
+      --shadow-soft: 0 8px 24px rgba(107, 61, 252, 0.15), inset 0 1px 0 rgba(255,255,255,0.65);
+      --ring: 0 0 0 3px rgba(107, 61, 252, 0.35);
+      --outline: rgba(107,61,252,.65);
+    }
 
-        .container {
-            position: relative;
-            width: 420px;
-            backdrop-filter: blur(20px);
-            background: var(--glass-bg);
-            border-radius: 24px;
-            padding: 40px;
-            box-shadow: 0 8px 32px var(--shadow-color);
-            border: 1px solid var(--border-color);
-            z-index: 1;
-        }
+    /* Global resets and typography */
+    html, body {
+      height: 100%;
+      background: radial-gradient(1200px 800px at 20% 10%, var(--bg-3) 0%, transparent 60%),
+                  radial-gradient(1200px 800px at 80% 20%, #22004e 0%, transparent 65%),
+                  linear-gradient(120deg, var(--bg-1), var(--bg-2));
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      overflow: hidden;
+    }
+    body:focus-within {
+      outline: none;
+    }
 
-        .theme-toggle {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: var(--glass-bg);
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 16px var(--shadow-color);
-            border: 1px solid var(--border-color);
-            z-index: 2;
-        }
+    /* Subtle noise overlay */
+    .noise-overlay {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .06;
+      mix-blend-mode: soft-light;
+      z-index: 1;
+      background-size: 200px 200px;
+    }
 
-        .theme-toggle i {
-            font-size: 1.5rem;
-            color: var(--text-primary);
-        }
+    /* Flowing nebula gradient animation */
+    .nebula {
+      position: fixed;
+      inset: -10%;
+      background:
+        radial-gradient(800px 500px at 10% 70%, rgba(171, 69, 255, 0.18), transparent 60%),
+        radial-gradient(600px 600px at 80% 20%, rgba(89, 0, 255, 0.18), transparent 60%),
+        conic-gradient(from 90deg at 50% 50%, rgba(165,108,255,0.08), rgba(0,0,0,0), rgba(138,44,255,0.08), rgba(0,0,0,0));
+      filter: blur(40px) saturate(120%);
+      animation: drift 24s linear infinite;
+      z-index: 0;
+    }
+    @keyframes drift {
+      0% { transform: translateY(0) rotate(0deg) scale(1.05); }
+      50% { transform: translateY(-2%) rotate(2deg) scale(1.08); }
+      100% { transform: translateY(0) rotate(0deg) scale(1.05); }
+    }
 
-        .logo {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+    /* Particle canvas */
+    #particles {
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      filter: blur(0.2px);
+    }
 
-        .logo i {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 10px;
-        }
+    /* Three.js orb canvas */
+    #orbCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 3;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
 
-        .logo h1 {
-            color: var(--text-primary);
-            font-size: 1.8rem;
-            font-weight: 700;
-        }
+    /* Ripple overlay for biometric acknowledgment */
+    .ripple-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 4;
+      pointer-events: none;
+      background: radial-gradient(closest-side, rgba(165,108,255,0.25), transparent 70%) center/0% 0% no-repeat;
+      opacity: 0;
+    }
 
-        .input-group {
-            position: relative;
-            margin-bottom: 25px;
-        }
+    /* Main container and glass card */
+    .container {
+      position: relative;
+      z-index: 5;
+      display: grid;
+      place-items: center;
+      min-height: 100vh;
+      padding: 1.5rem;
+    }
+    .glass-card {
+      width: 100%;
+      max-width: 28rem;
+      background: linear-gradient( to bottom right, rgba(255,255,255,0.08), rgba(255,255,255,0.02) );
+      background-color: var(--glass);
+      backdrop-filter: blur(14px) saturate(130%);
+      -webkit-backdrop-filter: blur(14px) saturate(130%);
+      border-radius: 1.25rem; /* 2xl-ish */
+      border: 1px solid var(--glass-border);
+      box-shadow: var(--shadow-strong);
+      position: relative;
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .glass-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      padding: 1px;
+      background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(165,108,255,0.5), rgba(138,44,255,0.5), rgba(255,255,255,0.35));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+              mask-composite: exclude;
+      pointer-events: none;
+      opacity: .55;
+    }
+    .inner {
+      position: relative;
+      padding: 1.75rem 1.5rem 1.5rem;
+    }
 
-        .input-group input {
-            width: 100%;
-            padding: 15px 45px 15px 15px;
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 1rem;
-            outline: none;
-            transition: 0.3s;
-        }
+    /* Top orb logo */
+    .logo-orb {
+      width: 64px;
+      height: 64px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #fff 0%, var(--accent) 15%, rgba(165,108,255,0.35) 35%, rgba(0,0,0,0) 70%);
+      box-shadow:
+        0 0 24px rgba(165,108,255,0.75),
+        inset 0 0 22px rgba(255,255,255,0.65);
+      position: relative;
+      margin: 0 auto 0.5rem;
+      transition: transform .6s ease, filter .6s ease;
+      filter: saturate(120%);
+    }
+    .logo-orb::after {
+      content: "";
+      position: absolute;
+      inset: -3px;
+      border-radius: inherit;
+      background: conic-gradient(from 45deg, rgba(165,108,255,0.8), rgba(138,44,255,0.6), rgba(255,255,255,0.5), rgba(165,108,255,0.8));
+      filter: blur(16px);
+      opacity: .35;
+      z-index: -1;
+    }
+    .logo-orb.unlocked {
+      transform: scale(1.08);
+      filter: drop-shadow(0 0 26px rgba(165,108,255,.95)) saturate(150%);
+    }
 
-        .input-group i {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-        }
+    /* Inputs */
+    .field {
+      position: relative;
+    }
+    .field input {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(165,108,255,0.35);
+      color: var(--text);
+      border-radius: 0.875rem;
+      width: 100%;
+      padding: 0.875rem 3rem 0.875rem 0.875rem;
+      outline: none;
+      box-shadow: var(--shadow-soft);
+      transition: box-shadow .25s ease, border-color .25s ease, background-color .25s ease;
+    }
+    .field input::placeholder {
+      color: color-mix(in oklab, var(--text) 35%, transparent);
+    }
+    .field input:focus {
+      border-color: var(--accent);
+      box-shadow: var(--shadow-soft), var(--ring);
+      background: rgba(255,255,255,0.12);
+    }
+    .field .spark-area {
+      pointer-events: none;
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      border-radius: inherit;
+    }
+    .spark {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #fff, var(--accent));
+      box-shadow: 0 0 10px var(--accent);
+      opacity: 0.95;
+      filter: saturate(140%);
+    }
 
-        .input-group input:focus {
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
-        }
+    /* Password toggle */
+    .toggle-pass {
+      position: absolute;
+      top: 50%;
+      right: 0.5rem;
+      transform: translateY(-50%);
+      display: grid;
+      place-items: center;
+      width: 2.25rem;
+      height: 2.25rem;
+      border-radius: 999px;
+      color: var(--muted);
+      transition: background .2s ease, color .2s ease;
+      cursor: pointer;
+    }
+    .toggle-pass:hover {
+      background: rgba(165,108,255,0.15);
+      color: var(--text);
+    }
 
-        .password-strength {
-            height: 4px;
-            border-radius: 2px;
-            margin-top: 8px;
-            transition: 0.3s;
-            background: #ddd;
-        }
+    /* Buttons */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 0.9rem 1.25rem;
+      border-radius: 0.95rem;
+      font-weight: 700;
+      letter-spacing: .2px;
+      box-shadow: 0 8px 24px rgba(165,108,255,0.4), inset 0 1px 0 rgba(255,255,255,0.2);
+      transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .btn-primary::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(200px 60px at var(--mx, 50%) var(--my, 50%), rgba(255,255,255,0.25), transparent 60%);
+      opacity: 0;
+      transition: opacity .2s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 12px 30px rgba(165,108,255,0.55);
+      filter: saturate(115%);
+    }
+    .btn-primary:hover::after { opacity: 1; }
+    .btn-primary.pulse {
+      animation: pulseGlow 2s ease-in-out infinite;
+    }
+    @keyframes pulseGlow {
+      0%, 100% { box-shadow: 0 8px 24px rgba(165,108,255,0.35), inset 0 1px 0 rgba(255,255,255,0.2); }
+      50% { box-shadow: 0 12px 36px rgba(165,108,255,0.6), inset 0 1px 0 rgba(255,255,255,0.25); }
+    }
 
-        .security-options {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            color: var(--text-secondary);
-        }
+    .btn-social {
+      display: grid;
+      place-items: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 0.85rem;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(165,108,255,0.35);
+      color: var(--text);
+      transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+      box-shadow: var(--shadow-soft);
+    }
+    .btn-social:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.18);
+      box-shadow: 0 8px 24px rgba(165,108,255,0.35);
+    }
 
-        .remember-me {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
+    /* Divider */
+    .divider {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: center;
+      gap: .75rem;
+      color: var(--muted);
+      margin: .25rem 0 0.5rem;
+    }
+    .divider::before, .divider::after {
+      content: "";
+      height: 1px;
+      background: linear-gradient(to right, transparent, rgba(165,108,255,0.45), transparent);
+    }
 
-        .remember-me input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--primary-color);
-        }
+    /* Biometric section */
+    .biometric {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: .75rem;
+      justify-items: center;
+    }
+    .bio-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+    .bio-btn {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 3.25rem;
+      height: 3.25rem;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(165,108,255,0.45);
+      box-shadow: var(--shadow-soft);
+      color: var(--text);
+      overflow: hidden;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+      cursor: pointer;
+      isolation: isolate;
+    }
+    .bio-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.16);
+      box-shadow: 0 10px 28px rgba(165,108,255,0.35);
+    }
+    .bio-btn::after {
+      content: "";
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(165,108,255,0.35), transparent 65%);
+      opacity: 0;
+      transform: scale(0.1);
+      transition: opacity .2s ease, transform .25s ease;
+      z-index: -1;
+    }
+    .bio-btn:hover::after {
+      opacity: 1;
+      width: 280%;
+      height: 280%;
+      transform: scale(1);
+    }
 
-        .forgot-password {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 500;
-        }
+    /* Face ID scanning ring */
+    .face-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 999px;
+      border: 2px solid rgba(165,108,255,0.65);
+      box-shadow: inset 0 0 12px rgba(165,108,255,0.45), 0 0 10px rgba(165,108,255,0.4);
+      animation: scan 2.2s linear infinite;
+      opacity: .55;
+      pointer-events: none;
+    }
+    @keyframes scan {
+      0% { clip-path: polygon(50% 0, 52% 0, 52% 100%, 50% 100%); }
+      50% { clip-path: polygon(0 48%, 100% 48%, 100% 52%, 0 52%); }
+      100% { clip-path: polygon(48% 0, 50% 0, 50% 100%, 48% 100%); }
+    }
 
-        .btn {
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 12px;
-            background: var(--primary-color);
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-        }
+    /* Links */
+    a.link {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+    }
+    a.link:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
 
-        .btn:hover {
-            background: var(--secondary-color);
-            transform: translateY(-2px);
-        }
+    /* Accessibility focus */
+    .focus-ring:focus-visible {
+      outline: 3px solid var(--outline);
+      outline-offset: 2px;
+      border-radius: 0.75rem;
+    }
 
-        .divider {
-            display: flex;
-            align-items: center;
-            margin: 25px 0;
-            color: var(--text-secondary);
-        }
+    /* Reduced motion preference */
+    @media (prefers-reduced-motion: reduce) {
+      .nebula, .btn-primary.pulse, .face-ring {
+        animation: none !important;
+      }
+      #orbCanvas, #particles {
+        display: none !important;
+      }
+    }
 
-        .divider::before,
-        .divider::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: var(--border-color);
-        }
+    /* Header actions area */
+    .actions {
+      position: fixed;
+      z-index: 6;
+      top: 1rem;
+      right: 1rem;
+      display: flex;
+      gap: .5rem;
+    }
+    .toggle-theme {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(165,108,255,0.35);
+      padding: .5rem .75rem;
+      border-radius: 999px;
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      user-select: none;
+      color: var(--text);
+      transition: background .2s ease, transform .2s ease, box-shadow .2s ease;
+    }
+    .toggle-theme:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.16);
+      box-shadow: 0 10px 28px rgba(165,108,255,0.35);
+    }
 
-        .divider span {
-            padding: 0 15px;
-        }
+    /* Trust footer */
+    .trust {
+      display: flex;
+      align-items: center;
+      gap: .5rem;
+      margin-top: .75rem;
+      justify-content: center;
+      color: var(--muted);
+      font-size: .89rem;
+      text-align: center;
+    }
 
-        .social-login {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .social-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            cursor: pointer;
-            transition: 0.3s;
-            border: 1px solid var(--border-color);
-        }
-
-        .social-btn:hover {
-            transform: translateY(-3px);
-            background: var(--primary-color);
-            color: white;
-        }
-
-        .register-link {
-            text-align: center;
-            margin-top: 25px;
-            color: var(--text-secondary);
-        }
-
-        .register-link a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .biometric-auth {
-            text-align: center;
-            margin-top: 20px;
-        }
-
-        .fingerprint-btn {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 2rem;
-            color: var(--primary-color);
-            transition: 0.3s;
-        }
-
-        .fingerprint-btn:hover {
-            transform: scale(1.1);
-        }
-
-        .alert {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 25px;
-            border-radius: 12px;
-            background: var(--glass-bg);
-            color: var(--text-primary);
-            box-shadow: 0 4px 16px var(--shadow-color);
-            display: none;
-            z-index: 1000;
-            animation: slideIn 0.3s ease;
-        }
-
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        .loading {
-            display: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 24px;
-            z-index: 2;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid var(--primary-color);
-            border-top: 4px solid transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                width: 90%;
-                padding: 30px 20px;
-            }
-        }
-    </style>
+    /* Helper utilities when Tailwind isn't used for specific elements */
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+  </style>
 </head>
-<body>
-    <div class="particles"></div>
-    
-    <div class="theme-toggle">
-        <i class="fas fa-moon"></i>
-    </div>
+<body class="theme-dark">
 
-    <div class="alert" id="alert"></div>
+  <!-- Subtle moving nebula background -->
+  <div class="nebula" aria-hidden="true"></div>
 
-    <div class="container" data-aos="fade-up">
-        <div class="loading">
-            <div class="spinner"></div>
-        </div>
+  <!-- Particles canvas -->
+  <canvas id="particles" aria-hidden="true"></canvas>
 
-        <div class="logo">
-            <i class="fas fa-shield-alt"></i>
-            <h1>Secure AI Pro</h1><br> <h1>Login</h1>
-        </div>
+  <!-- Three.js Orb -->
+  <canvas id="orbCanvas" aria-hidden="true"></canvas>
 
-        <form id="loginForm">
-            <div class="input-group">
-                <input type="email" placeholder="email" id="email" required autocomplete="email">
-                <i class="fas fa-envelope"></i>
+  <!-- Biometric ripple overlay -->
+  <div class="ripple-overlay" id="rippleOverlay" aria-hidden="true"></div>
+
+  <!-- Noise overlay -->
+  <div class="noise-overlay" id="noiseOverlay" aria-hidden="true"></div>
+
+  <!-- Header actions -->
+  <div class="actions">
+    <button id="themeToggle" class="toggle-theme focus-ring" aria-label="Toggle Future Mode">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 3v2M12 19v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <circle cx="12" cy="12" r="4" stroke="currentColor" stroke-width="1.6"/>
+      </svg>
+      <span class="text-sm font-semibold">Future Mode</span>
+    </button>
+  </div>
+
+  <!-- Main container -->
+  <main class="container">
+    <section class="glass-card" role="form" aria-labelledby="welcomeTitle" aria-describedby="welcomeDesc">
+      <div class="inner">
+        <!-- Small glowing Salmar orb (logo) -->
+        <div class="logo-orb" id="logoOrb" aria-hidden="true"></div>
+
+        <!-- Welcome messages -->
+        <h1 id="welcomeTitle" class="text-center text-2xl sm:text-3xl font-extrabold tracking-tight mb-1" style="color: var(--text);">
+          Welcome back, Explorer.
+        </h1>
+        <p id="welcomeDesc" class="text-center text-sm sm:text-base mb-5" style="color: var(--muted);">
+          Step into the future with Salmar.
+        </p>
+
+        <!-- Login form -->
+        <form id="loginForm" novalidate>
+          <!-- Email -->
+          <div class="field mb-3">
+            <label for="email" class="block text-sm font-semibold mb-1" style="color: var(--muted);">Email or Username</label>
+            <input id="email" name="email" type="text" required autocomplete="username" placeholder="you@galaxy.io"
+              aria-describedby="emailHelp" aria-invalid="false" class="focus-ring" />
+            <div aria-live="polite" id="emailHelp" class="mt-1 text-xs" style="color: var(--muted);"></div>
+            <div class="spark-area" aria-hidden="true"></div>
+          </div>
+
+          <!-- Password -->
+          <div class="field mb-4">
+            <label for="password" class="block text-sm font-semibold mb-1" style="color: var(--muted);">Password</label>
+            <input id="password" name="password" type="password" required autocomplete="current-password" placeholder="Enter your password"
+              aria-describedby="passwordHelp" aria-invalid="false" class="focus-ring" />
+            <button type="button" class="toggle-pass" id="togglePass" aria-label="Toggle password visibility">
+              <svg id="eyeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M12 5c-5 0-9 5-9 7s4 7 9 7 9-5 9-7-4-7-9-7Z" stroke="currentColor" stroke-width="1.6" fill="none"/>
+                <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6" fill="none"/>
+              </svg>
+            </button>
+            <div aria-live="polite" id="passwordHelp" class="mt-1 text-xs" style="color: var(--muted);"></div>
+            <div class="spark-area" aria-hidden="true"></div>
+          </div>
+
+          <!-- Actions row -->
+          <div class="flex items-center justify-between mb-4">
+            <div class="text-sm">
+              <a href="#" class="link">Forgot password?</a>
             </div>
-
-            <div class="input-group">
-                <input type="password" placeholder="password" id="password" required>
-                <i class="fas fa-lock"></i>
-                <div class="password-strength"></div>
+            <div class="text-sm">
+              <span style="color: var(--muted);">New here? </span><a href="#" class="link">Create Account</a>
             </div>
+          </div>
 
-            <div class="security-options">
-                <label class="remember-me">
-                    <input type="checkbox" id="remember">
-                    <span>Remember me</span>
-                </label>
-                <a href="#" class="forgot-password">Forgot Password?</a>
+          <!-- Primary login -->
+          <button type="submit" id="loginBtn" class="btn-primary pulse focus-ring" aria-label="Log In to Salmar">
+            Log In to Salmar
+          </button>
+
+          <!-- Biometrics -->
+          <div class="biometric mt-4">
+            <div class="text-sm font-semibold" style="color: var(--muted);">
+              Log in with Biometrics
             </div>
+            <div class="bio-actions">
+              <!-- Fingerprint -->
+              <button type="button" id="fingerBtn" class="bio-btn focus-ring" aria-label="Use fingerprint to login">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 2c-4.4 0-8 3.6-8 8 0 3.5 1.2 6.8 3.3 9.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M12 6c-2.2 0-4 1.8-4 4 0 2.9.8 5.7 2.3 8.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M12 10c-.6 0-1 .4-1 1 0 2 .5 3.9 1.5 5.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M17 10c0 3-.7 5.8-2 8.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                  <path d="M7 10c0 3 .7 5.8 2 8.2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </button>
 
-            <button type="submit" class="btn">
-                <i class="fas fa-sign-in-alt"></i>
-                <span>Login Securely</span>
+              <!-- Face ID -->
+              <button type="button" id="faceBtn" class="bio-btn focus-ring" aria-label="Use Face ID to login">
+                <div class="face-ring" aria-hidden="true"></div>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="3" y="3" width="6" height="6" rx="2" stroke="currentColor" stroke-width="1.6"/>
+                  <rect x="15" y="3" width="6" height="6" rx="2" stroke="currentColor" stroke-width="1.6"/>
+                  <rect x="3" y="15" width="6" height="6" rx="2" stroke="currentColor" stroke-width="1.6"/>
+                  <rect x="15" y="15" width="6" height="6" rx="2" stroke="currentColor" stroke-width="1.6"/>
+                  <circle cx="9" cy="10" r="1" fill="currentColor"/>
+                  <circle cx="15" cy="10" r="1" fill="currentColor"/>
+                  <path d="M8 14c1.2 1 2.8 1 4 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                </svg>
+              </button>
+            </div>
+            <div id="bioMsg" class="text-xs text-center" style="color: var(--muted);">
+              Biometric not available? Use password instead.
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="divider my-4 text-xs uppercase tracking-wider">
+            or
+          </div>
+
+          <!-- Social login -->
+          <div class="flex items-center justify-center gap-3 mb-1">
+            <!-- Google -->
+            <button type="button" class="btn-social focus-ring" aria-label="Continue with Google">
+              <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+                <path fill="#FFC107" d="M43.611 20.083h-1.611V20H24v8h11.303c-1.651 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.844 1.156 7.949 3.051l5.657-5.657C33.136 6.053 28.805 4 24 4 12.954 4 4 12.954 4 24s8.954 20 20 20 20-8.954 20-20c0-1.341-.138-2.651-.389-3.917z"/>
+                <path fill="#FF3D00" d="M6.306 14.691l6.571 4.818C14.455 15.376 18.808 12 24 12c3.059 0 5.844 1.156 7.949 3.051l5.657-5.657C33.136 6.053 28.805 4 24 4 16.318 4 9.734 8.337 6.306 14.691z"/>
+                <path fill="#4CAF50" d="M24 44c4.698 0 8.979-1.604 12.346-4.336l-5.694-4.828C28.612 36.803 26.405 37.6 24 37.6c-5.202 0-9.606-3.33-11.243-7.97l-6.541 5.03C9.579 40.053 16.247 44 24 44z"/>
+                <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-0.793 2.235-2.232 4.174-4.123 5.557L36.652 39.6C40.407 36.168 43 30.977 43 25c0-1.341-.138-2.651-.389-3.917z"/>
+              </svg>
             </button>
 
-            <div class="biometric-auth">
-                <button type="button" class="fingerprint-btn" id="biometricLogin">
-                    <i class="fas fa-fingerprint"></i>
-                </button>
-            </div>
+            <!-- Discord -->
+            <button type="button" class="btn-social focus-ring" aria-label="Continue with Discord">
+              <svg width="20" height="20" viewBox="0 0 71 55" aria-hidden="true">
+                <path fill="currentColor" d="M60.1 4.9A58.5 58.5 0 0046.9 1a41.1 41.1 0 00-2 4.2 56 56 0 00-17.8 0 41.2 41.2 0 00-2-4.2A58.8 58.8 0 0012 4.9C1.7 20.8-.9 36.3.3 51.7a58.9 58.9 0 0018.2 3.3c1.4-1.9 2.7-3.9 3.8-6a37.4 37.4 0 01-6-2.9c.5-.3 1-.6 1.5-.9a40.9 40.9 0 0015.3 3.8 40.9 40.9 0 0015.3-3.8l1.5.9a37.4 37.4 0 01-6 2.9 42.7 42.7 0 003.8 6 58.9 58.9 0 0018.2-3.3c1.4-17.1-2.3-32.7-12.9-46.8zM23.8 37.2c-3 0-5.5-2.8-5.5-6.2 0-3.5 2.4-6.2 5.5-6.2 3 0 5.5 2.8 5.5 6.2 0 3.5-2.4 6.2-5.5 6.2zm23.4 0c-3 0-5.5-2.8-5.5-6.2 0-3.5 2.4-6.2 5.5-6.2 3 0 5.5 2.8 5.5 6.2 0 3.5-2.4 6.2-5.5 6.2z"/>
+              </svg>
+            </button>
 
-            <div class="divider">
-                <span>or continue with</span>
-            </div>
+            <!-- GitHub -->
+            <button type="button" class="btn-social focus-ring" aria-label="Continue with GitHub">
+              <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M12 2a10 10 0 00-3.162 19.492c.5.093.683-.217.683-.483l-.013-1.695c-2.777.603-3.362-1.188-3.362-1.188-.455-1.158-1.112-1.467-1.112-1.467-.91-.622.069-.609.069-.609 1.005.07 1.533 1.032 1.533 1.032.894 1.53 2.347 1.088 2.917.833.092-.663.35-1.088.636-1.338-2.22-.252-4.555-1.11-4.555-4.942 0-1.09.39-1.984 1.029-2.682-.103-.253-.446-1.268.098-2.643 0 0 .84-.269 2.75 1.025A9.56 9.56 0 0112 6.844c.85.004 1.707.115 2.507.337 1.91-1.294 2.75-1.025 2.75-1.025.545 1.375.202 2.39.1 2.643.64.698 1.028 1.592 1.028 2.682 0 3.842-2.338 4.687-4.565 4.935.36.31.682.921.682 1.856l-.013 2.753c0 .269.18.58.69.481A10 10 0 0012 2z"/>
+              </svg>
+            </button>
+          </div>
 
-            <div class="social-login">
-                <div class="social-btn" title="Login with Google">
-                    <i class="fab fa-google"></i>
-                </div>
-                <div class="social-btn" title="Login with Apple">
-                    <i class="fab fa-apple"></i>
-                </div>
-                <div class="social-btn" title="Login with GitHub">
-                    <i class="fab fa-github"></i>
-                </div>
-            </div>
-
-            <div class="register-link">
-                Don't have an account? <a href="signup.html">Register now</a>
-            </div>
+          <!-- Trust footer -->
+          <div class="trust">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2l7 4v6c0 5-3.5 9.5-7 10-3.5-.5-7-5-7-10V6l7-4z" stroke="currentColor" stroke-width="1.6" fill="none"/>
+              <path d="M8 12l2.5 2.5L16 9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Your identity is safe. Biometrically encrypted by Salmar.</span>
+          </div>
         </form>
-    </div>
+      </div>
+    </section>
+  </main>
 
-    <script>
-        AOS.init({
-            duration: 1000,
-            once: true
+  <script>
+    // Tailwind init (optional customizations if needed)
+    // tailwind.config = { theme: { extend: { } } };
+
+    // Utility: Random float
+    const rand = (min, max) => Math.random() * (max - min) + min;
+
+    // Theme toggle
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('theme-light');
+      document.body.classList.toggle('theme-dark');
+      // Update aria-label for accessibility
+      if (document.body.classList.contains('theme-light')) {
+        themeToggle.setAttribute('aria-label', 'Switch to Dark Purple Mode');
+      } else {
+        themeToggle.setAttribute('aria-label', 'Switch to Light Purple Mode');
+      }
+    });
+
+    // Button hover light tracking
+    const loginBtn = document.getElementById('loginBtn');
+    loginBtn.addEventListener('pointermove', (e) => {
+      const rect = loginBtn.getBoundingClientRect();
+      loginBtn.style.setProperty('--mx', (e.clientX - rect.left) + 'px');
+      loginBtn.style.setProperty('--my', (e.clientY - rect.top) + 'px');
+    });
+
+    // Password visibility toggle
+    const pass = document.getElementById('password');
+    const togglePass = document.getElementById('togglePass');
+    const eyeIcon = document.getElementById('eyeIcon');
+    togglePass.addEventListener('click', () => {
+      const isPassword = pass.getAttribute('type') === 'password';
+      pass.setAttribute('type', isPassword ? 'text' : 'password');
+      // Toggle "eye" to "eye-off" by morphing paths simply by toggling a slash overlay
+      eyeIcon.innerHTML = isPassword
+        ? '<path d="M3 3l18 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M12 5c-5 0-9 5-9 7s4 7 9 7 9-5 9-7-4-7-9-7Z" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6" fill="none"/>'
+        : '<path d="M12 5c-5 0-9 5-9 7s4 7 9 7 9-5 9-7-4-7-9-7Z" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6" fill="none"/>';
+      pass.focus();
+    });
+
+    // Real-time form validation (accessible)
+    const email = document.getElementById('email');
+    const emailHelp = document.getElementById('emailHelp');
+    const passwordHelp = document.getElementById('passwordHelp');
+    const loginForm = document.getElementById('loginForm');
+
+    function validateEmail(value) {
+      const hasAt = /@/.test(value);
+      const userOrEmailOK = value.length >= 3 && (hasAt ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) : true);
+      return userOrEmailOK;
+    }
+    function validatePassword(value) {
+      return value.length >= 6;
+    }
+    function setValidity(el, valid, messageEl, message) {
+      el.setAttribute('aria-invalid', valid ? 'false' : 'true');
+      messageEl.textContent = valid ? '' : message;
+      messageEl.style.color = valid ? 'var(--muted)' : '#ff8296';
+    }
+
+    email.addEventListener('input', () => {
+      const v = email.value.trim();
+      setValidity(email, validateEmail(v), emailHelp, 'Please enter a valid email or username (min 3 chars).');
+      spawnSparks(email.closest('.field'));
+    });
+    pass.addEventListener('input', () => {
+      const v = pass.value;
+      setValidity(pass, validatePassword(v), passwordHelp, 'Password must be at least 6 characters.');
+      spawnSparks(pass.closest('.field'));
+    });
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const ev = email.value.trim();
+      const pv = pass.value;
+      const emailValid = validateEmail(ev);
+      const passValid = validatePassword(pv);
+      setValidity(email, emailValid, emailHelp, 'Please enter a valid email or username (min 3 chars).');
+      setValidity(pass, passValid, passwordHelp, 'Password must be at least 6 characters.');
+      if (emailValid && passValid) {
+        // Simulate a subtle confirmation animation
+        gsap.to('#loginBtn', { y: -2, duration: 0.1, yoyo: true, repeat: 1 });
+        waveBackground();
+        // Focus next or show success (demo)
+      }
+    });
+
+    // Subtle sparks when typing
+    function spawnSparks(fieldEl) {
+      const area = fieldEl.querySelector('.spark-area');
+      if (!area) return;
+      for (let i = 0; i < 3; i++) {
+        const s = document.createElement('span');
+        s.className = 'spark';
+        const rect = area.getBoundingClientRect();
+        const x = rand(8, rect.width - 8);
+        const y = rand(6, rect.height - 6);
+        s.style.left = x + 'px';
+        s.style.top = y + 'px';
+        s.style.transform = 'translate(-50%, -50%) scale(0.6)';
+        area.appendChild(s);
+        gsap.to(s, {
+          duration: rand(0.6, 1.1),
+          x: rand(-8, 8),
+          y: rand(-10, -18),
+          opacity: 0,
+          scale: rand(0.6, 1.1),
+          ease: 'power2.out',
+          onComplete: () => s.remove()
         });
+      }
+    }
 
-        const themeToggle = document.querySelector('.theme-toggle');
-        const body = document.body;
-        const themeIcon = document.querySelector('.theme-toggle i');
-        const form = document.getElementById('loginForm');
-        const passwordInput = document.querySelector('#password');
-        const strengthIndicator = document.querySelector('.password-strength');
-        const biometricBtn = document.getElementById('biometricLogin');
-        const loading = document.querySelector('.loading');
+    // Particles background (custom canvas)
+    const pCanvas = document.getElementById('particles');
+    const pCtx = pCanvas.getContext('2d', { alpha: true });
+    const DPR = Math.min(window.devicePixelRatio || 1, 2);
+    let particles = [];
+    function resizeCanvas() {
+      pCanvas.width = Math.floor(window.innerWidth * DPR);
+      pCanvas.height = Math.floor(window.innerHeight * DPR);
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
 
-        // Theme Toggle
-        themeToggle.addEventListener('click', () => {
-            body.classList.toggle('dark-mode');
-            themeIcon.classList.toggle('fa-moon');
-            themeIcon.classList.toggle('fa-sun');
-        });
+    function initParticles() {
+      const count = Math.floor((window.innerWidth * window.innerHeight) / 22000);
+      particles = Array.from({ length: count }, () => ({
+        x: rand(0, pCanvas.width),
+        y: rand(0, pCanvas.height),
+        r: rand(0.6 * DPR, 1.8 * DPR),
+        a: rand(0.15, 0.5),
+        vx: rand(-0.05, 0.05) * DPR,
+        vy: rand(-0.03, 0.03) * DPR,
+        tw: rand(0.001, 0.004)
+      }));
+    }
+    initParticles();
+    window.addEventListener('resize', initParticles);
 
-        // Password Strength
-        passwordInput.addEventListener('input', () => {
-            const strength = calculatePasswordStrength(passwordInput.value);
-            updateStrengthIndicator(strength);
-        });
+    function renderParticles(t) {
+      pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+      for (const p of particles) {
+        p.x += p.vx;
+        p.y += p.vy + Math.sin(t * p.tw) * 0.05;
+        if (p.x < 0) p.x = pCanvas.width; else if (p.x > pCanvas.width) p.x = 0;
+        if (p.y < 0) p.y = pCanvas.height; else if (p.y > pCanvas.height) p.y = 0;
 
-        function calculatePasswordStrength(password) {
-            let strength = 0;
-            if (password.length >= 8) strength += 25;
-            if (password.match(/[A-Z]/)) strength += 25;
-            if (password.match(/[0-9]/)) strength += 25;
-            if (password.match(/[^A-Za-z0-9]/)) strength += 25;
-            return strength;
+        const g = pCtx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
+        g.addColorStop(0, `rgba(200,160,255,${p.a})`);
+        g.addColorStop(1, 'rgba(0,0,0,0)');
+        pCtx.fillStyle = g;
+        pCtx.beginPath();
+        pCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        pCtx.fill();
+      }
+      requestAnimationFrame(renderParticles);
+    }
+    requestAnimationFrame(renderParticles);
+
+    // Noise texture generation (tiny)
+    (function makeNoise() {
+      try {
+        const c = document.createElement('canvas');
+        const s = 140;
+        c.width = s; c.height = s;
+        const ctx = c.getContext('2d');
+        const imgData = ctx.createImageData(s, s);
+        for (let i = 0; i < imgData.data.length; i += 4) {
+          const shade = Math.random() * 255;
+          imgData.data[i] = shade;
+          imgData.data[i+1] = shade;
+          imgData.data[i+2] = shade;
+          imgData.data[i+3] = Math.random() * 22; // low alpha
         }
+        ctx.putImageData(imgData, 0, 0);
+        const url = c.toDataURL('image/png');
+        document.getElementById('noiseOverlay').style.backgroundImage = `url(${url})`;
+      } catch (e) {
+        // graceful no-noise
+      }
+    })();
 
-        function updateStrengthIndicator(strength) {
-            strengthIndicator.style.width = `${strength}%`;
-            if (strength < 25) {
-                strengthIndicator.style.background = 'var(--error-color)';
-            } else if (strength < 50) {
-                strengthIndicator.style.background = 'var(--warning-color)';
-            } else if (strength < 75) {
-                strengthIndicator.style.background = 'var(--warning-color)';
-            } else {
-                strengthIndicator.style.background = 'var(--success-color)';
-            }
+    // Three.js 3D Orb
+    const orbCanvas = document.getElementById('orbCanvas');
+    let renderer, scene, camera, orb, light;
+    function initOrb() {
+      renderer = new THREE.WebGLRenderer({ canvas: orbCanvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(DPR);
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(32, window.innerWidth / window.innerHeight, 0.1, 100);
+      camera.position.set(0, 0, 12);
+
+      const geo = new THREE.SphereGeometry(3.2, 64, 64);
+      const mat = new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color(0x7b2dff),
+        emissive: new THREE.Color(0x6b3dfc),
+        emissiveIntensity: 0.35,
+        metalness: 0.2,
+        roughness: 0.15,
+        clearcoat: 0.85,
+        clearcoatRoughness: 0.15,
+        sheen: 1,
+        sheenColor: new THREE.Color(0xb58fff),
+        transmission: 0.4,
+        thickness: 0.8
+      });
+      orb = new THREE.Mesh(geo, mat);
+      scene.add(orb);
+
+      const hemi = new THREE.HemisphereLight(0x9a6eff, 0x220044, 0.6);
+      scene.add(hemi);
+
+      light = new THREE.PointLight(0x8a2cff, 2.2, 60, 2);
+      light.position.set(4, 3, 8);
+      scene.add(light);
+
+      window.addEventListener('resize', onOrbResize);
+      requestAnimationFrame(animateOrb);
+    }
+    function onOrbResize() {
+      if (!renderer) return;
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+    }
+    function animateOrb(time) {
+      if (orb) {
+        const t = time * 0.0003;
+        orb.rotation.y = t;
+        orb.rotation.x = Math.sin(t * 0.9) * 0.2;
+        light.position.x = Math.sin(t * 1.5) * 6;
+        light.position.y = Math.cos(t * 1.2) * 4 + 3;
+        light.position.z = Math.cos(t) * 6 + 6;
+      }
+      renderer.render(scene, camera);
+      requestAnimationFrame(animateOrb);
+    }
+    try {
+      initOrb();
+    } catch (e) {
+      // WebGL not available, silently fail
+      orbCanvas.style.display = 'none';
+    }
+
+    // Biometric availability and WebAuthn
+    const bioMsg = document.getElementById('bioMsg');
+    const fingerBtn = document.getElementById('fingerBtn');
+    const faceBtn = document.getElementById('faceBtn');
+    const logoOrb = document.getElementById('logoOrb');
+    const rippleOverlay = document.getElementById('rippleOverlay');
+
+    async function checkBiometricSupport() {
+      try {
+        const webAuthnSupported = window.PublicKeyCredential && typeof PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable === 'function';
+        if (!webAuthnSupported) {
+          bioMsg.textContent = 'Biometric not available? Use password instead.';
+          return false;
         }
+        const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+        bioMsg.textContent = available ? 'Use Touch ID / Face ID / Windows Hello if your device supports it.' : 'Biometric not available? Use password instead.';
+        return available;
+      } catch (e) {
+        bioMsg.textContent = 'Biometric not available? Use password instead.';
+        return false;
+      }
+    }
+    checkBiometricSupport();
 
-        // Form Submit
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            loading.style.display = 'flex';
+    // Ripple background wave
+    function waveBackground() {
+      gsap.fromTo(rippleOverlay, { opacity: 0, backgroundSize: '0% 0%' }, {
+        opacity: 0.7,
+        backgroundSize: '600% 600%',
+        duration: 0.7,
+        ease: 'power2.out',
+        onComplete: () => gsap.to(rippleOverlay, { opacity: 0, duration: 0.6, ease: 'power1.out' })
+      });
+    }
 
-            // Simulate API call
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
-            showAlert('Login successful! Redirecting...', 'success');
-            loading.style.display = 'none';
-        });
-
-        // Biometric Authentication
-        biometricBtn.addEventListener('click', async () => {
-            try {
-                if (window.PublicKeyCredential) {
-                    showAlert('Biometric authentication initiated...', 'info');
-                    // Simulate biometric auth
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-                    showAlert('Biometric authentication successful!', 'success');
-                } else {
-                    showAlert('Biometric authentication not supported', 'error');
-                }
-            } catch (error) {
-                showAlert('Biometric authentication failed', 'error');
-            }
-        });
-
-        // Alert System
-        function showAlert(message, type) {
-            const alert = document.getElementById('alert');
-            alert.textContent = message;
-            alert.style.display = 'block';
-            alert.style.background = type === 'success' ? 'var(--success-color)' :
-                                   type === 'error' ? 'var(--error-color)' :
-                                   'var(--primary-color)';
-            alert.style.color = 'white';
-
-            setTimeout(() => {
-                alert.style.display = 'none';
-            }, 3000);
+    // Orb unlock pulse
+    function unlockOrb() {
+      logoOrb.classList.add('unlocked');
+      try {
+        if (orb && orb.material) {
+          gsap.to(orb.material, { emissiveIntensity: 0.95, duration: 0.8, yoyo: true, repeat: 1, ease: 'sine.inOut' });
+          gsap.to(orb.scale, { x: 1.06, y: 1.06, z: 1.06, duration: 0.6, yoyo: true, repeat: 1, ease: 'sine.inOut' });
         }
+      } catch {}
+      setTimeout(() => logoOrb.classList.remove('unlocked'), 1200);
+    }
 
-        // Particle Animation
-        function createParticles() {
-            const particles = document.querySelector('.particles');
-            const particleCount = 50;
-
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.style.position = 'absolute';
-                particle.style.width = '2px';
-                particle.style.height = '2px';
-                particle.style.background = 'var(--primary-color)';
-                particle.style.borderRadius = '50%';
-                
-                const startX = Math.random() * window.innerWidth;
-                const startY = Math.random() * window.innerHeight;
-                
-                particle.style.left = startX + 'px';
-                particle.style.top = startY + 'px';
-                
-                particles.appendChild(particle);
-
-                animateParticle(particle);
-            }
+    // WebAuthn trigger (safe demo)
+    async function triggerWebAuthn({ userVerification = 'preferred' } = {}) {
+      // In a real app, fetch "publicKey" options from your server.
+      const fakeChallenge = new Uint8Array(32);
+      crypto.getRandomValues(fakeChallenge);
+      const opts = {
+        publicKey: {
+          challenge: fakeChallenge,
+          timeout: 60000,
+          userVerification
+          // rpId and allowCredentials would be provided by the server; omitted for demo.
+        },
+        mediation: 'optional'
+      };
+      try {
+        if (!window.PublicKeyCredential) throw new Error('WebAuthn not supported in this environment.');
+        const cred = await navigator.credentials.get(opts);
+        if (cred) {
+          waveBackground();
+          unlockOrb();
+          return { ok: true, cred };
+        } else {
+          throw new Error('No credential returned.');
         }
+      } catch (err) {
+        // Expected to fail in many sandboxed/cross-origin contexts
+        bioMsg.textContent = 'Biometric not available? Use password instead.';
+        return { ok: false, error: err };
+      }
+    }
 
-        function animateParticle(particle) {
-            const animation = particle.animate([
-                { transform: 'translate(0, 0)', opacity: 0.6 },
-                { transform: `translate(${Math.random() * 200 - 100}px, ${Math.random() * 200 - 100}px)`, opacity: 0 }
-            ], {
-                duration: Math.random() * 3000 + 2000,
-                iterations: Infinity
-            });
+    fingerBtn.addEventListener('click', async () => {
+      gsap.fromTo(fingerBtn, { scale: 1 }, { scale: 0.96, duration: 0.12, yoyo: true, repeat: 1 });
+      waveBackground();
+      const res = await triggerWebAuthn({ userVerification: 'required' });
+      if (res.ok) unlockOrb();
+    });
+
+    faceBtn.addEventListener('click', async () => {
+      gsap.fromTo(faceBtn, { scale: 1 }, { scale: 0.96, duration: 0.12, yoyo: true, repeat: 1 });
+      waveBackground();
+      const res = await triggerWebAuthn({ userVerification: 'required' });
+      if (res.ok) unlockOrb();
+    });
+
+    // Accessibility: keyboard "Enter" on bio buttons triggers click
+    [fingerBtn, faceBtn].forEach(btn => {
+      btn.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          btn.click();
         }
+      });
+    });
 
-        createParticles();
-    </script>
+    // Reduce motion: stop heavy animations if user prefers
+    const mediaReduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+    function applyReducedMotion(e) {
+      const reduce = e.matches;
+      if (reduce) {
+        try {
+          cancelAnimationFrame(renderParticles);
+        } catch {}
+      }
+    }
+    if (mediaReduce) applyReducedMotion(mediaReduce);
+    mediaReduce.addEventListener?.('change', applyReducedMotion);
+  </script>
 </body>
 </html>
