@@ -1,1131 +1,2194 @@
 <!DOCTYPE html>
+
 <html lang="en" class="h-full">
+
 <head>
+
   <meta charset="utf-8" />
+
   <meta name="viewport" content="width=device-width,initial-scale=1, viewport-fit=cover" />
+
   <meta name="theme-color" content="#2a1554" />
+
   <title>Salmar Security Status</title>
 
+
   <!-- Fonts -->
+
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 
+
   <!-- Tailwind CSS (CDN) -->
+
   <script src="https://cdn.tailwindcss.com"></script>
+
   <script>
+
     tailwind.config = {
+
       darkMode: 'class',
+
       theme: {
+
         extend: {
+
           fontFamily: {
+
             sans: ['Inter', 'system-ui', 'Avenir', 'Segoe UI', 'Helvetica Neue', 'Arial', 'Noto Sans', 'sans-serif'],
+
             display: ['Orbitron', 'Inter', 'ui-sans-serif', 'system-ui']
+
           },
+
           boxShadow: {
+
             'neon-green': '0 0 0.5rem rgba(34,197,94,0.6), 0 0 1.2rem rgba(34,197,94,0.5)',
+
             'neon-yellow': '0 0 0.5rem rgba(234,179,8,0.6), 0 0 1.2rem rgba(234,179,8,0.5)',
+
             'neon-red': '0 0 0.5rem rgba(239,68,68,0.6), 0 0 1.2rem rgba(239,68,68,0.5)',
+
             'neon-purple': '0 0 0.4rem rgba(168,85,247,0.6), 0 0 1rem rgba(168,85,247,0.5)',
+
           }
+
         }
+
       }
+
     }
+
   </script>
 
+
   <!-- GSAP for gentle micro-animations -->
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-KQ3o85kYwP+btWsYw8erZEcumbSeuTsCZyN/x8a6X5hPqYwacAaz6u0dsn1Timq9L2k2+WYH1uH3h/2N1Fq3Vw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+
   <style>
+
     :root {
+
       --bg: #120b22;
+
       --bg-2: #1a0f31;
+
       --panel: rgba(22, 12, 43, 0.7);
+
       --panel-strong: rgba(30, 16, 58, 0.9);
+
       --card: rgba(32, 18, 66, 0.65);
+
       --text: #eae7ff;
+
       --muted: #cfc9ff;
+
       --grid: rgba(140, 98, 245, 0.10);
+
       --grid-2: rgba(140, 98, 245, 0.06);
+
       --accent: #a855f7; /* purple */
+
       --accent-2: #7c3aed;
+
       --green: #22c55e;
+
       --yellow: #eab308;
+
       --red: #ef4444;
+
       --soft: rgba(255, 255, 255, 0.06);
+
       --border: rgba(168, 85, 247, 0.25);
+
       --noise-url: none;
+
     }
+
 
     /* Sleek business (light purple) mode */
+
     .theme-business {
+
       --bg: #f7f5ff;
+
       --bg-2: #ede8ff;
+
       --panel: rgba(250, 248, 255, 0.8);
+
       --panel-strong: rgba(255, 255, 255, 0.95);
+
       --card: rgba(255,255,255,0.85);
+
       --text: #1a1430;
+
       --muted: #3c2f6d;
+
       --grid: rgba(120, 60, 240, 0.10);
+
       --grid-2: rgba(120, 60, 240, 0.06);
+
       --accent: #7c3aed;
+
       --accent-2: #6d28d9;
+
       --soft: rgba(20, 0, 40, 0.06);
+
       --border: rgba(124, 58, 237, 0.25);
+
     }
+
 
     html, body { height: 100%; }
+
     body {
+
       background: radial-gradient(1200px 800px at 15% 0%, rgba(124, 58, 237, 0.25), transparent 60%),
+
                   radial-gradient(900px 700px at 85% 30%, rgba(168, 85, 247, 0.25), transparent 60%),
+
                   linear-gradient(180deg, var(--bg), var(--bg-2));
+
       color: var(--text);
+
       font-synthesis-weight: none;
+
       text-rendering: optimizeLegibility;
+
     }
+
 
     /* Subtle noise overlay (injected via JS as dataURL) */
+
     body::after {
+
       content: '';
+
       position: fixed;
+
       inset: 0;
+
       pointer-events: none;
+
       background-image: var(--noise-url);
+
       opacity: 0.04;
+
       mix-blend-mode: soft-light;
+
       z-index: 0;
+
     }
+
 
     /* Pulsing grid backdrop */
+
     .grid-backdrop::before,
+
     .grid-backdrop::after {
+
       content: '';
+
       position: fixed;
+
       inset: 0;
+
       pointer-events: none;
+
       z-index: 0;
+
       background-image:
+
         linear-gradient(to right, var(--grid) 1px, transparent 1px),
+
         linear-gradient(to bottom, var(--grid-2) 1px, transparent 1px);
+
       background-size: 48px 48px, 48px 48px;
+
       mask-image: radial-gradient(ellipse at 50% 40%, rgba(255,255,255,0.9), transparent 70%);
-    }
-    .grid-backdrop::after {
-      transform: scale(1.02);
-      filter: blur(0.3px);
-      opacity: 0.8;
-      animation: gridPulse 6s ease-in-out infinite;
-    }
-    @keyframes gridPulse {
-      0%, 100% { opacity: 0.55; transform: scale(1.02); }
-      50%      { opacity: 0.82; transform: scale(1.00); }
+
     }
 
-    /* Glass / neo-morphic panels */
-    .neo {
-      background: var(--card);
-      backdrop-filter: saturate(120%) blur(8px);
-      -webkit-backdrop-filter: saturate(120%) blur(8px);
-      border: 1px solid var(--border);
-      box-shadow:
-        inset 0 1px 0 var(--soft),
-        0 8px 30px rgba(0,0,0,0.25);
+    .grid-backdrop::after {
+
+      transform: scale(1.02);
+
+      filter: blur(0.3px);
+
+      opacity: 0.8;
+
+      animation: gridPulse 6s ease-in-out infinite;
+
     }
+
+    @keyframes gridPulse {
+
+      0%, 100% { opacity: 0.55; transform: scale(1.02); }
+
+      50%      { opacity: 0.82; transform: scale(1.00); }
+
+    }
+
+
+    /* Glass / neo-morphic panels */
+
+    .neo {
+
+      background: var(--card);
+
+      backdrop-filter: saturate(120%) blur(8px);
+
+      -webkit-backdrop-filter: saturate(120%) blur(8px);
+
+      border: 1px solid var(--border);
+
+      box-shadow:
+
+        inset 0 1px 0 var(--soft),
+
+        0 8px 30px rgba(0,0,0,0.25);
+
+    }
+
 
     .soft-border { border: 1px solid var(--border); }
 
+
     /* Neon rings and glows */
+
     .glow-green { box-shadow: 0 0 0.4rem rgba(34,197,94,0.6), 0 0 1.1rem rgba(34,197,94,0.5); }
+
     .glow-yellow { box-shadow: 0 0 0.4rem rgba(234,179,8,0.6), 0 0 1.1rem rgba(234,179,8,0.5); }
+
     .glow-red { box-shadow: 0 0 0.4rem rgba(239,68,68,0.6), 0 0 1.1rem rgba(239,68,68,0.5); }
+
     .glow-purple { box-shadow: 0 0 0.35rem rgba(168,85,247,0.6), 0 0 0.9rem rgba(168,85,247,0.5); }
 
+
     /* Status LED */
+
     .led {
+
       width: 0.9rem; height: 0.9rem; border-radius: 999px;
+
       box-shadow: inset 0 0 6px rgba(255,255,255,0.6);
+
       border: 1px solid rgba(255,255,255,0.3);
+
     }
+
     .led.green { background: radial-gradient(circle at 30% 30%, #a7f3d0, #22c55e 60%, #15803d 100%); }
+
     .led.yellow { background: radial-gradient(circle at 30% 30%, #fde68a, #eab308 60%, #a16207 100%); }
+
     .led.red { background: radial-gradient(circle at 30% 30%, #fecaca, #ef4444 60%, #991b1b 100%); }
 
+
     /* Progress bars */
+
     .bar {
+
       height: 0.6rem;
+
       background: linear-gradient(90deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+
       border-radius: 999px;
+
       overflow: hidden;
+
       border: 1px solid rgba(255,255,255,0.08);
+
     }
+
     .bar > span {
+
       display: block;
+
       height: 100%;
+
       width: 0%;
+
       border-radius: 999px;
+
       background: linear-gradient(90deg, #7c3aed, #a855f7);
+
       box-shadow: 0 0 10px rgba(168,85,247,0.6), inset 0 0 6px rgba(255,255,255,0.2);
+
       transition: width 1200ms cubic-bezier(.2,.7,.2,1);
+
     }
+
     .bar.green > span { background: linear-gradient(90deg, #10b981, #22c55e); box-shadow: 0 0 10px rgba(16,185,129,0.55), inset 0 0 6px rgba(255,255,255,0.14); }
+
     .bar.yellow > span { background: linear-gradient(90deg, #f59e0b, #eab308); box-shadow: 0 0 10px rgba(245,158,11,0.55), inset 0 0 6px rgba(255,255,255,0.14); }
+
     .bar.red > span { background: linear-gradient(90deg, #f43f5e, #ef4444); box-shadow: 0 0 10px rgba(239,68,68,0.55), inset 0 0 6px rgba(255,255,255,0.14); }
 
+
     /* Timeline */
+
     .timeline {
+
       position: relative;
+
       padding-left: 1rem;
+
     }
+
     .timeline::before {
+
       content: '';
+
       position: absolute;
+
       left: 0.5rem;
+
       top: 0;
+
       bottom: 0;
+
       width: 2px;
+
       background: linear-gradient(180deg, rgba(168,85,247,0), rgba(168,85,247,0.8), rgba(168,85,247,0));
+
       filter: drop-shadow(0 0 4px rgba(168,85,247,0.8));
+
     }
+
     .timeline-dot {
+
       position: absolute; left: 0.35rem; width: 0.7rem; height: 0.7rem;
+
       border-radius: 999px; background: #a855f7;
+
       box-shadow: 0 0 0.5rem rgba(168,85,247,0.9);
+
     }
+
 
     /* Badge */
+
     .badge {
+
       display: inline-flex; align-items: center; gap: 0.5rem;
+
       background: linear-gradient(180deg, rgba(168,85,247,0.15), rgba(124,58,237,0.12));
+
       border: 1px solid var(--border);
+
       color: var(--text);
+
       padding: 0.5rem 0.75rem;
+
       border-radius: 999px;
+
       transition: transform 180ms ease, box-shadow 200ms ease;
+
       will-change: transform;
+
     }
+
     .badge:hover, .badge:focus-visible {
+
       transform: translateY(-2px);
+
       box-shadow: 0 0 0.7rem rgba(168,85,247,0.75);
+
       outline: none;
+
     }
+
 
     /* Shield orb */
+
     .shield {
+
       width: 72px; height: 72px;
+
       position: relative;
+
       border-radius: 20px 20px 28px 28px / 28px 28px 40px 40px;
+
       background: radial-gradient(circle at 30% 25%, rgba(255,255,255,0.55), rgba(255,255,255,0) 35%),
+
                   radial-gradient(circle at 70% 75%, rgba(168,85,247,0.8), rgba(124,58,237,0.9) 60%, rgba(124,58,237,0.5) 100%);
+
       border: 1px solid rgba(255,255,255,0.25);
+
       box-shadow: inset 0 0 10px rgba(255,255,255,0.25), 0 0 28px rgba(34,197,94,0.45);
+
       overflow: hidden;
+
     }
+
     .shield::after {
+
       content: '';
+
       position: absolute; inset: 0;
+
       background: conic-gradient(from 0deg, rgba(34,197,94,0.0), rgba(34,197,94,0.45), rgba(34,197,94,0.0) 30%);
+
       filter: blur(12px);
+
       animation: sweep 4.8s linear infinite;
+
     }
+
     @keyframes sweep {
+
       to { transform: rotate(360deg); }
+
     }
+
     .shield.red { box-shadow: inset 0 0 10px rgba(255,255,255,0.25), 0 0 28px rgba(239,68,68,0.55); }
+
     .shield.yellow { box-shadow: inset 0 0 10px rgba(255,255,255,0.25), 0 0 28px rgba(234,179,8,0.55); }
 
+
     /* Map */
+
     .map {
+
       background:
+
         radial-gradient(500px 300px at 70% 20%, rgba(124,58,237,0.25), transparent 60%),
+
         linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.00));
+
       border-radius: 1rem;
+
       position: relative;
+
       overflow: hidden;
+
     }
+
     .map .grid {
+
       position: absolute; inset: 0;
+
       background-image:
+
         linear-gradient(to right, rgba(168,85,247,0.12) 1px, transparent 1px),
+
         linear-gradient(to bottom, rgba(168,85,247,0.08) 1px, transparent 1px);
+
       background-size: 40px 40px, 40px 40px;
+
       opacity: 0.5;
+
     }
+
     .node {
+
       position: absolute; width: 10px; height: 10px; border-radius: 999px;
+
       transform: translate(-50%, -50%);
+
       border: 1px solid rgba(255,255,255,0.6);
+
       cursor: pointer;
+
     }
+
     .node.ok { background: #22c55e; box-shadow: 0 0 8px rgba(34,197,94,0.8); }
+
     .node.warn { background: #eab308; box-shadow: 0 0 8px rgba(234,179,8,0.8); }
+
     .node.crit { background: #ef4444; box-shadow: 0 0 8px rgba(239,68,68,0.8); }
+
     .tooltip {
+
       position: absolute; transform: translate(-50%, -120%);
+
       background: var(--panel-strong);
+
       color: var(--text);
+
       border: 1px solid var(--border);
+
       padding: 0.4rem 0.6rem; border-radius: 0.5rem; white-space: nowrap;
+
       box-shadow: 0 8px 24px rgba(0,0,0,0.35), 0 0 10px rgba(168,85,247,0.4);
+
       pointer-events: none;
+
       z-index: 2;
+
       font-size: 0.8rem;
+
     }
+
 
     /* Buttons */
+
     .btn {
+
       display: inline-flex; align-items: center; gap: 0.5rem;
+
       padding: 0.6rem 0.95rem; border-radius: 0.75rem;
+
       border: 1px solid var(--border); background: linear-gradient(180deg, rgba(168,85,247,0.12), rgba(124,58,237,0.10));
+
       color: var(--text);
+
       transition: transform 160ms ease, box-shadow 180ms ease, background 180ms ease;
+
     }
+
     .btn:hover, .btn:focus-visible { transform: translateY(-1px); box-shadow: 0 0 0.8rem rgba(168,85,247,0.65); outline: none; }
+
     .btn-ghost { background: transparent; }
+
     .btn-primary { background: linear-gradient(180deg, rgba(124,58,237,0.25), rgba(168,85,247,0.18)); border-color: rgba(168,85,247,0.45); }
 
+
     /* Inputs */
+
     .input {
+
       background: rgba(255,255,255,0.06);
+
       border: 1px solid var(--border);
+
       border-radius: 0.75rem;
+
       padding: 0.6rem 0.9rem;
+
       color: var(--text);
+
       outline: none;
+
       width: 100%;
+
     }
+
     .input:focus { box-shadow: 0 0 0 0.25rem rgba(124,58,237,0.25); }
 
+
     /* Accessibility helpers */
+
     .visually-hidden { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); white-space: nowrap; }
+
     a.skip-link {
+
       position: absolute; left: 0.5rem; top: -3rem; background: var(--panel-strong); color: var(--text); padding: 0.5rem 0.75rem; border-radius: 0.5rem; border: 1px solid var(--border);
+
       transition: top 150ms ease; z-index: 50;
+
     }
+
     a.skip-link:focus { top: 0.5rem; }
 
+
     @media (prefers-reduced-motion: reduce) {
+
       * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+
     }
+
   </style>
+
 </head>
+
 <body class="grid-backdrop min-h-full font-sans antialiased" data-theme="neon">
+
   <a class="skip-link" href="#main">Skip to content</a>
 
+
   <header class="relative z-10">
+
     <nav class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6">
+
       <div class="flex items-center justify-between">
+
         <div class="flex items-center gap-4">
+
           <div aria-hidden="true" class="shield" id="shieldOrb"></div>
+
           <div>
+
             <h1 class="font-display text-2xl sm:text-3xl tracking-wide" aria-label="Salmar Security Status">
+
               <span class="text-[color:var(--text)]">Salmar</span>
+
               <span class="text-[color:var(--accent)]">Security Status</span>
+
             </h1>
+
             <p class="text-sm sm:text-base text-[color:var(--muted)]">Transparency you can trust — real-time updates on security, uptime, and system health.</p>
+
           </div>
+
         </div>
+
         <div class="flex items-center gap-2 sm:gap-3">
+
           <button id="themeToggle" class="btn btn-ghost" aria-pressed="true" aria-label="Toggle theme (Dark/Light Purple)">
+
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
               <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z" stroke="currentColor" stroke-width="1.5"/>
+
             </svg>
+
             <span class="hidden sm:inline">Dark/Light Purple</span>
+
           </button>
+
           <a href="#subscribe" class="btn btn-primary">
+
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
               <path d="M4 4h16v16H4z" stroke="currentColor" stroke-width="1.5"></path>
+
               <path d="M4 7l8 6 8-6" stroke="currentColor" stroke-width="1.5"></path>
+
             </svg>
+
             Subscribe
+
           </a>
+
         </div>
+
       </div>
+
     </nav>
+
   </header>
 
+
   <main id="main" class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-20">
+
     <!-- Global Status Banner -->
+
     <section aria-labelledby="global-status" class="neo rounded-2xl p-4 sm:p-6 md:p-8 mt-6 relative overflow-hidden">
+
       <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background: radial-gradient(650px 200px at 80% 0%, rgba(168,85,247,0.15), transparent 60%);"></div>
+
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 relative">
+
         <div class="flex items-center gap-4">
+
           <div id="globalLED" class="led green" aria-hidden="true"></div>
+
           <div>
+
             <h2 id="global-status" class="font-display text-xl sm:text-2xl tracking-wide">Global Status</h2>
+
             <p class="text-[color:var(--muted)] text-sm">Live security posture and system availability.</p>
+
           </div>
+
         </div>
+
         <div class="flex-1"></div>
+
         <div class="text-right">
+
           <div id="banner" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border soft-border glow-green" role="status" aria-live="polite" aria-atomic="true">
+
             <span id="bannerIcon" aria-hidden="true">🟢</span>
+
             <span id="bannerText" class="font-semibold">All Systems Secure</span>
+
           </div>
+
           <p id="lastUpdated" class="text-[color:var(--muted)] text-xs mt-1">Last updated: —</p>
+
         </div>
+
       </div>
+
 
       <!-- Optional API connector -->
+
       <div class="mt-6 grid gap-3 sm:grid-cols-3">
+
         <label class="col-span-2">
+
           <span class="block text-xs text-[color:var(--muted)] mb-1">Real-Time Status API URL (optional)</span>
+
           <input id="apiUrl" class="input" type="url" placeholder="https://status.yourdomain.com/api/health" inputmode="url" aria-describedby="apiHelp">
+
         </label>
+
         <div class="flex gap-2 items-end">
+
           <button id="connectApi" class="btn btn-primary w-full">Connect</button>
+
           <button id="demoToggle" class="btn w-full" aria-pressed="true">Demo: On</button>
+
         </div>
+
         <p id="apiHelp" class="sm:col-span-3 text-xs text-[color:var(--muted)]">Provide an endpoint returning overall status, service uptimes, incidents, and updates. The dashboard will poll safely and fall back to demo mode if unavailable.</p>
+
       </div>
+
     </section>
+
 
     <!-- Live System Dashboard -->
+
     <section aria-labelledby="dashboard" class="mt-8">
+
       <h2 id="dashboard" class="font-display text-xl sm:text-2xl mb-4">Live System Dashboard</h2>
+
       <div class="grid gap-6 md:grid-cols-2">
+
         <!-- Authentication & Login -->
+
         <article class="neo rounded-2xl p-5 md:p-6" aria-labelledby="svc-auth">
+
           <div class="flex items-center justify-between mb-2">
+
             <div class="flex items-center gap-2">
+
               <span aria-hidden="true">🔒</span>
+
               <h3 id="svc-auth" class="font-semibold">Authentication & Login</h3>
+
             </div>
+
             <span id="authStatusPill" class="badge" aria-live="polite">
+
               <span class="sr-only">Status:</span><span>OK</span>
+
             </span>
+
           </div>
+
           <p class="text-sm text-[color:var(--muted)] mb-4">Biometric, MFA, Passwords</p>
+
           <div class="space-y-4">
+
             <div>
+
               <div class="flex items-center justify-between mb-1 text-sm">
+
                 <span>30d Uptime</span><span id="authUptimeLabel">—</span>
+
               </div>
+
               <div class="bar green" aria-label="Authentication uptime progress" aria-valuemin="0" aria-valuemax="100"><span id="authBar"></span></div>
+
             </div>
+
             <ul class="text-sm space-y-2">
+
               <li class="flex items-center justify-between">
+
                 <span>Biometric</span>
+
                 <span id="authBiometric" class="badge">OK</span>
+
               </li>
+
               <li class="flex items-center justify-between">
+
                 <span>MFA</span>
+
                 <span id="authMFA" class="badge">OK</span>
+
               </li>
+
               <li class="flex items-center justify-between">
+
                 <span>Passwords</span>
+
                 <span id="authPassword" class="badge">OK</span>
+
               </li>
+
             </ul>
+
           </div>
+
         </article>
+
 
         <!-- Cloud Infrastructure -->
+
         <article class="neo rounded-2xl p-5 md:p-6" aria-labelledby="svc-cloud">
+
           <div class="flex items-center justify-between mb-2">
+
             <div class="flex items-center gap-2">
+
               <span aria-hidden="true">☁️</span>
+
               <h3 id="svc-cloud" class="font-semibold">Cloud Infrastructure</h3>
+
             </div>
+
             <span id="cloudStatusPill" class="badge" aria-live="polite"><span>OK</span></span>
+
           </div>
+
           <p class="text-sm text-[color:var(--muted)] mb-4">Servers, Databases, APIs</p>
+
           <div class="space-y-4">
+
             <div>
+
               <div class="flex items-center justify-between mb-1 text-sm">
+
                 <span>30d Uptime</span><span id="cloudUptimeLabel">—</span>
+
               </div>
+
               <div class="bar green"><span id="cloudBar"></span></div>
+
             </div>
+
             <ul class="text-sm space-y-2">
+
               <li class="flex items-center justify-between">
+
                 <span>Servers</span>
+
                 <span id="cloudServers" class="badge">OK</span>
+
               </li>
+
               <li class="flex items-center justify-between">
+
                 <span>Databases</span>
+
                 <span id="cloudDB" class="badge">OK</span>
+
               </li>
+
               <li class="flex items-center justify-between">
+
                 <span>APIs</span>
+
                 <span id="cloudAPI" class="badge">OK</span>
+
               </li>
+
             </ul>
+
           </div>
+
         </article>
+
 
         <!-- AI Core -->
+
         <article class="neo rounded-2xl p-5 md:p-6" aria-labelledby="svc-ai">
+
           <div class="flex items-center justify-between mb-2">
+
             <div class="flex items-center gap-2">
+
               <span aria-hidden="true">🤖</span>
+
               <h3 id="svc-ai" class="font-semibold">AI Core</h3>
+
             </div>
+
             <span id="aiStatusPill" class="badge" aria-live="polite"><span>OK</span></span>
+
           </div>
+
           <p class="text-sm text-[color:var(--muted)] mb-4">Model Processing, Outputs</p>
+
           <div class="space-y-4">
+
             <div>
+
               <div class="flex items-center justify-between mb-1 text-sm">
+
                 <span>30d Uptime</span><span id="aiUptimeLabel">—</span>
+
               </div>
+
               <div class="bar green"><span id="aiBar"></span></div>
+
             </div>
+
             <ul class="text-sm space-y-2">
+
               <li class="flex items-center justify-between">
+
                 <span>Processing</span>
+
                 <span id="aiProc" class="badge">OK</span>
+
               </li>
+
               <li class="flex items-center justify-between">
+
                 <span>Outputs</span>
+
                 <span id="aiOut" class="badge">OK</span>
+
               </li>
+
             </ul>
+
           </div>
+
         </article>
+
 
         <!-- Integrations -->
+
         <article class="neo rounded-2xl p-5 md:p-6" aria-labelledby="svc-int">
+
           <div class="flex items-center justify-between mb-2">
+
             <div class="flex items-center gap-2">
+
               <span aria-hidden="true">🔗</span>
+
               <h3 id="svc-int" class="font-semibold">Integrations</h3>
+
             </div>
+
             <span id="intStatusPill" class="badge" aria-live="polite"><span>OK</span></span>
+
           </div>
+
           <p class="text-sm text-[color:var(--muted)] mb-4">Google, Slack, Discord, APIs</p>
+
           <div class="space-y-4">
+
             <div>
+
               <div class="flex items-center justify-between mb-1 text-sm">
+
                 <span>30d Uptime</span><span id="intUptimeLabel">—</span>
+
               </div>
+
               <div class="bar green"><span id="intBar"></span></div>
+
             </div>
+
             <ul class="text-sm space-y-2">
+
               <li class="flex items-center justify-between">
+
                 <span>Google</span>
+
                 <span id="intGoogle" class="badge">OK</span>
+
               </li>
+
               <li class="flex items-center justify-between">
+
                 <span>Slack</span>
+
                 <span id="intSlack" class="badge">OK</span>
+
               </li>
+
               <li class="flex items-center justify-between">
+
                 <span>Discord</span>
+
                 <span id="intDiscord" class="badge">OK</span>
+
               </li>
+
             </ul>
+
           </div>
+
         </article>
+
       </div>
+
     </section>
+
 
     <!-- World Map (Optional) -->
+
     <section aria-labelledby="global-map" class="mt-10">
+
       <div class="flex items-center justify-between mb-3">
+
         <h2 id="global-map" class="font-display text-xl sm:text-2xl">Global Server Health</h2>
+
         <div class="flex items-center gap-2">
+
           <button id="toggleMap" class="btn btn-ghost">Toggle Map</button>
+
         </div>
+
       </div>
+
       <div id="mapWrap" class="neo rounded-2xl p-4 md:p-6">
+
         <div class="map h-64 md:h-80 soft-border" role="img" aria-label="World map with server nodes" id="map">
+
           <div class="grid" aria-hidden="true"></div>
+
           <!-- dynamic nodes injected -->
+
         </div>
+
         <p class="text-xs text-[color:var(--muted)] mt-2">Hover or focus nodes for region status. Colors: green=OK, yellow=degraded/maintenance, red=incident.</p>
+
       </div>
+
     </section>
+
 
     <!-- Incident History Timeline -->
+
     <section aria-labelledby="incidents" class="mt-12">
+
       <h2 id="incidents" class="font-display text-xl sm:text-2xl mb-4">Incident History</h2>
+
       <div class="neo rounded-2xl p-5 md:p-6">
+
         <ol id="incidentList" class="timeline space-y-6">
+
           <!-- items injected -->
+
         </ol>
+
       </div>
+
     </section>
+
 
     <!-- Security Updates & Alerts -->
+
     <section aria-labelledby="security-updates" class="mt-10">
+
       <h2 id="security-updates" class="font-display text-xl sm:text-2xl mb-4">Security Updates & Alerts</h2>
+
       <div class="neo rounded-2xl p-5 md:p-6">
+
         <ul id="updatesList" class="grid gap-3 sm:grid-cols-2">
+
           <!-- items injected -->
+
         </ul>
+
       </div>
+
     </section>
+
 
     <!-- Trust & Compliance -->
+
     <section aria-labelledby="trust" class="mt-10">
+
       <h2 id="trust" class="font-display text-xl sm:text-2xl mb-4">Trust & Compliance</h2>
+
       <div class="neo rounded-2xl p-5 md:p-6">
+
         <p class="text-sm text-[color:var(--muted)] mb-4">Salmar is independently audited and compliant with global standards.</p>
+
         <div class="flex flex-wrap gap-3" role="list">
+
           <button class="badge" role="listitem" aria-label="GDPR Compliant">
+
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="1.5"/><path d="M8 12l2 2 4-4" stroke="currentColor" stroke-width="1.5"/></svg>
+
             GDPR
+
           </button>
+
           <button class="badge" role="listitem" aria-label="CCPA Compliant">
+
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="4" y="4" width="16" height="16" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M7 12h10" stroke="currentColor" stroke-width="1.5"/></svg>
+
             CCPA
+
           </button>
+
           <button class="badge" role="listitem" aria-label="SOC 2 Compliant">
+
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l8 4v5c0 5-3.5 9.5-8 10-4.5-.5-8-5-8-10V7l8-4z" stroke="currentColor" stroke-width="1.5"/></svg>
+
             SOC 2
+
           </button>
+
           <button class="badge" role="listitem" aria-label="ISO 27001 Certified">
+
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.5"/><path d="M8 12a4 4 0 108 0 4 4 0 10-8 0z" stroke="currentColor" stroke-width="1.5"/></svg>
+
             ISO 27001
+
           </button>
+
         </div>
+
       </div>
+
     </section>
+
 
     <!-- Subscribe -->
+
     <section id="subscribe" aria-labelledby="subscribe-title" class="mt-12">
+
       <h2 id="subscribe-title" class="font-display text-xl sm:text-2xl mb-4">Subscribe to Incident Alerts</h2>
+
       <div class="neo rounded-2xl p-5 md:p-6">
+
         <form id="subForm" novalidate class="grid gap-4 sm:grid-cols-2">
+
           <label class="sm:col-span-2">
+
             <span class="block text-sm text-[color:var(--muted)] mb-1">Email (for alerts)</span>
+
             <input class="input" type="email" id="email" name="email" placeholder="you@company.com" autocomplete="email" required aria-required="true">
+
           </label>
+
           <label>
+
             <span class="block text-sm text-[color:var(--muted)] mb-1">Phone (optional for SMS)</span>
+
             <input class="input" type="tel" id="phone" name="phone" placeholder="+1 555 555 1234" autocomplete="tel">
+
           </label>
+
           <fieldset class="sm:col-span-2">
+
             <legend class="block text-sm text-[color:var(--muted)] mb-1">Alert Types</legend>
+
             <div class="flex flex-wrap gap-3">
+
               <label class="badge cursor-pointer" for="alert-email">
+
                 <input id="alert-email" type="checkbox" class="mr-2" checked> Email
+
               </label>
+
               <label class="badge cursor-pointer" for="alert-sms">
+
                 <input id="alert-sms" type="checkbox" class="mr-2"> SMS
+
               </label>
+
               <label class="badge cursor-pointer" for="alert-maint">
+
                 <input id="alert-maint" type="checkbox" class="mr-2" checked> Maintenance
+
               </label>
+
               <label class="badge cursor-pointer" for="alert-incident">
+
                 <input id="alert-incident" type="checkbox" class="mr-2" checked> Incidents
+
               </label>
+
             </div>
+
           </fieldset>
+
           <div class="sm:col-span-2 flex items-center justify-between">
+
             <div class="text-xs text-[color:var(--muted)]">By subscribing, you agree to our <a href="#" class="underline">Terms</a> and <a href="#" class="underline">Privacy Policy</a>.</div>
+
             <button class="btn btn-primary" type="submit">Subscribe</button>
+
           </div>
+
           <p id="subMsg" class="sm:col-span-2 text-sm"></p>
+
         </form>
+
       </div>
+
     </section>
+
   </main>
 
+
   <footer class="relative z-10 mt-16">
+
     <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-12">
+
       <div class="neo rounded-2xl p-5 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+
         <div class="text-sm flex flex-wrap gap-3">
+
           <a href="#" class="underline">Privacy Policy</a>
+
           <a href="#" class="underline">Terms of Service</a>
+
           <a href="#" class="underline">Security Whitepaper</a>
+
         </div>
+
         <p class="text-sm text-[color:var(--muted)]">The Future is Purple. The Future is Secure.</p>
+
       </div>
+
     </div>
+
   </footer>
 
+
   <script>
+
     // ---- Utility: Date format ----
+
     function fmtDate(d) {
+
       const dt = (d instanceof Date) ? d : new Date(d);
+
       const opt = { year: 'numeric', month: 'short', day: '2-digit' };
+
       return dt.toLocaleDateString(undefined, opt);
+
     }
+
     function nowTime() { return new Date().toLocaleTimeString(); }
 
+
     // ---- Noise generator injected as data URL (safe, no XHR) ----
+
     (function makeNoise() {
+
       try {
+
         const c = document.createElement('canvas'); c.width = 220; c.height = 220;
+
         const ctx = c.getContext('2d', { willReadFrequently: true });
+
         const img = ctx.createImageData(c.width, c.height);
+
         for (let i = 0; i < img.data.length; i += 4) {
+
           const n = Math.random() * 255 | 0;
+
           img.data[i] = img.data[i+1] = img.data[i+2] = n;
+
           img.data[i+3] = 15; // subtle alpha
+
         }
+
         ctx.putImageData(img, 0, 0);
+
         const url = `url(${c.toDataURL('image/png')})`;
+
         document.documentElement.style.setProperty('--noise-url', url);
+
       } catch (e) {
+
         // fail silently; background remains clean
+
       }
+
     })();
 
+
     // ---- Theme Toggle: Dark/Light Purple (Neon vs Business) ----
+
     const bodyEl = document.body;
+
     const themeToggle = document.getElementById('themeToggle');
+
     function applyTheme(theme) {
+
       if (theme === 'business') {
+
         bodyEl.classList.add('theme-business');
+
         bodyEl.dataset.theme = 'business';
+
         themeToggle.setAttribute('aria-pressed', 'false');
+
       } else {
+
         bodyEl.classList.remove('theme-business');
+
         bodyEl.dataset.theme = 'neon';
+
         themeToggle.setAttribute('aria-pressed', 'true');
+
       }
+
     }
+
     themeToggle.addEventListener('click', () => {
+
       const current = bodyEl.dataset.theme;
+
       applyTheme(current === 'neon' ? 'business' : 'neon');
+
       pulseBanner();
+
     });
+
     // keyboard shortcut: T
+
     document.addEventListener('keydown', (e) => {
+
       if (e.key.toLowerCase() === 't' && !/input|textarea|select/i.test(document.activeElement.tagName)) {
+
         themeToggle.click();
+
       }
+
     });
+
 
     // ---- Global Status Banner ----
+
     const banner = document.getElementById('banner');
+
     const bannerText = document.getElementById('bannerText');
+
     const bannerIcon = document.getElementById('bannerIcon');
+
     const globalLED = document.getElementById('globalLED');
+
     const lastUpdated = document.getElementById('lastUpdated');
+
     const shield = document.getElementById('shieldOrb');
 
+
     const Status = {
+
       SECURE: 'secure',
+
       MAINT: 'maintenance',
+
       INCIDENT: 'incident',
+
     };
+
 
     function setShieldPulse(color) {
+
       shield.classList.remove('red', 'yellow');
+
       if (color === 'red') shield.classList.add('red');
+
       if (color === 'yellow') shield.classList.add('yellow');
+
     }
+
 
     function updateGlobalStatus(state) {
+
       banner.classList.remove('glow-green','glow-yellow','glow-red');
+
       globalLED.classList.remove('green','yellow','red');
+
       let text = 'All Systems Secure', icon = '🟢', glow = 'glow-green', led = 'green';
+
       setShieldPulse(null);
 
+
       if (state === Status.MAINT) {
+
         text = 'Maintenance in Progress'; icon = '🟡'; glow = 'glow-yellow'; led = 'yellow'; setShieldPulse('yellow');
+
       } else if (state === Status.INCIDENT) {
+
         text = 'Incident Detected'; icon = '🔴'; glow = 'glow-red'; led = 'red'; setShieldPulse('red');
+
       }
+
 
       bannerText.textContent = text;
+
       bannerIcon.textContent = icon;
+
       banner.classList.add(glow);
+
       globalLED.classList.add(led);
+
       lastUpdated.textContent = 'Last updated: ' + fmtDate(new Date()) + ' ' + nowTime();
+
       pulseBanner();
+
     }
+
 
     function pulseBanner() {
+
       try {
+
         gsap.fromTo(banner, { scale: 0.98 }, { scale: 1, duration: 0.45, ease: 'power2.out' });
+
       } catch (e) {}
+
     }
+
 
     // ---- Services helpers ----
+
     function setPill(el, statusText) {
+
       const span = el.querySelector('span:last-child');
+
       span.textContent = statusText;
+
     }
+
     function setBar(barSpan, pct, colorClass = 'green') {
+
       const bar = barSpan.parentElement;
+
       bar.classList.remove('green','yellow','red');
+
       bar.classList.add(colorClass);
+
       requestAnimationFrame(() => { barSpan.style.width = Math.max(0, Math.min(100, pct)) + '%'; });
+
       bar.setAttribute('aria-valuenow', String(pct));
+
     }
+
 
     function serviceColorFromStatus(st) {
+
       if (st === 'degraded' || st === 'maintenance') return 'yellow';
+
       if (st === 'down' || st === 'incident') return 'red';
+
       return 'green';
+
     }
+
 
     // ---- Initialize content with defaults ----
+
     const services = {
+
       auth: {
+
         pill: document.getElementById('authStatusPill'),
+
         bar: document.getElementById('authBar'),
+
         label: document.getElementById('authUptimeLabel'),
+
         parts: {
+
           Biometric: document.getElementById('authBiometric'),
+
           MFA: document.getElementById('authMFA'),
+
           Passwords: document.getElementById('authPassword'),
+
         }
+
       },
+
       cloud: {
+
         pill: document.getElementById('cloudStatusPill'),
+
         bar: document.getElementById('cloudBar'),
+
         label: document.getElementById('cloudUptimeLabel'),
+
         parts: {
+
           Servers: document.getElementById('cloudServers'),
+
           Databases: document.getElementById('cloudDB'),
+
           APIs: document.getElementById('cloudAPI'),
+
         }
+
       },
+
       ai: {
+
         pill: document.getElementById('aiStatusPill'),
+
         bar: document.getElementById('aiBar'),
+
         label: document.getElementById('aiUptimeLabel'),
+
         parts: {
+
           Processing: document.getElementById('aiProc'),
+
           Outputs: document.getElementById('aiOut'),
+
         }
+
       },
+
       int: {
+
         pill: document.getElementById('intStatusPill'),
+
         bar: document.getElementById('intBar'),
+
         label: document.getElementById('intUptimeLabel'),
+
         parts: {
+
           Google: document.getElementById('intGoogle'),
+
           Slack: document.getElementById('intSlack'),
+
           Discord: document.getElementById('intDiscord'),
+
         }
+
       }
+
     };
 
+
     function setService(name, data) {
+
       const s = services[name];
+
       if (!s) return;
+
       const pct = data.uptime30d ?? 99.99;
+
       const status = data.status ?? 'ok';
+
       const color = serviceColorFromStatus(status);
+
       setPill(s.pill, status.toUpperCase());
+
       setBar(s.bar, pct, color);
+
       s.label.textContent = pct.toFixed(2) + '%';
+
       if (data.items) {
+
         for (const item of data.items) {
+
           const el = s.parts[item.name];
+
           if (el) setPill(el, (item.status || 'ok').toUpperCase());
+
         }
+
       }
+
     }
+
 
     // ---- Incident timeline & Updates ----
+
     const incidentList = document.getElementById('incidentList');
+
     const updatesList = document.getElementById('updatesList');
 
+
     function addIncident({ severity, title, date, resolved, durationMinutes }) {
+
       const li = document.createElement('li');
+
       li.className = 'relative pl-6';
+
       const dot = document.createElement('span'); dot.className = 'timeline-dot'; dot.style.top = '0.5rem';
+
       dot.style.background = severity === 'crit' ? '#ef4444' : severity === 'warn' ? '#eab308' : '#22c55e';
+
       dot.style.boxShadow = `0 0 8px ${dot.style.background}`;
+
       const statusEmoji = severity === 'crit' ? '🔴' : severity === 'warn' ? '🟡' : '🟢';
+
       const res = resolved ? `Resolved${durationMinutes ? ` in ${durationMinutes} mins` : ''}` : 'Ongoing';
+
       li.innerHTML = `
+
         <div class="flex items-start justify-between gap-3">
+
           <div>
+
             <p class="font-semibold">${statusEmoji} ${title}</p>
+
             <p class="text-xs text-[color:var(--muted)]">${fmtDate(date)} • ${res}</p>
+
           </div>
+
           <span class="badge">${resolved ? 'Closed' : 'Open'}</span>
+
         </div>
+
       `;
+
       li.appendChild(dot);
+
       incidentList.prepend(li);
+
       try { gsap.from(li, { y: 10, opacity: 0, duration: 0.35, ease: 'power2.out' }); } catch (e) {}
+
     }
+
 
     function addUpdate({ text, date }) {
+
       const li = document.createElement('li');
+
       li.className = 'neo rounded-xl p-3 soft-border';
+
       li.innerHTML = `
+
         <div class="flex items-center justify-between gap-3">
+
           <p>${text}</p>
+
           <span class="text-xs text-[color:var(--muted)]">${fmtDate(date)}</span>
+
         </div>
+
       `;
+
       updatesList.prepend(li);
+
       try { gsap.from(li, { y: 8, opacity: 0, duration: 0.3, ease: 'power2.out' }); } catch (e) {}
+
     }
+
 
     // Populate initial sample data
+
     const initialIncidents = [
+
       { severity: 'warn', title: 'Scheduled Maintenance', date: '2025-09-10', resolved: true },
+
       { severity: 'crit', title: 'Login Disruption', date: '2025-08-28', resolved: true, durationMinutes: 37 },
+
     ];
+
     const initialUpdates = [
+
       { text: 'TLS upgraded to 1.3 for stronger encryption', date: '2025-09-01' },
+
       { text: 'Post-quantum cryptography in testing phase (Q4 2025)', date: '2025-08-22' },
+
     ];
+
     initialIncidents.forEach(addIncident);
+
     initialUpdates.forEach(addUpdate);
 
+
     // ---- Global Demo Engine (randomized) ----
+
     let demoOn = true;
+
     const demoToggle = document.getElementById('demoToggle');
+
     demoToggle.addEventListener('click', () => {
+
       demoOn = !demoOn;
+
       demoToggle.textContent = 'Demo: ' + (demoOn ? 'On' : 'Off');
+
     });
+
 
     function randomUptime(base=99.92, variance=0.12) {
+
       return Math.max(97.5, Math.min(100, base + (Math.random() - 0.5) * variance));
+
     }
+
     function randomStatus(probIncident=0.05, probMaint=0.15) {
+
       const r = Math.random();
+
       if (r < probIncident) return 'incident';
+
       if (r < probIncident + probMaint) return 'maintenance';
+
       return 'ok';
+
     }
+
     function demoTick() {
+
       if (!demoOn) return;
+
       // Random global status
+
       const g = Math.random();
+
       const global = g < 0.08 ? Status.INCIDENT : g < 0.22 ? Status.MAINT : Status.SECURE;
+
       updateGlobalStatus(global);
 
+
       // Services
+
       const set = (name, items) => setService(name, items);
+
       set('auth', {
+
         uptime30d: randomUptime(99.97, 0.06),
+
         status: randomStatus(0.03, 0.12),
+
         items: [
+
           { name: 'Biometric', status: Math.random() < 0.95 ? 'ok' : 'maintenance' },
+
           { name: 'MFA', status: Math.random() < 0.95 ? 'ok' : 'incident' },
+
           { name: 'Passwords', status: Math.random() < 0.97 ? 'ok' : 'degraded' },
+
         ]
+
       });
+
       set('cloud', {
+
         uptime30d: randomUptime(99.94, 0.1),
+
         status: randomStatus(0.05, 0.15),
+
         items: [
+
           { name: 'Servers', status: Math.random() < 0.96 ? 'ok' : 'incident' },
+
           { name: 'Databases', status: Math.random() < 0.95 ? 'ok' : 'maintenance' },
+
           { name: 'APIs', status: Math.random() < 0.93 ? 'ok' : 'degraded' },
+
         ]
+
       });
+
       set('ai', {
+
         uptime30d: randomUptime(99.95, 0.08),
+
         status: randomStatus(0.04, 0.12),
+
         items: [
+
           { name: 'Processing', status: Math.random() < 0.96 ? 'ok' : 'degraded' },
+
           { name: 'Outputs', status: Math.random() < 0.97 ? 'ok' : 'maintenance' },
+
         ]
+
       });
+
       set('int', {
+
         uptime30d: randomUptime(99.92, 0.12),
+
         status: randomStatus(0.06, 0.12),
+
         items: [
+
           { name: 'Google', status: Math.random() < 0.96 ? 'ok' : 'incident' },
+
           { name: 'Slack', status: Math.random() < 0.95 ? 'ok' : 'maintenance' },
+
           { name: 'Discord', status: Math.random() < 0.95 ? 'ok' : 'degraded' },
+
         ]
+
       });
+
 
       // Occasional incident item insertion
+
       if (Math.random() < 0.08) {
+
         addIncident({
+
           severity: Math.random() < 0.5 ? 'warn' : 'crit',
+
           title: Math.random() < 0.5 ? 'API Latency Spike' : 'Edge Region Packet Loss',
+
           date: new Date(),
+
           resolved: Math.random() < 0.7,
+
           durationMinutes: Math.random() < 0.6 ? (10 + Math.floor(Math.random() * 60)) : undefined
+
         });
+
       }
+
       // Occasional security update
+
       if (Math.random() < 0.06) {
+
         addUpdate({
+
           text: Math.random() < 0.5 ? 'WAF ruleset updated for enhanced bot mitigation' : 'Rotated KMS and HSM-backed root keys',
+
           date: new Date()
+
         });
+
       }
+
     }
+
     setInterval(demoTick, 6000);
+
     demoTick();
 
+
     // ---- Real-Time API Integration (safe, optional) ----
+
     const connectBtn = document.getElementById('connectApi');
+
     const apiUrlInput = document.getElementById('apiUrl');
+
     let apiInterval = null;
 
+
     function parseAndApplyAPI(json) {
+
       // Expected fields (flexible): globalStatus, services, incidents, updates
+
       const gs = (json.globalStatus || '').toLowerCase();
+
       if (gs.includes('incident')) updateGlobalStatus(Status.INCIDENT);
+
       else if (gs.includes('maint')) updateGlobalStatus(Status.MAINT);
+
       else if (gs.includes('secure') || gs.includes('ok') || gs.includes('normal')) updateGlobalStatus(Status.SECURE);
 
+
       if (json.services) {
+
         const s = json.services;
+
         if (s.authentication) setService('auth', s.authentication);
+
         if (s.cloud) setService('cloud', s.cloud);
+
         if (s.ai) setService('ai', s.ai);
+
         if (s.integrations) setService('int', s.integrations);
+
       }
+
       if (Array.isArray(json.incidents)) {
+
         // Clear and re-add
+
         incidentList.innerHTML = '';
+
         json.incidents.slice().reverse().forEach(addIncident);
+
       }
+
       if (Array.isArray(json.updates)) {
+
         updatesList.innerHTML = '';
+
         json.updates.slice().reverse().forEach(addUpdate);
+
       }
+
     }
+
 
     async function pollAPI(url) {
+
       try {
+
         const resp = await fetch(url, { mode: 'cors', cache: 'no-store' });
+
         if (!resp.ok) throw new Error('HTTP ' + resp.status);
+
         const data = await resp.json();
+
         parseAndApplyAPI(data);
+
       } catch (e) {
+
         // Keep demo running and show a subtle message once
+
         console.warn('Status API fetch failed:', e?.message || e);
+
       }
+
     }
+
 
     connectBtn.addEventListener('click', () => {
+
       const url = apiUrlInput.value.trim();
+
       if (!url) {
+
         alert('Please enter a valid API URL (https://...)');
+
         return;
+
       }
+
       if (apiInterval) clearInterval(apiInterval);
+
       // start polling
+
       demoOn = false; demoToggle.textContent = 'Demo: Off';
+
       pollAPI(url);
+
       apiInterval = setInterval(() => pollAPI(url), 15000);
+
       lastUpdated.textContent = 'Last updated: ' + fmtDate(new Date()) + ' ' + nowTime() + ' (API)';
+
       pulseBanner();
+
     });
+
 
     // ---- Interactive Map (nodes over a simple projected plane) ----
+
     const map = document.getElementById('map');
+
     const toggleMapBtn = document.getElementById('toggleMap');
+
     const mapWrap = document.getElementById('mapWrap');
+
     toggleMapBtn.addEventListener('click', () => {
+
       if (mapWrap.hidden) {
+
         mapWrap.hidden = false; toggleMapBtn.textContent = 'Toggle Map';
+
       } else {
+
         mapWrap.hidden = true; toggleMapBtn.textContent = 'Show Map';
+
       }
+
     });
+
     const regions = [
+
       { name: 'us-west', x: 18, y: 40 }, { name: 'us-central', x: 28, y: 38 }, { name: 'us-east', x: 36, y: 36 },
+
       { name: 'canada', x: 30, y: 30 }, { name: 'brazil', x: 35, y: 68 },
+
       { name: 'uk', x: 47, y: 26 }, { name: 'eu-central', x: 52, y: 32 }, { name: 'nordics', x: 51, y: 22 },
+
       { name: 'south-eu', x: 52, y: 44 }, { name: 'south-africa', x: 55, y: 82 },
+
       { name: 'uae', x: 62, y: 44 }, { name: 'india', x: 68, y: 48 }, { name: 'singapore', x: 74, y: 63 },
+
       { name: 'japan', x: 82, y: 35 }, { name: 'australia', x: 84, y: 78 }, { name: 'new-zealand', x: 88, y: 82 }
+
     ];
+
     const tool = document.createElement('div'); tool.className = 'tooltip'; tool.style.display = 'none'; map.appendChild(tool);
 
+
     function setNodeStatus(el, status) {
+
       el.classList.remove('ok','warn','crit');
+
       el.classList.add(status);
+
       el.setAttribute('data-status', status);
+
     }
+
 
     function buildNodes() {
+
       regions.forEach((r, i) => {
+
         const n = document.createElement('button');
+
         n.className = 'node ok';
+
         n.style.left = r.x + '%'; n.style.top = r.y + '%';
+
         n.setAttribute('aria-label', r.name + ' status OK');
+
         n.setAttribute('data-name', r.name);
+
         setNodeStatus(n, Math.random() < 0.08 ? 'crit' : Math.random() < 0.20 ? 'warn' : 'ok');
+
         n.addEventListener('mouseenter', () => showTip(n));
+
         n.addEventListener('mouseleave', hideTip);
+
         n.addEventListener('focus', () => showTip(n));
+
         n.addEventListener('blur', hideTip);
+
         n.addEventListener('click', () => pingNode(n));
+
         map.appendChild(n);
+
         try { gsap.from(n, { opacity: 0, scale: 0.4, duration: 0.35, delay: i * 0.02, ease: 'back.out(2)' }); } catch (e) {}
+
       });
+
     }
+
     function showTip(n) {
+
       const status = n.getAttribute('data-status');
+
       const name = n.getAttribute('data-name');
+
       tool.textContent = `${name} • ${status.toUpperCase()}`;
+
       tool.style.left = n.style.left;
+
       tool.style.top = n.style.top;
+
       tool.style.display = 'block';
+
     }
+
     function hideTip() { tool.style.display = 'none'; }
+
     function pingNode(n) {
+
       try {
+
         gsap.fromTo(n, { scale: 0.9 }, { scale: 1, duration: 0.25, yoyo: true, repeat: 1, ease: 'power2.inOut' });
+
       } catch (e) {}
+
     }
+
     buildNodes();
 
+
     // ---- Subscribe Form ----
+
     const subForm = document.getElementById('subForm');
+
     const subMsg = document.getElementById('subMsg');
+
     function validateEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
     function validatePhone(v) { if (!v) return true; return /^\+?[0-9\s().-]{7,}$/.test(v); }
+
     subForm.addEventListener('submit', async (e) => {
+
       e.preventDefault();
+
       const email = document.getElementById('email').value.trim();
+
       const phone = document.getElementById('phone').value.trim();
+
       const wantsEmail = document.getElementById('alert-email').checked;
+
       const wantsSms = document.getElementById('alert-sms').checked;
+
       if (!email || !validateEmail(email)) {
+
         subMsg.textContent = 'Please enter a valid email address.';
+
         subMsg.className = 'text-sm text-red-400';
+
         return;
+
       }
+
       if (phone && !validatePhone(phone)) {
+
         subMsg.textContent = 'Please enter a valid phone number or leave it blank.';
+
         subMsg.className = 'text-sm text-red-400';
+
         return;
+
       }
+
       if (!wantsEmail && !wantsSms) {
+
         subMsg.textContent = 'Select at least one alert delivery method (Email or SMS).';
+
         subMsg.className = 'text-sm text-red-400';
+
         return;
+
       }
+
       // Simulate safe submit (no storage). Attempt fetch, fallback to instant success.
+
       let ok = true;
+
       try {
+
         if (window.fetch) {
+
           await fetch('https://httpbin.org/status/204', { mode: 'cors', cache: 'no-store' });
+
         }
+
       } catch (err) {
+
         ok = false;
+
       } finally {
+
         subMsg.textContent = ok ? 'You are subscribed. Check your inbox for a confirmation.' : 'Subscribed locally. Network request skipped.';
+
         subMsg.className = 'text-sm text-green-400';
+
         try { gsap.fromTo(subMsg, { opacity: 0 }, { opacity: 1, duration: 0.3 }); } catch (e) {}
+
       }
+
     });
 
+
     // ---- Intersection effects for progress bars ----
+
     const barSpans = Array.from(document.querySelectorAll('.bar > span'));
+
     const io = new IntersectionObserver((entries) => {
+
       entries.forEach(e => {
+
         if (e.isIntersecting) {
+
           const span = e.target;
+
           const parent = span.parentElement;
+
           const now = parent.getAttribute('aria-valuenow');
+
           if (now && !span.dataset.animated) {
+
             span.style.width = now + '%';
+
             span.dataset.animated = '1';
+
           }
+
         }
+
       });
+
     }, { threshold: 0.3 });
+
     barSpans.forEach(s => io.observe(s));
 
+
     // ---- Initial theme ----
+
     applyTheme('neon');
+
   </script>
+
 </body>
+
 </html>
+
 
