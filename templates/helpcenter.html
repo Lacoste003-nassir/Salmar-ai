@@ -1,1269 +1,1479 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="calm">
+<html lang="en" data-theme="auto">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Salmar Help Center</title>
-  <meta name="description" content="Salmar Help Center — Your guide to unlocking everything Salmar can do." />
-
-  <!-- Tailwind CSS (CDN) -->
+  <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- GSAP for subtle motion -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-dLIak0G4yjmGQImJdYI9F5R6h8V+l7sQ5Sg0sbn3zHPV5V2nweUCM2v5nhbpzHP4kLfSO44wGvbVjBP5aO9Cqw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          dropShadow: {
+            'neon': ['0 0 10px rgba(139, 92, 246, 0.6)', '0 0 24px rgba(255, 0, 229, 0.35)'],
+            'neon-cyan': ['0 0 10px rgba(0, 229, 255, 0.5)', '0 0 24px rgba(139, 92, 246, 0.35)'],
+          },
+          boxShadow: {
+            'soft': '10px 10px 30px rgba(0,0,0,0.25), -10px -10px 30px rgba(255,255,255,0.08)',
+            'glass': '0 10px 30px rgba(0,0,0,0.25)',
+            'focus': '0 0 0 3px rgba(139,92,246,0.55), 0 0 0 6px rgba(0,0,0,0.15)'
+          },
+          backdropBlur: {
+            xs: '2px'
+          },
+          animation: {
+            'pulse-slow': 'pulse 3.5s ease-in-out infinite',
+            'spin-slow': 'spin 12s linear infinite'
+          }
+        }
+      }
+    }
+  </script>
+  <!-- GSAP + ScrollTrigger -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
   <!-- Fuse.js for fuzzy search -->
-  <script src="https://cdn.jsdelivr.net/npm/fuse.js@6.6.2"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/fuse.js@7.0.0"></script>
+  <!-- Lenis smooth scroll -->
+  <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.35/bundled/lenis.min.js"></script>
   <style>
-    /* CSS Variables for Themes */
+    /* Theme variables: Calm (light) + Neon (dark). Auto adopts prefers-color-scheme at load, then user can toggle. */
     :root {
-      --radius-lg: 18px;
-      --radius-md: 14px;
-      --radius-sm: 10px;
-
-      --shadow-soft: 12px 12px 24px rgba(14, 0, 35, 0.55), -12px -12px 24px rgba(117, 72, 255, 0.08);
-      --shadow-inset: inset 8px 8px 18px rgba(0, 0, 0, 0.25), inset -8px -8px 18px rgba(255, 255, 255, 0.05);
-      --glass-bg: rgba(255, 255, 255, 0.06);
-      --glass-stroke: rgba(255, 255, 255, 0.12);
-
-      --ring-neo: 0 0 0 3px rgba(168, 85, 247, 0.22), 0 0 0 10px rgba(168, 85, 247, 0.07);
-
-      /* Calm (Light-ish) */
-      --bg: #10071f;
-      --bg-alt: #140a2a;
-      --surface: rgba(255, 255, 255, 0.06);
-      --surface-2: rgba(255, 255, 255, 0.08);
-      --text: #eef0ff;
-      --muted: #cfd2ffcc;
-      --accent: #a78bfa;  /* soft purple */
-      --accent-strong: #8b5cf6; /* brighter */
-      --positive: #22d3ee;
+      --bg-0: #0d061a;
+      --bg-1: #140b2b;
+      --surface: rgba(255,255,255,0.06);
+      --surface-strong: rgba(255,255,255,0.12);
+      --text: #f6f2ff;
+      --text-muted: #cbb8ff;
+      --accent: #8b5cf6;
+      --accent-2: #ff00e5;
+      --cyan: #00e5ff;
+      --success: #22c55e;
       --warning: #f59e0b;
-      --danger: #fb7185;
-
-      --grid1: rgba(167, 139, 250, 0.08);
-      --grid2: rgba(167, 139, 250, 0.06);
-      --grid-glow: rgba(139, 92, 246, 0.2);
+      --danger: #ef4444;
+      --ring: rgba(139,92,246,0.55);
+      --glass: rgba(255,255,255,0.07);
+      --card: rgba(255,255,255,0.06);
+      --shadow-ambient: rgba(0,0,0,0.45);
+      --grid: rgba(139, 92, 246, 0.08);
+      --neural: rgba(0,229,255,0.10);
     }
-
-    /* Neon (Dark Futuristic) */
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg-0: #f7f4ff;
+        --bg-1: #ece6ff;
+        --surface: rgba(255,255,255,0.8);
+        --surface-strong: rgba(255,255,255,0.92);
+        --text: #1f1140;
+        --text-muted: #4b3e7a;
+        --accent: #6e56cf;
+        --accent-2: #b832ff;
+        --cyan: #1ab3c6;
+        --glass: rgba(255,255,255,0.75);
+        --card: rgba(255,255,255,0.88);
+        --shadow-ambient: rgba(11,2,31,0.15);
+        --grid: rgba(110, 86, 207, 0.15);
+        --neural: rgba(26,179,198,0.16);
+      }
+    }
+    html[data-theme="calm"] {
+      --bg-0: #f7f4ff;
+      --bg-1: #ece6ff;
+      --surface: rgba(255,255,255,0.8);
+      --surface-strong: rgba(255,255,255,0.92);
+      --text: #1f1140;
+      --text-muted: #4b3e7a;
+      --accent: #6e56cf;
+      --accent-2: #b832ff;
+      --cyan: #1ab3c6;
+      --glass: rgba(255,255,255,0.75);
+      --card: rgba(255,255,255,0.88);
+      --shadow-ambient: rgba(11,2,31,0.15);
+      --grid: rgba(110, 86, 207, 0.15);
+      --neural: rgba(26,179,198,0.16);
+    }
     html[data-theme="neon"] {
-      --bg: #070211;
-      --bg-alt: #0a0217;
-      --surface: rgba(255, 255, 255, 0.05);
-      --surface-2: rgba(255, 255, 255, 0.07);
-      --text: #f6f4ff;
-      --muted: #d8d4ffbb;
-      --accent: #c084fc; /* neon-ish lavender */
-      --accent-strong: #a855f7;
-      --positive: #22d3ee;
-      --warning: #fbbf24;
-      --danger: #fb7185;
-
-      --grid1: rgba(168, 85, 247, 0.1);
-      --grid2: rgba(168, 85, 247, 0.08);
-      --grid-glow: rgba(216, 180, 254, 0.22);
+      --bg-0: #0b021f;
+      --bg-1: #140b2b;
+      --surface: rgba(255,255,255,0.06);
+      --surface-strong: rgba(255,255,255,0.12);
+      --text: #f6f2ff;
+      --text-muted: #cbb8ff;
+      --accent: #8b5cf6;
+      --accent-2: #ff00e5;
+      --cyan: #00e5ff;
+      --glass: rgba(255,255,255,0.07);
+      --card: rgba(255,255,255,0.06);
+      --shadow-ambient: rgba(0,0,0,0.45);
+      --grid: rgba(139, 92, 246, 0.08);
+      --neural: rgba(0,229,255,0.10);
     }
 
-    /* Global Base */
-    html, body {
-      height: 100%;
-      background: var(--bg);
+    /* Background: cosmic gradient + grid + neural paths + subtle grain */
+    body {
+      background: radial-gradient(1200px 700px at 15% 10%, var(--bg-1), transparent 60%),
+                  radial-gradient(1200px 700px at 85% 0%, rgba(139,92,246,0.18), transparent 60%),
+                  linear-gradient(180deg, var(--bg-0), var(--bg-1) 65%, var(--bg-0));
       color: var(--text);
-      scroll-behavior: smooth;
-      text-rendering: optimizeLegibility;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      font-feature-settings: "liga","kern";
+      min-height: 100vh;
+      overflow-x: hidden;
     }
-
-    /* Subtle animated cosmic grid background with gradient glow and tiny noise */
-    .cosmic-bg {
-      position: fixed;
-      inset: 0;
-      z-index: -2;
-      background:
-        radial-gradient(1200px 500px at 70% -10%, rgba(168,85,247,0.22), transparent 60%),
-        radial-gradient(800px 400px at -10% 100%, rgba(99,102,241,0.2), transparent 60%),
-        linear-gradient(180deg, var(--bg-alt), var(--bg));
-    }
-
-    .cosmic-grid::before,
-    .cosmic-grid::after {
+    .bg-layers:before,
+    .bg-layers:after {
       content: "";
       position: fixed;
       inset: 0;
-      z-index: -1;
       pointer-events: none;
+      z-index: -1;
     }
-
-    .cosmic-grid::before {
+    /* Grid layer */
+    .bg-layers:before {
+      background-image:
+        linear-gradient(to right, var(--grid) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--grid) 1px, transparent 1px);
+      background-size: 48px 48px, 48px 48px;
+      mask-image: radial-gradient(1000px 600px at 50% 5%, black, transparent 70%);
+      opacity: 0.45;
+    }
+    /* Neural pathways (soft curved lines) + grain */
+    .bg-layers:after {
       background:
-        repeating-linear-gradient(
-          0deg,
-          transparent 0px,
-          transparent 30px,
-          var(--grid1) 31px,
-          transparent 32px
-        ),
-        repeating-linear-gradient(
-          90deg,
-          transparent 0px,
-          transparent 30px,
-          var(--grid2) 31px,
-          transparent 32px
-        );
-      mask-image: radial-gradient(800px 400px at 50% 10%, rgba(255,255,255,0.6), transparent 70%),
-                   linear-gradient(to bottom, rgba(255,255,255,0.25), transparent 60%);
-      animation: gridFloat 30s linear infinite;
+        radial-gradient(40% 60% at 20% 30%, rgba(0,229,255,0.10), transparent),
+        radial-gradient(30% 40% at 80% 20%, rgba(255,0,229,0.08), transparent),
+        repeating-conic-gradient(from 0deg, rgba(255,255,255,0.015) 0deg 10deg, transparent 10deg 20deg);
+      mix-blend-mode: screen;
+      opacity: 0.6;
+      filter: saturate(120%);
     }
 
-    .cosmic-grid::after {
-      /* microscopic noise using conic gradients */
-      background:
-        conic-gradient(from 0deg, rgba(255,255,255,0.02), rgba(255,255,255,0.0), rgba(0,0,0,0.02), rgba(255,255,255,0.0)) 0 0/3px 3px,
-        radial-gradient(1200px 500px at 70% -10%, var(--grid-glow), transparent 60%);
-      mix-blend-mode: soft-light;
-      opacity: 0.7;
-      animation: noiseShift 9s steps(10) infinite;
+    /* Glassmorphism card + neumorphic soft edges */
+    .glass {
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 6px 6px 24px var(--shadow-ambient), -6px -6px 18px rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.14);
     }
-
-    @keyframes gridFloat {
-      0% { transform: translateY(0px); }
-      50% { transform: translateY(6px); }
-      100% { transform: translateY(0px); }
-    }
-    @keyframes noiseShift {
-      0% { transform: translate(0,0); }
-      100% { transform: translate(3px, -3px); }
-    }
-
-    /* Generic component skins */
-    .neo-card {
+    .glass-strong {
       background: var(--surface);
-      border: 1px solid var(--glass-stroke);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-soft);
-      backdrop-filter: blur(12px) saturate(120%);
-      -webkit-backdrop-filter: blur(12px) saturate(120%);
-    }
-    .neo-soft {
-      border-radius: var(--radius-md);
-      background: var(--surface-2);
-      box-shadow: var(--shadow-soft);
-    }
-    .ring-neo:focus-visible {
-      box-shadow: var(--ring-neo);
-      outline: none;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      box-shadow: 10px 10px 35px var(--shadow-ambient);
     }
 
-    /* Search input neumorphism + glow */
-    .search-wrap {
-      position: relative;
-      border-radius: 9999px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
-      box-shadow:
-        inset 2px 2px 6px rgba(0,0,0,0.35),
-        inset -2px -2px 6px rgba(255,255,255,0.06),
-        0 12px 24px rgba(139, 92, 246, 0.18);
-      border: 1px solid var(--glass-stroke);
-      transition: box-shadow 0.25s ease, border-color 0.25s ease;
+    /* Skip link */
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      z-index: -999;
     }
-    .search-wrap:focus-within {
-      box-shadow:
-        inset 2px 2px 6px rgba(0,0,0,0.35),
-        inset -2px -2px 6px rgba(255,255,255,0.06),
-        0 0 0 10px rgba(139, 92, 246, 0.08),
-        0 12px 40px rgba(139, 92, 246, 0.32);
-      border-color: rgba(167, 139, 250, 0.6);
+    .skip-link:focus {
+      left: 1rem;
+      top: 1rem;
+      width: auto; height: auto;
+      padding: .5rem .75rem;
+      z-index: 50;
+      box-shadow: 0 0 0 3px var(--ring);
+      border-radius: .5rem;
+      background: var(--surface-strong);
+      color: var(--text);
     }
 
     /* Glowing question orb */
     .orb {
-      width: 110px;
-      height: 110px;
-      border-radius: 9999px;
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
       background:
-        radial-gradient(circle at 30% 30%, rgba(255,255,255,0.25), rgba(255,255,255,0) 60%),
-        radial-gradient(circle at 70% 70%, rgba(168,85,247,0.75), rgba(168,85,247,0.1) 60%);
+        radial-gradient(35% 35% at 35% 35%, rgba(255,255,255,0.85), rgba(255,255,255,0.05) 40%),
+        radial-gradient(80% 80% at 50% 50%, rgba(139, 92, 246, 0.75), rgba(255, 0, 229, 0.6) 60%, rgba(0,229,255,0.55) 100%);
       box-shadow:
-        0 0 22px rgba(168,85,247,0.6),
-        0 0 60px rgba(168,85,247,0.28),
-        inset 0 0 24px rgba(255,255,255,0.2);
-      display: grid;
-      place-items: center;
-      position: relative;
-      isolation: isolate;
+        0 0 20px rgba(139,92,246,0.6),
+        0 0 45px rgba(255,0,229,0.35),
+        inset 0 0 20px rgba(255,255,255,0.35);
+      filter: saturate(115%);
+      transform: translate3d(0,0,0);
+      transition: filter .3s ease, transform .3s ease, box-shadow .3s ease;
+      will-change: transform, filter, box-shadow;
+    }
+    .orb.thinking {
+      filter: saturate(140%);
+      box-shadow:
+        0 0 28px rgba(139,92,246,0.8),
+        0 0 72px rgba(255,0,229,0.5),
+        inset 0 0 26px rgba(255,255,255,0.45);
     }
     .orb::after {
-      content: "";
+      content: "?";
       position: absolute;
-      inset: -8px;
-      border-radius: 9999px;
-      background: radial-gradient(circle, rgba(168,85,247,0.22), transparent 60%);
-      filter: blur(6px);
-      z-index: -1;
-      opacity: 0.9;
-    }
-    .orb svg {
-      width: 52%;
-      height: 52%;
-      filter: drop-shadow(0 2px 6px rgba(168,85,247,0.6));
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-weight: 900;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue";
+      color: white;
+      text-shadow: 0 2px 10px rgba(0,0,0,0.35);
+      font-size: 2rem;
+      letter-spacing: .05em;
     }
 
-    /* Cards ripple effect */
-    .ripple {
-      position: absolute;
-      border-radius: 9999px;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      background: radial-gradient(circle, rgba(167,139,250,0.6), transparent 60%);
-      animation: ripple 600ms ease-out forwards;
-      mix-blend-mode: screen;
+    /* Search combobox styles */
+    .search-wrap {
+      position: relative;
     }
-    @keyframes ripple {
-      from { width: 0; height: 0; opacity: 0.65; }
-      to { width: 320px; height: 320px; opacity: 0; }
+    .search-input {
+      background: var(--surface-strong);
+      border: 1px solid rgba(139,92,246,0.25);
+      color: var(--text);
+      outline: none;
+      transition: box-shadow .25s ease, border-color .25s ease, background .25s ease;
+      box-shadow: 0 2px 14px rgba(0,0,0,0.2), 0 0 0 1px rgba(255,255,255,0.06) inset;
+    }
+    .search-input::placeholder {
+      color: var(--text-muted);
+    }
+    .search-input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(139,92,246,0.25), 0 2px 18px rgba(0,0,0,0.25);
+      background: linear-gradient(0deg, rgba(255,255,255,0.03), rgba(255,255,255,0.03)), var(--surface-strong);
     }
 
-    /* Suggested dropdown */
-    .suggestions {
+    .listbox {
       position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
+      top: calc(100% + .5rem);
+      left: 0; right: 0;
       z-index: 30;
-      background: var(--surface-2);
-      border: 1px solid var(--glass-stroke);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-soft);
+      background: var(--surface);
+      border: 1px solid rgba(139,92,246,0.25);
+      border-radius: .9rem;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.35);
+      overflow: hidden;
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
-      overflow: hidden;
-      max-height: 0;
-      transition: max-height 0.22s ease;
+      max-height: 18rem;
+      overflow-y: auto;
     }
-    .suggestions.open {
-      max-height: 320px;
-    }
-    .suggestion-item {
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
-      padding: 0.75rem 1rem;
-      color: var(--text);
+    .option {
+      padding: .75rem 1rem;
       cursor: pointer;
-      transition: background 0.2s ease;
+      display: grid;
+      grid-template-columns: 24px 1fr auto;
+      gap: .75rem;
+      align-items: center;
+      color: var(--text);
     }
-    .suggestion-item:hover, .suggestion-item[aria-selected="true"] {
-      background: rgba(168,85,247,0.18);
+    .option[aria-selected="true"],
+    .option:hover {
+      background: linear-gradient(90deg, rgba(139,92,246,0.18), transparent 60%);
     }
-    .suggestion-item small {
-      color: var(--muted);
+    .option .badge {
+      padding: .125rem .5rem;
+      border-radius: 999px;
+      font-size: .7rem;
+      color: white;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 8px rgba(139,92,246,0.35);
+      white-space: nowrap;
     }
 
-    /* Bulleted list glow */
-    .glow-bullets li {
+    /* Ripple hover for topic cards */
+    .ripple {
       position: relative;
-      padding-left: 1.75rem;
+      overflow: hidden;
+      isolation: isolate;
     }
-    .glow-bullets li::before {
+    .ripple::after {
       content: "";
       position: absolute;
-      left: 0.5rem;
-      top: 0.6rem;
-      width: 8px;
-      height: 8px;
-      border-radius: 9999px;
-      background: var(--accent);
-      box-shadow: 0 0 12px var(--accent), 0 0 24px var(--accent-strong);
+      inset: -150% -150%;
+      background: radial-gradient(200px 200px at var(--x, 50%) var(--y, 50%), rgba(139,92,246,0.2), transparent 60%);
+      opacity: 0;
+      transition: opacity .3s ease, transform .3s ease;
+      transform: translateZ(0);
+      pointer-events: none;
+    }
+    .ripple:hover::after { opacity: 1; }
+    .card {
+      background: var(--card);
+      border: 1px solid rgba(139,92,246,0.18);
+      border-radius: 1.1rem;
+      box-shadow: 10px 10px 24px var(--shadow-ambient), -10px -10px 24px rgba(255,255,255,0.04);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 18px 45px rgba(139,92,246,0.25), 0 0 0 1px rgba(139,92,246,0.35) inset;
+      border-color: rgba(139,92,246,0.35);
+    }
+    .icon-wrap {
+      width: 56px; height: 56px;
+      border-radius: 14px;
+      display: grid; place-items: center;
+      background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(0,229,255,0.18));
+      border: 1px solid rgba(139,92,246,0.25);
+      box-shadow: 0 10px 20px rgba(139,92,246,0.25), inset 0 0 20px rgba(139,92,246,0.1);
     }
 
-    /* Advanced support links */
-    .support-link {
-      position: relative;
-      overflow: hidden;
-      border-radius: var(--radius-md);
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      border: 1px solid var(--glass-stroke);
-      box-shadow: var(--shadow-soft);
+    /* Bulleted glow list */
+    .glow-bullet li {
+      display: grid; grid-template-columns: 20px 1fr; gap: .75rem;
+      align-items: start;
     }
-    .support-link::after {
+    .glow-bullet li::before {
       content: "";
-      position: absolute; inset: -50% -20%;
-      background: conic-gradient(from 0deg, transparent, rgba(168,85,247,0.25), transparent 30%);
-      filter: blur(18px);
-      transform: rotate(0deg);
-      animation: rotateGlow 8s linear infinite;
-      opacity: 0.35;
+      margin-top: .5rem;
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent-2));
+      box-shadow: 0 0 12px rgba(139,92,246,0.65);
     }
-    @keyframes rotateGlow {
+
+    /* Modals / drawers */
+    .overlay {
+      position: fixed; inset: 0; z-index: 50;
+      display: none;
+      background: rgba(10, 6, 20, 0.55);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+    .overlay.active { display: block; }
+    .modal {
+      max-width: 42rem;
+      margin: 8vh auto;
+      border-radius: 1rem;
+      background: var(--surface-strong);
+      border: 1px solid rgba(139,92,246,0.25);
+      box-shadow: 0 22px 70px rgba(0,0,0,0.45);
+      overflow: hidden;
+    }
+
+    /* Chat Drawer */
+    .chat-drawer {
+      position: fixed;
+      top: 0; right: 0;
+      height: 100vh; width: 100%;
+      max-width: 28rem;
+      transform: translateX(100%);
+      transition: transform .35s cubic-bezier(.2,.8,.2,1);
+      z-index: 60;
+      background: var(--surface-strong);
+      border-left: 1px solid rgba(139,92,246,0.25);
+      box-shadow: -10px 0 40px rgba(0,0,0,0.45);
+      display: flex; flex-direction: column;
+    }
+    .chat-drawer.open { transform: translateX(0); }
+
+    .chat-button {
+      position: fixed;
+      bottom: 1.5rem; right: 1.5rem;
+      z-index: 55;
+      width: 64px; height: 64px;
+      border-radius: 999px;
+      display: grid; place-items: center;
+      background: radial-gradient(120% 120% at 30% 30%, rgba(139,92,246,0.85), rgba(255,0,229,0.8));
+      color: #fff;
+      border: 1px solid rgba(139,92,246,0.4);
+      box-shadow: 0 10px 25px rgba(139,92,246,0.35), 0 0 0 6px rgba(139,92,246,0.15);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .chat-button:hover { transform: translateY(-2px); box-shadow: 0 16px 35px rgba(139,92,246,0.45), 0 0 0 7px rgba(139,92,246,0.2); }
+
+    /* Guide mode spotlight (mask hole) */
+    .guide-spotlight {
+      position: fixed; inset: 0; z-index: 70; pointer-events: none;
+      transition: clip-path .35s ease;
+    }
+    .guide-spotlight::before {
+      content: "";
+      position: absolute; inset: 0;
+      background: rgba(8, 4, 18, 0.65);
+      backdrop-filter: blur(2px);
+      -webkit-backdrop-filter: blur(2px);
+      -webkit-mask: radial-gradient(200px 200px at var(--gx, 50%) var(--gy, 50%), transparent 180px, black 200px);
+              mask: radial-gradient(200px 200px at var(--gx, 50%) var(--gy, 50%), transparent 180px, black 200px);
+      transition: -webkit-mask-position .25s ease, mask-position .25s ease, -webkit-mask-size .25s ease, mask-size .25s ease;
+      pointer-events: auto;
+    }
+    .guide-tooltip {
+      position: fixed; z-index: 71;
+      max-width: 28rem;
+      background: var(--surface-strong);
+      border: 1px solid rgba(139,92,246,0.35);
+      border-radius: 1rem;
+      box-shadow: 0 18px 55px rgba(0,0,0,0.45);
+      padding: 1rem;
+    }
+
+    /* Focus ring */
+    :focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--ring);
+      border-radius: .5rem;
+    }
+
+    /* Trust bar shimmer border */
+    .shimmer-border {
+      position: relative;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+    .shimmer-border::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: conic-gradient(from 0deg, rgba(139,92,246,0.25), rgba(0,229,255,0.25), rgba(255,0,229,0.25), rgba(139,92,246,0.25));
+      filter: blur(12px);
+      opacity: .6;
+      z-index: -1;
+      animation: rotate 8s linear infinite;
+    }
+    @keyframes rotate {
       to { transform: rotate(360deg); }
     }
 
-    /* Trust badge bar */
-    .trust-bar {
-      background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
-      border: 1px solid var(--glass-stroke);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-soft);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      .orb, .chat-button, .card, .ripple::after, .guide-spotlight::before, .shimmer-border::after {
+        transition: none !important;
+        animation: none !important;
+      }
     }
-    .meter {
-      height: 8px;
-      border-radius: 9999px;
-      background: rgba(255,255,255,0.08);
-      overflow: hidden;
-    }
-    .meter > span {
-      display: block;
-      height: 100%;
-      width: 0%;
-      background: linear-gradient(90deg, var(--accent), var(--positive));
-      box-shadow: 0 0 16px rgba(167,139,250,0.6);
-      transition: width 1.4s ease;
-    }
-
-    /* Guide overlay */
-    .guide-overlay {
-      position: fixed;
-      inset: 0;
-      display: none;
-      z-index: 60;
-    }
-    .guide-overlay.active {
-      display: block;
-    }
-    .guide-dim {
-      position: absolute;
-      inset: 0;
-      background: rgba(7, 2, 17, 0.6);
-      backdrop-filter: blur(3px);
-      -webkit-backdrop-filter: blur(3px);
-    }
-    .guide-spotlight {
-      position: absolute;
-      border-radius: 16px;
-      box-shadow:
-        0 0 0 9999px rgba(7,2,17,0.6),
-        0 0 22px rgba(168,85,247,0.6),
-        inset 0 0 24px rgba(168,85,247,0.25);
-      border: 1px solid rgba(168,85,247,0.6);
-      background: rgba(255,255,255,0.02);
-      transition: all 0.35s ease;
-    }
-    .guide-tooltip {
-      position: absolute;
-      max-width: 28rem;
-      padding: 1rem 1.1rem;
-      color: var(--text);
-      background: var(--surface-2);
-      border: 1px solid var(--glass-stroke);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-soft);
-    }
-
-    /* Chat bubble */
-    .chat-fab {
-      position: fixed;
-      right: 1rem;
-      bottom: 1rem;
-      z-index: 50;
-      width: 58px; height: 58px;
-      border-radius: 9999px;
-      display: grid;
-      place-items: center;
-      color: white;
-      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), rgba(255,255,255,0) 60%),
-                  linear-gradient(135deg, var(--accent-strong), #5b21b6);
-      box-shadow: 0 12px 30px rgba(139,92,246,0.45), inset 0 0 24px rgba(255,255,255,0.12);
-      border: 1px solid rgba(255,255,255,0.12);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .chat-fab:hover { transform: translateY(-2px); box-shadow: 0 16px 38px rgba(139,92,246,0.55); }
-    .chat-panel {
-      position: fixed;
-      right: 1rem;
-      bottom: 5rem;
-      width: min(92vw, 380px);
-      height: 60vh;
-      max-height: 520px;
-      z-index: 50;
-      display: none;
-      grid-template-rows: auto 1fr auto;
-      overflow: hidden;
-    }
-    .chat-panel.open { display: grid; }
-    .chat-messages {
-      overflow: auto;
-      padding: 1rem;
-      display: grid;
-      gap: 0.75rem;
-      align-content: start;
-    }
-    .msg {
-      max-width: 80%;
-      padding: 0.75rem 0.9rem;
-      border-radius: 14px;
-      line-height: 1.35;
-      border: 1px solid var(--glass-stroke);
-      background: rgba(255,255,255,0.05);
-      box-shadow: var(--shadow-soft);
-    }
-    .msg.user {
-      justify-self: end;
-      background: rgba(167,139,250,0.18);
-      border-color: rgba(167,139,250,0.45);
-    }
-
-    /* Focus and accessibility */
-    :focus-visible {
-      outline: 2px dashed rgba(167,139,250,0.75);
-      outline-offset: 2px;
-    }
-    .skip-link {
-      position: absolute;
-      left: -999px;
-      top: 0;
-      background: #0f0c29;
-      color: #fff;
-      padding: 0.5rem 0.75rem;
-      z-index: 100;
-      border-radius: 8px;
-    }
-    .skip-link:focus { left: 1rem; top: 1rem; }
-
-    /* Utility to tint icons */
-    .icon {
-      color: var(--accent);
-      filter: drop-shadow(0 0 10px rgba(167,139,250,0.5));
-    }
-
-    /* Hide scrollbar but keep scrollability for messages on WebKit */
-    .chat-messages::-webkit-scrollbar { width: 10px; }
-    .chat-messages::-webkit-scrollbar-thumb { background: rgba(167,139,250,0.35); border-radius: 9999px; }
-    .chat-messages::-webkit-scrollbar-track { background: rgba(255,255,255,0.05); }
   </style>
 </head>
-<body class="min-h-screen antialiased selection:bg-purple-500/30 selection:text-white cosmic-grid cosmic-bg">
-  <a href="#main" class="skip-link">Skip to main content</a>
+<body class="bg-layers antialiased selection:bg-fuchsia-300/40 selection:text-fuchsia-900">
+  <a href="#main" class="skip-link">Skip to content</a>
 
   <!-- Top Navigation / Theme Toggle -->
-  <header class="container mx-auto max-w-7xl px-4 pt-6 pb-2">
-    <div class="flex items-center justify-between gap-4">
-      <a class="inline-flex items-center gap-2 text-lg font-semibold tracking-wide" href="#" aria-label="Salmar Help Center Home">
-        <span class="inline-grid place-items-center w-9 h-9 rounded-xl neo-soft">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-            <path d="M12 3l2.5 2.5L12 8M12 16l2.5 2.5L12 21M3 12l2.5-2.5L8 12M16 12l2.5-2.5L21 12" />
-          </svg>
-        </span>
-        <span>Salmar Help</span>
-      </a>
-
+  <header class="relative z-10">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <button id="guideStartBtn" class="hidden sm:inline-flex items-center gap-2 px-3 py-2 rounded-lg support-link ring-neo" aria-haspopup="dialog" aria-controls="guideOverlay">
-          <svg class="w-5 h-5 icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-            <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83" />
+        <!-- Simple wordmark "Salmar" -->
+        <div class="w-10 h-10 rounded-xl grid place-items-center glass drop-shadow-neon" aria-hidden="true">
+          <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true">
+            <defs>
+              <linearGradient id="g1" x1="0" x2="1">
+                <stop offset="0%" stop-color="#8b5cf6"/>
+                <stop offset="100%" stop-color="#ff00e5"/>
+              </linearGradient>
+            </defs>
+            <path d="M12 2c5.5 0 10 3.6 10 8.1 0 3.4-2.4 6.2-5.8 7.5L16 22l-4-2-4 2 .8-4.4C5.4 16.3 2 13.5 2 10.1 2 5.6 6.5 2 12 2z" fill="url(#g1)"/>
           </svg>
-          <span>Guide Mode</span>
-        </button>
-        <button id="themeToggle" class="inline-flex items-center gap-2 px-3 py-2 rounded-lg support-link ring-neo" aria-label="Toggle theme">
-          <svg id="sunIcon" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-            <circle cx="12" cy="12" r="4" />
-            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
-          </svg>
-          <svg id="moonIcon" class="w-5 h-5 hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-            <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/>
-          </svg>
-          <span class="sr-only">Toggle Theme</span>
+        </div>
+        <div class="leading-tight">
+          <p class="text-xl font-extrabold tracking-tight" style="color: var(--text)">Salmar Help Center</p>
+          <p class="text-sm" style="color: var(--text-muted)">The Future is Purple. The Future is Helpful.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-2">
+        <button id="themeToggle" type="button" class="relative inline-flex items-center gap-2 px-3 py-2 rounded-xl glass border border-violet-400/30 hover:border-violet-300/60 transition"
+          aria-label="Toggle theme">
+          <span class="w-2.5 h-2.5 rounded-full bg-violet-400 shadow-[0_0_12px_rgba(139,92,246,0.8)]"></span>
+          <span class="text-sm font-medium">Neon</span>
         </button>
       </div>
     </div>
   </header>
 
   <!-- Hero / Search -->
-  <section class="container mx-auto max-w-5xl px-4 pt-4 pb-10">
-    <div class="relative neo-card p-6 md:p-10 overflow-hidden">
-      <!-- Floating Orb -->
-      <div class="absolute right-4 top-4 md:right-8 md:top-8 pointer-events-none">
-        <div id="orb" class="orb" aria-hidden="true">
-          <svg viewBox="0 0 24 24" stroke="white" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.6" role="img" aria-label="Glowing question mark">
-            <path d="M9 9a3 3 0 1 1 5.2 2.1C13.3 12.1 12 12.5 12 14" />
-            <circle cx="12" cy="18" r="1" />
-          </svg>
-        </div>
-      </div>
+  <main id="main" class="relative">
+    <section class="relative pt-6 sm:pt-10">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="relative overflow-hidden glass-strong rounded-2xl p-6 sm:p-10">
+          <!-- Floating orb -->
+          <div id="orb" class="orb animate-pulse-slow" style="top: -30px; right: 5%;"></div>
 
-      <div class="max-w-3xl">
-        <h1 class="text-3xl md:text-4xl font-extrabold tracking-tight">
-          Welcome to the Salmar Help Center
-        </h1>
-        <p class="text-sm md:text-base mt-2 text-[color:var(--muted)]">
-          Your guide to unlocking everything Salmar can do.
-        </p>
-      </div>
+          <div class="max-w-3xl">
+            <h1 class="text-3xl sm:text-5xl font-black leading-tight tracking-tight mb-3" style="color: var(--text)">
+              Welcome to the Salmar Help Center
+            </h1>
+            <p class="text-base sm:text-lg mb-6" style="color: var(--text-muted)">
+              Your guide to unlocking everything Salmar can do.
+            </p>
 
-      <div class="mt-6 md:mt-8">
-        <div class="search-wrap p-1.5">
-          <div class="flex items-center gap-2">
-            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/5 border border-white/10">
-              <svg class="w-5 h-5 icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
-                <circle cx="11" cy="11" r="7"></circle>
-                <path d="M21 21l-4.3-4.3"></path>
-              </svg>
-              <span class="sr-only">Search icon</span>
-            </span>
-            <input id="searchInput" type="search" aria-label="Search the help center" autocomplete="off"
-              class="w-full bg-transparent outline-none text-base md:text-lg py-3 pr-3 placeholder:text-[color:var(--muted)]"
-              placeholder="Ask a question or search for help…" />
-            <button id="clearSearch" class="hidden md:inline-flex items-center gap-2 px-3 py-2 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition ring-neo">
-              <svg class="w-4 h-4" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8">
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-              <span class="text-sm">Clear</span>
-            </button>
+            <!-- Search combobox -->
+            <div class="search-wrap">
+              <label for="search" class="sr-only">Search the Help Center</label>
+              <div class="flex items-center gap-2">
+                <div class="flex-1 relative">
+                  <input id="search" type="text" class="search-input w-full rounded-2xl pl-12 pr-4 py-4 text-base sm:text-lg"
+                    role="combobox" aria-expanded="false" aria-controls="search-listbox" aria-autocomplete="list" autocomplete="off"
+                    placeholder="Ask a question or search for help…" />
+                  <svg class="absolute left-4 top-1/2 -translate-y-1/2 opacity-80" width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 1 1 0-15 7.5 7.5 0 0 1 0 15z" stroke="url(#g2)" stroke-width="2" stroke-linecap="round"/>
+                    <defs><linearGradient id="g2" x1="0" x2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs>
+                  </svg>
+                </div>
+                <button id="startGuideBiometrics" class="hidden sm:inline-flex items-center gap-2 px-4 py-3 rounded-xl border border-violet-400/30 hover:border-violet-300/60"
+                        style="background: var(--surface); color: var(--text)">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0-18 0" stroke="#8b5cf6" stroke-width="2"/><path d="M8 12h8M12 8v8" stroke="#00e5ff" stroke-width="2" stroke-linecap="round"/></svg>
+                  Guide Mode
+                </button>
+              </div>
+              <p id="microcopy" class="mt-2 text-sm" style="color: var(--text-muted)">
+                Try: “Set up biometric login” or “Connect Slack.”
+              </p>
+
+              <!-- Dynamic suggestion chips -->
+              <div id="chips" class="mt-3 flex flex-wrap gap-2"></div>
+
+              <!-- ARIA live region -->
+              <div id="searchStatus" class="sr-only" role="status" aria-live="polite"></div>
+
+              <!-- Suggestions listbox -->
+              <ul id="search-listbox" class="listbox mt-3 hidden" role="listbox" tabindex="-1" aria-label="Search suggestions"></ul>
+            </div>
           </div>
-
-          <!-- AI live suggestions -->
-          <div id="suggestions" class="suggestions mt-2" role="listbox" aria-label="Suggested results"></div>
         </div>
-
-        <p class="mt-3 text-xs md:text-sm text-[color:var(--muted)]">
-          Try: <button class="underline underline-offset-4 hover:text-white suggestion-chip" data-fill="Set up biometric login">“Set up biometric login”</button>
-          or <button class="underline underline-offset-4 hover:text-white suggestion-chip" data-fill="Connect Slack">“Connect Slack.”</button>
-        </p>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <main id="main" class="container mx-auto max-w-7xl px-4 pb-24">
     <!-- Popular Topics -->
-    <section aria-labelledby="popular-topics">
-      <div class="flex items-end justify-between flex-wrap gap-3">
-        <div>
-          <h2 id="popular-topics" class="text-2xl font-bold">Popular Topics</h2>
-          <p class="text-sm text-[color:var(--muted)] mt-1">Quick access to what most people need.</p>
+    <section class="relative mt-10 sm:mt-16" aria-labelledby="popular-topics-title">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-end justify-between flex-wrap gap-3 mb-5">
+          <h2 id="popular-topics-title" class="text-2xl sm:text-3xl font-extrabold tracking-tight">Popular Topics</h2>
+          <p class="text-sm sm:text-base" style="color: var(--text-muted)">Quick access to the most common categories</p>
         </div>
-      </div>
-
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 mt-5">
-        <!-- Card Template -->
-        <button class="topic-card neo-card p-4 md:p-5 text-left relative overflow-hidden group ring-neo"
-                data-topic="getting-started" aria-label="Open Getting Started">
-          <div class="flex items-center gap-3">
-            <span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-white/5 border border-white/10">
-              <!-- Key icon -->
-              <svg class="w-6 h-6 icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                <path d="M21 15l-5-5a5 5 0 1 0-7 7l5 5 2-2-5-5 2-2 5 5z"/>
-                <circle cx="7.5" cy="7.5" r="2.5"/>
-              </svg>
-            </span>
-            <div>
-              <h3 class="font-semibold text-lg">Getting Started</h3>
-              <p class="text-sm text-[color:var(--muted)]">Account setup, first steps</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <!-- Getting Started -->
+          <button id="topic-getting-started" class="card ripple p-5 text-left focus-visible:shadow-focus" data-category="Getting Started">
+            <div class="flex items-start gap-4">
+              <div class="icon-wrap shrink-0">
+                <!-- key icon -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M7.5 7.5a5 5 0 1 1 7.1 7.04L15 15h-2l-2 2H8l-1 1H5l2.5-2.5" stroke="url(#g3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <defs><linearGradient id="g3" x1="0" x2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs>
+                </svg>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-lg">Getting Started</h3>
+                <p class="text-sm mt-1" style="color: var(--text-muted)">Account setup, first steps</p>
+              </div>
             </div>
-          </div>
-          <div class="absolute inset-0 opacity-0 group-hover:opacity-100 transition"></div>
-        </button>
-
-        <button class="topic-card neo-card p-4 md:p-5 text-left relative overflow-hidden group ring-neo"
-                data-topic="security" aria-label="Open Security & Privacy">
-          <div class="flex items-center gap-3">
-            <span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-white/5 border border-white/10">
-              <!-- Lock icon -->
-              <svg class="w-6 h-6 icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                <rect x="3" y="11" width="18" height="10" rx="2" ry="2"></rect>
-                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-              </svg>
-            </span>
-            <div>
-              <h3 class="font-semibold text-lg">Security & Privacy</h3>
-              <p class="text-sm text-[color:var(--muted)]">Biometric login, encryption</p>
+          </button>
+          <!-- Security & Privacy -->
+          <button id="topic-security" class="card ripple p-5 text-left" data-category="Security & Privacy">
+            <div class="flex items-start gap-4">
+              <div class="icon-wrap shrink-0">
+                <!-- shield -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 3l7 3v6c0 4.97-3.06 7.88-7 9-3.94-1.12-7-4.03-7-9V6l7-3z" stroke="url(#g4)" stroke-width="2" fill="transparent"/>
+                  <path d="M9 12l2 2 4-4" stroke="#22c55e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <defs><linearGradient id="g4" x1="0" x2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#ff00e5"/></linearGradient></defs>
+                </svg>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-lg">Security & Privacy</h3>
+                <p class="text-sm mt-1" style="color: var(--text-muted)">Biometrics, encryption, safety</p>
+              </div>
             </div>
-          </div>
-        </button>
-
-        <button class="topic-card neo-card p-4 md:p-5 text-left relative overflow-hidden group ring-neo"
-                data-topic="using-salmar" aria-label="Open Using Salmar">
-          <div class="flex items-center gap-3">
-            <span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-white/5 border border-white/10">
-              <!-- Lightning icon -->
-              <svg class="w-6 h-6 icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                <path d="M13 3L4 14h7l-1 7 9-11h-7l1-7z"/>
-              </svg>
-            </span>
-            <div>
-              <h3 class="font-semibold text-lg">Using Salmar</h3>
-              <p class="text-sm text-[color:var(--muted)]">Features, shortcuts, commands</p>
+          </button>
+          <!-- Using Salmar -->
+          <button id="topic-using" class="card ripple p-5 text-left" data-category="Using Salmar">
+            <div class="flex items-start gap-4">
+              <div class="icon-wrap shrink-0">
+                <!-- bolt -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M13 3L4 14h7l-1 7 9-11h-7l1-7z" stroke="url(#g5)" stroke-width="2" fill="transparent"/>
+                  <defs><linearGradient id="g5" x1="0" x2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs>
+                </svg>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-lg">Using Salmar</h3>
+                <p class="text-sm mt-1" style="color: var(--text-muted)">Features, shortcuts, commands</p>
+              </div>
             </div>
-          </div>
-        </button>
-
-        <button class="topic-card neo-card p-4 md:p-5 text-left relative overflow-hidden group ring-neo"
-                data-topic="integrations" aria-label="Open Integrations">
-          <div class="flex items-center gap-3">
-            <span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-white/5 border border-white/10">
-              <!-- Link icon -->
-              <svg class="w-6 h-6 icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                <path d="M10 13a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1M14 11a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1" />
-              </svg>
-            </span>
-            <div>
-              <h3 class="font-semibold text-lg">Integrations</h3>
-              <p class="text-sm text-[color:var(--muted)]">Google, Slack, APIs</p>
+          </button>
+          <!-- Integrations -->
+          <button id="topic-integrations" class="card ripple p-5 text-left" data-category="Integrations">
+            <div class="flex items-start gap-4">
+              <div class="icon-wrap shrink-0">
+                <!-- link -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M10 13a5 5 0 0 1 0-7l1-1a5 5 0 0 1 7 7l-1 1M14 11a5 5 0 0 1 0 7l-1 1a5 5 0 0 1-7-7l1-1" stroke="url(#g6)" stroke-width="2" stroke-linecap="round"/>
+                  <defs><linearGradient id="g6" x1="0" x2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#ff00e5"/></linearGradient></defs>
+                </svg>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-lg">Integrations</h3>
+                <p class="text-sm mt-1" style="color: var(--text-muted)">Google, Slack, APIs</p>
+              </div>
             </div>
-          </div>
-        </button>
-
-        <button class="topic-card neo-card p-4 md:p-5 text-left relative overflow-hidden group ring-neo"
-                data-topic="billing" aria-label="Open Billing & Subscriptions">
-          <div class="flex items-center gap-3">
-            <span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-white/5 border border-white/10">
-              <!-- Card icon -->
-              <svg class="w-6 h-6 icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                <rect x="2" y="5" width="20" height="14" rx="3"/><path d="M2 10h20"/>
-              </svg>
-            </span>
-            <div>
-              <h3 class="font-semibold text-lg">Billing & Subscriptions</h3>
-              <p class="text-sm text-[color:var(--muted)]">Plans, invoices, upgrades</p>
+          </button>
+          <!-- Billing & Subscriptions -->
+          <button id="topic-billing" class="card ripple p-5 text-left" data-category="Billing & Subscriptions">
+            <div class="flex items-start gap-4">
+              <div class="icon-wrap shrink-0">
+                <!-- card -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <rect x="3" y="5" width="18" height="14" rx="2" stroke="url(#g7)" stroke-width="2"/>
+                  <path d="M3 9h18" stroke="#00e5ff" stroke-width="2"/>
+                  <defs><linearGradient id="g7" x1="0" x2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#ff00e5"/></linearGradient></defs>
+                </svg>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-lg">Billing & Subscriptions</h3>
+                <p class="text-sm mt-1" style="color: var(--text-muted)">Plans, invoices, payments</p>
+              </div>
             </div>
-          </div>
-        </button>
-
-        <button class="topic-card neo-card p-4 md:p-5 text-left relative overflow-hidden group ring-neo"
-                data-topic="troubleshooting" aria-label="Open Troubleshooting">
-          <div class="flex items-center gap-3">
-            <span class="inline-grid place-items-center w-11 h-11 rounded-xl bg-white/5 border border-white/10">
-              <!-- Wrench icon -->
-              <svg class="w-6 h-6 icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
-                <path d="M14.7 6.3a4 4 0 1 0-5.66 5.66l8.49 8.49a2 2 0 0 0 2.83-2.83l-8.49-8.49z"/>
-                <path d="M9 7l-2 2"/>
-              </svg>
-            </span>
-            <div>
-              <h3 class="font-semibold text-lg">Troubleshooting</h3>
-              <p class="text-sm text-[color:var(--muted)]">Fix issues fast</p>
+          </button>
+          <!-- Troubleshooting -->
+          <button id="topic-troubleshooting" class="card ripple p-5 text-left" data-category="Troubleshooting">
+            <div class="flex items-start gap-4">
+              <div class="icon-wrap shrink-0">
+                <!-- wrench -->
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M14 7a4 4 0 1 0 3 6l5 5-2 2-5-5a4 4 0 0 0-6-5l1-3 4-1z" stroke="url(#g8)" stroke-width="2" fill="transparent"/>
+                  <defs><linearGradient id="g8" x1="0" x2="1"><stop offset="0%" stop-color="#00e5ff"/><stop offset="100%" stop-color="#8b5cf6"/></linearGradient></defs>
+                </svg>
+              </div>
+              <div class="flex-1">
+                <h3 class="font-bold text-lg">Troubleshooting</h3>
+                <p class="text-sm mt-1" style="color: var(--text-muted)">Fix issues quickly</p>
+              </div>
             </div>
-          </div>
-        </button>
+          </button>
+        </div>
       </div>
     </section>
 
     <!-- Suggested Articles -->
-    <section class="mt-12 md:mt-16" aria-labelledby="suggested-articles">
-      <div class="grid lg:grid-cols-3 gap-6">
-        <div class="lg:col-span-2">
-          <h2 id="suggested-articles" class="text-2xl font-bold mb-3">Suggested Articles</h2>
-          <ul id="articleList" class="neo-card p-5 glow-bullets grid gap-3 text-[15px]" role="list">
-            <!-- Populated by JS -->
-          </ul>
-        </div>
-        <aside class="lg:col-span-1">
-          <div class="neo-card p-5 h-full">
-            <h3 class="font-semibold text-lg">AI-Powered Suggestions</h3>
-            <p class="text-sm text-[color:var(--muted)] mt-1">As you search or scroll, Salmar finds answers for you.</p>
-            <div id="aiChips" class="mt-4 flex flex-wrap gap-2">
-              <!-- Chips by JS -->
+    <section class="relative mt-12 sm:mt-16" aria-labelledby="suggested-articles-title">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass rounded-2xl p-6 sm:p-8">
+          <div class="flex items-center justify-between flex-wrap gap-3">
+            <div>
+              <h2 id="suggested-articles-title" class="text-2xl sm:text-3xl font-extrabold tracking-tight">Suggested Articles</h2>
+              <p class="text-sm sm:text-base mt-1" style="color: var(--text-muted)">Most-read guides for quick answers</p>
             </div>
-            <hr class="my-4 border-white/10" />
-            <div class="text-sm">
-              <p class="mb-2">Tip: Use natural language like:</p>
-              <ul class="list-disc ml-5 space-y-1 text-[color:var(--muted)]">
-                <li>“Enable Face ID on my phone”</li>
-                <li>“Troubleshoot Slack connection”</li>
-                <li>“See my latest invoice”</li>
-              </ul>
-            </div>
+            <button id="startGuideSlack" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-violet-400/30 hover:border-violet-300/60"
+              style="background: var(--surface); color: var(--text)">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2l3 6 6 1-4 4 1 6-6-3-6 3 1-6-4-4 6-1 3-6z" stroke="#8b5cf6" stroke-width="2" stroke-linejoin="round"/></svg>
+              Start Slack Guide
+            </button>
           </div>
-        </aside>
+
+          <ul id="mostReadList" class="glow-bullet mt-6 space-y-4"></ul>
+        </div>
       </div>
     </section>
 
-    <!-- Advanced Support Options -->
-    <section class="mt-12 md:mt-16" aria-labelledby="advanced-support">
-      <h2 id="advanced-support" class="text-2xl font-bold mb-4">Advanced Support</h2>
-      <div class="grid md:grid-cols-3 gap-4">
-        <a href="#report" class="support-link p-5 block" aria-label="Report an Issue">
-          <div class="flex items-center gap-3">
-            <span class="inline-grid place-items-center w-10 h-10 rounded-xl bg-white/5 border border-white/10">
-              <svg class="w-5 h-5 icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
-                <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
-              </svg>
-            </span>
-            <div>
-              <h3 class="font-semibold">Report an Issue</h3>
-              <p class="text-sm text-[color:var(--muted)]">Quick form for bugs & problems</p>
+    <!-- Advanced Support -->
+    <section class="relative mt-12 sm:mt-16" aria-labelledby="advanced-support-title">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 id="advanced-support-title" class="text-2xl sm:text-3xl font-extrabold tracking-tight mb-5">Advanced Support Options</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+          <button id="reportIssueBtn" class="card ripple p-5 text-left">
+            <div class="flex items-center gap-4">
+              <div class="icon-wrap">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M12 9v4m0 4h.01M2 12a10 10 0 1 0 20 0A10 10 0 0 0 2 12z" stroke="url(#g9)" stroke-width="2" stroke-linecap="round"/>
+                  <defs><linearGradient id="g9" x1="0" x2="1"><stop offset="0%" stop-color="#f59e0b"/><stop offset="100%" stop-color="#ef4444"/></linearGradient></defs>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-lg">Report an Issue</h3>
+                <p class="text-sm mt-1" style="color: var(--text-muted)">Quick form for bug reports</p>
+              </div>
             </div>
-          </div>
-        </a>
+          </button>
 
-        <button id="openChat" class="support-link p-5 text-left" aria-label="Open Live Chat with Salmar">
-          <div class="flex items-center gap-3">
-            <span class="inline-grid place-items-center w-10 h-10 rounded-xl bg-white/5 border border-white/10">
-              <svg class="w-5 h-5 icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                <path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
-              </svg>
-            </span>
-            <div>
-              <h3 class="font-semibold">Live Chat with Salmar</h3>
-              <p class="text-sm text-[color:var(--muted)]">AI-powered instant help</p>
+          <button id="openChatBtn" class="card ripple p-5 text-left">
+            <div class="flex items-center gap-4">
+              <div class="icon-wrap">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M4 6h16v8H7l-3 3V6z" stroke="url(#g10)" stroke-width="2" stroke-linejoin="round"/>
+                  <defs><linearGradient id="g10" x1="0" x2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-lg">Live Chat with Salmar</h3>
+                <p class="text-sm mt-1" style="color: var(--text-muted)">AI-powered instant help</p>
+              </div>
             </div>
-          </div>
-        </button>
+          </button>
 
-        <a href="#contact" class="support-link p-5 block" aria-label="Contact Support">
-          <div class="flex items-center gap-3">
-            <span class="inline-grid place-items-center w-10 h-10 rounded-xl bg-white/5 border border-white/10">
-              <svg class="w-5 h-5 icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
-                <path d="M21 10a8.38 8.38 0 0 1-.9 3.8l-3.2-1.3a4.6 4.6 0 0 0-.9-5.4l1.3-3.2A8.38 8.38 0 0 1 21 10z"/>
-                <path d="M3 14a8.38 8.38 0 0 1 .9-3.8l3.2 1.3a4.6 4.6 0 0 0 .9 5.4L6.7 20.1A8.38 8.38 0 0 1 3 14z"/>
-              </svg>
-            </span>
-            <div>
-              <h3 class="font-semibold">Contact Support</h3>
-              <p class="text-sm text-[color:var(--muted)]">We’re one click away</p>
+          <a href="#contact" class="card ripple p-5 text-left">
+            <div class="flex items-center gap-4">
+              <div class="icon-wrap">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  <path d="M3 5h18v14H3z" stroke="url(#g11)" stroke-width="2"/><path d="M3 7l9 6 9-6" stroke="#8b5cf6" stroke-width="2"/>
+                  <defs><linearGradient id="g11" x1="0" x2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#ff00e5"/></linearGradient></defs>
+                </svg>
+              </div>
+              <div>
+                <h3 class="font-bold text-lg">Contact Support</h3>
+                <p class="text-sm mt-1" style="color: var(--text-muted)">If the knowledge base doesn’t solve it</p>
+              </div>
             </div>
-          </div>
-        </a>
+          </a>
+        </div>
+        <p class="text-sm mt-4" style="color: var(--text-muted)">Still need help? We’re one click away.</p>
       </div>
     </section>
 
     <!-- Trust Badge Bar -->
-    <section class="mt-12 md:mt-16">
-      <div class="trust-bar p-5 md:p-6">
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-          <div class="flex items-center gap-3">
-            <span class="inline-grid place-items-center w-9 h-9 rounded-full bg-white/5 border border-white/10">
-              <svg class="w-5 h-5 text-teal-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <path d="M20 6L9 17l-5-5"/>
-              </svg>
-            </span>
-            <div>
-              <p class="font-semibold">99% of users find answers in under 2 minutes.</p>
-              <p class="text-sm text-[color:var(--muted)]">We optimize this help center continuously with AI.</p>
+    <section class="relative mt-12 sm:mt-16">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="shimmer-border p-0.5 rounded-2xl">
+          <div class="glass rounded-2xl p-6 sm:p-8 grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 items-center">
+            <div class="text-center sm:text-left">
+              <p class="text-sm uppercase tracking-widest" style="color: var(--text-muted)">Trust Badge</p>
+              <p class="text-xl sm:text-2xl font-extrabold mt-1">You're in good hands</p>
             </div>
-          </div>
-          <div class="w-full sm:w-64">
-            <div class="meter mt-1">
-              <span id="trustMeter" style="width: 0%;"></span>
+            <div class="text-center">
+              <p class="text-sm" style="color: var(--text-muted)">99% of users find answers in under</p>
+              <div class="mt-1 text-3xl sm:text-4xl font-black">
+                <span id="trustPercent">0</span>% • <span id="trustTime">0:00</span> mins
+              </div>
+            </div>
+            <div class="text-center sm:text-right">
+              <span class="inline-flex items-center gap-2 px-3 py-2 rounded-xl" style="background: linear-gradient(90deg, rgba(139,92,246,0.2), rgba(0,229,255,0.2)); border: 1px solid rgba(139,92,246,0.35);">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 13l4 4L19 7" stroke="#22c55e" stroke-width="2" stroke-linecap="round"/></svg>
+                Verified by user data
+              </span>
             </div>
           </div>
         </div>
       </div>
     </section>
-  </main>
 
-  <!-- Footer -->
-  <footer class="mt-10 pb-24">
-    <div class="container mx-auto max-w-7xl px-4">
-      <div class="grid md:grid-cols-3 gap-6 neo-card p-6">
-        <div>
-          <h4 class="font-semibold mb-2">Quick Links</h4>
-          <nav aria-label="Quick links">
-            <ul class="grid gap-2 text-sm">
-              <li><a class="underline underline-offset-4 hover:text-white" href="#contact">Contact Page</a></li>
-              <li><a class="underline underline-offset-4 hover:text-white" href="#report">Report an Issue</a></li>
-              <li><a class="underline underline-offset-4 hover:text-white" href="#security-status">Security Status</a></li>
-            </ul>
-          </nav>
-        </div>
-        <div>
-          <h4 class="font-semibold mb-2">Community</h4>
-          <ul class="grid gap-2 text-sm">
-            <li><a class="underline underline-offset-4 hover:text-white" href="#">Release Notes</a></li>
-            <li><a class="underline underline-offset-4 hover:text-white" href="#">Developer Docs</a></li>
-            <li><a class="underline underline-offset-4 hover:text-white" href="#">API Reference</a></li>
-          </ul>
-        </div>
-        <div class="flex flex-col justify-between">
-          <div>
-            <h4 class="font-semibold mb-2">Follow</h4>
-            <div class="flex items-center gap-3">
-              <a href="#" aria-label="Twitter" class="inline-grid place-items-center w-10 h-10 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
-                <svg class="w-5 h-5 icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M22.46 6c-.77.35-1.6.58-2.46.69a4.19 4.19 0 0 0 1.84-2.31 8.33 8.33 0 0 1-2.64 1 4.16 4.16 0 0 0-7.08 3.79A11.8 11.8 0 0 1 3.15 4.7a4.16 4.16 0 0 0 1.29 5.55 4.12 4.12 0 0 1-1.88-.52v.05a4.16 4.16 0 0 0 3.33 4.08 4.2 4.2 0 0 1-1.87.07 4.17 4.17 0 0 0 3.88 2.89A8.35 8.35 0 0 1 2 19.55 11.78 11.78 0 0 0 8.29 21c7.55 0 11.68-6.26 11.68-11.68 0-.18 0-.36-.01-.54A8.34 8.34 0 0 0 22.46 6z"/>
-                </svg>
-              </a>
-              <a href="#" aria-label="LinkedIn" class="inline-grid place-items-center w-10 h-10 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
-                <svg class="w-5 h-5 icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1 4.98 2.12 4.98 3.5zM.5 8h4V24h-4V8zM8.5 8h3.8v2.2h.05c.53-1 1.8-2.2 3.7-2.2 4 0 4.7 2.7 4.7 6.2V24h-4v-6.8c0-1.6 0-3.6-2.2-3.6s-2.6 1.7-2.6 3.5V24h-4V8z"/>
-                </svg>
-              </a>
-              <a href="#" aria-label="GitHub" class="inline-grid place-items-center w-10 h-10 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 transition">
-                <svg class="w-5 h-5 icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-                  <path fill-rule="evenodd" d="M12 1.5a10.5 10.5 0 0 0-3.32 20.47c.52.1.7-.22.7-.49v-1.9c-2.85.62-3.45-1.37-3.45-1.37-.47-1.2-1.16-1.52-1.16-1.52-.95-.66.07-.65.07-.65 1.05.08 1.6 1.08 1.6 1.08.94 1.6 2.47 1.14 3.07.87.1-.69.37-1.14.66-1.4-2.28-.26-4.68-1.15-4.68-5.12 0-1.13.4-2.05 1.06-2.77-.11-.26-.46-1.3.1-2.7 0 0 .86-.28 2.82 1.06a9.7 9.7 0 0 1 5.14 0c1.96-1.34 2.82-1.06 2.82-1.06.56 1.4.21 2.44.1 2.7.66.72 1.06 1.64 1.06 2.77 0 3.98-2.41 4.85-4.7 5.1.38.32.72.95.72 1.91v2.83c0 .27.18.6.7.49A10.5 10.5 0 0 0 12 1.5Z" clip-rule="evenodd"/>
-                </svg>
-              </a>
+    <!-- Footer -->
+    <footer id="contact" class="relative mt-16 sm:mt-24">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="glass rounded-2xl p-6 sm:p-10">
+          <div class="flex flex-col sm:flex-row items-center sm:items-start justify-between gap-6">
+            <div class="text-center sm:text-left">
+              <p class="text-2xl font-extrabold">Salmar Help Center</p>
+              <p class="mt-1" style="color: var(--text-muted)">The Future is Purple. The Future is Helpful.</p>
+              <div class="mt-4 flex items-center gap-3">
+                <a href="#" class="inline-flex items-center justify-center w-9 h-9 rounded-full border border-violet-400/30 hover:border-violet-300/70" aria-label="Twitter">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 5.8c-.7.3-1.4.5-2.2.6.8-.5 1.3-1.2 1.6-2.1-.8.5-1.6.8-2.6 1A3.8 3.8 0 0 0 12 8.6c0 .3 0 .6.1.8-3.2-.2-6-1.7-8-4-.3.6-.4 1.2-.4 1.9 0 1.3.6 2.4 1.6 3.1-.6 0-1.1-.2-1.6-.4v.1c0 1.8 1.3 3.3 3 3.7-.3.1-.6.1-.9.1-.2 0-.4 0-.6-.1.4 1.5 1.8 2.6 3.5 2.6a7.7 7.7 0 0 1-4.8 1.7h-.9A11 11 0 0 0 9 20c7.2 0 11.2-6 11.2-11.2v-.5c.8-.6 1.4-1.2 1.8-2z" fill="url(#g12)"/><defs><linearGradient id="g12" x1="0" x2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs></svg>
+                </a>
+                <a href="#" class="inline-flex items-center justify-center w-9 h-9 rounded-full border border-violet-400/30 hover:border-violet-300/70" aria-label="GitHub">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7C6.7 20 6 18 6 18c-.5-1.2-1.3-1.5-1.3-1.5-1-.7.1-.7.1-.7 1.1.1 1.7 1.1 1.7 1.1 1 .1.8-1.4 1.6-1.8-2.5-.3-5.1-1.3-5.1-5.8 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.6.1-3.3 0 0 .9-.3 3 .1.9-.2 2-.4 3-.4s2.1.1 3 .4c2.1-.4 3-.1 3-.1.6 1.7.2 3 .1 3.3.8.9 1.2 2 1.2 3.2 0 4.6-2.6 5.5-5.1 5.8.7.6 1 .6 1 2.4v1.9c0 .3.2.6.7.5A10 10 0 0 0 12 2z" fill="url(#g13)"/><defs><linearGradient id="g13" x1="0" x2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs></svg>
+                </a>
+                <a href="#" class="inline-flex items-center justify-center w-9 h-9 rounded-full border border-violet-400/30 hover:border-violet-300/70" aria-label="LinkedIn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 9H3v12h3V9zM4.5 3a1.5 1.5 0 100 3 1.5 1.5 0 000-3zM21 21h-3v-6.5c0-3.6-4-3.3-4 0V21h-3V9h3v1.9c1.4-2.7 7-2.9 7 2.6V21z" fill="url(#g14)"/><defs><linearGradient id="g14" x1="0" x2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs></svg>
+                </a>
+              </div>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-6">
+              <div class="space-y-2">
+                <a href="contact.html" class="block px-4 py-2 rounded-lg" style="background: var(--surface); border: 1px solid rgba(139,92,246,0.25)">Contact Page</a>
+                <button id="footerReportIssueBtn" class="block px-4 py-2 rounded-lg text-left" style="background: var(--surface); border: 1px solid rgba(139,92,246,0.25)">Report an Issue</button>
+                <a href="securitystatus.html" class="block px-4 py-2 rounded-lg" style="background: var(--surface); border: 1px solid rgba(139,92,246,0.25)">Security Status</a>
+              </div>
+              <div class="space-y-2">
+                <a href="privacy.html" class="block px-4 py-2 rounded-lg" style="background: var(--surface); border: 1px solid rgba(139,92,246,0.25)">Privacy Policy</a>
+                <a href="terms.html" class="block px-4 py-2 rounded-lg" style="background: var(--surface); border: 1px solid rgba(139,92,246,0.25)">Terms of Service</a>
+              </div>
             </div>
           </div>
-          <p class="text-sm text-[color:var(--muted)] mt-4 md:mt-0">“The Future is Purple. The Future is Helpful.”</p>
+          <div class="mt-6 text-center text-sm" style="color: var(--text-muted)">&copy; <span id="year"></span> Salmar. All rights reserved.</div>
         </div>
       </div>
-      <div class="text-center text-xs text-[color:var(--muted)] mt-4">
-        © <span id="year"></span> Salmar — All rights reserved.
-      </div>
-    </div>
-  </footer>
+    </footer>
+  </main>
 
-  <!-- Floating Chat -->
-  <button id="fab" class="chat-fab" aria-controls="chatPanel" aria-expanded="false" aria-label="Open chat">
-    <svg class="w-6 h-6" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8" aria-hidden="true">
-      <path d="M21 15a4 4 0 0 1-4 4H8l-5 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"/>
+  <!-- Floating Chat Button -->
+  <button id="floatChatBtn" class="chat-button" aria-label="Open live chat">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M4 6h16v8H7l-3 3V6z" stroke="white" stroke-width="2" stroke-linejoin="round"/>
     </svg>
   </button>
-  <section id="chatPanel" class="chat-panel neo-card" role="dialog" aria-label="Live Chat with Salmar">
-    <div class="px-4 py-3 flex items-center justify-between border-b border-white/10">
-      <div class="flex items-center gap-2">
-        <span class="inline-grid place-items-center w-8 h-8 rounded-full bg-white/5 border border-white/10">
-          <svg class="w-4 h-4 icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M12 3l2.5 2.5L12 8M12 16l2.5 2.5L12 21M3 12l2.5-2.5L8 12M16 12l2.5-2.5L21 12" />
-          </svg>
-        </span>
+
+  <!-- Chat Drawer -->
+  <aside id="chatDrawer" class="chat-drawer" aria-label="Live Chat with Salmar" aria-hidden="true">
+    <header class="px-4 py-3 border-b border-violet-400/20 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <img src="https://picsum.photos/seed/salmar/40" alt="Salmar avatar" class="w-9 h-9 rounded-full ring-2 ring-violet-400/40" />
         <div>
-          <h3 class="font-semibold leading-tight">Salmar Assistant</h3>
-          <p class="text-xs text-[color:var(--muted)] leading-tight">AI-powered instant help</p>
+          <p class="font-bold leading-tight">Live Chat with Salmar</p>
+          <p class="text-xs" style="color: var(--text-muted)">AI-powered instant help</p>
         </div>
       </div>
-      <button id="closeChat" class="p-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10" aria-label="Close chat">
-        <svg class="w-4 h-4" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8">
-          <path d="M18 6L6 18M6 6l12 12" />
-        </svg>
+      <button id="closeChatBtn" class="p-2 rounded-lg hover:bg-white/5" aria-label="Close chat">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
       </button>
+    </header>
+    <div id="chatMessages" class="flex-1 overflow-y-auto p-4 space-y-4">
+      <div class="flex items-start gap-3">
+        <img src="https://picsum.photos/seed/salmar/36" alt="" class="w-8 h-8 rounded-full ring-2 ring-violet-400/40" />
+        <div class="max-w-[80%] rounded-2xl px-4 py-3" style="background: var(--surface); border: 1px solid rgba(139,92,246,0.25)">
+          <p class="text-sm">Hi! I’m Salmar. Ask me anything or select a guide to begin. ✨</p>
+        </div>
+      </div>
     </div>
-    <div id="chatMsgs" class="chat-messages" aria-live="polite"></div>
-    <form id="chatForm" class="p-3 border-t border-white/10 grid grid-cols-[1fr_auto] gap-2">
-      <label class="sr-only" for="chatInput">Type your message</label>
-      <input id="chatInput" type="text" class="bg-white/5 border border-white/10 rounded-lg px-3 py-2 outline-none"
-             placeholder="Ask me anything…" autocomplete="off" />
-      <button class="px-3 py-2 rounded-lg bg-gradient-to-br from-purple-500 to-indigo-600 hover:brightness-110 transition text-white">
-        Send
-      </button>
+    <form id="chatForm" class="p-3 border-t border-violet-400/20">
+      <label for="chatInput" class="sr-only">Type your message</label>
+      <div class="flex items-center gap-2">
+        <input id="chatInput" class="flex-1 px-3 py-3 rounded-xl" style="background: var(--surface); border:1px solid rgba(139,92,246,0.25)" placeholder="Type your message…" />
+        <button class="px-4 py-3 rounded-xl text-white" style="background: linear-gradient(90deg, var(--accent), var(--accent-2));">Send</button>
+      </div>
     </form>
-  </section>
+  </aside>
 
-  <!-- Guide Overlay -->
-  <div id="guideOverlay" class="guide-overlay" role="dialog" aria-modal="true" aria-labelledby="guideTitle" aria-describedby="guideDesc">
-    <div class="guide-dim"></div>
-    <div id="spotlight" class="guide-spotlight"></div>
-    <div id="tooltip" class="guide-tooltip">
-      <h3 id="guideTitle" class="font-semibold text-lg">Interactive Guide</h3>
-      <p id="guideDesc" class="text-sm text-[color:var(--muted)] mt-1">Follow these steps to enable biometrics.</p>
-      <ol class="text-sm mt-2 list-decimal ml-5 space-y-1" id="guideSteps"></ol>
-      <div class="flex items-center justify-end gap-2 mt-3">
-        <button id="guidePrev" class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">Back</button>
-        <button id="guideNext" class="px-3 py-2 rounded-lg bg-gradient-to-r from-purple-500 to-indigo-600 text-white">Next</button>
-        <button id="guideClose" class="px-3 py-2 rounded-lg bg-white/5 border border-white/10 hover:bg-white/10">Close</button>
+  <!-- Report Issue Modal -->
+  <div id="modalOverlay" class="overlay" aria-hidden="true" aria-labelledby="reportTitle" role="dialog">
+    <div class="modal">
+      <div class="p-4 sm:p-6 border-b border-violet-400/20 flex items-center justify-between">
+        <h3 id="reportTitle" class="text-xl font-bold">Report an Issue</h3>
+        <a href = 'report.html'><button id="closeModal" class="p-2 rounded-lg hover:bg-white/5" aria-label="Close report issue form">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button></a>
+      
+
+  <!-- Article Quick-View Modal -->
+  <div id="articleOverlay" class="overlay" aria-hidden="true" aria-labelledby="articleTitle" role="dialog">
+    <div class="modal max-w-3xl">
+      <div class="p-4 sm:p-6 border-b border-violet-400/20 flex items-center justify-between">
+        <h3 id="articleTitle" class="text-xl font-bold">Article</h3>
+        <button id="closeArticle" class="p-2 rounded-lg hover:bg-white/5" aria-label="Close article">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="p-4 sm:p-6 space-y-4">
+        <div id="articleMeta" class="text-sm" style="color: var(--text-muted)"></div>
+        <div id="articleContent" class="prose prose-invert max-w-none"></div>
+        <div class="flex items-center justify-between">
+          <button id="startGuideFromArticle" class="px-4 py-2 rounded-xl border border-violet-400/30 hover:border-violet-300/60" style="background: var(--surface); color: var(--text)">Start Interactive Guide</button>
+          <a id="openFullArticle" href="#" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl text-white" style="background: linear-gradient(90deg, var(--accent), var(--accent-2));">Open Full Article</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Guide Mode Elements -->
+  <div id="guideSpotlight" class="guide-spotlight hidden"></div>
+  <div id="guideTooltip" class="guide-tooltip hidden">
+    <div class="flex items-start gap-3">
+      <div class="w-9 h-9 rounded-xl grid place-items-center" style="background: linear-gradient(135deg, rgba(139,92,246,0.25), rgba(0,229,255,0.25)); border: 1px solid rgba(139,92,246,0.35)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3l7 3v6c0 4.97-3.06 7.88-7 9-3.94-1.12-7-4.03-7-9V6l7-3z" stroke="#8b5cf6" stroke-width="2"/></svg>
+      </div>
+      <div class="flex-1">
+        <p id="guideStepTitle" class="font-bold">Step</p>
+        <p id="guideStepText" class="text-sm mt-1" style="color: var(--text-muted)">Instruction</p>
+        <div class="flex items-center justify-between mt-3">
+          <div id="guideProgress" class="text-xs" style="color: var(--text-muted)">1 / 3</div>
+          <div class="flex items-center gap-2">
+            <button id="guidePrev" class="px-3 py-2 rounded-lg border border-violet-400/30 hover:border-violet-300/60" style="background: var(--surface)">Back</button>
+            <button id="guideNext" class="px-3 py-2 rounded-lg text-white" style="background: linear-gradient(90deg, var(--accent), var(--accent-2));">Next</button>
+            <button id="guideExit" class="px-3 py-2 rounded-lg border border-violet-400/30 hover:border-violet-300/60" style="background: var(--surface)">Exit</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 
   <script>
-    // Utilities
-    const $ = (s, ctx=document) => ctx.querySelector(s);
-    const $$ = (s, ctx=document) => Array.from(ctx.querySelectorAll(s));
+    ;(() => {
+      const prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // Year
-    $('#year').textContent = new Date().getFullYear();
+      // Smooth scroll with Lenis
+      try {
+        const lenis = new Lenis({
+          duration: prefersReduced ? 0.8 : 1.1,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: !prefersReduced
+        });
+        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        requestAnimationFrame(raf);
+      } catch(e) { /* Lenis unavailable - continue gracefully */ }
 
-    // Theme Toggle (no localStorage to avoid sandbox issues)
-    const themeBtn = $('#themeToggle');
-    const sun = $('#sunIcon'), moon = $('#moonIcon');
-    function setTheme(name) {
-      document.documentElement.setAttribute('data-theme', name);
-      if (name === 'neon') { sun.classList.add('hidden'); moon.classList.remove('hidden'); }
-      else { sun.classList.remove('hidden'); moon.classList.add('hidden'); }
-    }
-    themeBtn.addEventListener('click', () => {
-      const cur = document.documentElement.getAttribute('data-theme');
-      setTheme(cur === 'neon' ? 'calm' : 'neon');
-    });
+      // Safe localStorage access
+      const storage = {
+        get(k) {
+          try { return window.localStorage ? localStorage.getItem(k) : null; } catch(e) { return null; }
+        },
+        set(k,v) {
+          try { if (window.localStorage) localStorage.setItem(k,v); } catch(e) { /* ignore */ }
+        }
+      };
 
-    // Floating Orb motion and pulse
-    const orb = $('#orb');
-    if (window.gsap && orb) {
-      gsap.to(orb, { y: -8, duration: 2.5, yoyo: true, repeat: -1, ease: "sine.inOut" });
-      gsap.to(orb, { boxShadow: '0 0 28px rgba(168,85,247,0.9), 0 0 70px rgba(168,85,247,0.35), inset 0 0 28px rgba(255,255,255,0.24)', duration: 2, yoyo: true, repeat: -1, ease: "sine.inOut" });
-      window.addEventListener('mousemove', (e) => {
-        const rect = orb.getBoundingClientRect();
-        const cx = rect.left + rect.width/2;
-        const cy = rect.top + rect.height/2;
-        const dx = (e.clientX - cx) / 40;
-        const dy = (e.clientY - cy) / 40;
-        gsap.to(orb, { x: dx, y: dy, duration: 0.4, overwrite: true });
-      });
-    }
+      // Theme Handling
+      const themeToggle = document.getElementById('themeToggle');
+      let theme = 'auto'; // 'calm' | 'neon' | 'auto'
+      const savedTheme = storage.get('salmar-theme');
+      if (savedTheme) theme = savedTheme;
 
-    // Typed placeholder suggestions
-    const searchInput = $('#searchInput');
-    const placeholderPhrases = [
-      "Ask a question or search for help…",
-      "Enable biometric login",
-      "Connect Slack",
-      "Manage your integrations",
-      "Find my latest invoice",
-      "Privacy and security settings"
-    ];
-    let phIndex = 0;
-    function cyclePlaceholder() {
-      let i = 0;
-      const text = placeholderPhrases[phIndex % placeholderPhrases.length];
-      phIndex++;
-      const typer = setInterval(() => {
-        if (document.activeElement === searchInput) { clearInterval(typer); return; }
-        searchInput.setAttribute('placeholder', text.slice(0, i++) + (i % 2 ? "▌" : ""));
-        if (i >= text.length + 2) { clearInterval(typer); setTimeout(() => { if (document.activeElement !== searchInput) searchInput.setAttribute('placeholder', "Ask a question or search for help…"); }, 900); }
-      }, 60);
-    }
-    setInterval(cyclePlaceholder, 4000);
-
-    // Search data
-    const articles = [
-      { id: 1, title: "How to set up biometric login in Salmar", topic: "security", tags: ["biometric","face id","touch id","login","security"], popularity: 10 },
-      { id: 2, title: "Troubleshooting login errors", topic: "troubleshooting", tags: ["login","errors","troubleshoot","auth"], popularity: 9 },
-      { id: 3, title: "Managing your integrations", topic: "integrations", tags: ["integrations","apps","google","slack","api"], popularity: 8 },
-      { id: 4, title: "Understanding your AI privacy settings", topic: "security", tags: ["privacy","ai","settings"], popularity: 8 },
-      { id: 5, title: "Canceling or upgrading your subscription", topic: "billing", tags: ["billing","subscription","cancel","upgrade"], popularity: 7 },
-      { id: 6, title: "Keyboard shortcuts to power-use Salmar", topic: "using-salmar", tags: ["shortcuts","commands","productivity"], popularity: 6 },
-      { id: 7, title: "Connect Slack and troubleshoot common issues", topic: "integrations", tags: ["slack","connect","fix"], popularity: 6 },
-      { id: 8, title: "First steps: create account & verify email", topic: "getting-started", tags: ["account","verify","email","start"], popularity: 5 },
-      { id: 9, title: "Using Google Calendar with Salmar", topic: "integrations", tags: ["google","calendar","events"], popularity: 5 },
-      { id: 10, title: "Exporting data securely", topic: "security", tags: ["export","data","security"], popularity: 5 }
-    ];
-
-    // Populate Suggested Articles initially by popularity
-    const articleList = $('#articleList');
-    function renderSuggested(list) {
-      articleList.innerHTML = "";
-      list.slice(0, 6).forEach(a => {
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <a href="#article-${a.id}" class="block rounded-md p-2 hover:bg-white/5 border border-transparent hover:border-white/10 transition">
-            <span class="font-medium">${a.title}</span>
-            <span class="ml-2 inline-flex text-xs px-2 py-0.5 rounded-full border border-white/10 bg-white/5 text-[color:var(--muted)]">${a.topic.replace('-', ' ')}</span>
-          </a>`;
-        articleList.appendChild(li);
-      });
-    }
-    renderSuggested(articles.sort((a,b)=>b.popularity - a.popularity));
-
-    // AI chips (auto-suggestions)
-    const aiChips = $('#aiChips');
-    const chipSet = [
-      "Enable biometric login",
-      "Connect Slack",
-      "See my invoice",
-      "Fix login errors",
-      "AI privacy guide",
-      "API integrations"
-    ];
-    chipSet.forEach(text => {
-      const b = document.createElement('button');
-      b.className = "px-3 py-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 text-sm transition";
-      b.textContent = text;
-      b.addEventListener('click', () => {
-        searchInput.value = text;
-        doSearch(text);
-        searchInput.focus();
-      });
-      aiChips.appendChild(b);
-    });
-
-    // Suggestions dropdown using Fuse.js-like search (fallback to simple search if Fuse missing)
-    const suggestions = $('#suggestions');
-    let fuse = null;
-    try {
-      if (window.Fuse) {
-        fuse = new Fuse(articles, { keys: ['title', 'tags', 'topic'], threshold: 0.35, includeScore: true });
+      function applyTheme(value) {
+        const html = document.documentElement;
+        if (value === 'auto') {
+          const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+          html.setAttribute('data-theme', prefersDark ? 'neon' : 'calm');
+        } else {
+          html.setAttribute('data-theme', value);
+        }
+        const current = html.getAttribute('data-theme');
+        themeToggle.querySelector('span:last-child').textContent = current === 'neon' ? 'Neon' : 'Calm';
       }
-    } catch (e) { fuse = null; }
+      applyTheme(theme);
 
-    function createSuggestionItem(a) {
-      const item = document.createElement('div');
-      item.className = 'suggestion-item';
-      item.setAttribute('role','option');
-      item.innerHTML = `
-        <svg class="w-4 h-4 text-[color:var(--accent)]" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="1.8" aria-hidden="true">
-          <circle cx="12" cy="12" r="9"></circle><path d="M12 8v4l3 3"/>
-        </svg>
-        <div class="min-w-0">
-          <div class="truncate">${a.title}</div>
-          <small>${a.topic.replace('-', ' ')} • ${a.tags.join(', ')}</small>
-        </div>
-      `;
-      item.addEventListener('click', () => {
-        suggestions.classList.remove('open');
-        searchInput.value = a.title;
-        doSearch(a.title);
+      themeToggle.addEventListener('click', () => {
+        const current = document.documentElement.getAttribute('data-theme');
+        const next = current === 'neon' ? 'calm' : 'neon';
+        theme = next;
+        applyTheme(theme);
+        storage.set('salmar-theme', theme);
       });
-      return item;
-    }
 
-    function openSuggestions(items) {
-      suggestions.innerHTML = "";
-      items.slice(0, 6).forEach(a => suggestions.appendChild(createSuggestionItem(a)));
-      if (items.length) suggestions.classList.add('open'); else suggestions.classList.remove('open');
-    }
-
-    function doSearch(q) {
-      const query = (q ?? searchInput.value ?? "").trim();
-      if (!query) {
-        suggestions.classList.remove('open');
-        renderSuggested(articles.sort((a,b)=>b.popularity - a.popularity));
-        return;
+      // Orb animation
+      const orb = document.getElementById('orb');
+      let orbX = window.innerWidth * 0.75, orbY = 100;
+      function positionOrb(x, y) {
+        orb.style.transform = `translate3d(${x}px, ${y}px, 0)`;
       }
-      let matches = [];
-      if (fuse) {
-        matches = fuse.search(query).map(r => r.item);
-      } else {
-        const str = query.toLowerCase();
-        matches = articles.filter(a => (a.title + ' ' + a.tags.join(' ') + ' ' + a.topic).toLowerCase().includes(str));
+      // initial position near hero top-right
+      positionOrb(0,0); // base transform; gsap will manage
+      if (window.gsap) {
+        gsap.set(orb, {x: 0, y: 0});
+        // gentle float
+        if (!prefersReduced) {
+          gsap.to(orb, { y: '+=12', duration: 2.5, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+          gsap.to(orb, { x: '+=8', duration: 3.0, yoyo: true, repeat: -1, ease: 'sine.inOut' });
+        }
       }
-      // Update suggestions dropdown
-      openSuggestions(matches);
-      // Update suggested list section to reflect AI help
-      renderSuggested(matches.length ? matches : articles);
-    }
 
-    // Input events
-    let suggestIndex = -1;
-    searchInput.addEventListener('input', (e) => {
-      suggestIndex = -1;
-      doSearch(e.target.value);
-    });
-    searchInput.addEventListener('keydown', (e) => {
-      const items = $$('.suggestion-item', suggestions);
-      if (!items.length) return;
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        suggestIndex = (suggestIndex + 1) % items.length;
-        items.forEach((it, i) => it.setAttribute('aria-selected', i === suggestIndex ? 'true' : 'false'));
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        suggestIndex = (suggestIndex - 1 + items.length) % items.length;
-        items.forEach((it, i) => it.setAttribute('aria-selected', i === suggestIndex ? 'true' : 'false'));
-      } else if (e.key === 'Enter') {
-        if (suggestIndex >= 0) {
+      // Move glow with mouse near hero
+      document.addEventListener('mousemove', (e) => {
+        const hero = document.querySelector('section > div > .glass-strong');
+        if (!hero) return;
+        const rect = hero.getBoundingClientRect();
+        const inside = e.clientX >= rect.left && e.clientX <= rect.right && e.clientY >= rect.top && e.clientY <= rect.bottom;
+        if (inside && window.gsap && !prefersReduced) {
+          gsap.to(orb, { x: e.clientX - rect.left - 60, y: e.clientY - rect.top - 60, duration: 0.35, ease: 'sine.out' });
+        }
+      });
+
+      // Search data seeding
+      const articles = [
+        // Getting Started
+        { id:'a1', title:'Create your Salmar account', category:'Getting Started', tags:['account','signup','onboarding'], mostRead:true, content:'Learn how to create your Salmar account in under a minute. We’ll guide you through email verification and first steps.' },
+        { id:'a2', title:'Set up biometric login in Salmar', category:'Security & Privacy', tags:['biometric','login','security','face id','touch id'], mostRead:true, content:'Enable Face ID or Touch ID for passwordless, secure access. Navigate to Settings → Security → Biometrics and follow the prompts.' },
+        { id:'a3', title:'Connect Slack to Salmar', category:'Integrations', tags:['slack','integration','workspace'], mostRead:true, content:'Integrate Slack to receive alerts and run commands. Go to Integrations → Slack → Connect and authorize your workspace.' },
+        { id:'a4', title:'Troubleshooting login errors', category:'Troubleshooting', tags:['login','error','auth'], mostRead:true, content:'Resolve common login problems including two-factor codes, expired sessions, and network restrictions.' },
+        { id:'a5', title:'Understanding your AI privacy settings', category:'Security & Privacy', tags:['privacy','data','model'], mostRead:true, content:'Control how your data is used to improve Salmar. Manage retention, redaction, and data isolation settings.' },
+        { id:'a6', title:'Canceling or upgrading your subscription', category:'Billing & Subscriptions', tags:['billing','plan','subscription'], mostRead:true, content:'Change plans any time. Learn about proration, refunds, and invoice access from the billing portal.' },
+
+        // More content
+        { id:'a7', title:'Keyboard shortcuts for power users', category:'Using Salmar', tags:['shortcuts','commands','productivity'], content:'Master navigation with quick actions palette, global shortcuts, and custom command bindings.' },
+        { id:'a8', title:'Connect Google Calendar', category:'Integrations', tags:['google','calendar','oauth'], content:'Sync events bi-directionally. Authorize Google, choose calendars, and set conflict resolution.' },
+        { id:'a9', title:'API access and tokens', category:'Using Salmar', tags:['api','tokens','developer'], content:'Create API tokens, assign scopes, rotate keys, and observe usage from developer dashboard.' },
+        { id:'a10', title:'Enable two-factor authentication (2FA)', category:'Security & Privacy', tags:['2fa','security','totp','authenticator'], content:'Protect your account with TOTP apps or hardware keys. Recovery codes and enforcement options included.' },
+        { id:'a11', title:'Invoice history and receipts', category:'Billing & Subscriptions', tags:['invoices','billing'], content:'Download past invoices and set up custom billing contacts or PO numbers.' },
+        { id:'a12', title:'Fix integration connection errors', category:'Troubleshooting', tags:['integration','errors','oauth'], content:'Guide to common OAuth issues, permission scopes, and rate limits for external services.' },
+        { id:'a13', title:'Team roles and permissions', category:'Getting Started', tags:['teams','roles','access'], content:'Owner, Admin, Member roles explained. How to invite teammates and assign permissions safely.' },
+        { id:'a14', title:'Custom workflows with automations', category:'Using Salmar', tags:['automation','workflow','rules'], content:'Build flows with triggers and actions: schedule tasks, route alerts, and orchestrate integrations.' },
+        { id:'a15', title:'Security whitepaper & encryption details', category:'Security & Privacy', tags:['security','encryption','compliance'], content:'Learn how Salmar secures data with encryption at rest, in transit, and key management practices.' },
+        { id:'a16', title:'Connect Slack: slash commands and alerts', category:'Integrations', tags:['slack','commands','alerts'], content:'Use /salmar commands from Slack channels, configure alert routing and notification preferences.' },
+        { id:'a17', title:'Reset your password', category:'Getting Started', tags:['password','reset','account'], content:'Reset flow via email with safety checks and session invalidation.' },
+        { id:'a18', title:'Latency/timeout troubleshooting', category:'Troubleshooting', tags:['latency','timeout','network'], content:'Identify slow network issues and optimize performance settings.' }
+      ];
+
+      // Chips area
+      const chips = document.getElementById('chips');
+      function renderChips(items) {
+        chips.innerHTML = '';
+        (items || []).slice(0, 4).forEach(a => {
+          const b = document.createElement('button');
+          b.className = 'px-3 py-1.5 text-sm rounded-full border border-violet-400/30 hover:border-violet-300/60';
+          b.style.background = 'var(--surface)';
+          b.textContent = a.title;
+          b.addEventListener('click', () => openArticle(a.id));
+          chips.appendChild(b);
+        });
+      }
+
+      // Fuse search
+      const fuse = new Fuse(articles, {
+        keys: ['title', 'tags', 'content', 'category'],
+        includeScore: true,
+        threshold: 0.35
+      });
+
+      const searchInput = document.getElementById('search');
+      const listbox = document.getElementById('search-listbox');
+      const status = document.getElementById('searchStatus');
+      let activeIndex = -1;
+      let visibleOptions = [];
+      let listboxOpen = false;
+      let inputDebounce;
+
+      function openListbox() { listbox.classList.remove('hidden'); searchInput.setAttribute('aria-expanded','true'); listboxOpen = true; }
+      function closeListbox() { listbox.classList.add('hidden'); searchInput.setAttribute('aria-expanded','false'); listboxOpen = false; activeIndex = -1; }
+      function setActive(i) {
+        const options = Array.from(listbox.querySelectorAll('[role="option"]'));
+        options.forEach((opt, idx) => opt.setAttribute('aria-selected', String(i===idx)));
+        if (i>=0 && options[i]) {
+          searchInput.setAttribute('aria-activedescendant', options[i].id);
+          options[i].scrollIntoView({ block: 'nearest' });
+        } else {
+          searchInput.removeAttribute('aria-activedescendant');
+        }
+        activeIndex = i;
+      }
+
+      function renderList(items) {
+        listbox.innerHTML = '';
+        visibleOptions = items.slice(0, 8);
+        visibleOptions.forEach((res, idx) => {
+          const a = res.item || res; // fuse returns item
+          const li = document.createElement('li');
+          li.id = 'opt-' + a.id;
+          li.setAttribute('role','option');
+          li.className = 'option';
+          li.setAttribute('aria-selected', 'false');
+
+          const icon = document.createElementNS('http://www.w3.org/2000/svg','svg');
+          icon.setAttribute('width','20'); icon.setAttribute('height','20'); icon.setAttribute('viewBox','0 0 24 24');
+          icon.innerHTML = '<defs><linearGradient id="gopt" x1="0" x2="1"><stop offset="0%" stop-color="#8b5cf6"/><stop offset="100%" stop-color="#00e5ff"/></linearGradient></defs><path d="M12 2l3 6 6 1-4 4 1 6-6-3-6 3 1-6-4-4 6-1 3-6z" stroke="url(#gopt)" stroke-width="2" fill="transparent"/>';
+          const info = document.createElement('div');
+          info.innerHTML = `<div class="font-medium">${a.title}</div><div class="text-xs" style="color: var(--text-muted)">${a.category}</div>`;
+          const badge = document.createElement('span');
+          badge.className = 'badge';
+          badge.textContent = a.category;
+
+          li.appendChild(icon);
+          li.appendChild(info);
+          li.appendChild(badge);
+          li.addEventListener('click', () => { openArticle(a.id); closeListbox(); });
+          li.addEventListener('mousemove', () => setActive(idx));
+          listbox.appendChild(li);
+        });
+        if (visibleOptions.length) openListbox(); else closeListbox();
+        status.textContent = `${visibleOptions.length} result${visibleOptions.length !== 1 ? 's':''} found.`;
+      }
+
+      function performSearch(q) {
+        if (!q || q.trim().length === 0) { renderList([]); return; }
+        const results = fuse.search(q.trim());
+        renderList(results);
+      }
+
+      searchInput.addEventListener('input', (e) => {
+        orb.classList.add('thinking');
+        clearTimeout(inputDebounce);
+        inputDebounce = setTimeout(() => {
+          performSearch(e.target.value);
+          orb.classList.remove('thinking');
+          // Update chips with top results
+          const sugg = fuse.search(e.target.value).map(r => r.item).slice(0,4);
+          renderChips(sugg);
+        }, 180);
+      });
+
+      searchInput.addEventListener('keydown', (e) => {
+        const count = visibleOptions.length;
+        if (!count) return;
+        if (e.key === 'ArrowDown') {
           e.preventDefault();
-          items[suggestIndex].click();
-        } else {
-          doSearch(searchInput.value);
-          suggestions.classList.remove('open');
+          setActive((activeIndex + 1) % count);
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          setActive((activeIndex - 1 + count) % count);
+        } else if (e.key === 'Enter') {
+          if (activeIndex >= 0) {
+            const a = (visibleOptions[activeIndex].item || visibleOptions[activeIndex]);
+            openArticle(a.id);
+            closeListbox();
+          }
+        } else if (e.key === 'Escape') {
+          closeListbox();
         }
-      } else if (e.key === 'Escape') {
-        suggestions.classList.remove('open');
+      });
+      searchInput.addEventListener('focus', () => {
+        if (visibleOptions.length) openListbox();
+      });
+      document.addEventListener('click', (e) => {
+        if (!listbox.contains(e.target) && e.target !== searchInput) closeListbox();
+      });
+
+      // Most read list
+      const mostReadList = document.getElementById('mostReadList');
+      function renderMostRead() {
+        mostReadList.innerHTML = '';
+        articles.filter(a => a.mostRead).slice(0, 6).forEach(a => {
+          const li = document.createElement('li');
+          const link = document.createElement('button');
+          link.className = 'text-left hover:underline decoration-violet-400/60';
+          link.textContent = a.title;
+          link.addEventListener('click', () => openArticle(a.id));
+          li.appendChild(link);
+          mostReadList.appendChild(li);
+        });
       }
-    });
-    document.addEventListener('click', (e) => {
-      if (!suggestions.contains(e.target) && e.target !== searchInput) suggestions.classList.remove('open');
-    });
-    $('#clearSearch').addEventListener('click', () => {
-      searchInput.value = "";
-      doSearch("");
-      searchInput.focus();
-    });
-    $$('.suggestion-chip').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const fill = btn.getAttribute('data-fill') || '';
-        searchInput.value = fill;
-        doSearch(fill);
-        searchInput.focus();
-      });
-    });
+      renderMostRead();
 
-    // Ripple on topic cards + filtering by topic
-    $$('.topic-card').forEach(card => {
-      card.addEventListener('pointerdown', (e) => {
-        const r = document.createElement('span');
-        r.className = 'ripple';
-        const rect = card.getBoundingClientRect();
-        r.style.left = (e.clientX - rect.left) + 'px';
-        r.style.top = (e.clientY - rect.top) + 'px';
-        card.appendChild(r);
-        setTimeout(()=> r.remove(), 600);
-      });
-      card.addEventListener('click', () => {
-        const topic = card.getAttribute('data-topic');
-        const matches = articles.filter(a => a.topic === topic).sort((a,b)=>b.popularity-a.popularity);
-        renderSuggested(matches);
-        // scroll to suggested section smoothly
-        const section = $('#suggested-articles');
-        section && section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      });
-    });
+      // Suggestions chips initial
+      renderChips(articles.filter(a => a.mostRead));
 
-    // Trust meter animation on visible
-    const meterSpan = $('#trustMeter');
-    const meterObserver = new IntersectionObserver((entries) => {
-      entries.forEach(ent => {
-        if (ent.isIntersecting) {
-          meterSpan.style.width = "99%";
-          meterObserver.disconnect();
+      // Ripple gradient mouse position
+      function attachRipple(el) {
+        el.addEventListener('pointermove', (e) => {
+          const rect = el.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          el.style.setProperty('--x', x + 'px');
+          el.style.setProperty('--y', y + 'px');
+        });
+      }
+      document.querySelectorAll('.ripple').forEach(attachRipple);
+
+      // Category filters -> update chips and scroll to list
+      document.querySelectorAll('[id^="topic-"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const cat = btn.getAttribute('data-category');
+          const filtered = articles.filter(a => a.category === cat);
+          renderChips(filtered.slice(0, 4));
+          searchInput.value = '';
+          performSearch('');
+          status.textContent = `Showing popular items for ${cat}.`;
+          // gentle highlight
+          btn.classList.add('ring-2');
+          setTimeout(() => btn.classList.remove('ring-2'), 600);
+          // also scroll to Suggested Articles
+          document.getElementById('suggested-articles-title').scrollIntoView({ behavior: prefersReduced ? 'auto' : 'smooth', block: 'start' });
+        });
+      });
+
+      // Article Quick-View
+      const articleOverlay = document.getElementById('articleOverlay');
+      const articleTitle = document.getElementById('articleTitle');
+      const articleMeta = document.getElementById('articleMeta');
+      const articleContent = document.getElementById('articleContent');
+      const closeArticleBtn = document.getElementById('closeArticle');
+      const startGuideFromArticle = document.getElementById('startGuideFromArticle');
+      const openFullArticle = document.getElementById('openFullArticle');
+      let lastOpenedArticle = null;
+
+      function openArticle(id) {
+        const a = articles.find(x => x.id === id);
+        if (!a) return;
+        lastOpenedArticle = a;
+        articleTitle.textContent = a.title;
+        articleMeta.textContent = `${a.category} • tags: ${a.tags ? a.tags.join(', ') : '—'}`;
+        articleContent.innerHTML = '';
+        // Safe content injection as text
+        const p = document.createElement('p');
+        p.textContent = a.content;
+        articleContent.appendChild(p);
+        openFullArticle.href = '#';
+        startGuideFromArticle.style.display = (a.title.toLowerCase().includes('biometric') || a.title.toLowerCase().includes('slack')) ? 'inline-flex' : 'none';
+        articleOverlay.classList.add('active');
+        articleOverlay.setAttribute('aria-hidden','false');
+      }
+      closeArticleBtn.addEventListener('click', () => {
+        articleOverlay.classList.remove('active');
+        articleOverlay.setAttribute('aria-hidden','true');
+      });
+      articleOverlay.addEventListener('click', (e) => {
+        if (e.target === articleOverlay) { articleOverlay.classList.remove('active'); articleOverlay.setAttribute('aria-hidden','true'); }
+      });
+
+      // Report Issue modal
+      const modalOverlay = document.getElementById('modalOverlay');
+      const reportIssueBtn = document.getElementById('reportIssueBtn');
+      const footerReportIssueBtn = document.getElementById('footerReportIssueBtn');
+      const closeModal = document.getElementById('closeModal');
+      function openModal() { modalOverlay.classList.add('active'); modalOverlay.setAttribute('aria-hidden','false'); }
+      function closeModalFn() { modalOverlay.classList.remove('active'); modalOverlay.setAttribute('aria-hidden','true'); }
+      reportIssueBtn.addEventListener('click', openModal);
+      footerReportIssueBtn.addEventListener('click', openModal);
+      closeModal.addEventListener('click', closeModalFn);
+      modalOverlay.addEventListener('click', e => { if (e.target === modalOverlay) closeModalFn(); });
+
+      // Report Issue validation
+      const issueForm = document.getElementById('issueForm');
+      const email = document.getElementById('issueEmail');
+      const emailError = document.getElementById('emailError');
+      const desc = document.getElementById('issueDesc');
+      const descError = document.getElementById('descError');
+      const success = document.getElementById('issueSuccess');
+
+      issueForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        let ok = true;
+        const validEmail = /^\S+@\S+\.\S+$/.test(email.value.trim());
+        if (!validEmail) { emailError.classList.remove('hidden'); ok=false; } else { emailError.classList.add('hidden'); }
+        if (desc.value.trim().length < 20) { descError.classList.remove('hidden'); ok=false; } else { descError.classList.add('hidden'); }
+        if (ok) {
+          success.classList.remove('hidden');
+          setTimeout(() => { closeModalFn(); issueForm.reset(); success.classList.add('hidden'); }, 1400);
         }
       });
-    }, { threshold: 0.5 });
-    meterObserver.observe(meterSpan.closest('.meter'));
 
-    // Chat bubble interactions
-    const fab = $('#fab');
-    const chatPanel = $('#chatPanel');
-    const openChatBtn = $('#openChat');
-    const closeChat = $('#closeChat');
-    const chatMsgs = $('#chatMsgs');
-    const chatForm = $('#chatForm');
-    const chatInput = $('#chatInput');
+      // Chat drawer
+      const chatDrawer = document.getElementById('chatDrawer');
+      const openChatBtn = document.getElementById('openChatBtn');
+      const floatChatBtn = document.getElementById('floatChatBtn');
+      const closeChatBtn = document.getElementById('closeChatBtn');
+      const chatMessages = document.getElementById('chatMessages');
+      const chatForm = document.getElementById('chatForm');
+      const chatInput = document.getElementById('chatInput');
 
-    function toggleChat(open) {
-      chatPanel.classList.toggle('open', open);
-      fab.setAttribute('aria-expanded', String(open));
-      if (open) {
-        chatInput.focus();
-        if (!chatMsgs.dataset.seeded) {
-          seedChat();
+      function openChat() {
+        chatDrawer.classList.add('open');
+        chatDrawer.setAttribute('aria-hidden','false');
+        setTimeout(() => chatInput.focus(), 200);
+      }
+      function closeChat() {
+        chatDrawer.classList.remove('open');
+        chatDrawer.setAttribute('aria-hidden','true');
+      }
+      openChatBtn.addEventListener('click', openChat);
+      floatChatBtn.addEventListener('click', openChat);
+      closeChatBtn.addEventListener('click', closeChat);
+
+      function addMsg(text, from='user') {
+        const wrap = document.createElement('div');
+        wrap.className = 'flex items-start gap-3 ' + (from==='user' ? 'justify-end' : '');
+        if (from==='user') {
+          const bubble = document.createElement('div');
+          bubble.className = 'max-w-[80%] rounded-2xl px-4 py-3 text-sm text-white';
+          bubble.style.background = 'linear-gradient(90deg, var(--accent), var(--accent-2))';
+          bubble.textContent = text;
+          wrap.appendChild(bubble);
+        } else {
+          const img = document.createElement('img');
+          img.src = 'https://picsum.photos/seed/salmar/36'; img.alt = ''; img.className = 'w-8 h-8 rounded-full ring-2 ring-violet-400/40';
+          const bubble = document.createElement('div');
+          bubble.className = 'max-w-[80%] rounded-2xl px-4 py-3 text-sm';
+          bubble.style.background = 'var(--surface)';
+          bubble.style.border = '1px solid rgba(139,92,246,0.25)';
+          bubble.textContent = text;
+          wrap.appendChild(img);
+          wrap.appendChild(bubble);
+        }
+        chatMessages.appendChild(wrap);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+      chatForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const val = chatInput.value.trim();
+        if (!val) return;
+        addMsg(val, 'user');
+        chatInput.value = '';
+        setTimeout(() => {
+          // simple suggestion response
+          const res = fuse.search(val).map(r => r.item).slice(0,3);
+          if (res.length) {
+            addMsg(`I found ${res.length} helpful article${res.length>1?'s':''}: ${res.map(a => a.title).join(' • ')}. Tap a title below:`);
+            // add quick action chips
+            const holder = document.createElement('div');
+            holder.className = 'flex flex-wrap gap-2 pl-11';
+            res.forEach(a => {
+              const chip = document.createElement('button');
+              chip.className = 'px-2.5 py-1.5 rounded-full text-xs';
+              chip.style.background = 'linear-gradient(90deg, rgba(139,92,246,0.25), rgba(0,229,255,0.25))';
+              chip.style.border = '1px solid rgba(139,92,246,0.35)';
+              chip.textContent = a.title;
+              chip.addEventListener('click', () => openArticle(a.id));
+              holder.appendChild(chip);
+            });
+            chatMessages.appendChild(holder);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+          } else {
+            addMsg("I couldn't find an exact match. Try keywords like “Slack” or “biometric”.");
+          }
+        }, 500);
+      });
+
+      // Guide Mode
+      const guideSpotlight = document.getElementById('guideSpotlight');
+      const guideTooltip = document.getElementById('guideTooltip');
+      const guideTitle = document.getElementById('guideStepTitle');
+      const guideText = document.getElementById('guideStepText');
+      const guideProgress = document.getElementById('guideProgress');
+      const btnPrev = document.getElementById('guidePrev');
+      const btnNext = document.getElementById('guideNext');
+      const btnExit = document.getElementById('guideExit');
+      const startGuideBiometrics = document.getElementById('startGuideBiometrics');
+      const startGuideSlack = document.getElementById('startGuideSlack');
+
+      let guideSteps = [];
+      let guideIndex = 0;
+
+      function computeTooltipPos(targetRect) {
+        const margin = 16;
+        let top = targetRect.bottom + margin;
+        let left = targetRect.left + window.scrollX;
+        if (left + 340 > window.innerWidth - 16) left = window.innerWidth - 356;
+        if (top + 180 > window.innerHeight) top = targetRect.top - 220;
+        guideTooltip.style.top = top + 'px';
+        guideTooltip.style.left = Math.max(16, left) + 'px';
+      }
+
+      function spotlightTo(el) {
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const gx = rect.left + rect.width/2;
+        const gy = rect.top + rect.height/2;
+        guideSpotlight.style.setProperty('--gx', gx + 'px');
+        guideSpotlight.style.setProperty('--gy', gy + 'px');
+        computeTooltipPos(rect);
+        if (!prefersReduced && window.gsap) {
+          gsap.to(window, { scrollTo: { y: rect.top + window.scrollY - 140 }, duration: 0.5, ease: 'power2.out' });
+        } else {
+          window.scrollTo({ top: rect.top + window.scrollY - 140, behavior: 'auto' });
         }
       }
-    }
-    function seedChat() {
-      chatMsgs.dataset.seeded = "true";
-      addMsg("assistant", "Hi! I’m Salmar. Ask me anything or try: “Enable biometric login”.");
-      addMsg("assistant", "I can suggest relevant guides while you type.");
-    }
-    function addMsg(role, text) {
-      const b = document.createElement('div');
-      b.className = 'msg ' + (role === 'user' ? 'user' : 'assistant');
-      b.textContent = text;
-      chatMsgs.appendChild(b);
-      chatMsgs.scrollTo({ top: chatMsgs.scrollHeight, behavior: 'smooth' });
-    }
-    fab.addEventListener('click', ()=> toggleChat(!chatPanel.classList.contains('open')));
-    openChatBtn.addEventListener('click', ()=> toggleChat(true));
-    closeChat.addEventListener('click', ()=> toggleChat(false));
-    chatForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const text = chatInput.value.trim();
-      if (!text) return;
-      addMsg('user', text);
-      chatInput.value = '';
-      // Simulate AI response using our articles
-      setTimeout(() => {
-        const matches = fuse ? fuse.search(text).map(r => r.item) : articles.filter(a => a.title.toLowerCase().includes(text.toLowerCase()));
-        if (matches.length) {
-          addMsg('assistant', `I found something: “${matches[0].title}”. Would you like to open it?`);
-        } else {
-          addMsg('assistant', "I couldn't find a direct match. Try rephrasing or select a category above.");
+
+      function updateGuide() {
+        const step = guideSteps[guideIndex];
+        if (!step) return endGuide();
+        guideTitle.textContent = step.title;
+        guideText.textContent = step.text;
+        guideProgress.textContent = (guideIndex+1) + ' / ' + guideSteps.length;
+        const el = document.querySelector(step.selector);
+        if (el) spotlightTo(el);
+        btnPrev.disabled = guideIndex === 0;
+        btnNext.textContent = guideIndex === guideSteps.length-1 ? 'Finish' : 'Next';
+      }
+
+      function startGuide(type='biometrics') {
+        guideSteps = type==='biometrics' ? [
+          { title:'Open Security & Privacy', text:'Click the Security & Privacy card to access your protection settings.', selector:'#topic-security' },
+          { title:'Locate Biometrics', text:'In Security, find “Biometric login”. We support Face ID and Touch ID.', selector:'#suggested-articles-title' },
+          { title:'Enable & Confirm', text:'Follow the on-screen instructions to enable biometrics securely.', selector:'#reportIssueBtn' }
+        ] : [
+          { title:'Open Integrations', text:'Click the Integrations card to explore available connectors.', selector:'#topic-integrations' },
+          { title:'Select Slack', text:'Choose Slack and click Connect to authorize your workspace.', selector:'#suggested-articles-title' },
+          { title:'Finish Setup', text:'Configure channels and slash commands to complete the integration.', selector:'#openChatBtn' }
+        ];
+        guideIndex = 0;
+        guideSpotlight.classList.remove('hidden');
+        guideTooltip.classList.remove('hidden');
+        updateGuide();
+      }
+
+      function endGuide() {
+        guideSpotlight.classList.add('hidden');
+        guideTooltip.classList.add('hidden');
+      }
+
+      btnPrev.addEventListener('click', () => { if (guideIndex>0) { guideIndex--; updateGuide(); } });
+      btnNext.addEventListener('click', () => { if (guideIndex<guideSteps.length-1) { guideIndex++; updateGuide(); } else { endGuide(); } });
+      btnExit.addEventListener('click', endGuide);
+      startGuideBiometrics.addEventListener('click', () => startGuide('biometrics'));
+      startGuideSlack.addEventListener('click', () => startGuide('slack'));
+      document.getElementById('startGuideFromArticle').addEventListener('click', () => {
+        if (!lastOpenedArticle) return;
+        const t = lastOpenedArticle.title.toLowerCase().includes('slack') ? 'slack' : 'biometrics';
+        endArticleQuickView();
+        startGuide(t);
+      });
+      function endArticleQuickView() {
+        articleOverlay.classList.remove('active');
+        articleOverlay.setAttribute('aria-hidden','true');
+      }
+
+      // Trust bar count-up
+      function countUp(el, to, duration=1200) {
+        const start = 0;
+        const t0 = performance.now();
+        function loop(t) {
+          const p = Math.min(1, (t - t0) / duration);
+          const val = Math.floor(start + (to - start) * p);
+          el.textContent = val;
+          if (p < 1) requestAnimationFrame(loop);
         }
-      }, 600);
-    });
-
-    // Guide Mode: spotlight + steps
-    const guideStartBtn = $('#guideStartBtn');
-    const overlay = $('#guideOverlay');
-    const spotlight = $('#spotlight');
-    const tooltip = $('#tooltip');
-    const guidePrev = $('#guidePrev');
-    const guideNext = $('#guideNext');
-    const guideClose = $('#guideClose');
-    const guideStepsEl = $('#guideSteps');
-
-    const guideTargets = [
-      { el: () => $('.search-wrap'), title: "Search for Biometrics", desc: "Start by typing “Enable biometric login”. Our AI suggests steps instantly." },
-      { el: () => $$('.topic-card').find(b => b.getAttribute('data-topic') === 'security'), title: "Open Security & Privacy", desc: "Tap this category to see security-related articles and settings." },
-      { el: () => $('#articleList'), title: "Follow the Article", desc: "Open “How to set up biometric login in Salmar” and follow the steps." }
-    ];
-    let guideIndex = 0;
-
-    function rectToSpotlight(el) {
-      const r = el.getBoundingClientRect();
-      const pad = 8;
-      spotlight.style.left = (r.left - pad) + 'px';
-      spotlight.style.top = (r.top - pad) + 'px';
-      spotlight.style.width = (r.width + pad*2) + 'px';
-      spotlight.style.height = (r.height + pad*2) + 'px';
-      // Position tooltip smartly
-      const tt = tooltip.getBoundingClientRect();
-      let top = (r.bottom + 12);
-      let left = Math.min(Math.max(r.left, 12), window.innerWidth - tt.width - 12);
-      tooltip.style.top = top + 'px';
-      tooltip.style.left = left + 'px';
-    }
-
-    function renderGuideStep() {
-      const t = guideTargets[guideIndex];
-      const el = t.el();
-      if (!el) return;
-      rectToSpotlight(el);
-      $('#guideTitle').textContent = t.title;
-      $('#guideDesc').textContent = t.desc;
-      guideStepsEl.innerHTML = guideTargets.map((g, i) => `<li ${i===guideIndex ? 'class="text-white"' : ''}>${g.title}</li>`).join('');
-      guidePrev.disabled = guideIndex === 0;
-      guideNext.textContent = guideIndex === guideTargets.length - 1 ? 'Done' : 'Next';
-    }
-
-    function openGuide() {
-      overlay.classList.add('active');
-      guideIndex = 0;
-      renderGuideStep();
-    }
-    function closeGuide() {
-      overlay.classList.remove('active');
-    }
-    function nextGuide() {
-      if (guideIndex < guideTargets.length - 1) {
-        guideIndex++;
-        renderGuideStep();
+        requestAnimationFrame(loop);
+      }
+      const trustPercent = document.getElementById('trustPercent');
+      const trustTime = document.getElementById('trustTime');
+      let trustAnimated = false;
+      if (window.IntersectionObserver) {
+        const io = new IntersectionObserver((entries) => {
+          entries.forEach(e => {
+            if (e.isIntersecting && !trustAnimated) {
+              trustAnimated = true;
+              countUp(trustPercent, 99, 1400);
+              // animate time to 2:00
+              const start = 0, end = 120, dur = 1400, t0 = performance.now();
+              function step(t) {
+                const p = Math.min(1, (t - t0) / dur);
+                const secs = Math.floor(start + (end - start) * p);
+                const m = Math.floor(secs / 60), s = (secs % 60).toString().padStart(2,'0');
+                trustTime.textContent = `${m}:${s}`;
+                if (p < 1) requestAnimationFrame(step);
+              }
+              requestAnimationFrame(step);
+            }
+          });
+        }, { threshold: 0.35 });
+        io.observe(trustPercent.closest('section'));
       } else {
-        closeGuide();
+        trustPercent.textContent = '99';
+        trustTime.textContent = '2:00';
       }
-    }
-    function prevGuide() {
-      if (guideIndex > 0) {
-        guideIndex--;
-        renderGuideStep();
+
+      // GSAP section reveals
+      if (window.gsap && window.ScrollTrigger && !prefersReduced) {
+        gsap.utils.toArray('section').forEach((sec, i) => {
+          gsap.from(sec.querySelectorAll('.card, .glass, h2'), {
+            opacity: 0, y: 24, stagger: 0.08, duration: 0.6, ease: 'power2.out',
+            scrollTrigger: { trigger: sec, start: 'top 80%' }
+          });
+        });
       }
-    }
 
-    guideStartBtn.addEventListener('click', openGuide);
-    guideClose.addEventListener('click', closeGuide);
-    guideNext.addEventListener('click', nextGuide);
-    guidePrev.addEventListener('click', prevGuide);
-    window.addEventListener('resize', () => { if (overlay.classList.contains('active')) renderGuideStep(); });
+      // Footer year
+      document.getElementById('year').textContent = new Date().getFullYear();
 
-    // Accessibility: close overlay with Escape, close chat with Escape
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        if (overlay.classList.contains('active')) closeGuide();
-        if (chatPanel.classList.contains('open')) toggleChat(false);
-        suggestions.classList.remove('open');
-      }
-    });
+      // Microcopy rotation while idle
+      const microcopy = document.getElementById('microcopy');
+      const hints = [
+        'Try: “Set up biometric login” or “Connect Slack.”',
+        'Try: “Create an API token” or “Enable 2FA.”',
+        'Try: “Manage billing” or “Keyboard shortcuts.”'
+      ];
+      let hintIndex = 0;
+      setInterval(() => {
+        hintIndex = (hintIndex + 1) % hints.length;
+        microcopy.textContent = hints[hintIndex];
+      }, 6000);
 
-    // In-viewport fade-in animations using IntersectionObserver
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach(ent => {
-        if (ent.isIntersecting) {
-          ent.target.style.transform = 'translateY(0px)';
-          ent.target.style.opacity = '1';
-          revealObserver.unobserve(ent.target);
+      // Accessibility: keyboard open chat with Alt+L
+      document.addEventListener('keydown', (e) => {
+        if (e.altKey && (e.key.toLowerCase() === 'l')) {
+          e.preventDefault();
+          openChat();
         }
       });
-    }, { threshold: 0.15 });
-    $$('.neo-card, .support-link, .trust-bar').forEach(el => {
-      el.style.transform = 'translateY(10px)';
-      el.style.opacity = '0';
-      el.style.transition = 'transform .6s cubic-bezier(.2,.65,.2,1), opacity .6s ease';
-      revealObserver.observe(el);
-    });
 
-    // Enhance keyboard navigation for suggestion list
-    suggestions.addEventListener('mousemove', () => {
-      suggestIndex = -1;
-      $$('.suggestion-item', suggestions).forEach(it => it.setAttribute('aria-selected', 'false'));
-    });
+      // Close overlays with Escape
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          closeModalFn();
+          closeChat();
+          articleOverlay.classList.remove('active'); articleOverlay.setAttribute('aria-hidden','true');
+          endGuide();
+        }
+      });
 
-    // Security note: no localStorage usage. All preferences are ephemeral per session.
+      // Click-to-open from chips
+      chips.addEventListener('click', (e) => {
+        if (e.target.tagName === 'BUTTON') {
+          const title = e.target.textContent.trim();
+          const found = articles.find(a => a.title === title);
+          if (found) openArticle(found.id);
+        }
+      });
+
+      // Make sure spotlight follows on scroll/resize
+      window.addEventListener('resize', () => { if (!guideSpotlight.classList.contains('hidden')) updateGuide(); });
+      window.addEventListener('scroll', () => { if (!guideSpotlight.classList.contains('hidden')) updateGuide(); }, { passive: true });
+
+    })();
   </script>
 </body>
 </html>

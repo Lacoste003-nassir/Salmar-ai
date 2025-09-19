@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1b0f3a">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2ecff">
+  <title>Salmar — Copyright Notice</title>
+
+  <!-- TailwindCSS (Play CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind config for dynamic themes & fonts
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Inter', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial'],
+            body: ['Inter', 'ui-sans-serif', 'system-ui']
+          },
+          colors: {
+            primary: {
+              50: '#f6f3ff',
+              100: '#ede8ff',
+              200: '#d9d0ff',
+              300: '#c1aeff',
+              400: '#a282ff',
+              500: '#875fff',
+              600: '#6c3fff',
+              700: '#552ee3',
+              800: '#3a1e9c',
+              900: '#281369',
+              950: '#1b0f3a'
+            },
+            accent: {
+              400: '#9a7cff',
+              500: '#7d5bff',
+              600: '#5f39ff'
+            }
+          },
+          boxShadow: {
+            neo: '12px 12px 28px rgba(0,0,0,0.45), -10px -10px 30px rgba(255,255,255,0.05)',
+            soft: '0 10px 40px rgba(0,0,0,0.25)',
+            glow: '0 0 40px rgba(128,90,255,0.45), 0 0 80px rgba(128,90,255,0.25)'
+          },
+          backdropBlur: {
+            xs: '2px'
+          },
+          keyframes: {
+            floatSlow: { '0%': { transform: 'translateY(0px)' }, '50%': { transform: 'translateY(-10px)' }, '100%': { transform: 'translateY(0px)' } },
+            pulseSoft: { '0%,100%': { opacity: 0.45 }, '50%': { opacity: 0.9 } },
+            orb: { '0%': { transform: 'translate3d(0,0,0) scale(1)' }, '50%': { transform: 'translate3d(0,-6px,0) scale(1.02)' }, '100%': { transform: 'translate3d(0,0,0) scale(1)' } },
+            shimmer: { '0%': { backgroundPosition: '200% 0' }, '100%': { backgroundPosition: '-200% 0' } }
+          },
+          animation: {
+            floatSlow: 'floatSlow 10s ease-in-out infinite',
+            pulseSoft: 'pulseSoft 6s ease-in-out infinite',
+            orb: 'orb 8s ease-in-out infinite',
+            shimmer: 'shimmer 8s linear infinite'
+          }
+        }
+      }
+    };
+  </script>
+
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-deep: #1b0f3a; /* deep royal purple */
+      --bg-deeper: #140a2b;
+      --card-bg: rgba(255,255,255,0.06);
+      --card-stroke: rgba(255,255,255,0.08);
+      --fg: #eef;
+      --fg-dim: #cfc9f7;
+      --accent: #a78bfa;
+      --divider-glow: rgba(167,139,250,0.5);
+      --divider-soft: rgba(167,139,250,0.18);
+      --shadow-neo-dark: 0 10px 30px rgba(0,0,0,0.45);
+    }
+    [data-theme="light"] {
+      --bg-deep: #f1edff; 
+      --bg-deeper: #ebe6ff;
+      --card-bg: rgba(255,255,255,0.7);
+      --card-stroke: rgba(98,68,235,0.15);
+      --fg: #1c1535;
+      --fg-dim: #3a2e78;
+      --accent: #6c3fff;
+      --divider-glow: rgba(108,63,255,0.55);
+      --divider-soft: rgba(108,63,255,0.15);
+      --shadow-neo-dark: 0 12px 30px rgba(40,19,105,0.18);
+    }
+
+    html, body {
+      height: 100%;
+      background: radial-gradient(1200px 800px at 20% 10%, rgba(108,63,255,0.1), transparent 60%),
+                  radial-gradient(800px 600px at 80% 0%, rgba(167,139,250,0.12), transparent 50%),
+                  linear-gradient(180deg, var(--bg-deep), var(--bg-deeper));
+      color: var(--fg);
+    }
+
+    /* Background Scales of Justice pattern container */
+    .bg-scales {
+      position: fixed;
+      inset: 0;
+      overflow: clip;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.22;
+      filter: drop-shadow(0 0 12px rgba(128,90,255,0.35)) saturate(110%);
+    }
+
+    /* Noise overlay (very subtle) */
+    .noise-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.04;
+      mix-blend-mode: soft-light;
+      z-index: 0;
+    }
+
+    /* Glassy card base */
+    .glass {
+      background: linear-gradient(180deg, var(--card-bg), rgba(255,255,255,0.03));
+      border: 1px solid var(--card-stroke);
+      box-shadow: var(--shadow-neo-dark), 0 0 0 1px rgba(255,255,255,0.02) inset, 0 10px 40px rgba(98,68,235,0.15);
+      backdrop-filter: blur(12px) saturate(110%);
+    }
+
+    /* Dividers with soft glow */
+    hr.divider {
+      border: none;
+      height: 1px;
+      position: relative;
+      background: linear-gradient(90deg, transparent, var(--divider-soft), transparent);
+      margin: 2rem 0;
+    }
+    hr.divider::after {
+      content: '';
+      position: absolute;
+      inset: 0 -2px;
+      height: 100%;
+      background: radial-gradient(100% 100% at 50% 50%, var(--divider-glow), transparent 70%);
+      filter: blur(8px);
+      opacity: 0.6;
+      pointer-events: none;
+    }
+
+    /* Header holographic icon shimmer */
+    .holo {
+      background: linear-gradient(120deg, rgba(255,255,255,0.75), rgba(167,139,250,0.5), rgba(125,91,255,0.7), rgba(255,255,255,0.6));
+      background-size: 300% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: shimmer 9s linear infinite;
+      text-shadow: 0 6px 40px rgba(127, 90, 240, 0.25);
+    }
+
+    /* Hover-highlight key legal terms */
+    .term {
+      position: relative;
+      color: var(--fg);
+      transition: color .2s ease, text-shadow .3s ease, box-shadow .3s ease;
+      border-radius: 6px;
+      padding: 0 .2rem;
+      outline: none;
+    }
+    .term:hover, .term:focus-visible {
+      color: white;
+      text-shadow: 0 0 12px rgba(167,139,250,0.8), 0 0 28px rgba(125,91,255,0.35);
+      box-shadow: 0 0 0 2px rgba(125,91,255,0.35) inset, 0 0 16px rgba(125,91,255,0.25);
+    }
+
+    /* Accessible focus style */
+    :focus-visible {
+      outline: 2px dashed rgba(167,139,250,0.7);
+      outline-offset: 3px;
+      border-radius: 8px;
+    }
+
+    /* Neumorphic buttons */
+    .btn-neo {
+      border: 1px solid var(--card-stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      box-shadow: 10px 10px 20px rgba(0,0,0,0.35), -8px -8px 18px rgba(255,255,255,0.05), inset 0 0 0 1px rgba(255,255,255,0.04);
+      transition: transform .15s ease, box-shadow .25s ease, background .3s ease;
+      backdrop-filter: blur(10px);
+    }
+    .btn-neo:hover {
+      transform: translateY(-1px);
+      box-shadow: 10px 14px 24px rgba(0,0,0,0.45), -10px -10px 22px rgba(255,255,255,0.06), 0 0 32px rgba(125,91,255,0.25);
+    }
+    .btn-neo:active {
+      transform: translateY(0);
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.35), 0 0 12px rgba(125,91,255,0.25);
+    }
+
+    /* Floating AI orb */
+    .ai-orb {
+      position: fixed;
+      right: 1rem;
+      bottom: 1rem;
+      width: 3.5rem;
+      height: 3.5rem;
+      border-radius: 9999px;
+      background: radial-gradient(120% 120% at 30% 30%, rgba(167,139,250,0.9), rgba(125,91,255,0.85) 40%, rgba(60,45,120,0.95) 80%);
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.05) inset, 0 12px 35px rgba(0,0,0,0.45), 0 0 60px rgba(125,91,255,0.55);
+      cursor: pointer;
+      z-index: 50;
+      animation: orb 7s ease-in-out infinite;
+      outline: none;
+    }
+    .ai-orb::after {
+      content: '';
+      position: absolute;
+      inset: -10px;
+      border-radius: inherit;
+      background: radial-gradient(100% 100% at 50% 50%, rgba(167,139,250,0.35), transparent 70%);
+      filter: blur(8px);
+      pointer-events: none;
+      animation: pulseSoft 6s ease-in-out infinite;
+    }
+
+    /* AI panel */
+    .ai-panel {
+      position: fixed;
+      right: 1rem;
+      bottom: 5.25rem;
+      width: min(94vw, 420px);
+      max-height: 70vh;
+      overflow: hidden;
+      z-index: 50;
+      border-radius: 16px;
+      transform-origin: bottom right;
+      transition: transform .2s ease, opacity .2s ease, visibility .2s ease;
+    }
+    .ai-panel.hidden {
+      opacity: 0;
+      transform: scale(0.96) translateY(10px);
+      visibility: hidden;
+    }
+    .ai-panel.visible {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+      visibility: visible;
+    }
+
+    /* Header badge */
+    .chip {
+      background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02));
+      border: 1px solid var(--card-stroke);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.04), 0 6px 20px rgba(0,0,0,0.25);
+    }
+
+    /* Accordion (details) custom arrow */
+    details summary::-webkit-details-marker { display: none; }
+    details summary::after {
+      content: '';
+      width: 1.25rem; height: 1.25rem; margin-left: .5rem;
+      border-radius: 9999px;
+      box-shadow: inset 0 0 0 2px rgba(167,139,250,0.5);
+      background: radial-gradient(100% 100% at 50% 50%, rgba(167,139,250,0.6), rgba(125,91,255,0.25));
+      display: inline-block; vertical-align: middle;
+      transition: transform .2s ease;
+    }
+    details[open] summary::after {
+      transform: rotate(90deg) scale(1.05);
+    }
+
+    /* Smooth link underline glow */
+    .link-glow {
+      position: relative;
+      color: var(--accent);
+    }
+    .link-glow::after {
+      content: '';
+      position: absolute; left: 0; right: 0; bottom: -2px; height: 2px;
+      background: linear-gradient(90deg, rgba(167,139,250,0.0), rgba(167,139,250,0.7), rgba(167,139,250,0.0));
+      transform: scaleX(0);
+      transform-origin: 50% 50%;
+      transition: transform .25s ease;
+    }
+    .link-glow:hover::after, .link-glow:focus-visible::after {
+      transform: scaleX(1);
+    }
+
+    /* Subtle card hover lift */
+    .lift:hover { transform: translateY(-2px); }
+
+    /* Print styles */
+    @media print {
+      .ai-orb, .ai-panel, .theme-toggle, .skip-link { display: none !important; }
+      body { background: white; color: black; }
+      .glass, .chip { backdrop-filter: none; box-shadow: none; border: 1px solid #ddd; }
+      a { color: #000; text-decoration: underline; }
+      hr.divider::after { display: none; }
+    }
+  </style>
+</head>
+
+<body class="font-body antialiased selection:bg-primary-600 selection:text-white">
+  <a href="#main" class="skip-link sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:px-4 focus:py-2 focus:rounded-md focus:bg-primary-700 focus:text-white">Skip to main content</a>
+
+  <!-- Dynamic noise and background icons -->
+  <canvas id="noise" class="noise-layer" aria-hidden="true"></canvas>
+  <div class="bg-scales" aria-hidden="true">
+    <svg id="scalesLayer" width="100%" height="100%"></svg>
+  </div>
+
+  <!-- Header -->
+  <header class="relative z-10">
+    <div class="mx-auto max-w-6xl px-4 sm:px-6 pt-10 md:pt-14">
+      <div class="flex items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <!-- Holographic shield + scroll icon -->
+          <div class="relative">
+            <svg width="48" height="48" viewBox="0 0 64 64" aria-hidden="true" class="drop-shadow-md">
+              <defs>
+                <linearGradient id="gradHolo" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.85"/>
+                  <stop offset="40%" stop-color="#a78bfa" stop-opacity="0.95"/>
+                  <stop offset="70%" stop-color="#7d5bff" stop-opacity="0.95"/>
+                  <stop offset="100%" stop-color="#ffffff" stop-opacity="0.85"/>
+                </linearGradient>
+                <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+                  <feMerge>
+                    <feMergeNode in="coloredBlur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <!-- Shield -->
+              <path d="M32 6l18 6v13c0 10-6.5 19.5-18 24-11.5-4.5-18-14-18-24V12l18-6z"
+                    fill="url(#gradHolo)" opacity="0.95" filter="url(#glow)"></path>
+              <!-- Scroll -->
+              <rect x="22" y="18" rx="2" ry="2" width="20" height="18" fill="rgba(27,15,58,0.6)" stroke="url(#gradHolo)" />
+              <rect x="22" y="18" rx="2" ry="2" width="6" height="4" fill="url(#gradHolo)" opacity="0.85"/>
+              <rect x="36" y="32" rx="2" ry="2" width="6" height="4" fill="url(#gradHolo)" opacity="0.85"/>
+              <line x1="26" y1="23" x2="40" y2="23" stroke="url(#gradHolo)" stroke-width="1.5" />
+              <line x1="26" y1="27" x2="38" y2="27" stroke="url(#gradHolo)" stroke-width="1.5" />
+              <line x1="26" y1="31" x2="34" y2="31" stroke="url(#gradHolo)" stroke-width="1.5" />
+            </svg>
+          </div>
+          <div>
+            <p class="chip px-3 py-1 rounded-full text-xs tracking-wide text-primary-200">Salmar Legal</p>
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold holo leading-snug">Copyright Notice</h1>
+            <p class="text-sm sm:text-base text-primary-200/90 mt-1">Respect for creators, users, and innovation is at the heart of Salmar.</p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <!-- Theme toggle -->
+          <button id="themeToggle" class="theme-toggle btn-neo rounded-full px-3 py-2 flex items-center gap-2 text-sm text-primary-100 hover:text-white" aria-label="Toggle theme" title="Toggle light/dark">
+            <span id="themeIcon" aria-hidden="true">🌙</span>
+            <span class="hidden sm:inline">Theme</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main id="main" class="relative z-10">
+    <section class="mx-auto max-w-6xl px-4 sm:px-6 py-8 md:py-12">
+      <article class="glass rounded-2xl p-5 sm:p-8 md:p-10 lift">
+        <!-- Ownership -->
+        <section aria-labelledby="ownership">
+          <h2 id="ownership" class="text-xl sm:text-2xl font-bold text-white/95">Copyright Ownership</h2>
+          <hr class="divider" />
+          <p class="leading-relaxed text-primary-100/90">
+            All content, software, code, visual assets, branding, and design elements of Salmar are protected under international copyright laws and intellectual property treaties.
+          </p>
+          <p class="mt-3 text-primary-100/90">
+            <span class="font-semibold term" tabindex="0" data-term="all-rights-reserved">© <span id="year"></span> Salmar Technologies. All Rights Reserved.</span>
+          </p>
+        </section>
+
+        <!-- User Rights & Limitations -->
+        <section class="mt-10" aria-labelledby="rights">
+          <h2 id="rights" class="text-xl sm:text-2xl font-bold text-white/95">User Rights & Limitations</h2>
+          <hr class="divider" />
+          <div class="grid sm:grid-cols-2 gap-6">
+            <div class="rounded-xl p-4 sm:p-5 border border-white/10 bg-white/5">
+              <h3 class="font-semibold text-primary-100 mb-2">Users may</h3>
+              <ul class="list-disc ms-5 text-primary-100/90 space-y-2">
+                <li>Access Salmar’s services.</li>
+                <li>Use AI outputs for personal or business purposes (as permitted).</li>
+              </ul>
+            </div>
+            <div class="rounded-xl p-4 sm:p-5 border border-white/10 bg-white/5">
+              <h3 class="font-semibold text-primary-100 mb-2">Users may not</h3>
+              <ul class="list-disc ms-5 text-primary-100/90 space-y-2">
+                <li>Copy, distribute, resell, or reverse-engineer Salmar’s platform, branding, or core technology.</li>
+              </ul>
+            </div>
+          </div>
+          <p class="mt-4 text-primary-100/90">
+            <span class="term" tabindex="0" data-term="outputs-disclaimer">Salmar-generated outputs may belong to the user, subject to applicable laws.</span>
+            Salmar retains no claim of ownership over user-created content unless explicitly agreed.
+          </p>
+        </section>
+
+        <!-- Trademarks -->
+        <section class="mt-10" aria-labelledby="trademarks">
+          <h2 id="trademarks" class="text-xl sm:text-2xl font-bold text-white/95">Trademarks</h2>
+          <hr class="divider" />
+          <p class="text-primary-100/90">
+            <span class="term" tabindex="0" data-term="trademark">Salmar™</span> and all related logos, designs, and taglines
+            (<em>“The Future is Purple”</em>) are registered trademarks of Salmar Technologies.
+            Unauthorized use is strictly prohibited.
+          </p>
+        </section>
+
+        <!-- Third-Party Content -->
+        <section class="mt-10" aria-labelledby="third-party">
+          <h2 id="third-party" class="text-xl sm:text-2xl font-bold text-white/95">Third-Party Content</h2>
+          <hr class="divider" />
+          <p class="text-primary-100/90">
+            Certain integrations, APIs, or references may involve third-party copyrights and trademarks.
+            Salmar does not claim ownership of third-party content and respects their intellectual property rights.
+          </p>
+        </section>
+
+        <!-- Reporting Infringement -->
+        <section class="mt-10" aria-labelledby="reporting">
+          <h2 id="reporting" class="text-xl sm:text-2xl font-bold text-white/95">Reporting Copyright Infringement</h2>
+          <hr class="divider" />
+          <div class="grid lg:grid-cols-2 gap-6">
+            <div>
+              <p class="text-primary-100/90">
+                Email: <a class="link-glow" href="mailto:copyright@salmar.ai">copyright@salmar.ai</a>
+              </p>
+              <ul class="list-disc ms-5 text-primary-100/90 mt-3 space-y-2">
+                <li>Name and contact information</li>
+                <li>Description of the copyrighted work</li>
+                <li>Evidence of ownership</li>
+                <li>Link to the infringing material</li>
+              </ul>
+              <p class="mt-3 text-primary-100/90">
+                Salmar responds promptly to verified copyright claims in compliance with applicable laws such as the
+                <span class="term" tabindex="0" data-term="dmca">DMCA</span>.
+              </p>
+              <div class="mt-4 flex flex-wrap gap-2">
+                <a class="btn-neo rounded-lg px-4 py-2 text-primary-100 hover:text-white"
+                   href="mailto:copyright@salmar.ai?subject=Copyright%20Infringement%20Notice&body=Hello%20Salmar%20Legal%2C%0D%0A%0D%0AMy%20name%20is%20%3CYour%20Name%3E.%20I%20am%20reporting%20an%20infringement.%0D%0A%0D%0ADescription%20of%20work%3A%0D%0AEvidence%20of%20ownership%3A%0D%0ALink%20to%20infringing%20material%3A%0D%0A%0D%0AThanks.">
+                  Email a report
+                </a>
+                <button id="startReport" class="btn-neo rounded-lg px-4 py-2 text-primary-100 hover:text-white">Start a report here</button>
+              </div>
+            </div>
+            <form id="reportForm" class="glass rounded-xl p-4 sm:p-5" novalidate aria-label="Report form">
+              <div class="grid sm:grid-cols-2 gap-4">
+                <label class="block">
+                  <span class="text-sm text-primary-100">Name</span>
+                  <input type="text" name="name" required class="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-600" placeholder="Your name" />
+                </label>
+                <label class="block">
+                  <span class="text-sm text-primary-100">Email</span>
+                  <input type="email" name="email" required class="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-600" placeholder="you@example.com" />
+                </label>
+                <label class="block sm:col-span-2">
+                  <span class="text-sm text-primary-100">Work description</span>
+                  <input type="text" name="work" required class="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-600" placeholder="Describe the copyrighted work" />
+                </label>
+                <label class="block sm:col-span-2">
+                  <span class="text-sm text-primary-100">Evidence of ownership</span>
+                  <textarea name="evidence" rows="3" required class="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-600" placeholder="Links, registration numbers, documentation"></textarea>
+                </label>
+                <label class="block sm:col-span-2">
+                  <span class="text-sm text-primary-100">Link to infringing material</span>
+                  <input type="url" name="link" required class="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-600" placeholder="https://example.com/infringing-page" />
+                </label>
+              </div>
+              <div class="mt-4 flex flex-wrap gap-3">
+                <button type="submit" class="btn-neo rounded-lg px-4 py-2 text-primary-100 hover:text-white">Compose email draft</button>
+                <p id="reportMsg" class="text-sm text-primary-100/80"></p>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- Updates Clause -->
+        <section class="mt-10" aria-labelledby="updates">
+          <h2 id="updates" class="text-xl sm:text-2xl font-bold text-white/95">Updates</h2>
+          <hr class="divider" />
+          <p class="text-primary-100/90">
+            This Copyright Notice may be updated periodically. Continued use of Salmar constitutes acceptance of the latest version.
+          </p>
+        </section>
+
+        <!-- FAQ - Expandable -->
+        <section class="mt-10" aria-labelledby="faq">
+          <h2 id="faq" class="text-xl sm:text-2xl font-bold text-white/95">FAQs</h2>
+          <hr class="divider" />
+          <div class="space-y-3">
+            <details class="glass rounded-xl px-4 py-3">
+              <summary class="cursor-pointer select-none font-semibold text-primary-100 focus:outline-none">Do I own what Salmar generates?</summary>
+              <div class="mt-3 text-primary-100/90">
+                In general, users may own the outputs they generate, subject to applicable laws and any specific agreements. Salmar does not claim ownership over your generated content unless explicitly agreed.
+              </div>
+            </details>
+            <details class="glass rounded-xl px-4 py-3">
+              <summary class="cursor-pointer select-none font-semibold text-primary-100 focus:outline-none">What is “All Rights Reserved”?</summary>
+              <div class="mt-3 text-primary-100/90">
+                “All Rights Reserved” indicates that the copyright owner reserves, to the fullest extent permitted by law, all rights granted by copyright.
+              </div>
+            </details>
+            <details class="glass rounded-xl px-4 py-3">
+              <summary class="cursor-pointer select-none font-semibold text-primary-100 focus:outline-none">How do trademarks differ from copyrights?</summary>
+              <div class="mt-3 text-primary-100/90">
+                Copyright protects original works of authorship. Trademarks protect brand identifiers such as names, logos, and taglines.
+              </div>
+            </details>
+          </div>
+        </section>
+      </article>
+
+      <!-- Footer -->
+      <footer class="mt-8 md:mt-12">
+        <div class="glass rounded-2xl px-5 sm:px-8 py-6 md:py-8">
+          <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <nav aria-label="Legal links" class="flex flex-wrap gap-4">
+              <a href="privacy.html" class="link-glow">Privacy Policy</a>
+              <a href="terms.html" class="link-glow">Terms of Service</a>
+              <a href="securitywhite.html" class="link-glow">Security Whitepaper</a>
+            </nav>
+            <p class="text-primary-100/90">Innovation thrives on respect for creators. The Future is Purple. The Future is Protected.</p>
+          </div>
+          <hr class="divider" />
+          <p class="text-sm text-primary-100/80">© <span id="yearFooter"></span> Salmar Technologies. All Rights Reserved.</p>
+        </div>
+      </footer>
+    </section>
+  </main>
+
+  <!-- AI Help floating orb -->
+  <button id="aiOrb" class="ai-orb" aria-haspopup="true" aria-expanded="false" aria-controls="aiPanel" aria-label="Open AI help"></button>
+
+  <section id="aiPanel" role="dialog" aria-modal="false" aria-labelledby="aiTitle" class="ai-panel glass hidden">
+    <div class="p-4 border-b border-white/10 flex items-center justify-between">
+      <div>
+        <h3 id="aiTitle" class="font-semibold text-primary-50">Legal Helper</h3>
+        <p class="text-xs text-primary-100/80">Tap a highlighted term or search below for plain-English explanations.</p>
+      </div>
+      <button id="aiClose" class="btn-neo rounded-md px-3 py-1 text-primary-100 hover:text-white" aria-label="Close help">Close</button>
+    </div>
+    <div class="p-4 space-y-3">
+      <label class="block">
+        <span class="text-sm text-primary-100">Search term</span>
+        <input id="aiSearch" type="text" class="mt-1 w-full rounded-lg bg-white/5 border border-white/10 px-3 py-2 text-primary-50 focus:outline-none focus:ring-2 focus:ring-primary-600" placeholder="e.g., DMCA, All Rights Reserved, Trademarks">
+      </label>
+      <div id="aiResult" class="text-primary-100/90">
+        Try: “DMCA”, “All Rights Reserved”, “Trademarks”, “Fair Use”, “Intellectual Property”
+      </div>
+      <div class="text-xs text-primary-100/70">Tip: Hover or focus any glowing term in the document to highlight it.</div>
+    </div>
+  </section>
+
+  <script>
+    // Year
+    const year = new Date().getFullYear();
+    document.getElementById('year').textContent = year;
+    document.getElementById('yearFooter').textContent = year;
+
+    // Theme handling with safe localStorage
+    const root = document.documentElement;
+    const themeToggle = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    function setIcon() {
+      const isDark = root.getAttribute('data-theme') === 'dark';
+      themeIcon.textContent = isDark ? '🌙' : '☀️';
+    }
+    (function initTheme(){
+      let preferred = null;
+      try {
+        preferred = localStorage.getItem('salmar-theme');
+      } catch (e) {}
+      if (preferred === 'light' || preferred === 'dark') {
+        root.setAttribute('data-theme', preferred);
+      } else {
+        // Use existing attribute or fallback to dark
+        if (!root.getAttribute('data-theme')) root.setAttribute('data-theme', 'dark');
+      }
+      setIcon();
+    })();
+
+    themeToggle.addEventListener('click', () => {
+      const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', next);
+      try { localStorage.setItem('salmar-theme', next); } catch (e) {}
+      setIcon();
+      drawNoise(); // adjust noise appearance if needed
+    }, {passive: true});
+
+    // Background: generate floating "scales of justice" icons as low poly SVGs
+    const scalesLayer = document.getElementById('scalesLayer');
+    function createScale(x, y, size, opacity, delay) {
+      const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+      g.setAttribute('transform', `translate(${x}, ${y}) scale(${size})`);
+      g.setAttribute('opacity', opacity);
+      g.style.animation = `floatSlow ${12 + Math.random()*10}s ease-in-out ${delay}s infinite`;
+      // Mast
+      const mast = document.createElementNS('http://www.w3.org/2000/svg','rect');
+      mast.setAttribute('x','-2'); mast.setAttribute('y','-20');
+      mast.setAttribute('width','4'); mast.setAttribute('height','40');
+      mast.setAttribute('fill','rgba(255,255,255,0.55)');
+      // Beam
+      const beam = document.createElementNS('http://www.w3.org/2000/svg','rect');
+      beam.setAttribute('x','-16'); beam.setAttribute('y','-4');
+      beam.setAttribute('width','32'); beam.setAttribute('height','3');
+      beam.setAttribute('fill','rgba(167,139,250,0.7)');
+      // Chains
+      const chainL = document.createElementNS('http://www.w3.org/2000/svg','line');
+      chainL.setAttribute('x1','-12'); chainL.setAttribute('y1','-1');
+      chainL.setAttribute('x2','-16'); chainL.setAttribute('y2','10');
+      chainL.setAttribute('stroke','rgba(255,255,255,0.6)'); chainL.setAttribute('stroke-width','1.2');
+
+      const chainR = document.createElementNS('http://www.w3.org/2000/svg','line');
+      chainR.setAttribute('x1','12'); chainR.setAttribute('y1','-1');
+      chainR.setAttribute('x2','16'); chainR.setAttribute('y2','10');
+      chainR.setAttribute('stroke','rgba(255,255,255,0.6)'); chainR.setAttribute('stroke-width','1.2');
+      // Pans
+      const panL = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+      panL.setAttribute('cx','-16'); panL.setAttribute('cy','14'); panL.setAttribute('rx','8'); panL.setAttribute('ry','4');
+      panL.setAttribute('fill','rgba(125,91,255,0.5)');
+
+      const panR = document.createElementNS('http://www.w3.org/2000/svg','ellipse');
+      panR.setAttribute('cx','16'); panR.setAttribute('cy','14'); panR.setAttribute('rx','8'); panR.setAttribute('ry','4');
+      panR.setAttribute('fill','rgba(125,91,255,0.5)');
+      // Glow dot
+      const glow = document.createElementNS('http://www.w3.org/2000/svg','circle');
+      glow.setAttribute('cx','0'); glow.setAttribute('cy','-10'); glow.setAttribute('r','2.2');
+      glow.setAttribute('fill','rgba(255,255,255,0.85)');
+
+      g.append(mast, beam, chainL, chainR, panL, panR, glow);
+      return g;
+    }
+    function populateScales() {
+      const w = window.innerWidth, h = window.innerHeight;
+      scalesLayer.setAttribute('viewBox', `0 0 ${w} ${h}`);
+      scalesLayer.setAttribute('preserveAspectRatio', 'xMidYMid slice');
+      scalesLayer.innerHTML = '';
+      const count = Math.min(18, Math.round((w*h)/60000)); // density based on viewport
+      for (let i=0;i<count;i++){
+        const x = Math.random() * w;
+        const y = Math.random() * h;
+        const size = 0.6 + Math.random() * 1.4;
+        const opacity = 0.35 + Math.random() * 0.35;
+        const delay = Math.random() * 6;
+        scalesLayer.appendChild(createScale(x, y, size, opacity, delay));
+      }
+    }
+    window.addEventListener('resize', () => { populateScales(); }, {passive: true});
+    populateScales();
+
+    // Subtle procedural noise overlay on canvas
+    const noiseCanvas = document.getElementById('noise');
+    const ctx = noiseCanvas.getContext('2d', { alpha: true, willReadFrequently: false });
+    function drawNoise() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const w = noiseCanvas.clientWidth = window.innerWidth;
+      const h = noiseCanvas.clientHeight = window.innerHeight;
+      noiseCanvas.width = Math.floor(w * dpr);
+      noiseCanvas.height = Math.floor(h * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      const imageData = ctx.createImageData(w, h);
+      const buf = imageData.data;
+      const base = (document.documentElement.getAttribute('data-theme') === 'dark') ? 28 : 200;
+      for (let i=0;i<buf.length;i+=4){
+        const v = base + Math.random()*10;
+        buf[i] = v; buf[i+1]= v; buf[i+2]= v; buf[i+3]= 18; // alpha 0-255
+      }
+      ctx.putImageData(imageData, 0, 0);
+    }
+    drawNoise();
+    window.addEventListener('resize', drawNoise, {passive: true});
+
+    // Hover term → notify AI helper
+    const termMap = {
+      'all-rights-reserved': 'All Rights Reserved: The copyright owner reserves all rights provided by law. Usage is restricted unless explicitly permitted.',
+      'dmca': 'DMCA: The Digital Millennium Copyright Act, a U.S. law that provides a process for copyright owners to request removal of infringing content.',
+      'trademark': 'Trademark: A word, phrase, symbol, or design that identifies and distinguishes the source of goods/services.',
+      'outputs-disclaimer': 'Outputs Ownership: In many cases, users own the content generated for them, subject to law and platform terms, unless otherwise agreed.',
+      'fair use': 'Fair Use: Limited use of copyrighted material without permission for purposes such as criticism, comment, news reporting, teaching, scholarship, or research.',
+      'intellectual property': 'Intellectual Property: Creations of the mind (like inventions, literary and artistic works, designs, symbols, names) protected by law.'
+    };
+
+    function explain(term) {
+      const panel = document.getElementById('aiPanel');
+      const res = document.getElementById('aiResult');
+      const t = (term || '').toLowerCase().trim();
+      if (!t) {
+        res.textContent = 'Please enter a term to explain.';
+        return;
+      }
+      const direct = termMap[t] || termMap[t.replace(/[^\w\s-]/g,'')] || null;
+      let found = direct;
+      if (!found) {
+        // try partials
+        found = Object.entries(termMap).find(([k]) => k.includes(t) || t.includes(k));
+        if (found) found = found[1];
+      }
+      res.textContent = found || 'No definition found. Try: DMCA, All Rights Reserved, Trademarks, Fair Use, Intellectual Property.';
+      panel.classList.remove('hidden'); panel.classList.add('visible');
+      document.getElementById('aiOrb').setAttribute('aria-expanded', 'true');
+    }
+
+    document.addEventListener('click', (e) => {
+      const t = e.target.closest('.term');
+      if (t) {
+        e.preventDefault();
+        explain(t.dataset.term || t.textContent);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.target.classList && e.target.classList.contains('term') && (e.key === 'Enter' || e.key === ' ')) {
+        e.preventDefault();
+        explain(e.target.dataset.term || e.target.textContent);
+      }
+    });
+
+    // AI panel interactions
+    const aiOrb = document.getElementById('aiOrb');
+    const aiPanel = document.getElementById('aiPanel');
+    const aiClose = document.getElementById('aiClose');
+    const aiSearch = document.getElementById('aiSearch');
+
+    aiOrb.addEventListener('click', () => {
+      const isHidden = aiPanel.classList.contains('hidden');
+      aiPanel.classList.toggle('hidden');
+      aiPanel.classList.toggle('visible');
+      aiOrb.setAttribute('aria-expanded', String(isHidden));
+      if (isHidden) aiSearch.focus();
+    });
+
+    aiClose.addEventListener('click', () => {
+      aiPanel.classList.add('hidden'); aiPanel.classList.remove('visible');
+      aiOrb.setAttribute('aria-expanded', 'false');
+      aiOrb.focus();
+    });
+
+    aiSearch.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        explain(aiSearch.value);
+      }
+    });
+
+    // Start report button -> scroll to form and focus first field
+    document.getElementById('startReport').addEventListener('click', () => {
+      const form = document.getElementById('reportForm');
+      form.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => {
+        form.querySelector('input[name="name"]').focus();
+      }, 400);
+    });
+
+    // Report form: validate and compose mailto
+    document.getElementById('reportForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const form = e.currentTarget;
+      const msg = document.getElementById('reportMsg');
+      const data = new FormData(form);
+      const name = (data.get('name')||'').toString().trim();
+      const email = (data.get('email')||'').toString().trim();
+      const work = (data.get('work')||'').toString().trim();
+      const evidence = (data.get('evidence')||'').toString().trim();
+      const link = (data.get('link')||'').toString().trim();
+
+      // simple validation
+      const errors = [];
+      if (!name) errors.push('Name is required.');
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) errors.push('Valid email is required.');
+      if (!work) errors.push('Work description is required.');
+      if (!evidence) errors.push('Evidence of ownership is required.');
+      if (!link || !/^https?:\/\//i.test(link)) errors.push('Valid URL to infringing material is required.');
+
+      if (errors.length) {
+        msg.textContent = errors.join(' ');
+        msg.className = 'text-sm text-red-300';
+        return;
+      }
+      msg.textContent = 'Looks good! Opening your email client...';
+      msg.className = 'text-sm text-green-300';
+
+      const subject = encodeURIComponent('Copyright Infringement Notice');
+      const body = encodeURIComponent(
+`Hello Salmar Legal,
+
+My name is ${name} (${email}). I am reporting an infringement.
+
+Description of work:
+${work}
+
+Evidence of ownership:
+${evidence}
+
+Link to the infringing material:
+${link}
+
+Thank you.`
+      );
+      window.location.href = `mailto:copyright@salmar.ai?subject=${subject}&body=${body}`;
+    });
+
+    // Close AI panel on outside click
+    document.addEventListener('click', (e) => {
+      if (!aiPanel.contains(e.target) && e.target !== aiOrb && !aiOrb.contains(e.target)) {
+        aiPanel.classList.add('hidden'); aiPanel.classList.remove('visible');
+        aiOrb.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    // Keyboard escape to close
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        aiPanel.classList.add('hidden'); aiPanel.classList.remove('visible');
+        aiOrb.setAttribute('aria-expanded', 'false');
+      }
+    }, {passive: true});
+  </script>
+</body>
+</html>

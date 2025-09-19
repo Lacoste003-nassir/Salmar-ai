@@ -1,0 +1,1316 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Salmar — Press Page</title>
+  <meta name="description" content="Salmar in the Press — Press kit, news mentions, press releases, and media inquiries." />
+  <meta name="color-scheme" content="dark light" />
+  <link rel="preconnect" href="https://cdn.tailwindcss.com" crossorigin>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+  <link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+  <style>
+    /* Tailwind config via CDN */
+  </style>
+  <script>
+    /* Tailwind: extend with fluid type scale and custom container */
+    tailwind.config = {
+      theme: {
+        extend: {
+          container: { center: true, padding: { DEFAULT: '1rem', sm: '1.25rem', lg: '2rem' } },
+          fontSize: {
+            'fluid-2xl': ['clamp(1.5rem, 1.2rem + 1.2vw, 2rem)', { lineHeight: '1.15' }],
+            'fluid-3xl': ['clamp(1.875rem, 1.4rem + 1.8vw, 2.5rem)', { lineHeight: '1.1' }],
+            'fluid-4xl': ['clamp(2.25rem, 1.6rem + 2.6vw, 3rem)', { lineHeight: '1.05' }],
+            'fluid-5xl': ['clamp(2.75rem, 2rem + 3.2vw, 4rem)', { lineHeight: '1.05' }],
+          },
+          boxShadow: {
+            'neo-sm': '8px 8px 16px rgba(0,0,0,.45), -6px -6px 12px rgba(255,255,255,.04)',
+            'neo-md': '18px 18px 36px rgba(0,0,0,.5), -12px -12px 24px rgba(255,255,255,.05)',
+            'neo-inset': 'inset 3px 3px 6px rgba(0,0,0,.4), inset -3px -3px 6px rgba(255,255,255,.05)',
+            'glow': '0 0 0 2px rgba(122,43,246,.25), 0 0 24px rgba(122,43,246,.45)',
+            'glow-strong': '0 0 0 2px rgba(122,43,246,.35), 0 0 36px rgba(122,43,246,.75)',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root {
+      /* Royal Ultraviolet palette (default dark) */
+      --bg-1: #0A0416;
+      --bg-2: #3C0F61;
+      --card: rgba(255,255,255,0.06);
+      --glass: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.14);
+      --text: #EAE6FF;
+      --muted: #C4B8FF;
+      --accent: #7A2BF6;
+      --accent-2: #C0A2FF;
+      --teal: #19E6D3;
+      --warning: #FFB155;
+      --success: #30E88F;
+
+      --shadow-strong: 0 10px 40px rgba(122, 43, 246, .35);
+      --grad: radial-gradient(1200px 800px at 75% -10%, rgba(122,43,246,.18), transparent 65%) ,
+              radial-gradient(1000px 800px at 15% 110%, rgba(25,230,211,.1), transparent 60%),
+              linear-gradient(160deg, var(--bg-1), var(--bg-2));
+    }
+    [data-theme="light"] {
+      --bg-1: #F7F5FF;
+      --bg-2: #ECE7FF;
+      --card: rgba(0,0,0,0.05);
+      --glass: rgba(255,255,255,0.6);
+      --border: rgba(0,0,0,0.12);
+      --text: #1A1030;
+      --muted: #3C1F6D;
+      --accent: #6B2AE6;
+      --accent-2: #7A2BF6;
+      --teal: #05B8A9;
+      --warning: #D97200;
+      --success: #1E9F63;
+
+      --shadow-strong: 0 10px 40px rgba(122, 43, 246, .25);
+      --grad: radial-gradient(900px 600px at 75% -10%, rgba(122,43,246,.15), transparent 60%) ,
+              radial-gradient(800px 650px at 15% 110%, rgba(25,230,211,.08), transparent 55%),
+              linear-gradient(160deg, var(--bg-1), var(--bg-2));
+    }
+
+    html, body {
+      height: 100%;
+      scroll-behavior: smooth;
+    }
+    body {
+      background: var(--grad);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Subtle universal transition for theme changes */
+    * {
+      transition: color .25s ease, background-color .25s ease, border-color .25s ease, box-shadow .25s ease, opacity .25s ease;
+    }
+
+    /* Background starfield canvas and ticker layers */
+    #bg-starfield {
+      position: fixed; inset: 0; width: 100%; height: 100%;
+      z-index: -3;
+    }
+    .bg-tickers {
+      position: fixed; inset: 0; pointer-events: none;
+      z-index: -2; opacity: .14; mix-blend-mode: screen;
+      mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+    }
+    .ticker-row {
+      white-space: nowrap;
+      font-weight: 700;
+      letter-spacing: .08em;
+      will-change: transform;
+      opacity: .45;
+      text-transform: uppercase;
+      color: var(--muted);
+      filter: blur(.35px);
+      animation: ticker-left 60s linear infinite;
+    }
+    .ticker-row:nth-child(even){ animation-name: ticker-right; opacity: .35;}
+    .ticker-row span {
+      display: inline-block; padding-right: 2rem;
+    }
+    @keyframes ticker-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+    @keyframes ticker-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+    @media (prefers-reduced-motion: reduce) {
+      .ticker-row { animation-duration: 180s; }
+    }
+
+    /* Noise film overlay (SVG fractalNoise) */
+    .noise {
+      position: fixed; inset: 0; pointer-events: none; z-index: -1; opacity: .05;
+      background: url('data:image/svg+xml;utf8,\
+        <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300">\
+          <filter id="n">\
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch"/>\
+            <feColorMatrix type="saturate" values="0"/>\
+          </filter>\
+          <rect width="100%" height="100%" filter="url(%23n)" opacity="0.7"/>\
+        </svg>'
+      ) repeat;
+      background-size: 300px 300px;
+    }
+
+    /* Megaphone orb */
+    .orb-wrap {
+      position: relative;
+      width: min(82vw, 720px);
+      height: min(82vw, 720px);
+      margin-inline: auto;
+      perspective: 1200px;
+    }
+    .orb {
+      position: absolute; inset: 0; border-radius: 9999px;
+      background:
+        radial-gradient(120px 120px at 35% 30%, rgba(255,255,255,.45), rgba(255,255,255,.05) 60%),
+        radial-gradient(500px 500px at 65% 70%, rgba(122,43,246,.45), rgba(122,43,246,.06) 60%),
+        conic-gradient(from 180deg, rgba(192,162,255,.5), rgba(25,230,211,.3), rgba(122,43,246,.65), rgba(192,162,255,.5));
+      box-shadow: inset 0 0 120px rgba(192,162,255,.25), 0 40px 120px rgba(122,43,246,.35);
+      overflow: hidden;
+      transform-style: preserve-3d;
+    }
+    .orb::after {
+      content: "";
+      position: absolute; inset: -10%;
+      background: radial-gradient(600px 600px at 30% 20%, rgba(255,255,255,.18), transparent 60%);
+      mix-blend-mode: screen;
+    }
+    .orb-megaphone {
+      position: absolute;
+      left: 50%; top: 50%; transform: translate(-50%,-50%) rotate(-14deg);
+      width: 44%;
+      filter: drop-shadow(0 10px 24px rgba(122,43,246,.6));
+    }
+
+    /* Glass + neumorphism utilities */
+    .glass {
+      background: var(--glass);
+      backdrop-filter: saturate(130%) blur(14px);
+      -webkit-backdrop-filter: saturate(130%) blur(14px);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-strong), 8px 8px 24px rgba(0,0,0,.25), -8px -8px 24px rgba(255,255,255,.03);
+    }
+    .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.02));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: var(--shadow-strong), 12px 12px 36px rgba(0,0,0,.4), -6px -6px 18px rgba(255,255,255,.04);
+    }
+    .card-hover {
+      transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s ease, border-color .3s ease;
+    }
+    .card-hover:hover, .card-hover:focus-within {
+      transform: translateY(-4px);
+      box-shadow: 0 0 0 2px rgba(122,43,246,.25), 0 16px 42px rgba(122,43,246,.45), 0 6px 24px rgba(0,0,0,.35);
+      border-color: rgba(122,43,246,.5);
+    }
+    .neon-frame {
+      position: absolute; inset: 0; border-radius: 18px; pointer-events: none;
+      box-shadow: 0 0 0 0 rgba(122,43,246,.0);
+      transition: box-shadow .35s ease;
+    }
+    .card-hover:hover .neon-frame, .card-hover:focus-within .neon-frame {
+      box-shadow: 0 0 0 2px rgba(122,43,246,.8), 0 0 36px rgba(122,43,246,.65);
+    }
+
+    .btn {
+      position: relative; display: inline-flex; align-items: center; justify-content: center; gap: .6rem;
+      border-radius: 14px; padding: .85rem 1.15rem;
+      color: white; font-weight: 700; letter-spacing: .02em;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      box-shadow: 0 6px 28px rgba(122,43,246,.45), inset 0 0 0 0 rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.12);
+      transition: transform .25s ease, box-shadow .25s ease, filter .25s ease;
+    }
+    .btn:hover { transform: translateY(-2px); box-shadow: 0 10px 36px rgba(122,43,246,.6), inset 0 0 0 0 rgba(255,255,255,.15); }
+    .btn:active { transform: translateY(0px) scale(.99); }
+    .btn-outline {
+      background: transparent; color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover {
+      box-shadow: 0 0 0 2px rgba(122,43,246,.6), 0 20px 40px rgba(122,43,246,.25);
+      color: white; background: linear-gradient(135deg, rgba(122,43,246,.25), rgba(192,162,255,.25));
+    }
+
+    /* TL;DR overlay on news cards */
+    .tldr {
+      position: absolute; inset: 0; opacity: 0; pointer-events: none;
+      transition: opacity .25s ease;
+      background: linear-gradient(180deg, rgba(10,4,22,.0), rgba(10,4,22,.75));
+    }
+    .news-card:hover .tldr, .news-card:focus-within .tldr { opacity: 1; }
+    .tldr-chip {
+      display: inline-flex; align-items: center; gap: .4rem; font-size: .75rem;
+      padding: .35rem .6rem; border-radius: 999px; color: #0A0416; font-weight: 800;
+      background: linear-gradient(135deg, #C0A2FF, #19E6D3);
+      box-shadow: 0 4px 20px rgba(192,162,255,.5);
+    }
+
+    /* Accordion smooth expand */
+    .accordion-panel {
+      overflow: hidden; height: 0; transition: height .35s ease;
+    }
+
+    /* Scroll-snap timeline */
+    .timeline {
+      scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+    }
+    .timeline-card {
+      scroll-snap-align: center;
+      min-width: 20rem;
+    }
+
+    /* Focus styles */
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body class="antialiased">
+  <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:px-3 focus:py-2 focus:rounded-md focus:bg-black/60 focus:text-white">Skip to content</a>
+
+  <!-- Background Layers -->
+  <canvas id="bg-starfield" aria-hidden="true"></canvas>
+  <div class="bg-tickers" aria-hidden="true">
+    <div class="ticker-row text-sm sm:text-base" style="position:absolute; top:15%; width:200%;">
+      <span>Breaking: Salmar partners with leading enterprises</span><span>Analysis: The future is purple</span><span>Update: Salmar sets a new AI benchmark</span><span>Feature: Universal AI platform</span>
+    </div>
+    <div class="ticker-row text-sm sm:text-base" style="position:absolute; top:45%; width:200%;">
+      <span>Exclusive: Biometric-first security by Salmar</span><span>Opinion: The purple revolution in AI</span><span>Spotlight: Salmar in the press</span><span>Debrief: AI that does everything</span>
+    </div>
+    <div class="ticker-row text-sm sm:text-base" style="position:absolute; top:78%; width:200%;">
+      <span>Coverage: Wired — redefining AI frontiers</span><span>Coverage: TechCrunch — the AI that does everything</span><span>Coverage: Forbes — the purple revolution</span><span>Global: Salmar expands</span>
+    </div>
+  </div>
+  <div class="noise" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header class="sticky top-0 z-40 backdrop-blur-xl" role="banner">
+    <div class="container flex items-center justify-between py-4">
+      <a href="#" class="inline-flex items-center gap-3 group">
+        <span class="relative inline-flex items-center justify-center h-10 w-10 rounded-xl overflow-hidden">
+          <span class="absolute inset-0 rounded-xl" style="background: radial-gradient(120px 120px at 30% 20%, rgba(255,255,255,.8), rgba(255,255,255,.1) 60%), linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 6px 22px rgba(122,43,246,.55);"></span>
+          <svg viewBox="0 0 64 64" width="28" height="28" class="relative">
+            <path d="M11 36V28l20-10v28L11 36Z M45 22v20" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="45" cy="32" r="3" fill="white"/>
+          </svg>
+        </span>
+        <span class="font-extrabold tracking-tight text-lg sm:text-xl">Salmar Press</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-2" aria-label="Primary">
+        <a href="#press-kit" class="btn btn-outline text-sm">Press Kit</a>
+        <a href="#news" class="btn btn-outline text-sm">News</a>
+        <a href="#releases" class="btn btn-outline text-sm">Releases</a>
+        <a href="#inquiries" class="btn btn-outline text-sm">Media Inquiries</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <button id="themeToggle" class="btn btn-outline" aria-label="Toggle dark/light mode">
+          <svg id="icon-moon" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+          <svg id="icon-sun" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22 5.64 5.64m12.72 12.72 1.42 1.42M1 12h2m18 0h2M4.22 19.78 5.64 18.36m12.72-12.72 1.42-1.42"/></svg>
+        </button>
+        <a href="#press-kit" class="btn whitespace-nowrap">
+          <span>Download Press Kit</span>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 -mr-1" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14m0 0l-6-6m6 6 6-6M5 19h14"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main id="main" class="relative z-10">
+    <!-- Hero -->
+    <section class="pt-10 sm:pt-14 lg:pt-20">
+      <div class="container grid lg:grid-cols-2 gap-10 items-center">
+        <div class="order-2 lg:order-1" data-aos="fade-up" data-aos-delay="50">
+          <h1 class="text-fluid-5xl font-extrabold leading-tight">
+            Salmar in the Press
+          </h1>
+          <p class="mt-4 text-lg sm:text-xl text-[color:var(--muted)]">
+            The future is purple — and the world is talking about it.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="#press-kit" class="btn">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14m0 0l-6-6m6 6 6-6M5 19h14"/></svg>
+              Download Press Kit
+            </a>
+            <a href="#news" class="btn btn-outline">Latest Coverage</a>
+          </div>
+        </div>
+        <div class="order-1 lg:order-2" aria-hidden="true">
+          <div class="orb-wrap" data-aos="zoom-in">
+            <div id="orb" class="orb">
+              <!-- Megaphone icon inside -->
+              <svg class="orb-megaphone" viewBox="0 0 256 256" role="img" aria-label="Holographic megaphone orb">
+                <defs>
+                  <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0%" stop-color="#C0A2FF"/>
+                    <stop offset="100%" stop-color="#19E6D3"/>
+                  </linearGradient>
+                </defs>
+                <g fill="none" stroke="url(#g1)" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M40 132v-24l96-48v120l-64-24-32-24z"/>
+                  <path d="M176 72v96"/>
+                  <circle cx="176" cy="120" r="10" fill="#C0A2FF"/>
+                  <path d="M76 170c0 22 14 30 34 30 13 0 28-6 26-30" />
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Press Kit -->
+    <section id="press-kit" class="mt-16 sm:mt-24" role="region" aria-labelledby="press-kit-title">
+      <div class="container">
+        <div class="glass rounded-2xl p-5 sm:p-8" data-aos="fade-up">
+          <div class="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h2 id="press-kit-title" class="text-fluid-4xl font-extrabold">Press Kit</h2>
+              <p class="text-[color:var(--muted)] mt-1">Quick access downloads for media and partners.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <button id="downloadAll" class="btn" aria-label="Download full press kit ZIP">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14m0 0l-6-6m6 6 6-6M5 19h14"/></svg>
+                Download All (.zip)
+              </button>
+            </div>
+          </div>
+          <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-5 mt-6">
+            <!-- Brand Kit -->
+            <article class="relative card card-hover p-5 news-card" tabindex="-1">
+              <div class="neon-frame"></div>
+              <div class="flex items-start justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="h-11 w-11 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 6px 18px rgba(122,43,246,.5);">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 20l8-16 8 16H4z"/><path d="M12 9v10" /></svg>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg">Brand Kit</h3>
+                    <p class="text-sm text-[color:var(--muted)]">Logos, color palette, typography.</p>
+                  </div>
+                </div>
+                <button class="btn btn-outline px-3 py-2 text-sm download-btn" data-pack="brand">Download</button>
+              </div>
+              <div class="tldr flex items-end p-4">
+                <div class="space-y-2">
+                  <span class="tldr-chip">Summarized by Salmar</span>
+                  <p class="text-sm text-white/90 max-w-md">Everything needed to represent Salmar consistently across media: vector logo, official colors, typography, usage rules.</p>
+                </div>
+              </div>
+            </article>
+            <!-- Fact Sheet -->
+            <article class="relative card card-hover p-5 news-card" tabindex="-1">
+              <div class="neon-frame"></div>
+              <div class="flex items-start justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="h-11 w-11 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, var(--teal), var(--accent-2)); box-shadow: 0 6px 18px rgba(25,230,211,.4);">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black/80" viewBox="0 0 24 24" fill="currentColor"><path d="M6 2h9l5 5v13a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2zm9 1.5V8h4.5"/></svg>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg">Company Fact Sheet</h3>
+                    <p class="text-sm text-[color:var(--muted)]">Mission, founding story, leadership bios.</p>
+                  </div>
+                </div>
+                <button class="btn btn-outline px-3 py-2 text-sm download-btn" data-pack="facts">Download</button>
+              </div>
+              <div class="tldr flex items-end p-4">
+                <div class="space-y-2">
+                  <span class="tldr-chip">Summarized by Salmar</span>
+                  <p class="text-sm text-white/90 max-w-md">One-page overview with essential company data, positioning, and quick contacts for journalists.</p>
+                </div>
+              </div>
+            </article>
+            <!-- Media Assets -->
+            <article class="relative card card-hover p-5 news-card" tabindex="-1">
+              <div class="neon-frame"></div>
+              <div class="flex items-start justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="h-11 w-11 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, var(--accent-2), var(--accent)); box-shadow: 0 6px 18px rgba(192,162,255,.5);">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M8 11l3 3 5-5"/></svg>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg">Media Assets</h3>
+                    <p class="text-sm text-[color:var(--muted)]">Screenshots, mockups, promotional images.</p>
+                  </div>
+                </div>
+                <button class="btn btn-outline px-3 py-2 text-sm download-btn" data-pack="media">Download</button>
+              </div>
+              <div class="tldr flex items-end p-4">
+                <div class="space-y-2">
+                  <span class="tldr-chip">Summarized by Salmar</span>
+                  <p class="text-sm text-white/90 max-w-md">Ready-to-publish PNG/SVG mockups and safe areas for editorial layouts.</p>
+                </div>
+              </div>
+            </article>
+            <!-- Video & B-Roll -->
+            <article class="relative card card-hover p-5 news-card" tabindex="-1">
+              <div class="neon-frame"></div>
+              <div class="flex items-start justify-between">
+                <div class="flex items-center gap-3">
+                  <div class="h-11 w-11 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, var(--warning), var(--accent)); box-shadow: 0 6px 18px rgba(255,177,85,.35);">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-black/85" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6h12a2 2 0 0 1 2 2v1l2.5-1.5a1 1 0 0 1 1.5.86V15.6a1 1 0 0 1-1.5.86L18 15v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/></svg>
+                  </div>
+                  <div>
+                    <h3 class="font-bold text-lg">Videos & B‑Roll</h3>
+                    <p class="text-sm text-[color:var(--muted)]">Cutaways for press coverage.</p>
+                  </div>
+                </div>
+                <button class="btn btn-outline px-3 py-2 text-sm download-btn" data-pack="video">Download</button>
+              </div>
+              <div class="tldr flex items-end p-4">
+                <div class="space-y-2">
+                  <span class="tldr-chip">Summarized by Salmar</span>
+                  <p class="text-sm text-white/90 max-w-md">Shot lists, storyboard frames, and licensing notes for frictionless broadcast.</p>
+                </div>
+              </div>
+            </article>
+          </div>
+          <div id="zipStatus" class="mt-4 text-sm text-[color:var(--muted)]"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- News Highlights -->
+    <section id="news" class="mt-16 sm:mt-24" role="region" aria-labelledby="news-title">
+      <div class="container">
+        <div class="flex items-end justify-between gap-4">
+          <div>
+            <h2 id="news-title" class="text-fluid-4xl font-extrabold">News Highlights</h2>
+            <p class="text-[color:var(--muted)] mt-1">Recent coverage from major outlets.</p>
+          </div>
+        </div>
+        <div class="grid md:grid-cols-2 xl:grid-cols-3 gap-6 mt-6">
+          <!-- Wired -->
+          <article class="relative card card-hover p-5 news-card" data-outlet="major" tabindex="0" data-summary="Wired highlights Salmar’s unified approach to AI, blending multimodal reasoning with enterprise-grade safety and speed.">
+            <div class="neon-frame"></div>
+            <div class="flex items-center gap-3">
+              <div class="px-3 py-1 rounded-md font-black text-sm tracking-widest bg-white text-black">WIRED</div>
+              <span class="text-sm text-[color:var(--muted)]">Major Outlet</span>
+            </div>
+            <h3 class="mt-3 font-bold text-xl">“Salmar is redefining AI frontiers” — Wired</h3>
+            <p class="mt-2 text-sm text-[color:var(--muted)]">A deep dive into the platform that does everything.</p>
+            <div class="mt-4 flex items-center gap-3">
+              <a href="#" class="btn btn-outline text-sm">Read</a>
+            </div>
+            <div class="tldr flex items-end p-4">
+              <div class="space-y-2">
+                <span class="tldr-chip">TL;DR by Salmar</span>
+                <p class="text-sm text-white/90 max-w-md"></p>
+              </div>
+            </div>
+          </article>
+          <!-- TechCrunch -->
+          <article class="relative card card-hover p-5 news-card" data-outlet="major" tabindex="0" data-summary="TechCrunch calls Salmar the ‘AI that does everything,’ spotlighting seamless integrations and developer-first tooling.">
+            <div class="neon-frame"></div>
+            <div class="flex items-center gap-3">
+              <div class="px-3 py-1 rounded-md font-extrabold text-sm tracking-widest bg-[#0F0F0F] text-white">TECHCRUNCH</div>
+              <span class="text-sm text-[color:var(--muted)]">Major Outlet</span>
+            </div>
+            <h3 class="mt-3 font-bold text-xl">“The AI that does everything is here” — TechCrunch</h3>
+            <p class="mt-2 text-sm text-[color:var(--muted)]">Launch report and market reactions.</p>
+            <div class="mt-4 flex items-center gap-3">
+              <a href="#" class="btn btn-outline text-sm">Read</a>
+            </div>
+            <div class="tldr flex items-end p-4">
+              <div class="space-y-2">
+                <span class="tldr-chip">TL;DR by Salmar</span>
+                <p class="text-sm text-white/90 max-w-md"></p>
+              </div>
+            </div>
+          </article>
+          <!-- Forbes -->
+          <article class="relative card card-hover p-5 news-card" data-outlet="major" tabindex="0" data-summary="Forbes analyzes how ‘purple thinking’ unifies brand, product, and community—driving adoption across sectors.">
+            <div class="neon-frame"></div>
+            <div class="flex items-center gap-3">
+              <div class="px-3 py-1 rounded-md font-black text-sm tracking-widest bg-white text-black">FORBES</div>
+              <span class="text-sm text-[color:var(--muted)]">Major Outlet</span>
+            </div>
+            <h3 class="mt-3 font-bold text-xl">“The purple revolution in AI” — Forbes</h3>
+            <p class="mt-2 text-sm text-[color:var(--muted)]">How Salmar’s vision reshapes AI.</p>
+            <div class="mt-4 flex items-center gap-3">
+              <a href="#" class="btn btn-outline text-sm">Read</a>
+            </div>
+            <div class="tldr flex items-end p-4">
+              <div class="space-y-2">
+                <span class="tldr-chip">TL;DR by Salmar</span>
+                <p class="text-sm text-white/90 max-w-md"></p>
+              </div>
+            </div>
+          </article>
+          <!-- Social buzz -->
+          <article class="relative card card-hover p-5 news-card" data-outlet="social" tabindex="0" data-summary="Community creators showcase powerful workflows built on Salmar—automations, analytics, and on-device inference.">
+            <div class="neon-frame"></div>
+            <div class="flex items-center gap-3">
+              <div class="px-3 py-1 rounded-md font-extrabold text-sm tracking-widest bg-[#1DA1F2] text-white">SOCIAL</div>
+              <span class="text-sm text-[color:var(--muted)]">Buzz</span>
+            </div>
+            <h3 class="mt-3 font-bold text-xl">“Creators build on Salmar” — Community Buzz</h3>
+            <p class="mt-2 text-sm text-[color:var(--muted)]">Trending threads and demos.</p>
+            <div class="mt-4 flex items-center gap-3">
+              <a href="#" class="btn btn-outline text-sm">Read</a>
+            </div>
+            <div class="tldr flex items-end p-4">
+              <div class="space-y-2">
+                <span class="tldr-chip">TL;DR by Salmar</span>
+                <p class="text-sm text-white/90 max-w-md"></p>
+              </div>
+            </div>
+          </article>
+          <!-- Podcast -->
+          <article class="relative card card-hover p-5 news-card" data-outlet="social" tabindex="0" data-summary="Founders discuss the roadmap: safety, reasoning, and an open ecosystem for developers and enterprises.">
+            <div class="neon-frame"></div>
+            <div class="flex items-center gap-3">
+              <div class="px-3 py-1 rounded-md font-extrabold text-sm tracking-widest bg-[#7A2BF6] text-white">PODCAST</div>
+              <span class="text-sm text-[color:var(--muted)]">Interview</span>
+            </div>
+            <h3 class="mt-3 font-bold text-xl">“On building a universal AI” — Founders Talk</h3>
+            <p class="mt-2 text-sm text-[color:var(--muted)]">Long-form interview highlights.</p>
+            <div class="mt-4 flex items-center gap-3">
+              <a href="#" class="btn btn-outline text-sm">Listen</a>
+            </div>
+            <div class="tldr flex items-end p-4">
+              <div class="space-y-2">
+                <span class="tldr-chip">TL;DR by Salmar</span>
+                <p class="text-sm text-white/90 max-w-md"></p>
+              </div>
+            </div>
+          </article>
+          <!-- Editorial -->
+          <article class="relative card card-hover p-5 news-card" data-outlet="major" tabindex="0" data-summary="Editors examine how Salmar’s biometric-first security sets new standards for enterprise AI governance.">
+            <div class="neon-frame"></div>
+            <div class="flex items-center gap-3">
+              <div class="px-3 py-1 rounded-md font-extrabold text-sm tracking-widest bg-white text-black">EDITORIAL</div>
+              <span class="text-sm text-[color:var(--muted)]">Op-Ed</span>
+            </div>
+            <h3 class="mt-3 font-bold text-xl">“Security at the speed of ideas” — Editorial</h3>
+            <p class="mt-2 text-sm text-[color:var(--muted)]">Governance and biometrics explained.</p>
+            <div class="mt-4 flex items-center gap-3">
+              <a href="#" class="btn btn-outline text-sm">Read</a>
+            </div>
+            <div class="tldr flex items-end p-4">
+              <div class="space-y-2">
+                <span class="tldr-chip">TL;DR by Salmar</span>
+                <p class="text-sm text-white/90 max-w-md"></p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Press Releases Accordion -->
+    <section id="releases" class="mt-16 sm:mt-24" role="region" aria-labelledby="releases-title">
+      <div class="container">
+        <h2 id="releases-title" class="text-fluid-4xl font-extrabold">Press Releases</h2>
+        <p class="text-[color:var(--muted)] mt-1">Official announcements from Salmar.</p>
+        <div class="mt-6 space-y-4">
+          <!-- Release Item -->
+          <div class="card p-4 sm:p-5">
+            <button class="w-full flex items-center justify-between gap-4 text-left release-toggle" aria-expanded="false" aria-controls="rel-1">
+              <div class="flex items-center gap-3">
+                <span class="h-8 w-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 6px 18px rgba(122,43,246,.4);">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14m0 0l-6-6m6 6 6-6"/></svg>
+                </span>
+                <span class="font-bold text-lg">Salmar launches universal AI platform</span>
+              </div>
+              <span class="inline-flex items-center gap-2 text-sm text-[color:var(--muted)]">
+                <span>Jan 12, 2025</span>
+                <svg class="h-5 w-5 rotate-0 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              </span>
+            </button>
+            <div id="rel-1" class="accordion-panel" role="region" aria-labelledby="rel-1-heading">
+              <div class="pt-4 border-t border-[color:var(--border)] grid md:grid-cols-3 gap-5">
+                <article class="md:col-span-2 prose prose-invert max-w-none">
+                  <h3 id="rel-1-heading" class="font-extrabold text-xl">A new chapter for AI</h3>
+                  <p>Salmar unveils a universal AI that seamlessly integrates reasoning, perception, and action. Built for developers and enterprises, the platform emphasizes safety, speed, and extensibility.</p>
+                  <ul class="list-disc pl-6">
+                    <li>Multimodal core with advanced tool use</li>
+                    <li>Enterprise-grade governance and observability</li>
+                    <li>SDKs and APIs for rapid integration</li>
+                  </ul>
+                </article>
+                <div class="flex flex-col gap-3">
+                  <button class="btn w-full share-release" data-target="#rel-1">Copy Link</button>
+                  <a href="#" class="btn btn-outline w-full">View Full Release</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Release Item -->
+          <div class="card p-4 sm:p-5">
+            <button class="w-full flex items-center justify-between gap-4 text-left release-toggle" aria-expanded="false" aria-controls="rel-2">
+              <div class="flex items-center gap-3">
+                <span class="h-8 w-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, var(--teal), var(--accent-2)); box-shadow: 0 6px 18px rgba(25,230,211,.4);">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-black/80" fill="currentColor" viewBox="0 0 24 24"><path d="M4 6h12a2 2 0 0 1 2 2v1l2.5-1.5a1 1 0 0 1 1.5.86V15.6a1 1 0 0 1-1.5.86L18 15v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"/></svg>
+                </span>
+                <span class="font-bold text-lg">Salmar introduces biometric-first security layer</span>
+              </div>
+              <span class="inline-flex items-center gap-2 text-sm text-[color:var(--muted)]">
+                <span>Feb 24, 2025</span>
+                <svg class="h-5 w-5 rotate-0 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              </span>
+            </button>
+            <div id="rel-2" class="accordion-panel" role="region" aria-labelledby="rel-2-heading">
+              <div class="pt-4 border-t border-[color:var(--border)] grid md:grid-cols-3 gap-5">
+                <article class="md:col-span-2 prose prose-invert max-w-none">
+                  <h3 id="rel-2-heading" class="font-extrabold text-xl">Security at human speed</h3>
+                  <p>Salmar’s biometric-first security enables fine-grained policy control with privacy guarantees, compatible with existing identity providers and device-level secure enclaves.</p>
+                  <ul class="list-disc pl-6">
+                    <li>Adaptive authentication and continuous verification</li>
+                    <li>Privacy-preserving biometrics</li>
+                    <li>Drop-in for enterprise IAM</li>
+                  </ul>
+                </article>
+                <div class="flex flex-col gap-3">
+                  <button class="btn w-full share-release" data-target="#rel-2">Copy Link</button>
+                  <a href="#" class="btn btn-outline w-full">View Full Release</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Release Item -->
+          <div class="card p-4 sm:p-5">
+            <button class="w-full flex items-center justify-between gap-4 text-left release-toggle" aria-expanded="false" aria-controls="rel-3">
+              <div class="flex items-center gap-3">
+                <span class="h-8 w-8 rounded-lg flex items-center justify-center" style="background: linear-gradient(135deg, var(--accent), var(--accent-2)); box-shadow: 0 6px 18px rgba(122,43,246,.4);">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+                </span>
+                <span class="font-bold text-lg">Salmar announces enterprise partnership program</span>
+              </div>
+              <span class="inline-flex items-center gap-2 text-sm text-[color:var(--muted)]">
+                <span>Mar 30, 2025</span>
+                <svg class="h-5 w-5 rotate-0 transition-transform" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+              </span>
+            </button>
+            <div id="rel-3" class="accordion-panel" role="region" aria-labelledby="rel-3-heading">
+              <div class="pt-4 border-t border-[color:var(--border)] grid md:grid-cols-3 gap-5">
+                <article class="md:col-span-2 prose prose-invert max-w-none">
+                  <h3 id="rel-3-heading" class="font-extrabold text-xl">Partner-first growth</h3>
+                  <p>Global systems integrators and ISVs can now build on Salmar with certified playbooks, co-selling, and revenue sharing.</p>
+                </article>
+                <div class="flex flex-col gap-3">
+                  <button class="btn w-full share-release" data-target="#rel-3">Copy Link</button>
+                  <a href="#" class="btn btn-outline w-full">View Full Release</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Press Coverage Feed -->
+    <section id="live" class="mt-16 sm:mt-24" role="region" aria-labelledby="live-title">
+      <div class="container">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <h2 id="live-title" class="text-fluid-4xl font-extrabold">Live Press Coverage</h2>
+            <p class="text-[color:var(--muted)] mt-1">Auto-updating mentions as they happen.</p>
+          </div>
+          <div class="flex items-center gap-2" role="tablist" aria-label="Live feed filters">
+            <button class="btn btn-outline px-3 py-2 text-sm feed-filter" role="tab" aria-selected="true" data-filter="all">All</button>
+            <button class="btn btn-outline px-3 py-2 text-sm feed-filter" role="tab" aria-selected="false" data-filter="major">Major outlets</button>
+            <button class="btn btn-outline px-3 py-2 text-sm feed-filter" role="tab" aria-selected="false" data-filter="social">Social buzz</button>
+          </div>
+        </div>
+        <div class="mt-6 grid md:grid-cols-2 xl:grid-cols-3 gap-5" id="feed" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <!-- Interactive Timeline -->
+    <section id="timeline" class="mt-16 sm:mt-24" role="region" aria-labelledby="timeline-title">
+      <div class="container">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 id="timeline-title" class="text-fluid-4xl font-extrabold">Salmar in the Media</h2>
+            <p class="text-[color:var(--muted)] mt-1">Milestones across the press landscape.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="btn btn-outline px-3 py-2" id="tl-prev" aria-label="Previous milestone">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+            </button>
+            <button class="btn px-3 py-2" id="tl-next" aria-label="Next milestone">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="mt-6 overflow-x-auto timeline" id="timelineTrack">
+          <div class="flex gap-5 min-w-max pr-5">
+            <!-- Timeline cards -->
+            <div class="card timeline-card p-5">
+              <div class="text-sm text-[color:var(--muted)]">Jan 2025</div>
+              <h3 class="font-bold text-lg mt-1">Universal AI Announced</h3>
+              <p class="text-sm mt-2">Coverage ignites across major outlets.</p>
+            </div>
+            <div class="card timeline-card p-5">
+              <div class="text-sm text-[color:var(--muted)]">Feb 2025</div>
+              <h3 class="font-bold text-lg mt-1">Biometrics Layer</h3>
+              <p class="text-sm mt-2">Security deep-dive features and op-eds.</p>
+            </div>
+            <div class="card timeline-card p-5">
+              <div class="text-sm text-[color:var(--muted)]">Mar 2025</div>
+              <h3 class="font-bold text-lg mt-1">Partnerships</h3>
+              <p class="text-sm mt-2">Enterprise program expands globally.</p>
+            </div>
+            <div class="card timeline-card p-5">
+              <div class="text-sm text-[color:var(--muted)]">Apr 2025</div>
+              <h3 class="font-bold text-lg mt-1">Developer Summit</h3>
+              <p class="text-sm mt-2">Community showcases powerful builds.</p>
+            </div>
+            <div class="card timeline-card p-5">
+              <div class="text-sm text-[color:var(--muted)]">May 2025</div>
+              <h3 class="font-bold text-lg mt-1">Global Awards</h3>
+              <p class="text-sm mt-2">Recognized for innovation and ethics.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Media Inquiry Form -->
+    <section id="inquiries" class="mt-16 sm:mt-24 pb-20" role="region" aria-labelledby="inquiries-title">
+      <div class="container">
+        <div class="grid lg:grid-cols-2 gap-8">
+          <div>
+            <h2 id="inquiries-title" class="text-fluid-4xl font-extrabold">Media Inquiries</h2>
+            <p class="text-[color:var(--muted)] mt-1">We’d love to help with your story. For urgent inquiries, contact press@salmar.ai.</p>
+            <ul class="mt-4 space-y-2 text-sm text-[color:var(--muted)]">
+              <li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full" style="background: var(--teal)"></span> Same-day responses for breaking news</li>
+              <li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full" style="background: var(--accent)"></span> Executive interviews on request</li>
+              <li class="flex items-center gap-2"><span class="h-2 w-2 rounded-full" style="background: var(--warning)"></span> Fact-checking support</li>
+            </ul>
+          </div>
+          <form class="glass rounded-2xl p-6" id="pressForm" novalidate>
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div>
+                <label for="name" class="block text-sm font-semibold">Name</label>
+                <input id="name" name="name" type="text" class="mt-1 w-full rounded-xl px-3 py-2 bg-white/5 border border-[color:var(--border)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]" placeholder="Jane Doe" required aria-required="true" />
+                <p class="mt-1 text-xs text-red-400 hidden" id="nameError">Please enter your name.</p>
+              </div>
+              <div>
+                <label for="email" class="block text-sm font-semibold">Email</label>
+                <input id="email" name="email" type="email" inputmode="email" class="mt-1 w-full rounded-xl px-3 py-2 bg-white/5 border border-[color:var(--border)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]" placeholder="press@example.com" required aria-required="true" />
+                <p class="mt-1 text-xs text-red-400 hidden" id="emailError">Enter a valid email address.</p>
+              </div>
+              <div class="sm:col-span-2">
+                <label for="org" class="block text-sm font-semibold">Media Outlet / Organization</label>
+                <input id="org" name="org" type="text" class="mt-1 w-full rounded-xl px-3 py-2 bg-white/5 border border-[color:var(--border)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]" placeholder="Tech Daily" required aria-required="true" />
+                <p class="mt-1 text-xs text-red-400 hidden" id="orgError">Please provide your outlet or organization.</p>
+              </div>
+              <div class="sm:col-span-2">
+                <label for="message" class="block text-sm font-semibold">Message / Request</label>
+                <textarea id="message" name="message" rows="5" class="mt-1 w-full rounded-xl px-3 py-2 bg-white/5 border border-[color:var(--border)] focus:outline-none focus:ring-2 focus:ring-[color:var(--accent)]" placeholder="Interview request, deadline, context..." required aria-required="true"></textarea>
+                <p class="mt-1 text-xs text-red-400 hidden" id="messageError">Please include a message.</p>
+              </div>
+              <!-- Honeypot -->
+              <div class="hidden">
+                <label>Leave this field empty</label>
+                <input type="text" id="hp" name="hp" tabindex="-1" autocomplete="off"/>
+              </div>
+            </div>
+            <div class="mt-5 flex items-center gap-3">
+              <button type="submit" class="btn" id="submitBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 -ml-1" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19l9-7-9-7-9 7 9 7z"/></svg>
+                Send Press Request
+              </button>
+              <span id="formStatus" class="text-sm text-[color:var(--muted)]" role="status" aria-live="polite"></span>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer CTA -->
+    <section class="relative">
+      <div class="container">
+        <div class="card p-6 sm:p-8 rounded-2xl flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+          <div>
+            <h3 class="text-fluid-3xl font-extrabold">The Future is Purple. The Future is Newsworthy.</h3>
+            <p class="text-[color:var(--muted)] mt-1">Explore our press kit or get in touch with our team.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-3">
+            <a href="#press-kit" class="btn">Press Kit</a>
+            <a href="contact.html" class="btn btn-outline">Contact Page</a>
+            <a href="blog.html" class="btn btn-outline">About Us</a>
+          </div>
+        </div>
+        <footer class="py-8 text-sm text-[color:var(--muted)] flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p>© <span id="year"></span> Salmar. All rights reserved.</p>
+          <nav class="flex items-center gap-4">
+            <a href="privacy.html" class="hover:underline">Privacy Policy</a>
+            <a href="terms.html" class="hover:underline">Terms of Service</a>
+            
+          </nav>
+        </footer>
+      </div>
+    </section>
+  </main>
+
+  <!-- Libraries -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" integrity="sha512-+l3m1z5n1QF0l7N0YgX8IO0sI93I4yVb8C9s2p5kwQ7yqd7U4cJG9M6F7m1E1JrQYk4m1bq2wkZxN8B2xteQ7A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js" integrity="sha512-+y4Z7k0kqJ8S4Qk5A/4gF8B2aE5h9Z9TX4TzVx3cz4dF7+qGv4R9Q0S8j3tHk1yF7o2w1plz8o8q9a7Bv0gq7w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+
+  <!-- App JS -->
+  <script>
+    // Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Theme toggle with safe localStorage
+    (function() {
+      const html = document.documentElement;
+      const btn = document.getElementById('themeToggle');
+      const iconMoon = document.getElementById('icon-moon');
+      const iconSun  = document.getElementById('icon-sun');
+
+      const setTheme = (mode) => {
+        html.setAttribute('data-theme', mode);
+        const isLight = mode === 'light';
+        iconSun.classList.toggle('hidden', !isLight);
+        iconMoon.classList.toggle('hidden', isLight);
+      };
+
+      // Load preference safely
+      try {
+        const saved = window.localStorage && localStorage.getItem('salmar-theme');
+        if (saved) setTheme(saved);
+        else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) setTheme('light');
+      } catch(_) {}
+
+      btn.addEventListener('click', () => {
+        const next = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+        setTheme(next);
+        try { window.localStorage && localStorage.setItem('salmar-theme', next); } catch(_) {}
+      });
+    })();
+
+    // AOS init
+    AOS.init({ once: true, duration: 700, easing: 'ease-out-cubic' });
+
+    // Starfield background
+    (function(){
+      const canvas = document.getElementById('bg-starfield');
+      const ctx = canvas.getContext('2d', { alpha: true });
+      let w, h, stars = [];
+      const maxStars = 180;
+      const rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function resize(){
+        w = canvas.width = window.innerWidth;
+        h = canvas.height = window.innerHeight;
+        stars = new Array(maxStars).fill(0).map(() => ({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          z: Math.random() * 0.8 + 0.2,
+          r: Math.random() * 1.1 + 0.2,
+          vx: (Math.random() * 0.4 + 0.1) * (Math.random() > .5 ? 1 : -1),
+          vy: (Math.random() * 0.15 + 0.05) * (Math.random() > .5 ? 1 : -1),
+          hue: 260 + Math.random() * 60
+        }));
+      }
+      window.addEventListener('resize', resize, { passive: true });
+      resize();
+
+      function step(){
+        ctx.clearRect(0,0,w,h);
+        for(const s of stars){
+          ctx.beginPath();
+          const alpha = .5 * s.z + .2;
+          ctx.fillStyle = `hsla(${s.hue}, 80%, 70%, ${alpha})`;
+          ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+          ctx.fill();
+
+          if (!rm) { s.x += s.vx * s.z; s.y += s.vy * s.z; }
+          if (s.x < -5) s.x = w + 5;
+          if (s.x > w + 5) s.x = -5;
+          if (s.y < -5) s.y = h + 5;
+          if (s.y > h + 5) s.y = -5;
+        }
+        requestAnimationFrame(step);
+      }
+      step();
+    })();
+
+    // Orb float and gentle parallax
+    (function(){
+      const orb = document.getElementById('orb');
+      if (!orb) return;
+      gsap.to(orb, { y: -12, duration: 3.5, repeat: -1, yoyo: true, ease: 'sine.inOut' });
+
+      let rect = orb.getBoundingClientRect();
+      window.addEventListener('resize', () => rect = orb.getBoundingClientRect());
+      const onMove = (e) => {
+        const x = (e.clientX - (rect.left + rect.width/2)) / rect.width;
+        const y = (e.clientY - (rect.top + rect.height/2)) / rect.height;
+        gsap.to(orb, { rotateX: y * -6, rotateY: x * 6, duration: .6, ease: 'sine.out' });
+      };
+      window.addEventListener('mousemove', onMove, { passive: true });
+    })();
+
+    // TL;DR injection for News cards
+    (function(){
+      const cards = document.querySelectorAll('.news-card');
+      cards.forEach(card => {
+        const summary = card.getAttribute('data-summary');
+        const para = card.querySelector('.tldr p');
+        if (summary && para) para.textContent = summary;
+      });
+    })();
+
+    // Accordion logic (Press Releases)
+    (function(){
+      const toggles = document.querySelectorAll('.release-toggle');
+      toggles.forEach(btn => {
+        const panelId = btn.getAttribute('aria-controls');
+        const panel = document.getElementById(panelId);
+        const chevron = btn.querySelector('svg.h-5.w-5');
+        btn.addEventListener('click', () => {
+          const expanded = btn.getAttribute('aria-expanded') === 'true';
+          btn.setAttribute('aria-expanded', String(!expanded));
+
+          // Measure current and target height for smooth animation
+          if (!expanded) {
+            panel.style.height = 'auto';
+            const target = panel.clientHeight + 'px';
+            panel.style.height = '0px';
+            requestAnimationFrame(() => { panel.style.height = target; });
+            chevron.style.transform = 'rotate(180deg)';
+          } else {
+            panel.style.height = panel.clientHeight + 'px';
+            requestAnimationFrame(() => { panel.style.height = '0px'; });
+            chevron.style.transform = 'rotate(0deg)';
+          }
+        });
+        // On transition end, if expanded set to auto for content flexibility
+        panel.addEventListener('transitionend', (e) => {
+          if (e.propertyName !== 'height') return;
+          if (btn.getAttribute('aria-expanded') === 'true') {
+            panel.style.height = 'auto';
+          }
+        });
+      });
+
+      // Share link
+      document.querySelectorAll('.share-release').forEach(b => {
+        b.addEventListener('click', async () => {
+          const targetSelector = b.getAttribute('data-target');
+          try {
+            const url = new URL(window.location.href);
+            url.hash = targetSelector.replace('#','');
+            await (navigator.clipboard && navigator.clipboard.writeText(url.toString()));
+            b.textContent = 'Link Copied!';
+            setTimeout(() => b.textContent = 'Copy Link', 1600);
+          } catch(_e) {
+            // Fallback
+            const a = document.createElement('a'); a.href = targetSelector;
+            b.textContent = 'Open Link';
+            setTimeout(() => b.textContent = 'Copy Link', 1600);
+          }
+        });
+      });
+    })();
+
+    // Live Press Coverage feed (simulated)
+    (function(){
+      const feed = document.getElementById('feed');
+      const filters = document.querySelectorAll('.feed-filter');
+      let active = 'all';
+
+      const samples = [
+        { outlet: 'Wired', type: 'major', title: 'Inside Salmar’s universal AI engine', ts: '2m ago' },
+        { outlet: 'TechCrunch', type: 'major', title: 'Developers race to build on Salmar', ts: '6m ago' },
+        { outlet: 'Forbes', type: 'major', title: 'The purple brand that unifies AI', ts: '14m ago' },
+        { outlet: 'Community', type: 'social', title: 'Workflow: automate product ops with Salmar', ts: '19m ago' },
+        { outlet: 'Podcast', type: 'social', title: 'Security at the speed of ideas', ts: '24m ago' },
+        { outlet: 'Analyst', type: 'major', title: 'Market note: adoption accelerates', ts: '31m ago' },
+      ];
+
+      function renderItem(item){
+        const el = document.createElement('article');
+        el.className = 'card p-4 relative overflow-hidden';
+        el.setAttribute('data-type', item.type);
+        el.innerHTML = `
+          <div class="flex items-center gap-3">
+            <span class="px-2.5 py-1 rounded-md text-xs font-black tracking-widest ${item.type==='social' ? 'bg-[color:var(--accent)] text-white' : 'bg-white text-black'}">${item.outlet.toUpperCase()}</span>
+            <span class="text-xs text-[color:var(--muted)]">${item.ts}</span>
+          </div>
+          <h4 class="font-bold mt-2">${item.title}</h4>
+          <div class="absolute inset-x-0 bottom-0 h-0.5" style="background: linear-gradient(90deg, var(--accent), var(--teal))"></div>
+        `;
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(8px)';
+        feed.prepend(el);
+        requestAnimationFrame(() => {
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0px)';
+        });
+      }
+
+      // Seed
+      samples.slice(0,4).forEach(renderItem);
+
+      // Interval updates (throttled; respect reduced motion by reducing freq)
+      const rm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let i = 0;
+      setInterval(() => {
+        const item = samples[(i++) % samples.length];
+        renderItem(item);
+        applyFilter(active);
+      }, rm ? 10000 : 6000);
+
+      function applyFilter(type){
+        active = type;
+        filters.forEach(f => f.setAttribute('aria-selected', f.dataset.filter === type ? 'true' : 'false'));
+        Array.from(feed.children).forEach(child => {
+          const show = type === 'all' || child.getAttribute('data-type') === type;
+          child.style.display = show ? '' : 'none';
+        });
+      }
+      filters.forEach(f => f.addEventListener('click', () => applyFilter(f.dataset.filter)));
+    })();
+
+    // Timeline controls
+    (function(){
+      const track = document.getElementById('timelineTrack');
+      const prev = document.getElementById('tl-prev');
+      const next = document.getElementById('tl-next');
+
+      function scrollByCard(dir){
+        const card = track.querySelector('.timeline-card');
+        const w = card ? card.getBoundingClientRect().width : 320;
+        track.scrollBy({ left: dir * (w + 20), behavior: 'smooth' });
+      }
+      prev.addEventListener('click', () => scrollByCard(-1));
+      next.addEventListener('click', () => scrollByCard(1));
+      track.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight') scrollByCard(1);
+        if (e.key === 'ArrowLeft') scrollByCard(-1);
+      });
+    })();
+
+    // Press Kit ZIPs with JSZip (all generated assets)
+    (function(){
+      const status = document.getElementById('zipStatus');
+
+      function saveBlob(blob, filename){
+        const URL_ = window.URL || window.webkitURL;
+        const a = document.createElement('a');
+        const url = URL_.createObjectURL(blob);
+        a.href = url; a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => { URL_.revokeObjectURL(url); a.remove(); }, 100);
+      }
+
+      // Generate assets
+      function svgLogo() {
+        return `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="640" height="320" viewBox="0 0 640 320" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7A2BF6"/><stop offset="100%" stop-color="#19E6D3"/>
+    </linearGradient>
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#7A2BF6" flood-opacity="0.45"/>
+    </filter>
+  </defs>
+  <rect width="100%" height="100%" fill="#0A0416"/>
+  <g filter="url(#shadow)" transform="translate(140,55)">
+    <circle cx="75" cy="75" r="72" fill="url(#g)"/>
+    <path d="M50 85V65l80-40v80l-80-20Z M145 40v70" stroke="#fff" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="245" y="165" font-family="Inter, Arial, sans-serif" font-size="64" font-weight="800" fill="#EAE6FF" letter-spacing="1">SALMAR</text>
+</svg>`;
+      }
+
+      function colorPaletteJSON(){
+        return JSON.stringify({
+          primary: "#7A2BF6",
+          primaryAlt: "#C0A2FF",
+          teal: "#19E6D3",
+          bgDark: ["#0A0416", "#3C0F61"],
+          bgLight: ["#F7F5FF", "#ECE7FF"],
+          textDark: "#EAE6FF",
+          textLight: "#1A1030"
+        }, null, 2);
+      }
+
+      function typographyMD(){
+        return `# Typography
+- Primary: System UI (Inter/Segoe UI/Roboto fallback)
+- Weight: 400 / 600 / 800
+- Scale: Fluid (clamp) for responsive headings
+
+Use high contrast and adequate line height.`;
+      }
+
+      function factSheetMD(){
+        return `# Salmar — Company Fact Sheet
+Mission: Build the universal AI that does everything, safely and intuitively.
+
+Founding Story: Born from the idea that AI should unify reasoning, perception, and action for everyone.
+
+Leadership: 
+- CEO — [Name]
+- CTO — [Name]
+- VP Communications — [Name]
+
+Contact: press@salmar.ai`;
+      }
+
+      function mediaMockupSVG(title) {
+        return `<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1280" height="720" viewBox="0 0 1280 720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0A0416"/><stop offset="100%" stop-color="#3C0F61"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#7A2BF6"/><stop offset="100%" stop-color="#19E6D3"/>
+    </linearGradient>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  <circle cx="980" cy="160" r="100" fill="url(#glow)" opacity="0.6"/>
+  <rect x="120" y="160" width="580" height="330" rx="24" ry="24" fill="#FFFFFF0D" stroke="#FFFFFF22"/>
+  <text x="140" y="220" font-family="Inter, Arial" font-size="48" fill="#EAE6FF" font-weight="800">${title}</text>
+  <text x="140" y="270" font-family="Inter, Arial" font-size="22" fill="#C0B8FF">Salmar — The AI that does everything</text>
+  <rect x="140" y="310" width="300" height="160" rx="16" fill="#FFFFFF18"/>
+  <rect x="460" y="310" width="220" height="70" rx="14" fill="#7A2BF6"/>
+  <rect x="460" y="395" width="220" height="70" rx="14" fill="#19E6D3"/>
+</svg>`;
+      }
+
+      function videoReadme() {
+        return `# Videos & B-Roll
+Placeholder assets for press workflow.
+
+- Shots: Product UI flythrough, team collaboration, platform in action
+- Framing: 16:9, 4K recommended
+- Usage: Editorial and broadcast permitted with attribution "Salmar"`
+
+      }
+
+      async function buildPack(kind){
+        const zip = new JSZip();
+        if (kind === 'brand') {
+          zip.file('brand/logo.svg', svgLogo());
+          zip.file('brand/color-palette.json', colorPaletteJSON());
+          zip.file('brand/typography.md', typographyMD());
+          zip.file('brand/usage.md', '# Brand Usage\nAlways provide adequate contrast and whitespace.\n');
+        }
+        if (kind === 'facts') {
+          zip.file('facts/company-fact-sheet.md', factSheetMD());
+          zip.file('facts/contacts.txt', 'Press: press@salmar.ai\nWebsite: https://salmar.ai\n');
+        }
+        if (kind === 'media') {
+          zip.file('media/mockup-hero.svg', mediaMockupSVG('Press Mockup — Hero'));
+          zip.file('media/mockup-dashboard.svg', mediaMockupSVG('Press Mockup — Dashboard'));
+          zip.file('media/guidelines.md', 'Use unmodified assets. Do not stretch or skew the logo.\n');
+        }
+        if (kind === 'video') {
+          zip.file('video/readme.md', videoReadme());
+          zip.file('video/storyboard-1.svg', mediaMockupSVG('Storyboard — Sequence A'));
+          zip.file('video/storyboard-2.svg', mediaMockupSVG('Storyboard — Sequence B'));
+        }
+        // All packs
+        if (kind === 'all') {
+          ['brand','facts','media','video'].forEach(k => {
+            if (k === 'brand') {
+              zip.file('brand/logo.svg', svgLogo());
+              zip.file('brand/color-palette.json', colorPaletteJSON());
+              zip.file('brand/typography.md', typographyMD());
+              zip.file('brand/usage.md', '# Brand Usage\nGuidelines...');
+            }
+            if (k === 'facts') {
+              zip.file('facts/company-fact-sheet.md', factSheetMD());
+              zip.file('facts/contacts.txt', 'Press: press@salmar.ai\nWebsite: https://salmar.ai\n');
+            }
+            if (k === 'media') {
+              zip.file('media/mockup-hero.svg', mediaMockupSVG('Press Mockup — Hero'));
+              zip.file('media/mockup-dashboard.svg', mediaMockupSVG('Press Mockup — Dashboard'));
+              zip.file('media/guidelines.md', 'Use unmodified assets.\n');
+            }
+            if (k === 'video') {
+              zip.file('video/readme.md', videoReadme());
+              zip.file('video/storyboard-1.svg', mediaMockupSVG('Storyboard — Sequence A'));
+              zip.file('video/storyboard-2.svg', mediaMockupSVG('Storyboard — Sequence B'));
+            }
+          });
+        }
+        status.textContent = 'Preparing files...';
+        const blob = await zip.generateAsync({ type: 'blob' });
+        status.textContent = 'Ready.';
+        const filename = `salmar-${kind === 'all' ? 'press-kit' : kind}.zip`;
+        saveBlob(blob, filename);
+        setTimeout(() => status.textContent = '', 1500);
+      }
+
+      document.querySelectorAll('.download-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const pack = btn.getAttribute('data-pack');
+          buildPack(pack);
+        });
+      });
+      document.getElementById('downloadAll').addEventListener('click', () => buildPack('all'));
+    })();
+
+    // Form validation and UX
+    (function(){
+      const form = document.getElementById('pressForm');
+      const status = document.getElementById('formStatus');
+      const btn = document.getElementById('submitBtn');
+
+      function showError(id, show){
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.classList.toggle('hidden', !show);
+      }
+      function validEmail(v){ return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+      form.addEventListener('input', (e) => {
+        const t = e.target;
+        if (t.id === 'name') showError('nameError', t.value.trim().length < 2);
+        if (t.id === 'email') showError('emailError', !validEmail(t.value.trim()));
+        if (t.id === 'org') showError('orgError', t.value.trim().length < 2);
+        if (t.id === 'message') showError('messageError', t.value.trim().length < 10);
+      });
+
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Honeypot
+        if (form.hp && form.hp.value) return;
+
+        const name = form.name.value.trim();
+        const email = form.email.value.trim();
+        const org = form.org.value.trim();
+        const msg = form.message.value.trim();
+
+        const hasErrors = [
+          [ 'nameError', name.length < 2 ],
+          [ 'emailError', !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ],
+          [ 'orgError', org.length < 2 ],
+          [ 'messageError', msg.length < 10 ],
+        ].map(([id, cond]) => (showError(id, cond), cond)).some(Boolean);
+
+        if (hasErrors) {
+          status.textContent = 'Please correct the highlighted fields.';
+          return;
+        }
+
+        btn.disabled = true;
+        btn.style.opacity = .7;
+        status.textContent = 'Sending...';
+        setTimeout(() => {
+          status.textContent = 'Thanks! Your request has been received. We’ll respond shortly.';
+          btn.disabled = false; btn.style.opacity = 1;
+          form.reset();
+        }, 900);
+      });
+    })();
+
+    // Reveal on hash for releases
+    (function(){
+      const hash = window.location.hash.replace('#','');
+      if (!hash) return;
+      const panel = document.getElementById(hash);
+      if (!panel) return;
+      const btn = document.querySelector(`.release-toggle[aria-controls="${hash}"]`);
+      if (!btn) return;
+      btn.click();
+      panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    })();
+  </script>
+</body>
+</html>
