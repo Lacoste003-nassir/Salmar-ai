@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth antialiased">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark light">
+  <meta name="theme-color" content="#1a0b2e" id="metaThemeColor">
+  <title>Salmar AI — Pricing</title>
+
+  <!-- Prefers color-scheme script (safe, no errors in sandbox) -->
+  <script>
+    (function () {
+      try {
+        const stored = typeof localStorage !== 'undefined' ? localStorage.getItem('salmar-theme') : null;
+        const preferDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (stored === 'dark' || (!stored && preferDark)) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+      } catch (e) {
+        // fail silently
+      }
+    })();
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            display: ['Outfit', 'Inter', 'system-ui', 'ui-sans-serif'],
+            sans: ['Inter', 'system-ui', 'ui-sans-serif'],
+          },
+          colors: {
+            salmar: {
+              50: '#f6f3ff',
+              100: '#ece6ff',
+              200: '#d7caff',
+              300: '#b9a0ff',
+              400: '#9a77ff',
+              500: '#7d4dff',
+              600: '#6828ff',
+              700: '#561fd1',
+              800: '#441aa4',
+              900: '#321577',
+              950: '#1a0b2e',
+            },
+          },
+          boxShadow: {
+            'neo': '10px 10px 30px rgba(0,0,0,0.25), -10px -10px 30px rgba(255,255,255,0.04)',
+            'glass': '0 10px 30px rgba(0,0,0,.25)',
+            'orb': '0 0 60px rgba(152, 74, 255, .45), 0 0 120px rgba(104, 40, 255,.25)',
+            'glow': '0 0 0 2px rgba(255,255,255,.06), inset 0 0 0 1px rgba(255,255,255,.05), 0 20px 50px rgba(0,0,0,.35)',
+          },
+          backdropBlur: {
+            xs: '2px',
+          },
+          animation: {
+            gradient: 'gradient 16s ease infinite',
+            float: 'float 8s ease-in-out infinite',
+            pulseSoft: 'pulseSoft 4s ease-in-out infinite',
+            ring: 'ring 10s linear infinite',
+          },
+          keyframes: {
+            gradient: {
+              '0%, 100%': { backgroundPosition: '0% 50%' },
+              '50%': { backgroundPosition: '100% 50%' }
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' }
+            },
+            pulseSoft: {
+              '0%, 100%': { transform: 'scale(1)', filter: 'blur(16px)' },
+              '50%': { transform: 'scale(1.06)', filter: 'blur(20px)' }
+            },
+            ring: {
+              '0%': { transform: 'rotate(0deg)' },
+              '100%': { transform: 'rotate(360deg)' }
+            },
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- GSAP for animations -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <style>
+    :root {
+      --surface: rgba(255,255,255,0.08);
+      --surface-strong: rgba(255,255,255,0.12);
+      --stroke: rgba(255,255,255,0.22);
+      --glass: rgba(255,255,255,0.09);
+      --fg: rgba(10, 8, 20, 1);
+      --fg-soft: rgba(10, 8, 20, .8);
+      --accent: #7d4dff;
+      --accent-2: #ff4df0;
+    }
+    .dark :root, .dark {
+      --surface: rgba(255,255,255,0.06);
+      --surface-strong: rgba(255,255,255,0.1);
+      --stroke: rgba(255,255,255,0.12);
+      --glass: rgba(255,255,255,0.08);
+      --fg: rgba(248, 244, 255, 1);
+      --fg-soft: rgba(248, 244, 255, .85);
+      --accent: #b9a0ff;
+      --accent-2: #ff9bf0;
+    }
+    /* Glassmorphism card */
+    .glass {
+      background: linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.04));
+      backdrop-filter: blur(14px) saturate(120%);
+      -webkit-backdrop-filter: blur(14px) saturate(120%);
+      border: 1px solid var(--stroke);
+    }
+    .glass-strong {
+      background: linear-gradient(180deg, rgba(255,255,255,.18), rgba(255,255,255,.07));
+      backdrop-filter: blur(16px) saturate(140%);
+      -webkit-backdrop-filter: blur(16px) saturate(140%);
+      border: 1px solid var(--stroke);
+    }
+    /* Subtle noise overlay using SVG filter */
+    .noise-layer {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      opacity: .06;
+      mix-blend-mode: overlay;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .animate-gradient, .animate-float, .animate-pulseSoft, .animate-ring {
+        animation: none !important;
+      }
+    }
+    /* Toggle styles */
+    .toggle {
+      --h: 28px; --w: 56px; --p: 3px;
+      width: var(--w); height: var(--h);
+      border-radius: 9999px;
+      position: relative;
+      transition: background .3s ease, box-shadow .3s ease;
+    }
+    .toggle .dot {
+      width: calc(var(--h) - var(--p) * 2);
+      height: calc(var(--h) - var(--p) * 2);
+      border-radius: 50%;
+      position: absolute; top: var(--p); left: var(--p);
+      transition: transform .25s ease, background .3s ease;
+      will-change: transform;
+    }
+    input[type="range"]::-webkit-slider-thumb { appearance: none; height: 18px; width: 18px; border-radius: 9999px; background: #7d4dff; border: 2px solid white; box-shadow: 0 4px 16px rgba(125,77,255,.35); }
+    input[type="range"]::-moz-range-thumb { height: 18px; width: 18px; border-radius: 9999px; background: #7d4dff; border: 2px solid white; box-shadow: 0 4px 16px rgba(125,77,255,.35); }
+    input[type="range"]::-webkit-slider-runnable-track { height: 6px; border-radius: 9999px; background: linear-gradient(90deg, #6828ff, #ff4df0); }
+    input[type="range"]::-moz-range-track { height: 6px; border-radius: 9999px; background: linear-gradient(90deg, #6828ff, #ff4df0); }
+  </style>
+</head>
+
+<body class="bg-salmar-950 text-white relative font-sans selection:bg-salmar-400/30 selection:text-white">
+  <!-- Animated gradient backdrop -->
+  <div aria-hidden="true" class="fixed inset-0 -z-20">
+    <div class="absolute inset-0 bg-[radial-gradient(60%_80%_at_70%_20%,rgba(120,60,255,.35),transparent_60%),radial-gradient(50%_70%_at_20%_80%,rgba(255,60,220,.15),transparent_60%)]"></div>
+    <div class="absolute inset-0 bg-gradient-to-br from-salmar-900/40 via-salmar-950 to-salmar-950 animate-gradient bg-[length:200%_200%]"></div>
+  </div>
+
+  <!-- Starry dots -->
+  <div aria-hidden="true" class="pointer-events-none fixed inset-0 -z-10">
+    <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="gDot" r="1">
+          <stop offset="0" stop-color="#b9a0ff"/>
+          <stop offset=".9" stop-color="#b9a0ff" stop-opacity=".05"/>
+          <stop offset="1" stop-color="#b9a0ff" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <!-- random sparkles -->
+      <g fill="url(#gDot)" opacity=".45">
+        <circle cx="10%" cy="20%" r="1.2%"/>
+        <circle cx="35%" cy="12%" r="0.8%"/>
+        <circle cx="70%" cy="28%" r="1%"/>
+        <circle cx="85%" cy="10%" r="0.6%"/>
+        <circle cx="15%" cy="70%" r="1.1%"/>
+        <circle cx="40%" cy="80%" r="0.7%"/>
+        <circle cx="78%" cy="60%" r="0.9%"/>
+      </g>
+    </svg>
+  </div>
+
+  <!-- SVG noise overlay (no external images) -->
+  <svg class="noise-layer -z-10" width="100%" height="100%">
+    <filter id="noiseFilter">
+      <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+      <feComponentTransfer>
+        <feFuncA type="table" tableValues="0 0.06"/>
+      </feComponentTransfer>
+    </filter>
+    <rect width="100%" height="100%" filter="url(#noiseFilter)"></rect>
+  </svg>
+
+  <!-- Skip link -->
+  <a href="#plans" class="sr-only focus:not-sr-only focus:absolute focus:m-3 focus:p-3 focus:rounded-md focus:bg-salmar-800 focus:text-white">Skip to pricing</a>
+
+  <!-- Navigation -->
+  <header class="relative z-10">
+    <nav class="mx-auto max-w-7xl px-6 py-5 flex items-center justify-between">
+      <a href="#" class="group inline-flex items-center gap-3" aria-label="Salmar AI Home">
+        <span class="relative inline-flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-salmar-500 to-fuchsia-500 shadow-orb">
+          <span class="absolute inset-0 blur-md rounded-full bg-gradient-to-br from-salmar-400/70 to-fuchsia-400/70 animate-pulseSoft"></span>
+          <svg class="relative w-5 h-5 text-white/90" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4">
+            <path d="M12 3l2.6 5.2L20 9l-4 3.9.9 5.6L12 16.9 7.1 18.5 8 12.9 4 9l5.4-.8L12 3z"/>
+          </svg>
+        </span>
+        <span class="font-display text-xl font-semibold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-white to-salmar-200">Salmar AI</span>
+      </a>
+
+      <div class="flex items-center gap-4">
+        <!-- Billing toggle -->
+        <div class="hidden md:flex items-center gap-3 glass-strong px-3 py-2 rounded-full shadow-glow">
+          <span class="text-sm text-white/70">Monthly</span>
+          <label class="relative inline-flex items-center cursor-pointer" aria-label="Toggle billing period">
+            <input type="checkbox" id="billingToggle" class="sr-only" aria-checked="false" role="switch" aria-label="Yearly billing with 20% discount">
+            <span class="toggle glass border border-white/10 shadow-inner bg-white/10">
+              <span class="dot bg-white"></span>
+            </span>
+          </label>
+          <span class="text-sm text-white/90 font-medium flex items-center gap-1">
+            Yearly
+            <span class="ml-1 rounded-full text-[10px] px-2 py-0.5 bg-emerald-500/20 text-emerald-200 border border-emerald-300/20">-20%</span>
+          </span>
+        </div>
+
+        <!-- Theme toggle -->
+        <button id="themeToggle" class="glass-strong px-3 py-2 rounded-full border border-white/10 shadow-glow hover:shadow-neo transition" aria-label="Toggle dark mode">
+          <span class="flex items-center gap-2">
+            <svg class="h-5 w-5 hidden dark:inline text-yellow-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M21.64 13a9 9 0 01-10.63-10.6A9 9 0 1021.64 13z"/>
+            </svg>
+            <svg class="h-5 w-5 dark:hidden text-salmar-200" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              <path d="M6.76 4.84l-1.8-1.79L3.17 4.84l1.79 1.79 1.8-1.79zM1 13h3v-2H1v2zm10 10h2v-3h-2v3zM4.84 20.83l1.79-1.8-1.8-1.79-1.79 1.79 1.8 1.8zM20 11V9h-3v2h3zm-2.93-6.16l1.79-1.79-1.79-1.8-1.79 1.8 1.79 1.79zM20.83 19.16l-1.79-1.79-1.8 1.79 1.8 1.8 1.79-1.8zM12 7a5 5 0 100 10A5 5 0 0012 7z"/>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="relative z-0 overflow-hidden">
+    <div class="absolute inset-0 -z-10 flex items-center justify-center">
+      <!-- Central Salmar Orb -->
+      <div class="relative w-[38rem] max-w-full h-[38rem] animate-float" aria-hidden="true">
+        <div class="absolute inset-0 rounded-full blur-2xl bg-gradient-to-br from-salmar-600/55 via-fuchsia-500/35 to-purple-700/40 animate-pulseSoft shadow-orb"></div>
+        <div class="absolute inset-12 rounded-full glass border border-white/10 shadow-glow"></div>
+        <div class="absolute inset-0">
+          <svg class="w-full h-full" viewBox="0 0 100 100">
+            <defs>
+              <radialGradient id="orbG" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ffffff" stop-opacity=".9"/>
+                <stop offset="35%" stop-color="#b9a0ff" stop-opacity=".65"/>
+                <stop offset="100%" stop-color="#6828ff" stop-opacity=".25"/>
+              </radialGradient>
+            </defs>
+            <circle cx="50" cy="50" r="46" fill="url(#orbG)"></circle>
+            <g opacity=".6">
+              <circle cx="50" cy="50" r="48" stroke="rgba(185,160,255,.35)" stroke-width="0.4" fill="none" class="origin-center animate-ring"></circle>
+              <circle cx="50" cy="50" r="42" stroke="rgba(255,160,240,.20)" stroke-width="0.4" fill="none" style="animation: ring 14s linear infinite reverse;"></circle>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <div class="relative mx-auto max-w-7xl px-6 pt-10 pb-20 lg:pb-28">
+      <div class="max-w-3xl">
+        <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight tracking-tight bg-clip-text text-transparent bg-gradient-to-br from-white to-salmar-200">
+          Choose Your Path to Unlimited Intelligence
+        </h1>
+        <p class="mt-5 text-lg sm:text-xl text-white/80 max-w-2xl">
+          From curious explorers to world-scale teams, Salmar adapts to your ambitions. Compare plans, tune your AI, and feel the Orb respond in real-time.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-4">
+          <a href="#plans" class="inline-flex items-center gap-2 rounded-2xl px-5 py-3 bg-gradient-to-r from-salmar-600 to-fuchsia-500 text-white font-semibold shadow-glow hover:opacity-95 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-salmar-950">
+            View Plans
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <path d="M5 12h14M13 5l7 7-7 7"/>
+            </svg>
+          </a>
+          <a href="#builder" class="inline-flex items-center gap-2 rounded-2xl px-5 py-3 glass-strong border border-white/10 text-white/90 font-semibold hover:bg-white/10 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-salmar-400 focus-visible:ring-offset-salmar-950">
+            Custom Build Your AI
+            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2a10 10 0 100 20 10 10 0 000-20zm1 14.5v-5h-2v5h2zm0-7V7h-2v2.5h2z"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Billing toggle (mobile) -->
+  <div class="md:hidden mx-auto max-w-7xl px-6">
+    <div class="flex items-center justify-center gap-3 glass-strong px-3 py-2 rounded-full shadow-glow">
+      <span class="text-sm text-white/70">Monthly</span>
+      <label class="relative inline-flex items-center cursor-pointer" aria-label="Toggle billing period">
+        <input type="checkbox" id="billingToggleMobile" class="sr-only" aria-checked="false" role="switch" aria-label="Yearly billing with 20% discount">
+        <span class="toggle glass border border-white/10 shadow-inner bg-white/10">
+          <span class="dot bg-white"></span>
+        </span>
+      </label>
+      <span class="text-sm text-white/90 font-medium flex items-center gap-1">
+        Yearly
+        <span class="ml-1 rounded-full text-[10px] px-2 py-0.5 bg-emerald-500/20 text-emerald-200 border border-emerald-300/20">-20%</span>
+      </span>
+    </div>
+  </div>
+
+  <!-- Pricing Cards -->
+  <section id="plans" class="relative mx-auto max-w-7xl px-6 pt-10 pb-12">
+    <div class="flex items-baseline justify-between gap-6">
+      <h2 class="font-display text-3xl sm:text-4xl font-bold text-white">Plans that scale with your imagination</h2>
+      <span class="hidden md:inline text-sm text-white/70">All prices in USD. Cancel anytime.</span>
+    </div>
+
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6 lg:gap-8">
+      <!-- Free -->
+      <article class="group relative rounded-3xl p-6 lg:p-7 glass border border-white/10 shadow-glow hover:shadow-neo transition will-change-transform hover:-translate-y-1 focus-within:-translate-y-1">
+        <div class="absolute -inset-[1px] rounded-3xl bg-gradient-to-br from-white/8 via-white/0 to-white/0 opacity-0 group-hover:opacity-100 transition pointer-events-none"></div>
+        <header class="flex items-start justify-between">
+          <div>
+            <h3 class="font-display text-2xl font-bold">Salmar Basic</h3>
+            <p class="text-white/70">For students and curious explorers</p>
+          </div>
+          <!-- Orb mini -->
+          <div class="relative w-14 h-14">
+            <span class="absolute inset-0 rounded-full blur-lg bg-gradient-to-br from-salmar-400/60 to-fuchsia-400/50"></span>
+            <span class="relative block w-full h-full rounded-full bg-gradient-to-br from-white/70 to-salmar-300/70 border border-white/20"></span>
+          </div>
+        </header>
+
+        <div class="mt-6 flex items-end gap-2">
+          <span class="text-4xl font-extrabold tracking-tight" data-price="free">$0</span>
+          <span class="text-white/60 mb-1">/ month</span>
+        </div>
+
+        <ul class="mt-6 space-y-3 text-white/90">
+          <li class="flex items-start gap-3">
+            <span class="mt-1 text-emerald-300" aria-hidden="true">✓</span>
+            <span>Core AI assistant for general-purpose tasks</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="mt-1 text-emerald-300" aria-hidden="true">✓</span>
+            <span>20 requests per day</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="mt-1 text-emerald-300" aria-hidden="true">✓</span>
+            <span>Text generation, summarization, advice</span>
+          </li>
+          <li class="flex items-start gap-3">
+            <span class="mt-1 text-emerald-300" aria-hidden="true">✓</span>
+            <span>Community Help Center access</span>
+          </li>
+        </ul>
+
+        <div class="mt-8">
+          <a href="#" class="w-full inline-flex justify-center items-center rounded-2xl px-5 py-3 glass border border-white/10 font-semibold hover:bg-white/10 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-salmar-400 focus-visible:ring-offset-salmar-950">Get Started</a>
+        </div>
+      </article>
+
+      <!-- Pro -->
+      <article class="group relative rounded-3xl p-6 lg:p-7 glass-strong border border-white/10 shadow-glow hover:shadow-neo transition will-change-transform hover:-translate-y-1 focus-within:-translate-y-1">
+        <div class="absolute -inset-[1px] rounded-3xl bg-gradient-to-br from-fuchsia-400/20 via-salmar-400/10 to-transparent opacity-0 group-hover:opacity-100 transition pointer-events-none"></div>
+        <header class="flex items-start justify-between">
+          <div>
+            <h3 class="font-display text-2xl font-bold flex items-center gap-2">
+              Salmar Plus
+              <span class="text-[10px] uppercase tracking-widest rounded-full px-2 py-0.5 bg-gradient-to-r from-salmar-600/40 to-fuchsia-500/40 border border-white/10">Popular</span>
+            </h3>
+            <p class="text-white/70">For professionals, freelancers, creators</p>
+          </div>
+          <!-- Orb mini variant -->
+          <div class="relative w-14 h-14">
+            <span class="absolute inset-0 rounded-full blur-lg bg-gradient-to-br from-fuchsia-400/70 to-salmar-500/70"></span>
+            <span class="relative block w-full h-full rounded-full bg-gradient-to-br from-white/80 to-fuchsia-300/70 border border-white/20"></span>
+          </div>
+        </header>
+
+        <div class="mt-6 flex items-end gap-2">
+          <span class="text-4xl font-extrabold tracking-tight" data-price="pro" aria-live="polite">$29</span>
+          <span class="text-white/60 mb-1" data-billing-suffix>/ month</span>
+        </div>
+        <p class="text-xs text-emerald-200/90 mt-1 hidden" id="proDiscountNote">Billed yearly — you save 20%</p>
+
+        <ul class="mt-6 space-y-3 text-white/90">
+          <li class="flex items-start gap-3"><span class="mt-1 text-emerald-300">✓</span><span>Unlimited queries with priority speed</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 text-emerald-300">✓</span><span>Salmar Orb live animations (listening • processing • answering)</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 text-emerald-300">✓</span><span>File analysis, voice input, extended memory</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 text-emerald-300">✓</span><span>Enhanced personalization: themes & AI profile</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 text-emerald-300">✓</span><span>Email + chat support</span></li>
+        </ul>
+
+        <div class="mt-8">
+          <a href="#" class="w-full inline-flex justify-center items-center rounded-2xl px-5 py-3 bg-gradient-to-r from-salmar-600 to-fuchsia-500 text-white font-semibold shadow-glow hover:opacity-95 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-salmar-950">Upgrade to Plus</a>
+        </div>
+      </article>
+
+      <!-- Enterprise -->
+      <article class="group relative rounded-3xl p-6 lg:p-7 glass border border-white/10 shadow-glow hover:shadow-neo transition will-change-transform hover:-translate-y-1 focus-within:-translate-y-1">
+        <div class="absolute -inset-[1px] rounded-3xl bg-gradient-to-br from-salmar-400/10 via-fuchsia-300/10 to-transparent opacity-0 group-hover:opacity-100 transition pointer-events-none"></div>
+        <header class="flex items-start justify-between">
+          <div>
+            <h3 class="font-display text-2xl font-bold">Salmar Infinity</h3>
+            <p class="text-white/70">For teams, enterprises, and research</p>
+          </div>
+          <!-- Orb mini variant -->
+          <div class="relative w-14 h-14">
+            <span class="absolute inset-0 rounded-full blur-lg bg-gradient-to-tr from-salmar-500/70 to-fuchsia-400/70"></span>
+            <span class="relative block w-full h-full rounded-full bg-gradient-to-tr from-white/80 to-salmar-200/70 border border-white/20"></span>
+          </div>
+        </header>
+
+        <div class="mt-6 flex items-end gap-2">
+          <span class="text-3xl font-extrabold tracking-tight">Custom</span>
+          <span class="text-white/60 mb-1">— Contact Sales</span>
+        </div>
+
+        <ul class="mt-6 space-y-3 text-white/90">
+          <li class="flex items-start gap-3"><span class="mt-1 text-emerald-300">✓</span><span>Full AI suite • unlimited scalability</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 text-emerald-300">✓</span><span>Team collaboration hub with shared brain</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 text-emerald-300">✓</span><span>Private data mode (on‑premise)</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 text-emerald-300">✓</span><span>API & integrations (CRM • dev tools • more)</span></li>
+          <li class="flex items-start gap-3"><span class="mt-1 text-emerald-300">✓</span><span>Dedicated manager + 24/7 premium support</span></li>
+        </ul>
+
+        <div class="mt-8 flex flex-col gap-3">
+          <a href="#" class="w-full inline-flex justify-center items-center rounded-2xl px-5 py-3 bg-gradient-to-r from-salmar-600 to-fuchsia-500 text-white font-semibold shadow-glow hover:opacity-95 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-salmar-950">Contact Sales</a>
+          <p class="text-xs text-white/60 text-center">Security reviews, custom SLAs, and deployment options available.</p>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- Custom Builder -->
+  <section id="builder" class="relative mx-auto max-w-7xl px-6 pt-6 pb-14">
+    <div class="grid lg:grid-cols-2 gap-8">
+      <div class="rounded-3xl p-6 lg:p-8 glass-strong border border-white/10 shadow-glow">
+        <h3 class="font-display text-2xl font-bold">Custom Build Your AI</h3>
+        <p class="mt-1 text-white/75">Tune Salmar to your exact needs. Watch the Orb react as you shape Power, Memory, Security, and Collaboration.</p>
+
+        <form class="mt-6 space-y-6" aria-labelledby="builderTitle">
+          <fieldset class="space-y-6">
+            <legend id="builderTitle" class="sr-only">AI Builder Sliders</legend>
+
+            <div class="flex items-center justify-between">
+              <label for="power" class="font-medium text-white/90">Power</label>
+              <span id="powerVal" class="text-white/70 text-sm">5</span>
+            </div>
+            <input id="power" name="power" type="range" min="0" max="10" step="1" value="5" class="w-full" aria-describedby="powerVal">
+
+            <div class="flex items-center justify-between">
+              <label for="memory" class="font-medium text-white/90">Memory</label>
+              <span id="memoryVal" class="text-white/70 text-sm">5</span>
+            </div>
+            <input id="memory" name="memory" type="range" min="0" max="10" step="1" value="5" class="w-full" aria-describedby="memoryVal">
+
+            <div class="flex items-center justify-between">
+              <label for="security" class="font-medium text-white/90">Security</label>
+              <span id="securityVal" class="text-white/70 text-sm">5</span>
+            </div>
+            <input id="security" name="security" type="range" min="0" max="10" step="1" value="5" class="w-full" aria-describedby="securityVal">
+
+            <div class="flex items-center justify-between">
+              <label for="collab" class="font-medium text-white/90">Collaboration</label>
+              <span id="collabVal" class="text-white/70 text-sm">5</span>
+            </div>
+            <input id="collab" name="collab" type="range" min="0" max="10" step="1" value="5" class="w-full" aria-describedby="collabVal">
+          </fieldset>
+
+          <div class="grid sm:grid-cols-2 gap-5">
+            <div class="rounded-2xl p-4 glass border border-white/10">
+              <p class="text-white/70 text-sm">Estimated Price</p>
+              <div class="mt-1 flex items-baseline gap-2">
+                <span class="text-3xl font-extrabold" id="builderPrice" aria-live="polite">$49</span>
+                <span class="text-white/60 text-sm" id="builderSuffix">/ month</span>
+              </div>
+              <p class="text-xs text-emerald-200/90 mt-1 hidden" id="builderDiscountNote">Billed yearly — 20% off</p>
+            </div>
+
+            <div class="rounded-2xl p-4 glass border border-white/10">
+              <p class="text-white/70 text-sm">Capability Meter</p>
+              <div class="mt-2 w-full h-3 rounded-full bg-white/10 overflow-hidden">
+                <div id="capBar" class="h-full w-1/2 rounded-full bg-gradient-to-r from-salmar-500 via-fuchsia-500 to-rose-400 transition-all duration-500"></div>
+              </div>
+              <p class="mt-1 text-xs text-white/60"><span id="capLabel">Medium</span> capability</p>
+            </div>
+          </div>
+
+          <div class="flex flex-wrap gap-3">
+            <button type="button" class="inline-flex items-center gap-2 rounded-2xl px-5 py-3 bg-gradient-to-r from-salmar-600 to-fuchsia-500 text-white font-semibold shadow-glow hover:opacity-95 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-fuchsia-400 focus-visible:ring-offset-salmar-950">Start Custom Plan</button>
+            <button type="button" class="inline-flex items-center gap-2 rounded-2xl px-5 py-3 glass border border-white/10 text-white font-semibold hover:bg-white/10 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-salmar-400 focus-visible:ring-offset-salmar-950">Talk to Architect</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Live Orb reacting to builder -->
+      <div class="rounded-3xl p-6 lg:p-8 glass-strong border border-white/10 shadow-glow relative overflow-hidden">
+        <div class="absolute -inset-1 opacity-30 pointer-events-none" aria-hidden="true">
+          <div class="absolute -top-24 -right-20 w-96 h-96 rounded-full blur-3xl bg-gradient-to-br from-salmar-500/70 to-fuchsia-500/70 animate-pulseSoft"></div>
+        </div>
+
+        <div class="relative">
+          <h4 class="font-display text-xl font-semibold">Live Salmar Orb</h4>
+          <p class="text-white/75">Push the sliders — the Orb pulses faster and glows brighter with higher specs.</p>
+
+          <div class="mt-6 flex items-center justify-center">
+            <div class="relative w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96">
+              <div id="liveOrbGlow" class="absolute inset-0 rounded-full blur-2xl bg-gradient-to-br from-salmar-500/60 to-fuchsia-500/60 shadow-orb"></div>
+              <svg id="liveOrb" class="relative w-full h-full" viewBox="0 0 200 200">
+                <defs>
+                  <radialGradient id="liveOrbG" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity=".95"/>
+                    <stop offset="35%" stop-color="#d7caff" stop-opacity=".75"/>
+                    <stop offset="100%" stop-color="#6828ff" stop-opacity=".35"/>
+                  </radialGradient>
+                  <filter id="goo">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur"/>
+                    <feColorMatrix in="blur" mode="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 18 -8" result="goo"/>
+                    <feBlend in="SourceGraphic" in2="goo"/>
+                  </filter>
+                </defs>
+                <g filter="url(#goo)">
+                  <circle cx="100" cy="100" r="78" fill="url(#liveOrbG)"></circle>
+                  <!-- dynamic nodes -->
+                  <circle id="node1" cx="60" cy="80" r="10" fill="#ff89f7" opacity=".65"></circle>
+                  <circle id="node2" cx="135" cy="120" r="8" fill="#b592ff" opacity=".65"></circle>
+                  <circle id="node3" cx="100" cy="50" r="7" fill="#ffb8f9" opacity=".6"></circle>
+                </g>
+                <!-- rings -->
+                <g opacity=".5">
+                  <circle id="ring1" cx="100" cy="100" r="86" stroke="rgba(185,160,255,.35)" stroke-width="1.2" fill="none"></circle>
+                  <circle id="ring2" cx="100" cy="100" r="70" stroke="rgba(255,160,240,.25)" stroke-width="1.2" fill="none"></circle>
+                </g>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Comparison Table -->
+  <section class="relative mx-auto max-w-7xl px-6 pb-20">
+    <div class="rounded-3xl glass-strong border border-white/10 shadow-glow overflow-hidden">
+      <button id="compareToggle" class="w-full flex items-center justify-between px-6 py-4 sm:px-8 sm:py-5 text-left hover:bg-white/5 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-salmar-400 focus-visible:ring-offset-salmar-950" aria-expanded="false" aria-controls="comparePanel">
+        <div class="flex items-center gap-3">
+          <svg class="w-5 h-5 text-salmar-300" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h2v14H3V5zm4 4h2v10H7V9zm4-6h2v16h-2V3zm4 8h2v8h-2v-8zm4-4h2v12h-2V7z"/></svg>
+          <h3 class="font-display text-lg sm:text-xl font-semibold">Compare features across plans</h3>
+        </div>
+        <svg id="chev" class="w-5 h-5 text-white/70 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+
+      <div id="comparePanel" class="hidden border-t border-white/10">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-white/10">
+            <thead>
+              <tr class="bg-white/5">
+                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white/70">Feature</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white/70">Basic</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white/70">Plus</th>
+                <th scope="col" class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-white/70">Infinity</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-white/10">
+              <tr>
+                <td class="px-6 py-4 text-white/90">Daily Requests</td>
+                <td class="px-6 py-4 text-white/80">20</td>
+                <td class="px-6 py-4 text-white/80">Unlimited</td>
+                <td class="px-6 py-4 text-white/80">Unlimited</td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 text-white/90">Priority Response</td>
+                <td class="px-6 py-4"><span aria-hidden="true" class="text-white/50">—</span><span class="sr-only">Not included</span></td>
+                <td class="px-6 py-4"><span class="text-emerald-300" aria-hidden="true">✓</span><span class="sr-only">Included</span></td>
+                <td class="px-6 py-4"><span class="text-emerald-300" aria-hidden="true">✓</span><span class="sr-only">Included</span></td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 text-white/90">File Analysis</td>
+                <td class="px-6 py-4"><span aria-hidden="true" class="text-white/50">—</span><span class="sr-only">Not included</span></td>
+                <td class="px-6 py-4"><span class="text-emerald-300" aria-hidden="true">✓</span><span class="sr-only">Included</span></td>
+                <td class="px-6 py-4"><span class="text-emerald-300" aria-hidden="true">✓</span><span class="sr-only">Included</span></td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 text-white/90">Voice Input</td>
+                <td class="px-6 py-4"><span aria-hidden="true" class="text-white/50">—</span></td>
+                <td class="px-6 py-4"><span class="text-emerald-300" aria-hidden="true">✓</span></td>
+                <td class="px-6 py-4"><span class="text-emerald-300" aria-hidden="true">✓</span></td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 text-white/90">Team Hub</td>
+                <td class="px-6 py-4"><span aria-hidden="true" class="text-white/50">—</span></td>
+                <td class="px-6 py-4 text-white/80">Add‑on</td>
+                <td class="px-6 py-4"><span class="text-emerald-300" aria-hidden="true">✓</span></td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 text-white/90">On‑Premise Mode</td>
+                <td class="px-6 py-4"><span aria-hidden="true" class="text-white/50">—</span></td>
+                <td class="px-6 py-4"><span aria-hidden="true" class="text-white/50">—</span></td>
+                <td class="px-6 py-4"><span class="text-emerald-300" aria-hidden="true">✓</span></td>
+              </tr>
+              <tr>
+                <td class="px-6 py-4 text-white/90">24/7 Premium Support</td>
+                <td class="px-6 py-4"><span aria-hidden="true" class="text-white/50">—</span></td>
+                <td class="px-6 py-4 text-white/80">Business hours</td>
+                <td class="px-6 py-4"><span class="text-emerald-300" aria-hidden="true">✓</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Footer -->
+  <footer class="relative">
+    <div class="mx-auto max-w-7xl px-6 pb-16">
+      <div class="rounded-3xl glass-strong border border-white/10 shadow-glow p-6 lg:p-10 overflow-hidden relative">
+        <div aria-hidden="true" class="absolute -right-10 -top-10 w-56 h-56 rounded-full blur-2xl bg-gradient-to-br from-salmar-500/60 to-fuchsia-500/60"></div>
+        <div class="grid lg:grid-cols-2 gap-6">
+          <div>
+            <h3 class="font-display text-2xl sm:text-3xl font-bold">Ready to push the boundaries?</h3>
+            <p class="text-white/75 mt-1">Join thousands who build with Salmar every day. Everything you need to think bigger and move faster.</p>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 lg:justify-end">
+            <a href="#plans" class="inline-flex items-center gap-2 rounded-2xl px-5 py-3 bg-gradient-to-r from-salmar-600 to-fuchsia-500 text-white font-semibold shadow-glow hover:opacity-95 transition">Get Started</a>
+            <a href="#" class="inline-flex items-center gap-2 rounded-2xl px-5 py-3 glass border border-white/10 text-white font-semibold hover:bg-white/10 transition">Talk to Sales</a>
+          </div>
+        </div>
+        <div class="mt-6 text-xs text-white/60 flex flex-wrap gap-3">
+          <span>© <span id="year"></span> Salmar AI</span>
+          <span aria-hidden="true">•</span>
+          <a href="#" class="hover:underline">Privacy</a>
+          <span aria-hidden="true">•</span>
+          <a href="#" class="hover:underline">Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Helpers
+    const $ = (s, el=document) => el.querySelector(s);
+    const $$ = (s, el=document) => Array.from(el.querySelectorAll(s));
+
+    // Year in footer
+    $('#year').textContent = new Date().getFullYear();
+
+    // Theme toggle with safe storage
+    const metaTheme = $('#metaThemeColor');
+    function updateThemeColor() {
+      const dark = document.documentElement.classList.contains('dark');
+      metaTheme.setAttribute('content', dark ? '#1a0b2e' : '#ece6ff');
+    }
+    updateThemeColor();
+
+    $('#themeToggle').addEventListener('click', () => {
+      const root = document.documentElement;
+      const willBeDark = !root.classList.contains('dark');
+      root.classList.toggle('dark', willBeDark);
+      updateThemeColor();
+      try {
+        if (typeof localStorage !== 'undefined') localStorage.setItem('salmar-theme', willBeDark ? 'dark' : 'light');
+      } catch(e) { /* ignore in sandbox */ }
+    });
+
+    // Billing toggles (sync both)
+    const toggles = [$('#billingToggle'), $('#billingToggleMobile')].filter(Boolean);
+    let yearly = false;
+
+    function syncToggles(checked) {
+      toggles.forEach(t => {
+        if (!t) return;
+        t.checked = checked;
+        t.setAttribute('aria-checked', String(checked));
+        const dot = t.parentElement.querySelector('.dot');
+        const track = t.parentElement.querySelector('.toggle');
+        if (checked) {
+          dot.style.transform = 'translateX(28px)';
+          dot.style.background = '#fff';
+          track.style.background = 'linear-gradient(90deg, #6828ff, #ff4df0)';
+          track.style.boxShadow = '0 6px 24px rgba(125,77,255,.35)';
+        } else {
+          dot.style.transform = 'translateX(0px)';
+          dot.style.background = '#fff';
+          track.style.background = 'rgba(255,255,255,.08)';
+          track.style.boxShadow = 'none';
+        }
+      });
+    }
+
+    toggles.forEach(t => t.addEventListener('change', (e) => {
+      yearly = e.target.checked;
+      syncToggles(yearly);
+      updatePrices();
+      updateBuilderPrice();
+    }));
+
+    // Initial sync
+    syncToggles(false);
+
+    // Pricing logic
+    const proPriceEl = document.querySelector('[data-price="pro"]');
+    const billingSuffixEls = $$('[data-billing-suffix]');
+    const proDiscountNote = $('#proDiscountNote');
+
+    function formatMoney(n) {
+      return '$' + Math.round(n).toString();
+    }
+
+    function updatePrices() {
+      if (!proPriceEl) return;
+      if (yearly) {
+        // $29/mo -> 20% off ($23/mo billed yearly)
+        proPriceEl.textContent = '$23';
+        billingSuffixEls.forEach(el => el.textContent = '/ month (billed yearly)');
+        if (proDiscountNote) proDiscountNote.classList.remove('hidden');
+      } else {
+        proPriceEl.textContent = '$29';
+        billingSuffixEls.forEach(el => el.textContent = '/ month');
+        if (proDiscountNote) proDiscountNote.classList.add('hidden');
+      }
+    }
+    updatePrices();
+
+    // Comparison collapsible
+    const compareToggle = $('#compareToggle');
+    const comparePanel = $('#comparePanel');
+    const chev = $('#chev');
+    compareToggle.addEventListener('click', () => {
+      const expanded = compareToggle.getAttribute('aria-expanded') === 'true';
+      compareToggle.setAttribute('aria-expanded', String(!expanded));
+      comparePanel.classList.toggle('hidden', expanded);
+      chev.style.transform = expanded ? 'rotate(0deg)' : 'rotate(180deg)';
+    });
+
+    // Builder logic
+    const power = $('#power');
+    const memory = $('#memory');
+    const security = $('#security');
+    const collab = $('#collab');
+
+    const vals = {
+      power: $('#powerVal'),
+      memory: $('#memoryVal'),
+      security: $('#securityVal'),
+      collab: $('#collabVal'),
+    };
+
+    const builderPriceEl = $('#builderPrice');
+    const builderSuffixEl = $('#builderSuffix');
+    const builderDiscountNote = $('#builderDiscountNote');
+    const capBar = $('#capBar');
+    const capLabel = $('#capLabel');
+
+    function calcBuilderPrice() {
+      const p = Number(power.value);
+      const m = Number(memory.value);
+      const s = Number(security.value);
+      const c = Number(collab.value);
+      const base = 19;
+      let price = base + p*3 + m*2 + s*4 + c*2;
+      price = Math.min(price, 299);
+      if (yearly) price = price * 0.8;
+      return Math.round(price);
+    }
+
+    function capabilityLevel(percent) {
+      if (percent < 35) return 'Basic';
+      if (percent < 70) return 'Medium';
+      if (percent < 90) return 'Advanced';
+      return 'Elite';
+    }
+
+    function updateBuilderPrice() {
+      const price = calcBuilderPrice();
+      builderPriceEl.textContent = `$${price}`;
+      builderSuffixEl.textContent = yearly ? '/ month (billed yearly)' : '/ month';
+      if (yearly) builderDiscountNote.classList.remove('hidden'); else builderDiscountNote.classList.add('hidden');
+
+      // Capability
+      const total = Number(power.value) + Number(memory.value) + Number(security.value) + Number(collab.value);
+      const percent = Math.round((total / 40) * 100);
+      capBar.style.width = Math.max(2, percent) + '%';
+      capLabel.textContent = capabilityLevel(percent);
+
+      // Orb reaction intensity
+      const intensity = Math.max(0.4, percent / 100);
+      gsap.to('#liveOrbGlow', { duration: 0.6, opacity: 0.25 + intensity * 0.55, ease: 'power2.out' });
+
+      // Pulse speed (faster with higher specs)
+      const speed = 2.5 - (percent / 100) * 1.8; // from ~2.5s to ~0.7s
+      animateLiveOrb(speed);
+    }
+
+    // Update slider value labels + price on input
+    [power, memory, security, collab].forEach(input => {
+      input.addEventListener('input', (e) => {
+        vals[e.target.id].textContent = e.target.value;
+        updateBuilderPrice();
+      });
+    });
+    updateBuilderPrice();
+
+    // GSAP Orb animations
+    let orbTween = null, nodeTweens = [];
+    function animateLiveOrb(speed = 2.0) {
+      // Clear previous
+      if (orbTween) { orbTween.kill(); }
+      nodeTweens.forEach(t => t.kill());
+      nodeTweens = [];
+
+      // subtle breathing of main orb via scale on #liveOrbG stop positions (simulated by ring pulsation)
+      orbTween = gsap.to(['#ring1', '#ring2'], {
+        duration: speed,
+        repeat: -1,
+        yoyo: true,
+        ease: 'sine.inOut',
+        attr: (i, target) => {
+          const base = i === 0 ? 86 : 70;
+          return { r: base + (i === 0 ? 2.5 : 2) };
+        }
+      });
+
+      // floating nodes
+      const nodes = ['#node1', '#node2', '#node3'];
+      nodes.forEach((sel, idx) => {
+        const t = gsap.to(sel, {
+          duration: speed + idx * 0.2,
+          repeat: -1,
+          yoyo: true,
+          ease: 'sine.inOut',
+          attr: {
+            cx: 100 + Math.cos(idx) * (idx === 0 ? -30 : 30),
+            cy: 100 + Math.sin(idx) * (idx === 2 ? -25 : 25),
+            r: 8 + idx
+          },
+          stagger: 0.1
+        });
+        nodeTweens.push(t);
+      });
+    }
+    animateLiveOrb(2.0);
+
+    // Hover lift/glow for pricing cards (extra polish)
+    $$('#plans article').forEach(card => {
+      card.addEventListener('mousemove', (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left, y = e.clientY - rect.top;
+        card.style.setProperty('--mx', x + 'px');
+        card.style.setProperty('--my', y + 'px');
+        card.style.backgroundImage = `radial-gradient(300px circle at ${x}px ${y}px, rgba(255,255,255,.08), transparent 40%)`;
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.backgroundImage = '';
+      });
+    });
+
+    // Scroll reveal (IntersectionObserver)
+    const revealEls = $$('section, article, .glass-strong');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          gsap.fromTo(entry.target, { y: 24, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out' });
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+
+    // Sync both billing toggles on load interactions
+    function setYearly(value) {
+      yearly = !!value;
+      syncToggles(yearly);
+      updatePrices();
+      updateBuilderPrice();
+    }
+    toggles.forEach(t => t && t.addEventListener('click', () => setYearly(t.checked)));
+
+    // Keyboard usability improvements on toggle
+    toggles.forEach(t => t && t.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        t.checked = !t.checked;
+        setYearly(t.checked);
+      }
+    }));
+  </script>
+</body>
+</html>
