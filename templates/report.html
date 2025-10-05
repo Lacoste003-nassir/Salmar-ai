@@ -1,978 +1,1170 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
+
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Salmar | Report an Issue</title>
-  <meta name="description" content="Report an issue to help improve Salmar — The AI that does everything." />
-  <!-- Tailwind CSS (CDN) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: {
-              50:  "#f5e9ff",
-              100: "#ead4ff",
-              200: "#d4aaff",
-              300: "#bd80ff",
-              400: "#a855f7",
-              500: "#8b5cf6",
-              600: "#7c3aed",
-              700: "#6d28d9",
-              800: "#581c87",
-              900: "#3b0764",
-            },
-            accent: {
-              400: "#7c3aed",
-              500: "#8b5cf6",
-              600: "#a855f7",
-            },
-          }
-        }
-      }
-    }
-  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report an Issue - Salmar AI</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
   <style>
-    :root {
-      --bg1: #0b021d;
-      --bg2: #250a49;
-      --bg3: #3b0a6b;
-      --text: #f5eaff;
-      --muted: #c7b7ff;
-      --glass: rgba(255,255,255,0.06);
-      --glass-strong: rgba(255,255,255,0.12);
-      --border: rgba(168,85,247,0.45);
-      --glow: #a855f7;
-      --shadow-deep: rgba(0,0,0,0.6);
-      --ok: #22c55e;
-      --warn: #f59e0b;
-      --err: #ef4444;
-    }
-    [data-theme="light"] {
-      --bg1: #f6f1ff;
-      --bg2: #efe7ff;
-      --bg3: #d9c8ff;
-      --text: #19002e;
-      --muted: #3f1b78;
-      --glass: rgba(255,255,255,0.65);
-      --glass-strong: rgba(255,255,255,0.76);
-      --border: rgba(124,58,237,0.35);
-      --glow: #7c3aed;
-      --shadow-deep: rgba(0,0,0,0.12);
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    html, body {
-      height: 100%;
+    :root {
+      --primary-purple: #8B5CF6;
+      --deep-purple: #2D0A46;
+      --light-purple: #C4B5FD;
+      --neon-purple: #A78BFA;
+      --dark-bg: #1a0b2e;
+      --glass-bg: rgba(139, 92, 246, 0.1);
+      --glass-border: rgba(196, 181, 253, 0.2);
     }
 
     body {
-      color: var(--text);
-      background: radial-gradient(1200px 600px at 10% 0%, var(--bg3) 0%, var(--bg2) 35%, var(--bg1) 70%) fixed,
-                  radial-gradient(1200px 600px at 90% 100%, #1a0534 0%, var(--bg2) 35%, var(--bg1) 70%) fixed,
-                  linear-gradient(135deg, var(--bg1), #0a0318);
-      background-blend-mode: screen, normal, normal;
+      font-family: 'Inter', sans-serif;
+      background: var(--deep-purple);
+      color: #ffffff;
       overflow-x: hidden;
-    }
-
-    /* Subtle animated neural grid overlay */
-    .neural-grid::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(ellipse at 50% -10%, rgba(168,85,247,0.25), transparent 50%) 0 0 / 100% 100% no-repeat,
-        linear-gradient(transparent, transparent),
-        /* grid lines */
-        repeating-linear-gradient(90deg, rgba(168,85,247,0.12) 0px, rgba(168,85,247,0.12) 1px, transparent 1px, transparent 70px),
-        repeating-linear-gradient(0deg, rgba(168,85,247,0.08) 0px, rgba(168,85,247,0.08) 1px, transparent 1px, transparent 70px);
-      mask-image: radial-gradient(circle at 50% 50%, rgba(255,255,255,0.7), rgba(255,255,255,0.1) 55%, transparent 80%);
-      animation: gridShift 26s linear infinite;
-      z-index: 0;
-    }
-    @keyframes gridShift {
-      0% { transform: translateY(0) translateX(0); opacity: 0.55; }
-      50% { transform: translateY(-25px) translateX(20px); opacity: 0.6; }
-      100% { transform: translateY(0) translateX(0); opacity: 0.55; }
-    }
-
-    /* Ultra subtle noise texture */
-    .noise::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.08;
-      mix-blend-mode: overlay;
-      background: 
-        radial-gradient(1px 1px at 10% 20%, rgba(255,255,255,0.09), transparent 60%),
-        radial-gradient(1px 1px at 30% 80%, rgba(255,255,255,0.08), transparent 60%),
-        radial-gradient(1px 1px at 60% 10%, rgba(255,255,255,0.08), transparent 60%),
-        radial-gradient(1px 1px at 90% 50%, rgba(255,255,255,0.09), transparent 60%);
-      z-index: 0;
-    }
-
-    /* Glassmorphism card */
-    .glass {
-      background: var(--glass);
-      backdrop-filter: blur(18px) saturate(1.2);
-      -webkit-backdrop-filter: blur(18px) saturate(1.2);
-      border: 1px solid var(--border);
-      box-shadow:
-        0 10px 30px var(--shadow-deep),
-        0 0 0 1px rgba(168,85,247,0.25) inset,
-        0 0 28px 4px rgba(168,85,247,0.14);
-    }
-
-    .soft {
-      box-shadow: 
-        inset 8px 8px 16px rgba(0,0,0,0.25),
-        inset -8px -8px 16px rgba(255,255,255,0.06),
-        0 10px 24px rgba(0,0,0,0.35);
-    }
-
-    /* Salmar orb */
-    .salmar-orb {
       position: relative;
+      min-height: 100vh;
+    }
+
+    /* Animated Particle Background */
+    .particle-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 3px;
+      height: 3px;
+      background: var(--neon-purple);
+      border-radius: 50%;
+      opacity: 0.6;
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) translateX(0) scale(0);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 0.6;
+      }
+
+      90% {
+        opacity: 0.6;
+      }
+
+      100% {
+        transform: translateY(-100px) translateX(100px) scale(1);
+        opacity: 0;
+      }
+    }
+
+    /* Salmar Orb Animation */
+    .orb {
+      position: fixed;
+      width: 400px;
+      height: 400px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.4) 0%, rgba(139, 92, 246, 0) 70%);
+      filter: blur(60px);
+      animation: orbPulse 8s ease-in-out infinite;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .orb-1 {
+      top: -200px;
+      right: -200px;
+    }
+
+    .orb-2 {
+      bottom: -200px;
+      left: -200px;
+      animation-delay: 4s;
+    }
+
+    @keyframes orbPulse {
+
+      0%,
+      100% {
+        transform: scale(1);
+        opacity: 0.3;
+      }
+
+      50% {
+        transform: scale(1.2);
+        opacity: 0.5;
+      }
+    }
+
+    /* Main Container */
+    .container {
+      position: relative;
+      z-index: 2;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 60px;
+      animation: fadeInDown 1s ease-out;
+    }
+
+    .logo {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2.5rem;
+      font-weight: 700;
+      background: linear-gradient(135deg, var(--primary-purple), var(--light-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 10px;
+      display: inline-block;
+    }
+
+    h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 3rem;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, #ffffff, var(--light-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 1.2rem;
+      color: var(--light-purple);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* Issue Type Tiles */
+    .issue-types {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 25px;
+      margin-bottom: 60px;
+      animation: fadeInUp 1s ease-out 0.3s both;
+    }
+
+    .issue-tile {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 2px solid var(--glass-border);
+      border-radius: 20px;
+      padding: 30px;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .issue-tile::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .issue-tile:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .issue-tile:hover {
+      transform: translateY(-10px);
+      border-color: var(--primary-purple);
+      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.4);
+    }
+
+    .issue-tile.selected {
+      border-color: var(--primary-purple);
+      background: rgba(139, 92, 246, 0.2);
+      box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+    }
+
+    .issue-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      display: block;
+    }
+
+    .issue-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .issue-desc {
+      font-size: 0.95rem;
+      color: var(--light-purple);
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Form Section */
+    .form-section {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 2px solid var(--glass-border);
+      border-radius: 30px;
+      padding: 50px;
+      margin-bottom: 40px;
+      animation: fadeInUp 1s ease-out 0.6s both;
+    }
+
+    .form-step {
+      margin-bottom: 40px;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .step-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--primary-purple), var(--neon-purple));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      margin-right: 15px;
+      font-size: 1.1rem;
+    }
+
+    .step-title {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 500;
+      color: var(--light-purple);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea {
+      width: 100%;
+      padding: 15px 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid var(--glass-border);
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 1rem;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: var(--primary-purple);
+      box-shadow: 0 0 20px rgba(139, 92, 246, 0.3);
+    }
+
+    textarea {
+      min-height: 150px;
+      resize: vertical;
+    }
+
+    /* Upload Zone */
+    .upload-zone {
+      border: 3px dashed var(--glass-border);
+      border-radius: 15px;
+      padding: 40px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .upload-zone:hover {
+      border-color: var(--primary-purple);
+      background: rgba(139, 92, 246, 0.1);
+    }
+
+    .upload-zone.dragover {
+      border-color: var(--primary-purple);
+      background: rgba(139, 92, 246, 0.2);
+    }
+
+    .upload-icon {
+      font-size: 3rem;
+      margin-bottom: 15px;
+      opacity: 0.7;
+    }
+
+    /* Urgency Selector */
+    .urgency-options {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .urgency-option {
+      flex: 1;
+      min-width: 150px;
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid var(--glass-border);
+      border-radius: 15px;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+
+    .urgency-option:hover {
+      transform: translateY(-5px);
+    }
+
+    .urgency-option.selected {
+      border-color: var(--primary-purple);
+      background: rgba(139, 92, 246, 0.2);
+    }
+
+    .urgency-option.normal.selected {
+      border-color: #10B981;
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);
+    }
+
+    .urgency-option.high.selected {
+      border-color: #F59E0B;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+    }
+
+    .urgency-option.critical.selected {
+      border-color: #EF4444;
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.3);
+    }
+
+    .urgency-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      padding: 20px;
+      background: linear-gradient(135deg, var(--primary-purple), var(--neon-purple));
+      border: none;
+      border-radius: 15px;
+      color: #ffffff;
+      font-size: 1.3rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .submit-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .submit-btn:hover::before {
+      width: 600px;
+      height: 600px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 20px 60px rgba(139, 92, 246, 0.5);
+    }
+
+    .submit-btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* AI Suggestion Box */
+    .ai-suggestion {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(196, 181, 253, 0.1));
+      border: 2px solid var(--primary-purple);
+      border-radius: 15px;
+      padding: 20px;
+      margin-top: 20px;
+      display: none;
+      animation: slideInUp 0.5s ease-out;
+    }
+
+    .ai-suggestion.show {
+      display: block;
+    }
+
+    .ai-icon {
+      font-size: 1.5rem;
+      margin-right: 10px;
+    }
+
+    /* Tracking Section */
+    .tracking-section {
+      background: var(--glass-bg);
+      backdrop-filter: blur(10px);
+      border: 2px solid var(--glass-border);
+      border-radius: 30px;
+      padding: 50px;
+      margin-bottom: 40px;
+      animation: fadeInUp 1s ease-out 0.9s both;
+    }
+
+    .tracking-input-group {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+
+    .tracking-input-group input {
+      flex: 1;
+    }
+
+    .track-btn {
+      padding: 15px 40px;
+      background: linear-gradient(135deg, var(--primary-purple), var(--neon-purple));
+      border: none;
+      border-radius: 12px;
+      color: #ffffff;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .track-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(139, 92, 246, 0.4);
+    }
+
+    /* Emergency Contact */
+    .emergency-contact {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.2), rgba(220, 38, 38, 0.1));
+      border: 2px solid rgba(239, 68, 68, 0.5);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      animation: fadeInUp 1s ease-out 1.2s both;
+    }
+
+    .emergency-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: #FCA5A5;
+    }
+
+    .contact-info {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    .contact-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+    }
+
+    /* Success Modal */
+    .success-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.95), rgba(196, 181, 253, 0.95));
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .success-modal.show {
+      display: flex;
+    }
+
+    .success-content {
+      text-align: center;
+      animation: scaleIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+
+    .checkmark {
       width: 120px;
       height: 120px;
-      border-radius: 9999px;
-      background:
-        radial-gradient(circle at 30% 35%, rgba(255,255,255,0.35), transparent 35%),
-        conic-gradient(from 0deg, rgba(168,85,247,0.85), rgba(139,92,246,0.55), rgba(124,58,237,0.85), rgba(168,85,247,0.85));
-      filter: drop-shadow(0 0 8px rgba(168,85,247,0.55));
-      box-shadow: 0 0 40px rgba(168,85,247,0.25), inset 0 0 30px rgba(255,255,255,0.12);
-      transition: transform 0.6s ease, box-shadow 0.6s ease, filter 0.6s ease;
-    }
-    .salmar-orb::before {
-      content: "";
-      position: absolute;
-      inset: -18px;
-      border-radius: inherit;
-      background: radial-gradient(80px 80px at 50% 50%, rgba(168,85,247,0.35), transparent 70%);
-      filter: blur(18px);
-      animation: auraPulse 3.5s ease-in-out infinite;
-      pointer-events: none;
-    }
-    @keyframes auraPulse {
-      0%, 100% { opacity: 0.6; transform: scale(0.95); }
-      50% { opacity: 0.95; transform: scale(1.05); }
-    }
-    .orb-boost {
-      filter: drop-shadow(0 0 25px rgba(168,85,247,0.9));
-      box-shadow: 0 0 70px rgba(168,85,247,0.5), inset 0 0 40px rgba(255,255,255,0.2);
-      transform: scale(1.06);
+      border-radius: 50%;
+      background: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 30px;
+      font-size: 4rem;
+      color: var(--primary-purple);
+      animation: checkmarkPop 0.6s ease-out 0.3s both;
     }
 
-    /* Warning triangle */
-    .warn-triangle {
-      width: 64px;
-      height: 64px;
-      filter: drop-shadow(0 0 12px rgba(168,85,247,0.9));
-      animation: trianglePulse 2.8s ease-in-out infinite;
-    }
-    @keyframes trianglePulse {
-      0%,100% { transform: translateY(0) scale(1); opacity: 0.95; }
-      50% { transform: translateY(-2px) scale(1.03); opacity: 1; }
+    .success-title {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      color: #ffffff;
     }
 
-    /* Custom select (listbox) */
-    .select-trigger {
-      position: relative;
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: var(--glass-strong);
-      transition: border-color 0.25s ease, box-shadow 0.25s ease;
-      outline: none;
-    }
-    .select-trigger:focus, .select-trigger[aria-expanded="true"] {
-      box-shadow: 0 0 0 3px rgba(168,85,247,0.35), 0 0 32px rgba(168,85,247,0.25);
-      border-color: rgba(168,85,247,0.8);
-    }
-    .options {
-      background: var(--glass-strong);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      backdrop-filter: blur(14px) saturate(1.2);
-      -webkit-backdrop-filter: blur(14px) saturate(1.2);
-      box-shadow: 0 12px 40px rgba(0,0,0,0.45), 0 0 0 1px rgba(168,85,247,0.2);
-    }
-    .option-item[aria-selected="true"] {
-      background: linear-gradient(90deg, rgba(168,85,247,0.22), rgba(168,85,247,0.08));
-      border-left: 3px solid var(--glow);
+    .tracking-code {
+      font-size: 2rem;
+      font-family: 'Space Grotesk', monospace;
+      background: rgba(255, 255, 255, 0.2);
+      padding: 15px 30px;
+      border-radius: 10px;
+      display: inline-block;
+      margin: 20px 0;
     }
 
-    /* Inputs */
-    .field {
-      border-radius: 14px;
-      border: 1px solid var(--border);
-      background: var(--glass-strong);
-      transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, color 0.25s ease;
-      outline: none;
-    }
-    .field:focus {
-      box-shadow: 0 0 0 3px rgba(168,85,247,0.3), 0 0 28px rgba(168,85,247,0.2);
-      border-color: rgba(168,85,247,0.8);
-    }
-    textarea.field {
-      resize: vertical;
-      min-height: 140px;
-    }
-
-    /* Dropzone */
-    .dropzone {
-      border: 2px dashed rgba(168,85,247,0.45);
-      border-radius: 16px;
-      background: linear-gradient(180deg, rgba(168,85,247,0.08), rgba(168,85,247,0.03));
-      transition: border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
-    }
-    .dropzone.dragover {
-      border-color: var(--glow);
-      box-shadow: 0 0 0 3px rgba(168,85,247,0.25), inset 0 0 20px rgba(168,85,247,0.2);
-      background: linear-gradient(180deg, rgba(168,85,247,0.18), rgba(168,85,247,0.06));
-    }
-
-    /* Urgency buttons (radio) */
-    .urgency-group label {
-      border-radius: 9999px;
-      padding: 0.5rem 1rem;
-      border: 1px solid var(--border);
-      background: var(--glass-strong);
-      cursor: pointer;
-      transition: transform 0.18s ease, box-shadow 0.2s ease, border-color 0.2s ease, background 0.2s ease;
-      user-select: none;
-    }
-    .urgency-group input:focus + label {
-      box-shadow: 0 0 0 3px rgba(168,85,247,0.3);
-    }
-    .urgency-group input:checked + label[data-level="low"] {
-      box-shadow: 0 0 16px rgba(34,197,94,0.25), inset 0 0 18px rgba(34,197,94,0.18);
-      border-color: rgba(34,197,94,0.6);
-      background: linear-gradient(180deg, rgba(34,197,94,0.2), rgba(34,197,94,0.07));
-    }
-    .urgency-group input:checked + label[data-level="medium"] {
-      box-shadow: 0 0 16px rgba(245,158,11,0.25), inset 0 0 18px rgba(245,158,11,0.18);
-      border-color: rgba(245,158,11,0.6);
-      background: linear-gradient(180deg, rgba(245,158,11,0.22), rgba(245,158,11,0.07));
-    }
-    .urgency-group input:checked + label[data-level="high"] {
-      box-shadow: 0 0 18px rgba(239,68,68,0.28), inset 0 0 18px rgba(239,68,68,0.18);
-      border-color: rgba(239,68,68,0.7);
-      background: linear-gradient(180deg, rgba(239,68,68,0.22), rgba(239,68,68,0.07));
-    }
-
-    /* Submit ripple */
-    .ripple {
-      position: absolute;
-      border-radius: 9999px;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.35) 30%, rgba(255,255,255,0.1) 60%, transparent 70%);
-      animation: ripple 700ms ease-out forwards;
-      width: 10px; height: 10px;
-    }
-    @keyframes ripple {
-      to { opacity: 0; transform: translate(-50%, -50%) scale(18); }
-    }
-
-    /* Suggestion tags */
-    .suggestion-chip {
-      border: 1px dashed rgba(168,85,247,0.45);
-      background: linear-gradient(180deg, rgba(168,85,247,0.12), rgba(168,85,247,0.06));
-      border-radius: 9999px;
-      transition: transform 0.14s ease, box-shadow 0.14s ease;
-      cursor: pointer;
-    }
-    .suggestion-chip:hover {
-      transform: translateY(-1px);
-      box-shadow: 0 6px 16px rgba(168,85,247,0.25);
-    }
-
-    /* Known issue alert */
-    .known-issue {
-      border-radius: 14px;
-      border: 1px solid rgba(245,158,11,0.5);
-      background: linear-gradient(180deg, rgba(245,158,11,0.15), rgba(245,158,11,0.04));
-      box-shadow: 0 8px 24px rgba(245,158,11,0.15), inset 0 0 12px rgba(245,158,11,0.08);
-    }
-
-    /* Spark particles */
-    .spark {
+    /* Confetti */
+    .confetti {
       position: fixed;
-      width: 6px;
-      height: 6px;
-      border-radius: 9999px;
-      background: radial-gradient(circle, #e9d5ff 0%, #c084fc 50%, #7c3aed 70%, transparent 72%);
-      filter: blur(0.3px) drop-shadow(0 0 6px rgba(168,85,247,0.9));
-      z-index: 50;
-      pointer-events: none;
-      opacity: 0.95;
-      will-change: transform, opacity;
+      width: 10px;
+      height: 10px;
+      background: var(--primary-purple);
+      position: absolute;
+      animation: confettiFall 3s linear;
     }
 
-    /* Confirmation panel */
-    .success-card {
-      border-radius: 18px;
-      border: 1px solid rgba(34,197,94,0.45);
-      background: linear-gradient(180deg, rgba(34,197,94,0.18), rgba(34,197,94,0.06));
-      box-shadow: 0 18px 44px rgba(34,197,94,0.25), inset 0 0 16px rgba(34,197,94,0.12);
-    }
-
-    /* Footer links */
-    .footer-link {
-      color: var(--muted);
-      transition: color 0.2s ease, text-shadow 0.2s ease;
-    }
-    .footer-link:hover {
-      color: var(--text);
-      text-shadow: 0 0 18px rgba(168,85,247,0.6);
-    }
-
-    /* Reduce motion respecting */
-    @media (prefers-reduced-motion: reduce) {
-      .salmar-orb::before,
-      .warn-triangle,
-      .neural-grid::before {
-        animation: none !important;
+    @keyframes confettiFall {
+      to {
+        transform: translateY(100vh) rotate(360deg);
+        opacity: 0;
       }
+    }
+
+    /* Animations */
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.5);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes checkmarkPop {
+      0% {
+        transform: scale(0);
+      }
+
+      50% {
+        transform: scale(1.2);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2rem;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+      }
+
+      .subtitle {
+        font-size: 1rem;
+      }
+
+      .form-section,
+      .tracking-section {
+        padding: 30px 20px;
+      }
+
+      .issue-types {
+        grid-template-columns: 1fr;
+      }
+
+      .urgency-options {
+        flex-direction: column;
+      }
+
+      .tracking-input-group {
+        flex-direction: column;
+      }
+
+      .contact-info {
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .success-title {
+        font-size: 2rem;
+      }
+
+      .tracking-code {
+        font-size: 1.5rem;
+      }
+    }
+
+    .helper-points {
+      display: inline-block;
+      background: linear-gradient(135deg, #F59E0B, #FCD34D);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: 600;
+      color: var(--deep-purple);
+      margin-top: 15px;
     }
   </style>
 </head>
-<body class="neural-grid noise min-h-screen antialiased selection:bg-primary-600/70 selection:text-white">
-  <a href="#report-card" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:bg-white/90 focus:text-black focus:px-3 focus:py-2 focus:rounded-md">Skip to form</a>
 
-  <header class="relative z-10">
-    <div class="mx-auto max-w-5xl px-4 pt-10 md:pt-14">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <!-- Warning triangle -->
-          <svg class="warn-triangle" viewBox="0 0 64 64" aria-hidden="true">
-            <defs>
-              <filter id="glow">
-                <feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
-                <feMerge>
-                  <feMergeNode in="coloredBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
-                </feMerge>
-              </filter>
-            </defs>
-            <polygon filter="url(#glow)" points="32,4 60,56 4,56" fill="url(#gradTri)" stroke="#a855f7" stroke-width="1.5"/>
-            <defs>
-              <linearGradient id="gradTri" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#a855f7" stop-opacity="0.85"/>
-                <stop offset="100%" stop-color="#7c3aed" stop-opacity="0.75"/>
-              </linearGradient>
-            </defs>
-            <rect x="30" y="22" width="4" height="20" rx="2" fill="#fff"/>
-            <circle cx="32" cy="48" r="2" fill="#fff"/>
-          </svg>
-          <div class="flex flex-col">
-            <h1 class="text-2xl md:text-3xl font-bold tracking-tight">Report an Issue</h1>
-            <p class="text-sm md:text-base text-primary-100/90" id="subtitle">Found something unusual? Help us improve Salmar by reporting it securely.</p>
-          </div>
-        </div>
+<body>
+  <!-- Particle Background -->
+  <div class="particle-container" id="particleContainer"></div>
 
-        <!-- Theme toggle -->
-        <button id="themeToggle" class="glass p-2 rounded-full focus:outline-none focus:ring-4 focus:ring-primary-600/30" aria-label="Toggle color theme" title="Toggle light/dark">
-          <svg id="themeIcon" class="w-6 h-6" viewBox="0 0 24 24" fill="none">
-            <path id="sun" d="M12 4V2M12 22v-2M4.93 4.93 3.52 3.52M20.48 20.48l-1.41-1.41M22 12h-2M4 12H2M19.07 4.93l1.41-1.41M3.52 20.48l1.41-1.41M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-          </svg>
-        </button>
+  <!-- Orbs -->
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="logo">🟣 SALMAR AI</div>
+      <h1>Report an Issue</h1>
+      <p class="subtitle">Every report is an opportunity for growth. Help us build a better Salmar AI together. Your
+        feedback shapes our future.</p>
+    </header>
+
+    <!-- Issue Type Selection -->
+    <div class="issue-types">
+      <div class="issue-tile" data-type="broken">
+        <span class="issue-icon">🛠️</span>
+        <div class="issue-title">Something's Broken</div>
+        <div class="issue-desc">Bugs, errors, crashes, or unexpected behavior</div>
       </div>
-
-      <!-- Orb center -->
-      <div class="flex items-center justify-center mt-8 md:mt-10">
-        <div class="salmar-orb" id="salmarOrb" role="img" aria-label="Salmar orb"></div>
+      <div class="issue-tile" data-type="security">
+        <span class="issue-icon">🔒</span>
+        <div class="issue-title">Security Concern</div>
+        <div class="issue-desc">Login issues, suspicious activity, vulnerabilities</div>
+      </div>
+      <div class="issue-tile" data-type="design">
+        <span class="issue-icon">🎨</span>
+        <div class="issue-title">Design/Experience Issue</div>
+        <div class="issue-desc">Accessibility, confusing layouts, visual glitches</div>
+      </div>
+      <div class="issue-tile" data-type="feature">
+        <span class="issue-icon">💡</span>
+        <div class="issue-title">Suggest a Feature</div>
+        <div class="issue-desc">Share ideas that can shape future updates</div>
       </div>
     </div>
-  </header>
 
-  <main class="relative z-10">
-    <!-- Form Card -->
-    <section id="report-card" class="mx-auto mt-8 md:mt-10 max-w-5xl px-4">
-      <div class="glass rounded-2xl p-5 sm:p-7 md:p-10 soft">
-        <form id="issueForm" novalidate class="space-y-6">
-          <!-- Category -->
-          <div>
-            <label class="block mb-2 font-semibold" for="category">Category</label>
-            <div class="relative">
-              <!-- Hidden native select for accessibility fallback -->
-              <select id="nativeCategory" name="category" class="sr-only" tabindex="-1" aria-hidden="true">
-                <option value="" selected disabled>Select a category</option>
-                <option value="Login">Login</option>
-                <option value="Security">Security</option>
-                <option value="AI Output">AI Output</option>
-                <option value="Integration">Integration</option>
-                <option value="Performance">Performance</option>
-                <option value="Other">Other</option>
-              </select>
+    <!-- Report Form -->
+    <div class="form-section">
+      <form id="reportForm">
+        <!-- Step 1: Who's Reporting -->
+        <div class="form-step">
+          <div class="step-header">
+            <div class="step-number">1</div>
+            <div class="step-title">Who's Reporting?</div>
+          </div>
+          <div class="form-group">
+            <label for="userName">Your Name (Optional for anonymity)</label>
+            <input type="text" id="userName" placeholder="Enter your name">
+          </div>
+          <div class="form-group">
+            <label for="userEmail">Email Address (Optional)</label>
+            <input type="email" id="userEmail" placeholder="your.email@example.com">
+          </div>
+        </div>
 
-              <!-- Custom Listbox -->
-              <button type="button"
-                      id="categoryBtn"
-                      class="select-trigger w-full px-4 py-3 flex items-center justify-between"
-                      role="combobox"
-                      aria-expanded="false"
-                      aria-haspopup="listbox"
-                      aria-controls="categoryListbox"
-                      aria-labelledby="categoryLabel"
-                      >
-                <span class="flex items-center gap-3 text-sm sm:text-base">
-                  <span id="categoryIcon" aria-hidden="true" class="inline-flex w-6 h-6 rounded-md items-center justify-center bg-primary-600/25 border border-primary-500/40 text-primary-100">
-                    <!-- default icon -->
-                    <svg viewBox="0 0 24 24" class="w-4 h-4"><path fill="currentColor" d="M4 7h16v2H4zm0 4h16v2H4zm0 4h10v2H4z"/></svg>
-                  </span>
-                  <span id="categoryLabel" class="opacity-80">Select a category</span>
-                </span>
-                <span class="text-primary-100/80" aria-hidden="true">
-                  <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-                </span>
-              </button>
+        <!-- Step 2: Issue Type (Selected Above) -->
+        <div class="form-step">
+          <div class="step-header">
+            <div class="step-number">2</div>
+            <div class="step-title">What's the Issue?</div>
+          </div>
+          <p style="color: var(--light-purple);">Select an issue type from the tiles above ☝️</p>
+          <input type="hidden" id="issueType">
+        </div>
 
-              <ul id="categoryListbox"
-                  class="options absolute mt-2 w-full max-h-64 overflow-auto p-1 shadow-xl hidden"
-                  role="listbox"
-                  aria-activedescendant=""
-                  tabindex="-1">
-                <li role="option" data-value="Login" class="option-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-primary-600/15 focus:bg-primary-600/15" tabindex="0">
-                  <span class="w-6 h-6 inline-flex items-center justify-center rounded bg-primary-600/25 border border-primary-500/40 text-primary-100">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="currentColor" d="M12 1a5 5 0 0 1 5 5v2h-2V6a3 3 0 0 0-6 0v2H7V6a5 5 0 0 1 5-5Zm7 9a2 2 0 0 1 2 2v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3v-8a2 2 0 0 1 2-2h14Z"/></svg>
-                  </span>
-                  <span>Login</span>
-                </li>
-                <li role="option" data-value="Security" class="option-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-primary-600/15 focus:bg-primary-600/15" tabindex="0">
-                  <span class="w-6 h-6 inline-flex items-center justify-center rounded bg-primary-600/25 border border-primary-500/40 text-primary-100">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="currentColor" d="M12 2l7 4v6c0 5-3.5 9.74-7 10-3.5-.26-7-5-7-10V6l7-4Zm0 6a3 3 0 1 0 0 6 3 3 0 0 0 0-6Z"/></svg>
-                  </span>
-                  <span>Security</span>
-                </li>
-                <li role="option" data-value="AI Output" class="option-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-primary-600/15 focus:bg-primary-600/15" tabindex="0">
-                  <span class="w-6 h-6 inline-flex items-center justify-center rounded bg-primary-600/25 border border-primary-500/40 text-primary-100">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a9 9 0 1 0 9 9h-2a7 7 0 1 1-7-7V3Zm1 1v8h8a8 8 0 0 0-8-8Z"/></svg>
-                  </span>
-                  <span>AI Output</span>
-                </li>
-                <li role="option" data-value="Integration" class="option-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-primary-600/15 focus:bg-primary-600/15" tabindex="0">
-                  <span class="w-6 h-6 inline-flex items-center justify-center rounded bg-primary-600/25 border border-primary-500/40 text-primary-100">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="currentColor" d="M7 2h10v6H7V2Zm-3 8h6v6H4v-6Zm10 0h6v6h-6v-6ZM7 18h10v4H7v-4Z"/></svg>
-                  </span>
-                  <span>Integration</span>
-                </li>
-                <li role="option" data-value="Performance" class="option-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-primary-600/15 focus:bg-primary-600/15" tabindex="0">
-                  <span class="w-6 h-6 inline-flex items-center justify-center rounded bg-primary-600/25 border border-primary-500/40 text-primary-100">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="currentColor" d="M12 3a9 9 0 0 0-9 9h2a7 7 0 0 1 7-7V3Zm9 9a9 9 0 0 0-9-9v2a7 7 0 0 1 7 7h2Zm-9 9a9 9 0 0 0 9-9h-2a7 7 0 0 1-7 7v2Zm-9-9a9 9 0 0 0 9 9v-2a7 7 0 0 1-7-7H3Z"/></svg>
-                  </span>
-                  <span>Performance</span>
-                </li>
-                <li role="option" data-value="Other" class="option-item flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer hover:bg-primary-600/15 focus:bg-primary-600/15" tabindex="0">
-                  <span class="w-6 h-6 inline-flex items-center justify-center rounded bg-primary-600/25 border border-primary-500/40 text-primary-100">
-                    <svg class="w-4 h-4" viewBox="0 0 24 24"><path fill="currentColor" d="M4 4h16v4H4zm4 6h12v4H8zm-4 6h16v4H4z"/></svg>
-                  </span>
-                  <span>Other</span>
-                </li>
-              </ul>
-            </div>
-            <p id="categoryError" class="mt-2 text-sm text-red-400 hidden">Please choose a category.</p>
+        <!-- Step 3: Tell Us More -->
+        <div class="form-step">
+          <div class="step-header">
+            <div class="step-number">3</div>
+            <div class="step-title">Tell Us More</div>
+          </div>
+          <div class="form-group">
+            <label for="issueDescription">What happened? What were you trying to do?</label>
+            <textarea id="issueDescription"
+              placeholder="Describe the issue in detail. The more information you provide, the faster we can help!"></textarea>
           </div>
 
-          <!-- Description -->
-          <div>
-            <div class="flex items-center justify-between mb-2">
-              <label class="font-semibold" for="description">Description</label>
-              <span id="charCount" class="text-xs text-primary-100/70">0 / 1000</span>
-            </div>
-            <textarea id="description" name="description" class="field w-full px-4 py-3" placeholder="Describe the issue in detail..." maxlength="1000" aria-describedby="descHelp descError"></textarea>
-            <div class="mt-2 text-sm text-primary-100/80" id="descHelp">Tip: Include steps to reproduce, expected vs actual result, and any error messages.</div>
-            <p id="descError" class="mt-2 text-sm text-red-400 hidden">Please provide at least 12 characters.</p>
-
-            <!-- Known issue status -->
-            <div id="knownIssue" class="known-issue mt-3 p-3 hidden">
-              <div class="flex items-start gap-3">
-                <svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-1" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M1 21h22L12 2 1 21Zm12-3h-2v2h2v-2Zm0-8h-2v6h2V10Z"/></svg>
-                <div>
-                  <p class="font-semibold">This is a known issue — fix in progress.</p>
-                  <p class="text-sm opacity-90">We’re actively working on this. Track updates on our status page.</p>
-                  <a href="#" class="inline-flex items-center gap-1 mt-1 text-sm underline decoration-dashed underline-offset-4 hover:text-white">View status</a>
-                </div>
-              </div>
-            </div>
-
-            <!-- AI Suggestions -->
-            <div id="suggestions" class="mt-4 hidden">
-              <p class="text-sm font-semibold mb-2">Salmar suggests:</p>
-              <div id="suggestionItems" class="flex flex-wrap gap-2"></div>
-            </div>
-          </div>
-
-          <!-- Attachments -->
-          <div>
-            <label class="block mb-2 font-semibold" for="attachments">Attachments</label>
-            <div id="dropzone" class="dropzone p-5 flex flex-col items-center justify-center text-center">
-              <svg class="w-10 h-10 text-primary-100/80" viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0l-4 4m4-4l4 4M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              <p class="mt-2 text-sm">Drag & drop files here, or click to browse.</p>
-              <p class="text-xs text-primary-100/70">Screenshots, logs, or files. Max 10MB each.</p>
-              <input id="fileInput" type="file" class="sr-only" multiple aria-label="Upload attachments" />
-              <button type="button" id="browseBtn" class="mt-3 px-3 py-1.5 rounded-full border border-primary-500/50 text-sm hover:bg-primary-600/10 focus:outline-none focus:ring-4 focus:ring-primary-600/30">Browse</button>
-            </div>
-            <ul id="fileList" class="mt-3 space-y-2 text-sm"></ul>
-            <p id="fileError" class="mt-2 text-sm text-red-400 hidden">One or more files exceed the 10MB limit.</p>
-          </div>
-
-          <!-- Contact (Optional) -->
-          <div>
-            <label class="block mb-2 font-semibold" for="email">Contact (optional)</label>
-            <input id="email" name="email" type="email" class="field w-full px-4 py-3" placeholder="Where can we reach you for updates?" aria-describedby="emailHelp emailError"/>
-            <div id="emailHelp" class="mt-2 text-sm text-primary-100/70">We’ll only use this to contact you about your report.</div>
-            <p id="emailError" class="mt-2 text-sm text-red-400 hidden">Please provide a valid email address.</p>
-          </div>
-
-          <!-- Urgency -->
-          <fieldset class="urgency-group">
-            <legend class="font-semibold mb-2">Urgency</legend>
-            <div class="flex flex-wrap gap-2" role="radiogroup" aria-label="Urgency Level">
-              <input class="sr-only" type="radio" name="urgency" id="uLow" value="Low" checked/>
-              <label for="uLow" data-level="low" class="inline-flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(16,185,129,0.85)]"></span> Low
-              </label>
-
-              <input class="sr-only" type="radio" name="urgency" id="uMedium" value="Medium"/>
-              <label for="uMedium" data-level="medium" class="inline-flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_12px_rgba(245,158,11,0.85)]"></span> Medium
-              </label>
-
-              <input class="sr-only" type="radio" name="urgency" id="uHigh" value="High"/>
-              <label for="uHigh" data-level="high" class="inline-flex items-center gap-2">
-                <span class="w-2 h-2 rounded-full bg-rose-500 shadow-[0_0_14px_rgba(244,63,94,0.85)]"></span> High
-              </label>
-            </div>
-          </fieldset>
-
-          <!-- Submit -->
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-6">
-            <div class="text-xs text-primary-100/80">
-              <span class="inline-flex items-center gap-1">
-                <svg class="w-4 h-4 text-primary-200" viewBox="0 0 24 24" fill="none"><path d="M12 2l9 4-9 4-9-4 9-4Zm0 8l9 4-9 4-9-4 9-4Zm0 8l9 4-9 4-9-4 9-4Z" stroke="currentColor" stroke-width="1.2" /></svg>
-                Your report is encrypted. Sensitive data is never shared.
-              </span>
-            </div>
-            <button id="submitBtn" type="submit" class="relative overflow-hidden inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-gradient-to-r from-primary-600 via-primary-500 to-primary-600 text-white font-semibold shadow-[0_10px_28px_rgba(124,58,237,0.45)] hover:shadow-[0_14px_34px_rgba(124,58,237,0.60)] focus:outline-none focus:ring-4 focus:ring-primary-600/40 transition-all">
-              <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Send Report to Salmar
-            </button>
-          </div>
-        </form>
-      </div>
-
-      <!-- Confirmation Section -->
-      <div id="successPanel" class="success-card mt-6 p-6 md:p-8 hidden">
-        <div class="flex items-start gap-4">
-          <svg class="w-7 h-7 text-emerald-400 flex-shrink-0" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <div class="flex-1">
-            <p class="text-lg font-semibold">Your report has been received.</p>
-            <p class="text-sm opacity-90">The Salmar orb glows brighter — our team will review it promptly.</p>
-            <div class="mt-3 text-sm">
-              <span class="opacity-80">Ticket ID:</span>
-              <code id="ticketId" class="ml-2 px-2 py-0.5 rounded bg-white/10 border border-white/20">SAL-XXXX</code>
-            </div>
-            <div class="mt-4">
-              <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-primary-500/40 bg-primary-600/15 text-sm">
-                <svg class="w-4 h-4 text-primary-200" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.09 6.26L20 9l-5 3.73L16.18 20 12 16.9 7.82 20 9 12.73 4 9l5.91-.74L12 2z" stroke="currentColor" stroke-width="1.2"/></svg>
-                <span>Badge unlocked: You helped make Salmar stronger.</span>
+          <!-- AI Suggestion Box -->
+          <div class="ai-suggestion" id="aiSuggestion">
+            <div style="display: flex; align-items: center;">
+              <span class="ai-icon">🤖</span>
+              <div>
+                <strong>AI-Powered Suggestion:</strong>
+                <p style="margin-top: 10px; color: var(--light-purple);">This looks similar to a known bug from March
+                  15, 2024. Would you like to see the fix or continue submitting?</p>
+                <button type="button" class="track-btn"
+                  style="margin-top: 10px; padding: 10px 20px; font-size: 0.9rem;">View Fix</button>
               </div>
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Footer -->
-      <footer class="mt-12 mb-10 text-center">
-        <div class="flex items-center justify-center gap-6 text-sm">
-          <a class="footer-link" href="securitystatus.html" aria-label="Security Status">Security Status</a>
-          <a class="footer-link" href="helpcenter.html" aria-label="Help Center">Help Center</a>
-          <a class="footer-link" href="privacy.html" aria-label="Privacy Policy">Privacy Policy</a>
+        <!-- Step 4: Add Evidence -->
+        <div class="form-step">
+          <div class="step-header">
+            <div class="step-number">4</div>
+            <div class="step-title">Add Evidence</div>
+          </div>
+          <div class="upload-zone" id="uploadZone">
+            <div class="upload-icon">📎</div>
+            <div style="font-size: 1.1rem; margin-bottom: 10px;">Drag & Drop Files Here</div>
+            <div style="color: var(--light-purple); font-size: 0.9rem;">or click to browse</div>
+            <div style="margin-top: 15px; color: var(--light-purple); font-size: 0.85rem;">Screenshots, recordings, or
+              system logs (Max 10MB)</div>
+            <input type="file" id="fileInput" style="display: none;" multiple accept="image/*,video/*,.log,.txt">
+          </div>
+          <div id="fileList" style="margin-top: 15px;"></div>
         </div>
-        <p class="mt-3 text-xs text-primary-100/70">Together, we keep Salmar secure.</p>
-      </footer>
-    </section>
-  </main>
+
+        <!-- Step 5: Urgency -->
+        <div class="form-step">
+          <div class="step-header">
+            <div class="step-number">5</div>
+            <div class="step-title">How Urgent Is It?</div>
+          </div>
+          <div class="urgency-options">
+            <div class="urgency-option normal" data-urgency="normal">
+              <div class="urgency-icon">🟢</div>
+              <div style="font-weight: 600; margin-bottom: 5px;">Normal</div>
+              <div style="font-size: 0.85rem; color: var(--light-purple);">Can wait for regular review</div>
+            </div>
+            <div class="urgency-option high" data-urgency="high">
+              <div class="urgency-icon">🟡</div>
+              <div style="font-weight: 600; margin-bottom: 5px;">High</div>
+              <div style="font-size: 0.85rem; color: var(--light-purple);">Affecting my work</div>
+            </div>
+            <div class="urgency-option critical" data-urgency="critical">
+              <div class="urgency-icon">🔴</div>
+              <div style="font-weight: 600; margin-bottom: 5px;">Critical</div>
+              <div style="font-size: 0.85rem; color: var(--light-purple);">Immediate attention needed</div>
+            </div>
+          </div>
+          <input type="hidden" id="urgencyLevel">
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn">
+          <span>🚀 Send to Salmar</span>
+        </button>
+      </form>
+    </div>
+
+    <!-- Tracking Section -->
+    <div class="tracking-section">
+      <h2 style="font-size: 2rem; margin-bottom: 15px;">Track Your Report</h2>
+      <p style="color: var(--light-purple); margin-bottom: 20px;">Already submitted a report? Enter your tracking code
+        to see live updates on its progress.</p>
+      <div class="tracking-input-group">
+        <input type="text" id="trackingCode" placeholder="Enter your tracking code (e.g., SLM-2024-A1B2C3)">
+        <button type="button" class="track-btn" onclick="trackIssue()">Track Issue</button>
+      </div>
+      <div style="margin-top: 20px; color: var(--light-purple); font-size: 0.9rem;">
+        💡 Tip: Save your tracking code to monitor your issue's journey from submission to resolution
+      </div>
+    </div>
+
+    <!-- Emergency Contact -->
+    <div class="emergency-contact">
+      <div class="emergency-title">🚨 Emergency Security Hotline</div>
+      <p style="color: #FCA5A5; margin-bottom: 20px;">For urgent security matters like data leaks or critical
+        vulnerabilities</p>
+      <div class="contact-info">
+        <div class="contact-item">
+          <span>📧</span>
+          <span>security@salmar.ai</span>
+        </div>
+        <div class="contact-item">
+          <span>📞</span>
+          <span>+1 (555) SALMAR-911</span>
+        </div>
+        <div class="contact-item">
+          <span>🟣</span>
+          <span>Fast Lane: Critical reports get immediate human review</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div class="success-modal" id="successModal">
+    <div class="success-content">
+      <div class="checkmark">✓</div>
+      <h2 class="success-title">Thanks! Report Received</h2>
+      <p style="font-size: 1.2rem; color: #ffffff; margin-bottom: 20px;">Salmar's team has received your report</p>
+      <div class="tracking-code" id="generatedCode">SLM-2024-A1B2C3</div>
+      <p style="color: rgba(255, 255, 255, 0.9); margin-top: 20px;">Save this code to track your issue's progress</p>
+      <div class="helper-points">+50 Helper Points Earned! 🌟</div>
+      <div style="margin-top: 30px;">
+        <button class="track-btn" onclick="closeSuccessModal()" style="margin: 0 10px;">Close</button>
+        <button class="track-btn" onclick="copyTrackingCode()" style="margin: 0 10px;">Copy Code</button>
+      </div>
+    </div>
+  </div>
 
   <script>
-    (function() {
-      const htmlEl = document.documentElement;
-      const themeToggle = document.getElementById('themeToggle');
-      const themeIcon = document.getElementById('themeIcon');
-      const orb = document.getElementById('salmarOrb');
-      const form = document.getElementById('issueForm');
-      const submitBtn = document.getElementById('submitBtn');
-      const successPanel = document.getElementById('successPanel');
-      const ticketIdEl = document.getElementById('ticketId');
+    // Particle Animation
+    function createParticles() {
+      const container = document.getElementById('particleContainer');
+      const particleCount = 50;
 
-      // Category custom listbox
-      const categoryBtn = document.getElementById('categoryBtn');
-      const categoryListbox = document.getElementById('categoryListbox');
-      const nativeCategory = document.getElementById('nativeCategory');
-      const categoryLabel = document.getElementById('categoryLabel');
-      const categoryIcon = document.getElementById('categoryIcon');
-      const categoryError = document.getElementById('categoryError');
-
-      // Description & suggestions
-      const description = document.getElementById('description');
-      const charCount = document.getElementById('charCount');
-      const descError = document.getElementById('descError');
-      const suggestionsWrap = document.getElementById('suggestions');
-      const suggestionItems = document.getElementById('suggestionItems');
-      const knownIssue = document.getElementById('knownIssue');
-
-      // Attachments
-      const dropzone = document.getElementById('dropzone');
-      const fileInput = document.getElementById('fileInput');
-      const browseBtn = document.getElementById('browseBtn');
-      const fileList = document.getElementById('fileList');
-      const fileError = document.getElementById('fileError');
-
-      // Email
-      const email = document.getElementById('email');
-      const emailError = document.getElementById('emailError');
-
-      // THEME TOGGLE (no storage to avoid sandbox errors)
-      function toggleTheme() {
-        const current = htmlEl.getAttribute('data-theme');
-        const next = current === 'dark' ? 'light' : 'dark';
-        htmlEl.setAttribute('data-theme', next);
-        themeIcon.innerHTML = next === 'dark'
-          ? '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" fill="none"/>'
-          : '<path d="M12 4V2M12 22v-2M4.93 4.93 3.52 3.52M20.48 20.48l-1.41-1.41M22 12h-2M4 12H2M19.07 4.93l1.41-1.41M3.52 20.48l1.41-1.41M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>';
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+        particle.style.animationDelay = Math.random() * 5 + 's';
+        container.appendChild(particle);
       }
-      themeToggle.addEventListener('click', toggleTheme);
+    }
 
-      // ACCESSIBLE LISTBOX
-      let catOpen = false;
-      let activeIndex = -1;
-      const options = Array.from(categoryListbox.querySelectorAll('[role="option"]'));
+    createParticles();
 
-      function openCat() {
-        categoryListbox.classList.remove('hidden');
-        categoryBtn.setAttribute('aria-expanded', 'true');
-        catOpen = true;
-        // Find current selection to set activedescendant
-        const selectedIndex = options.findIndex(o => o.getAttribute('aria-selected') === 'true');
-        setActive(selectedIndex >= 0 ? selectedIndex : 0);
-        setTimeout(() => categoryListbox.focus(), 0);
-      }
-      function closeCat() {
-        categoryListbox.classList.add('hidden');
-        categoryBtn.setAttribute('aria-expanded', 'false');
-        catOpen = false;
-        activeIndex = -1;
-      }
-      function setActive(index) {
-        if (index < 0 || index >= options.length) return;
-        activeIndex = index;
-        options.forEach((opt, i) => {
-          if (i === index) {
-            opt.classList.add('ring-2', 'ring-primary-500/40');
-            categoryListbox.setAttribute('aria-activedescendant', 'opt-' + i);
-            opt.id = 'opt-' + i;
-          } else {
-            opt.classList.remove('ring-2', 'ring-primary-500/40');
-            if (opt.id && opt.id.startsWith('opt-')) opt.removeAttribute('id');
+    // Issue Type Selection
+    const issueTiles = document.querySelectorAll('.issue-tile');
+    const issueTypeInput = document.getElementById('issueType');
+
+    issueTiles.forEach(tile => {
+      tile.addEventListener('click', function () {
+        issueTiles.forEach(t => t.classList.remove('selected'));
+        this.classList.add('selected');
+        issueTypeInput.value = this.dataset.type;
+
+        // Ripple effect
+        const ripple = document.createElement('div');
+        ripple.style.position = 'absolute';
+        ripple.style.width = '20px';
+        ripple.style.height = '20px';
+        ripple.style.background = 'rgba(139, 92, 246, 0.6)';
+        ripple.style.borderRadius = '50%';
+        ripple.style.transform = 'scale(0)';
+        ripple.style.animation = 'ripple 0.6s ease-out';
+        this.appendChild(ripple);
+
+        setTimeout(() => ripple.remove(), 600);
+      });
+    });
+
+    // Urgency Selection
+    const urgencyOptions = document.querySelectorAll('.urgency-option');
+    const urgencyInput = document.getElementById('urgencyLevel');
+
+    urgencyOptions.forEach(option => {
+      option.addEventListener('click', function () {
+        urgencyOptions.forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+        urgencyInput.value = this.dataset.urgency;
+      });
+    });
+
+    // File Upload
+    const uploadZone = document.getElementById('uploadZone');
+    const fileInput = document.getElementById('fileInput');
+    const fileList = document.getElementById('fileList');
+    let uploadedFiles = [];
+
+    uploadZone.addEventListener('click', () => fileInput.click());
+
+    uploadZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadZone.classList.add('dragover');
+    });
+
+    uploadZone.addEventListener('dragleave', () => {
+      uploadZone.classList.remove('dragover');
+    });
+
+    uploadZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadZone.classList.remove('dragover');
+      handleFiles(e.dataTransfer.files);
+    });
+
+    fileInput.addEventListener('change', (e) => {
+      handleFiles(e.target.files);
+    });
+
+    function handleFiles(files) {
+      uploadedFiles = Array.from(files);
+      displayFiles();
+    }
+
+    function displayFiles() {
+      fileList.innerHTML = '';
+      uploadedFiles.forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.style.cssText = 'background: rgba(139, 92, 246, 0.1); padding: 10px 15px; border-radius: 8px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;';
+        fileItem.innerHTML = `
+                    <span>📄 ${file.name} (${(file.size / 1024).toFixed(2)} KB)</span>
+                    <button type="button" onclick="removeFile(${index})" style="background: rgba(239, 68, 68, 0.3); border: none; color: #fff; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Remove</button>
+                `;
+        fileList.appendChild(fileItem);
+      });
+    }
+
+    function removeFile(index) {
+      uploadedFiles.splice(index, 1);
+      displayFiles();
+    }
+
+    // AI Suggestion (triggered on description input)
+    const descriptionInput = document.getElementById('issueDescription');
+    const aiSuggestion = document.getElementById('aiSuggestion');
+    let suggestionTimeout;
+
+    descriptionInput.addEventListener('input', function () {
+      clearTimeout(suggestionTimeout);
+      if (this.value.length > 50) {
+        suggestionTimeout = setTimeout(() => {
+          // Simulate AI analysis
+          if (Math.random() > 0.5) {
+            aiSuggestion.classList.add('show');
           }
-        });
+        }, 2000);
+      } else {
+        aiSuggestion.classList.remove('show');
       }
-      function selectActive(index) {
-        const opt = options[index];
-        if (!opt) return;
-        options.forEach(o => o.setAttribute('aria-selected', 'false'));
-        opt.setAttribute('aria-selected', 'true');
-        const value = opt.getAttribute('data-value');
-        nativeCategory.value = value;
-        categoryLabel.textContent = value;
-        // update icon (clone)
-        categoryIcon.innerHTML = opt.querySelector('svg').outerHTML;
-        categoryError.classList.add('hidden');
-        closeCat();
-        categoryBtn.focus();
-      }
-      categoryBtn.addEventListener('click', () => {
-        catOpen ? closeCat() : openCat();
-      });
-      categoryBtn.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault(); openCat();
-        }
-      });
-      categoryListbox.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') { e.preventDefault(); closeCat(); categoryBtn.focus(); }
-        if (e.key === 'ArrowDown') { e.preventDefault(); setActive(Math.min(options.length - 1, activeIndex + 1)); }
-        if (e.key === 'ArrowUp') { e.preventDefault(); setActive(Math.max(0, activeIndex - 1)); }
-        if (e.key === 'Enter') { e.preventDefault(); selectActive(activeIndex); }
-        if (e.key === 'Tab') { closeCat(); }
-      });
-      options.forEach((opt, index) => {
-        opt.addEventListener('click', () => selectActive(index));
-        opt.addEventListener('mousemove', () => setActive(index));
-      });
-      document.addEventListener('click', (e) => {
-        if (!categoryBtn.contains(e.target) && !categoryListbox.contains(e.target)) closeCat();
-      });
+    });
 
-      // CHAR COUNT + AI SUGGESTIONS + KNOWN ISSUES + SPARKS
-      const suggestionDB = [
-        { k: ['login','signin','password','2fa','otp','captcha'], text: 'Trouble signing in? Try resetting your password or check 2FA settings.', link: '#'},
-        { k: ['security','xss','csrf','encryption','token'], text: 'Security concerns? Review our security guidelines and token policies.', link: '#'},
-        { k: ['slow','lag','latency','timeout','performance','memory','cpu'], text: 'Performance tips: check rate limits and network stability.', link: '#'},
-        { k: ['integration','api','webhook','sdk','oauth','callback'], text: 'Integration help: verify API keys, scopes, and webhook endpoints.', link: '#'},
-        { k: ['output','hallucination','incorrect','bias','format','json'], text: 'AI output looks off? Provide sample input/output for faster triage.', link: '#'},
-        { k: ['crash','500','error','bug','exception','stack'], text: 'Seeing errors? Include logs/stack traces and environment details.', link: '#'}
-      ];
-      const knownIssues = [
-        { k: ['webhook delay','webhooks delay','delay webhook','delayed webhook'], msg: 'Webhook delivery delays affecting some regions.' },
-        { k: ['login outage','cannot login','cant login','sign in down'], msg: 'Intermittent login failures for a subset of users.' },
-        { k: ['model slow','response slow','slow generation'], msg: 'Elevated response times for large requests.' },
-      ];
+    // Form Submission
+    const reportForm = document.getElementById('reportForm');
+    const successModal = document.getElementById('successModal');
 
-      function updateCharCount() {
-        const v = description.value.trim();
-        charCount.textContent = v.length + ' / 1000';
+    reportForm.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // Validate form
+      if (!issueTypeInput.value) {
+        alert('Please select an issue type');
+        return;
       }
 
-      function updateSuggestions() {
-        const text = description.value.toLowerCase();
-        const arr = suggestionDB.filter(item => item.k.some(k => text.includes(k)));
-        suggestionItems.innerHTML = '';
-        if (arr.length === 0) {
-          suggestionsWrap.classList.add('hidden');
-          return;
-        }
-        suggestionsWrap.classList.remove('hidden');
-        arr.slice(0, 4).forEach(s => {
-          const chip = document.createElement('button');
-          chip.type = 'button';
-          chip.className = 'suggestion-chip px-3 py-1.5 text-sm flex items-center gap-2';
-          chip.innerHTML = '<span aria-hidden="true">✨</span><span>'+s.text+'</span>';
-          chip.addEventListener('click', () => window.open(s.link, '_blank', 'noopener,noreferrer'));
-          suggestionItems.appendChild(chip);
-        });
+      if (!descriptionInput.value.trim()) {
+        alert('Please describe the issue');
+        return;
       }
 
-      function updateKnownIssue() {
-        const text = description.value.toLowerCase();
-        const match = knownIssues.find(item => item.k.some(k => text.includes(k)));
-        if (match) {
-          knownIssue.querySelector('p.font-semibold').textContent = 'This is a known issue — fix in progress.';
-          knownIssue.querySelector('p.opacity-90').textContent = match.msg + ' Track updates on our status page.';
-          knownIssue.classList.remove('hidden');
-        } else {
-          knownIssue.classList.add('hidden');
-        }
+      if (!urgencyInput.value) {
+        alert('Please select urgency level');
+        return;
       }
 
-      // Sparks traveling to orb
-      let lastSparkTime = 0;
-      function createSpark() {
-        const now = performance.now();
-        if (now - lastSparkTime < 120) return; // throttle
-        lastSparkTime = now;
+      // Generate tracking code
+      const trackingCode = 'SLM-' + new Date().getFullYear() + '-' +
+        Math.random().toString(36).substring(2, 8).toUpperCase();
+      document.getElementById('generatedCode').textContent = trackingCode;
 
-        const rectSrc = description.getBoundingClientRect();
-        const rectDst = orb.getBoundingClientRect();
-        const startX = rectSrc.left + rectSrc.width * (0.15 + Math.random() * 0.7);
-        const startY = rectSrc.top + rectSrc.height * (0.05 + Math.random() * 0.9);
-        const endX = rectDst.left + rectDst.width / 2 + (Math.random() * 20 - 10);
-        const endY = rectDst.top + rectDst.height / 2 + (Math.random() * 20 - 10);
+      // Create wave animation
+      createWaveAnimation();
 
-        const spark = document.createElement('div');
-        spark.className = 'spark';
-        document.body.appendChild(spark);
+      // Show success modal after animation
+      setTimeout(() => {
+        successModal.classList.add('show');
+        createConfetti();
+      }, 1000);
+    });
 
-        const dx = endX - startX;
-        const dy = endY - startY;
-        const midX = startX + dx * 0.5 + (Math.random() * 60 - 30);
-        const midY = startY + dy * 0.5 + (Math.random() * 20 - 10);
+    function createWaveAnimation() {
+      const wave = document.createElement('div');
+      wave.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                width: 50px;
+                height: 50px;
+                background: radial-gradient(circle, rgba(139, 92, 246, 0.8) 0%, transparent 70%);
+                border-radius: 50%;
+                transform: translate(-50%, -50%);
+                animation: waveExpand 1s ease-out;
+                z-index: 999;
+                pointer-events: none;
+            `;
+      document.body.appendChild(wave);
 
-        let t = 0;
-        const dur = 700 + Math.random() * 400;
-        const start = performance.now();
+      const style = document.createElement('style');
+      style.textContent = `
+                @keyframes waveExpand {
+                    to {
+                        width: 2000px;
+                        height: 2000px;
+                        opacity: 0;
+                    }
+                }
+            `;
+      document.head.appendChild(style);
 
-        function frame(ts) {
-          const p = Math.min(1, (ts - start) / dur);
-          // Quadratic Bezier interpolation
-          const x = (1-p)*(1-p)*startX + 2*(1-p)*p*midX + p*p*endX;
-          const y = (1-p)*(1-p)*startY + 2*(1-p)*p*midY + p*p*endY;
-          spark.style.transform = 'translate(' + x + 'px,' + y + 'px) translate(-50%,-50%) scale(' + (1 + 0.3*Math.sin(p*3.14)) + ')';
-          spark.style.opacity = String(1 - p*0.9);
-          if (p < 1) {
-            requestAnimationFrame(frame);
-          } else {
-            spark.remove();
-            // brief orb boost
-            orb.classList.add('orb-boost');
-            setTimeout(() => orb.classList.remove('orb-boost'), 220);
-          }
-        }
-        spark.style.transform = 'translate(' + startX + 'px,' + startY + 'px) translate(-50%,-50%)';
-        requestAnimationFrame(frame);
+      setTimeout(() => wave.remove(), 1000);
+    }
+
+    function createConfetti() {
+      const colors = ['#8B5CF6', '#C4B5FD', '#A78BFA', '#DDD6FE'];
+      for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.top = '-10px';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+        document.body.appendChild(confetti);
+
+        setTimeout(() => confetti.remove(), 3000);
+      }
+    }
+
+    function closeSuccessModal() {
+      successModal.classList.remove('show');
+      reportForm.reset();
+      issueTiles.forEach(t => t.classList.remove('selected'));
+      urgencyOptions.forEach(o => o.classList.remove('selected'));
+      uploadedFiles = [];
+      displayFiles();
+    }
+
+    function copyTrackingCode() {
+      const code = document.getElementById('generatedCode').textContent;
+      navigator.clipboard.writeText(code).then(() => {
+        alert('Tracking code copied to clipboard!');
+      });
+    }
+
+    function trackIssue() {
+      const code = document.getElementById('trackingCode').value;
+      if (!code) {
+        alert('Please enter a tracking code');
+        return;
       }
 
-      description.addEventListener('input', () => {
-        updateCharCount();
-        updateSuggestions();
-        updateKnownIssue();
-        createSpark();
-        // validate inline
-        const valid = description.value.trim().length >= 12;
-        descError.classList.toggle('hidden', valid);
-      });
+      // Simulate tracking
+      alert(`Tracking issue: ${code}\n\nStatus: In Progress\n✓ Issue acknowledged\n✓ Assigned to Engineer\n→ Fix in progress\n○ Resolved`);
+    }
 
-      updateCharCount();
-
-      // DROPZONE
-      let currentFiles = [];
-      function bytesToSize(bytes) {
-        const sizes = ['B','KB','MB','GB'];
-        if (bytes === 0) return '0 B';
-        const i = Math.floor(Math.log(bytes)/Math.log(1024));
-        return (bytes/Math.pow(1024,i)).toFixed(2)+' '+sizes[i];
-      }
-      function renderFiles() {
-        fileList.innerHTML = '';
-        currentFiles.forEach((f, idx) => {
-          const li = document.createElement('li');
-          li.className = 'glass rounded-lg p-2 flex items-center justify-between';
-          li.innerHTML = '<div class="flex items-center gap-3"><div class="w-8 h-8 rounded-md bg-primary-600/15 flex items-center justify-center border border-primary-500/30 text-primary-100"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6Z" stroke="currentColor" stroke-width="1.4"/><path d="M14 2v6h6" stroke="currentColor" stroke-width="1.4"/></svg></div><div><div class="font-medium text-sm opacity-95 truncate max-w-[40vw] sm:max-w-md">' + f.name + '</div><div class="text-xs opacity-75">' + bytesToSize(f.size) + '</div></div></div><button type="button" class="inline-flex items-center gap-1 text-xs px-2 py-1 rounded border border-primary-500/40 hover:bg-primary-600/10 remove-file" data-index="'+idx+'"><svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none"><path d="M19 7l-1 12a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 7m3 0V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M4 7h16" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg> Remove</button>';
-          fileList.appendChild(li);
-        });
-        fileList.querySelectorAll('.remove-file').forEach(btn => {
-          btn.addEventListener('click', () => {
-            const i = parseInt(btn.getAttribute('data-index'));
-            currentFiles.splice(i, 1);
-            renderFiles();
-          });
-        });
-      }
-      function handleFiles(files) {
-        fileError.classList.add('hidden');
-        const limit = 10 * 1024 * 1024; // 10MB
-        for (const f of files) {
-          if (f.size > limit) {
-            fileError.classList.remove('hidden');
-            continue;
-          }
-          currentFiles.push(f);
-        }
-        renderFiles();
-      }
-      dropzone.addEventListener('click', () => fileInput.click());
-      browseBtn.addEventListener('click', () => fileInput.click());
-      fileInput.addEventListener('change', (e) => handleFiles(Array.from(e.target.files)));
-      dropzone.addEventListener('dragover', (e) => { e.preventDefault(); dropzone.classList.add('dragover'); });
-      dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
-      dropzone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropzone.classList.remove('dragover');
-        const files = Array.from(e.dataTransfer.files || []);
-        handleFiles(files);
-      });
-
-      // Email validation (optional)
-      email.addEventListener('input', () => {
-        if (!email.value) {
-          emailError.classList.add('hidden');
-          return;
-        }
-        const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value);
-        emailError.classList.toggle('hidden', ok);
-      });
-
-      // Submit ripple
-      submitBtn.addEventListener('click', (e) => {
-        const rect = submitBtn.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const span = document.createElement('span');
-        span.className = 'ripple';
-        span.style.left = x + 'px';
-        span.style.top = y + 'px';
-        submitBtn.appendChild(span);
-        setTimeout(() => span.remove(), 700);
-      });
-
-      // Form validation + submission
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const cat = nativeCategory.value;
-        const desc = description.value.trim();
-        const urgency = (form.querySelector('input[name="urgency"]:checked') || {}).value || 'Low';
-        const contact = email.value.trim();
-
-        // Validate
-        let valid = true;
-        if (!cat) { categoryError.classList.remove('hidden'); valid = false; } else categoryError.classList.add('hidden');
-        if (desc.length < 12) { descError.classList.remove('hidden'); valid = false; } else descError.classList.add('hidden');
-        if (contact && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contact)) { emailError.classList.remove('hidden'); valid = false; } else emailError.classList.add('hidden');
-
-        if (!valid) return;
-
-        // Simulate submission
-        submitBtn.disabled = true;
-        submitBtn.classList.add('opacity-70', 'cursor-not-allowed');
-        const originalText = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-opacity="0.25" stroke-width="4"/><path d="M22 12a10 10 0 0 1-10 10" stroke="currentColor" stroke-width="4"/></svg> Sending...';
-
-        // brief orb boost
-        orb.classList.add('orb-boost');
-
-        await new Promise(r => setTimeout(r, 1000 + Math.random()*700));
-
-        // Generate ticket ID
-        const d = new Date();
-        const pad = n => String(n).padStart(2, '0');
-        const id = `SAL-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
-        ticketIdEl.textContent = id;
-
-        // Reset
-        form.reset();
-        currentFiles = [];
-        renderFiles();
-        nativeCategory.value = '';
-        categoryLabel.textContent = 'Select a category';
-        suggestionsWrap.classList.add('hidden');
-        knownIssue.classList.add('hidden');
-        updateCharCount();
-
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('opacity-70', 'cursor-not-allowed');
-        submitBtn.innerHTML = originalText;
-
-        // Show success
-        successPanel.classList.remove('hidden');
-        setTimeout(() => orb.classList.remove('orb-boost'), 350);
-
-        // Announce for accessibility
-        const sr = document.createElement('div');
-        sr.setAttribute('role', 'status');
-        sr.className = 'sr-only';
-        sr.textContent = 'Report submitted successfully. Ticket ' + id;
-        document.body.appendChild(sr);
-        setTimeout(() => sr.remove(), 1000);
-      });
-
-      // Accessibility: Close success on Escape (optional)
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-          if (catOpen) closeCat();
-        }
-      });
-
-      // Ensure focus styles for mouse users remain subtle
-      document.body.addEventListener('mousedown', () => {
-        document.body.classList.add('using-mouse');
-      }, { once: true });
-
-    })();
+    // Add ripple animation style
+    const rippleStyle = document.createElement('style');
+    rippleStyle.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(20);
+                    opacity: 0;
+                }
+            }
+        `;
+    document.head.appendChild(rippleStyle);
   </script>
 </body>
+
 </html>

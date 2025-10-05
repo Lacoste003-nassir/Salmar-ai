@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,10 +9,8 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet" />
   <!-- Tailwind (utilities + preflight) -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -44,13 +43,14 @@
       --success: #7bf1a8;
       --danger: #ff6bb9;
       --glow: 0 0 24px rgba(181, 129, 255, 0.45), 0 0 64px rgba(130, 72, 255, 0.25);
-      --shadow-soft: 12px 12px 24px rgba(0,0,0,0.35), -8px -8px 24px rgba(255,255,255,0.02);
+      --shadow-soft: 12px 12px 24px rgba(0, 0, 0, 0.35), -8px -8px 24px rgba(255, 255, 255, 0.02);
       --card-border: rgba(209, 178, 255, 0.2);
       --wave1: #6b2bff;
       --wave2: #b36bff;
       --wave3: #ff72d2;
       --focus: #caa6ff;
     }
+
     body[data-theme="light"] {
       --bg: #f5f0ff;
       --bg-2: #ede3ff;
@@ -61,21 +61,29 @@
       --accent-2: #9a5bff;
       --neon: #742bff;
       --glow: 0 0 18px rgba(106, 56, 255, 0.35), 0 0 48px rgba(159, 92, 255, 0.2);
-      --shadow-soft: 10px 10px 20px rgba(97,75,146,0.2), -6px -6px 20px rgba(255,255,255,0.7);
+      --shadow-soft: 10px 10px 20px rgba(97, 75, 146, 0.2), -6px -6px 20px rgba(255, 255, 255, 0.7);
       --card-border: rgba(114, 71, 196, 0.18);
       --wave1: #6a38ff;
       --wave2: #9a5bff;
       --wave3: #ff79da;
       --focus: #5a21ff;
     }
+
     body.future-mode {
       --glass: rgba(163, 117, 255, 0.1);
       --card-border: rgba(200, 155, 255, 0.35);
     }
 
     /* Base styles */
-    * { box-sizing: border-box; }
-    html, body { height: 100%; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
     body {
       background:
         radial-gradient(1200px 600px at 80% -10%, rgba(170, 120, 255, 0.25), transparent 60%),
@@ -86,8 +94,15 @@
       font-family: 'Plus Jakarta Sans', system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
       letter-spacing: 0.1px;
     }
-    a { color: inherit; text-decoration: none; }
-    button:focus-visible, a:focus-visible, input:focus-visible {
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    input:focus-visible {
       outline: 2px solid var(--focus);
       outline-offset: 2px;
       border-radius: 0.5rem;
@@ -108,19 +123,20 @@
       position: absolute;
       inset: 0;
       background:
-        repeating-linear-gradient(
-          90deg,
+        repeating-linear-gradient(90deg,
           rgba(163, 117, 255, 0.14) 0px,
           rgba(163, 117, 255, 0.14) 1px,
           transparent 1px,
-          transparent 3px
-        );
+          transparent 3px);
       mask-image: radial-gradient(75% 60% at 50% 40%, black, transparent 70%);
       opacity: 0;
       transition: opacity 0.8s ease;
       z-index: 0;
     }
-    body.future-mode .soundwave-bg { opacity: 1; }
+
+    body.future-mode .soundwave-bg {
+      opacity: 1;
+    }
 
     /* Header styles */
     .glass {
@@ -132,7 +148,7 @@
 
     /* Neumorphic card */
     .neo {
-      background: linear-gradient(180deg, rgba(255,255,255,0.035), rgba(255,255,255,0.02));
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.035), rgba(255, 255, 255, 0.02));
       border: 1px solid var(--card-border);
       box-shadow: var(--shadow-soft);
     }
@@ -141,6 +157,7 @@
     .neon-hover {
       transition: box-shadow 0.35s ease, transform 0.35s ease, border-color 0.35s ease;
     }
+
     .neon-hover:hover {
       box-shadow: var(--glow);
       border-color: rgba(200, 155, 255, 0.6);
@@ -158,25 +175,34 @@
       color: white;
       padding: 0.85rem 1.25rem;
       border-radius: 0.9rem;
-      border: 1px solid rgba(255,255,255,0.15);
-      box-shadow: 0 8px 24px rgba(138,92,255,0.35), inset 0 0 18px rgba(255,255,255,0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      box-shadow: 0 8px 24px rgba(138, 92, 255, 0.35), inset 0 0 18px rgba(255, 255, 255, 0.1);
       transition: transform 0.25s ease, box-shadow 0.35s ease, filter 0.35s ease;
       overflow: hidden;
     }
+
     .btn-primary::before {
       content: "";
       position: absolute;
       inset: -60% -20%;
-      background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.2), transparent 30%);
+      background: conic-gradient(from 0deg, transparent, rgba(255, 255, 255, 0.2), transparent 30%);
       transform: rotate(0deg);
       animation: sweep 5s linear infinite;
       mix-blend-mode: screen;
       opacity: 0.5;
     }
+
     @keyframes sweep {
-      to { transform: rotate(360deg); }
+      to {
+        transform: rotate(360deg);
+      }
     }
-    .btn-primary:hover { transform: translateY(-2px) scale(1.02); box-shadow: 0 12px 28px rgba(138,92,255,0.45), inset 0 0 22px rgba(255,255,255,0.22); }
+
+    .btn-primary:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 12px 28px rgba(138, 92, 255, 0.45), inset 0 0 22px rgba(255, 255, 255, 0.22);
+    }
+
     .btn-ghost {
       background: transparent;
       color: var(--text);
@@ -186,27 +212,39 @@
       backdrop-filter: blur(10px);
       transition: transform 0.2s ease, border-color 0.3s ease, box-shadow 0.3s ease;
     }
-    .btn-ghost:hover { transform: translateY(-2px); border-color: rgba(200, 155, 255, 0.55); box-shadow: var(--glow); }
+
+    .btn-ghost:hover {
+      transform: translateY(-2px);
+      border-color: rgba(200, 155, 255, 0.55);
+      box-shadow: var(--glow);
+    }
 
     /* Waves */
     .hero-waves {
-      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
     }
+
     .waves path {
       transform-origin: center;
-      filter: drop-shadow(0 0 10px rgba(179,107,255,0.35));
+      filter: drop-shadow(0 0 10px rgba(179, 107, 255, 0.35));
     }
 
     /* Feature card hover ripple */
     .ripple {
       position: absolute;
       inset: 0;
-      background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(179,107,255,0.25), transparent 35%);
+      background: radial-gradient(circle at var(--x, 50%) var(--y, 50%), rgba(179, 107, 255, 0.25), transparent 35%);
       opacity: 0;
       transition: opacity 0.35s ease;
       pointer-events: none;
     }
-    .feature:hover .ripple { opacity: 1; }
+
+    .feature:hover .ripple {
+      opacity: 1;
+    }
 
     /* Tagline morph */
     .morph {
@@ -222,52 +260,96 @@
     .pulse {
       animation: pulseGlow 2.4s ease-in-out infinite;
     }
+
     @keyframes pulseGlow {
-      0%, 100% { filter: drop-shadow(0 0 6px rgba(179,107,255,0.35)) drop-shadow(0 0 18px rgba(179,107,255,0.15)); }
-      50% { filter: drop-shadow(0 0 14px rgba(179,107,255,0.65)) drop-shadow(0 0 30px rgba(179,107,255,0.35)); }
+
+      0%,
+      100% {
+        filter: drop-shadow(0 0 6px rgba(179, 107, 255, 0.35)) drop-shadow(0 0 18px rgba(179, 107, 255, 0.15));
+      }
+
+      50% {
+        filter: drop-shadow(0 0 14px rgba(179, 107, 255, 0.65)) drop-shadow(0 0 30px rgba(179, 107, 255, 0.35));
+      }
     }
 
     /* Constellation map */
-    .node { transition: transform 0.25s ease; }
-    .node:hover { transform: scale(1.08); }
+    .node {
+      transition: transform 0.25s ease;
+    }
+
+    .node:hover {
+      transform: scale(1.08);
+    }
 
     /* Floating testimonial cards */
-    .floaty { animation: floaty 6s ease-in-out infinite; }
+    .floaty {
+      animation: floaty 6s ease-in-out infinite;
+    }
+
     @keyframes floaty {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-10px); }
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
     }
 
     /* Black hole CTA swirl */
     .blackhole {
       position: relative;
       background:
-        radial-gradient(180px 120px at 50% 52%, rgba(0,0,0,0.25), transparent 50%),
-        radial-gradient(closest-side, rgba(20,0,40,0.6), transparent 65%),
-        radial-gradient(closest-side, rgba(90,0,120,0.2), transparent 55%);
+        radial-gradient(180px 120px at 50% 52%, rgba(0, 0, 0, 0.25), transparent 50%),
+        radial-gradient(closest-side, rgba(20, 0, 40, 0.6), transparent 65%),
+        radial-gradient(closest-side, rgba(90, 0, 120, 0.2), transparent 55%);
       overflow: hidden;
       isolation: isolate;
     }
+
     .blackhole::before {
       content: "";
-      position: absolute; inset: -50%;
+      position: absolute;
+      inset: -50%;
       background: conic-gradient(from 0deg, rgba(170, 120, 255, 0.1), rgba(255, 121, 218, 0.08), rgba(138, 92, 255, 0.08), rgba(170, 120, 255, 0.1));
       animation: swirl 14s linear infinite;
       filter: blur(32px);
       z-index: -1;
     }
-    @keyframes swirl { to { transform: rotate(360deg); } }
+
+    @keyframes swirl {
+      to {
+        transform: rotate(360deg);
+      }
+    }
 
     /* Utility */
-    .max-w-mega { max-width: 1300px; }
+    .max-w-mega {
+      max-width: 1300px;
+    }
 
     /* Reduced Motion */
     @media (prefers-reduced-motion: reduce) {
-      .btn-primary::before, .floaty, .pulse, .blackhole::before { animation: none !important; }
-      .neon-hover, .btn-primary, .btn-ghost { transition: none !important; }
+
+      .btn-primary::before,
+      .floaty,
+      .pulse,
+      .blackhole::before {
+        animation: none !important;
+      }
+
+      .neon-hover,
+      .btn-primary,
+      .btn-ghost {
+        transition: none !important;
+      }
     }
   </style>
 </head>
+
 <body class="min-h-screen antialiased relative" data-theme="dark">
   <!-- Subtle animated grain -->
   <canvas class="grain" id="grainCanvas" aria-hidden="true"></canvas>
@@ -284,15 +366,17 @@
             <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
               <defs>
                 <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#9a5bff"/>
-                  <stop offset="100%" stop-color="#ff79da"/>
+                  <stop offset="0%" stop-color="#9a5bff" />
+                  <stop offset="100%" stop-color="#ff79da" />
                 </linearGradient>
               </defs>
-              <path fill="url(#g1)" d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Zm0 2a8 8 0 0 1 0 16 8 8 0 0 1 0-16Zm-2 5.5c0-.828.672-1.5 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5V12c0 .828-.672 1.5-1.5 1.5h-1A1.5 1.5 0 0 1 10 12V9.5Zm1.25 5.75h1.5A2.25 2.25 0 0 1 15 17.5v.25H9v-.25a2.25 2.25 0 0 1 2.25-2.25Z"/>
+              <path fill="url(#g1)"
+                d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Zm0 2a8 8 0 0 1 0 16 8 8 0 0 1 0-16Zm-2 5.5c0-.828.672-1.5 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5V12c0 .828-.672 1.5-1.5 1.5h-1A1.5 1.5 0 0 1 10 12V9.5Zm1.25 5.75h1.5A2.25 2.25 0 0 1 15 17.5v.25H9v-.25a2.25 2.25 0 0 1 2.25-2.25Z" />
             </svg>
           </span>
           <div class="leading-tight">
-            <span class="text-lg font-extrabold tracking-tight" style="background:linear-gradient(90deg,#b36bff,#ff79da);-webkit-background-clip:text;background-clip:text;color:transparent;">Salmar</span>
+            <span class="text-lg font-extrabold tracking-tight"
+              style="background:linear-gradient(90deg,#b36bff,#ff79da);-webkit-background-clip:text;background-clip:text;color:transparent;">Salmar</span>
             <span class="block text-xs text-[color:var(--muted)]">The AI That Does Everything</span>
           </div>
         </a>
@@ -310,24 +394,26 @@
             <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
               <defs>
                 <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#b36bff"/>
-                  <stop offset="100%" stop-color="#ff79da"/>
+                  <stop offset="0%" stop-color="#b36bff" />
+                  <stop offset="100%" stop-color="#ff79da" />
                 </linearGradient>
               </defs>
-              <path fill="url(#g2)" d="M12 3a9 9 0 1 0 .001 18.001A9 9 0 0 0 12 3Zm0 2c.707 0 1.386.102 2.029.292a7 7 0 1 1-8.737 8.737A7.004 7.004 0 0 1 12 5Z"/>
+              <path fill="url(#g2)"
+                d="M12 3a9 9 0 1 0 .001 18.001A9 9 0 0 0 12 3Zm0 2c.707 0 1.386.102 2.029.292a7 7 0 1 1-8.737 8.737A7.004 7.004 0 0 1 12 5Z" />
             </svg>
             <span class="ml-1 hidden sm:inline">Future</span>
           </button>
           <!-- Theme -->
           <button id="themeToggle" class="btn-ghost" aria-pressed="true" aria-label="Toggle theme">
             <svg id="moonIcon" width="18" height="18" viewBox="0 0 24 24" aria-hidden="true">
-              <path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 1 0 9.79 9.79Z"/>
+              <path fill="currentColor" d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 1 0 9.79 9.79Z" />
             </svg>
             <svg id="sunIcon" width="18" height="18" viewBox="0 0 24 24" class="hidden" aria-hidden="true">
-              <path fill="currentColor" d="M6.76 4.84l-1.8-1.79L3.17 4.84l1.79 1.79 1.8-1.79Zm10.45 1.79l1.79-1.79-1.79-1.79-1.79 1.79 1.79 1.79ZM12 4V1h-0v3Zm0 19v-3h0v3Zm8-8h3v0h-3ZM1 12h3v0H1Zm3.17 7.16l1.79 1.79 1.8-1.79-1.8-1.79-1.79 1.79Zm14.83 0l-1.79 1.79-1.8-1.79 1.8-1.79 1.79 1.79ZM12 7a5 5 0 1 1 0 10A5 5 0 0 1 12 7Z"/>
+              <path fill="currentColor"
+                d="M6.76 4.84l-1.8-1.79L3.17 4.84l1.79 1.79 1.8-1.79Zm10.45 1.79l1.79-1.79-1.79-1.79-1.79 1.79 1.79 1.79ZM12 4V1h-0v3Zm0 19v-3h0v3Zm8-8h3v0h-3ZM1 12h3v0H1Zm3.17 7.16l1.79 1.79 1.8-1.79-1.8-1.79-1.79 1.79Zm14.83 0l-1.79 1.79-1.8-1.79 1.8-1.79 1.79 1.79ZM12 7a5 5 0 1 1 0 10A5 5 0 0 1 12 7Z" />
             </svg>
           </button>
-          <a href="#cta" class="btn-primary">Start with Salmar</a>
+          <a href="login.html" class="btn-primary">Start with Salmar</a>
         </div>
       </div>
     </div>
@@ -337,21 +423,24 @@
   <section class="relative pt-14 md:pt-20">
     <div class="hero-waves" aria-hidden="true">
       <svg class="waves w-full h-full" viewBox="0 0 1440 600" preserveAspectRatio="none">
-        <path d="M0,320 C240,260 480,380 720,320 C960,260 1200,380 1440,320 L1440,600 L0,600 Z" fill="url(#wg1)" opacity="0.25"></path>
-        <path d="M0,300 C240,240 480,360 720,300 C960,240 1200,360 1440,300 L1440,600 L0,600 Z" fill="url(#wg2)" opacity="0.20"></path>
-        <path d="M0,340 C240,280 480,400 720,340 C960,280 1200,400 1440,340 L1440,600 L0,600 Z" fill="url(#wg3)" opacity="0.18"></path>
+        <path d="M0,320 C240,260 480,380 720,320 C960,260 1200,380 1440,320 L1440,600 L0,600 Z" fill="url(#wg1)"
+          opacity="0.25"></path>
+        <path d="M0,300 C240,240 480,360 720,300 C960,240 1200,360 1440,300 L1440,600 L0,600 Z" fill="url(#wg2)"
+          opacity="0.20"></path>
+        <path d="M0,340 C240,280 480,400 720,340 C960,280 1200,400 1440,340 L1440,600 L0,600 Z" fill="url(#wg3)"
+          opacity="0.18"></path>
         <defs>
           <linearGradient id="wg1" x1="0" x2="1">
-            <stop offset="0%" stop-color="var(--wave1)"/>
-            <stop offset="100%" stop-color="var(--wave2)"/>
+            <stop offset="0%" stop-color="var(--wave1)" />
+            <stop offset="100%" stop-color="var(--wave2)" />
           </linearGradient>
           <linearGradient id="wg2" x1="0" x2="1">
-            <stop offset="0%" stop-color="var(--wave2)"/>
-            <stop offset="100%" stop-color="var(--wave3)"/>
+            <stop offset="0%" stop-color="var(--wave2)" />
+            <stop offset="100%" stop-color="var(--wave3)" />
           </linearGradient>
           <linearGradient id="wg3" x1="0" x2="1">
-            <stop offset="0%" stop-color="var(--wave1)"/>
-            <stop offset="100%" stop-color="var(--wave3)"/>
+            <stop offset="0%" stop-color="var(--wave1)" />
+            <stop offset="100%" stop-color="var(--wave3)" />
           </linearGradient>
         </defs>
       </svg>
@@ -360,8 +449,10 @@
     <div class="container max-w-mega relative z-10 grid lg:grid-cols-2 gap-10 items-center">
       <!-- Left: Content -->
       <div class="relative">
-        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-2xl glass text-sm tracking-wide mb-4 neon-hover" aria-live="polite">
-          <span class="h-2 w-2 rounded-full" style="background: radial-gradient(circle, #7bf1a8 0%, #1ae287 40%, transparent 70%); box-shadow: 0 0 14px rgba(122, 241, 168, 0.8);"></span>
+        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-2xl glass text-sm tracking-wide mb-4 neon-hover"
+          aria-live="polite">
+          <span class="h-2 w-2 rounded-full"
+            style="background: radial-gradient(circle, #7bf1a8 0%, #1ae287 40%, transparent 70%); box-shadow: 0 0 14px rgba(122, 241, 168, 0.8);"></span>
           Live • Salmar is thinking in real-time
         </div>
 
@@ -396,7 +487,9 @@
         </div>
 
         <div class="mt-6 text-sm text-[color:var(--muted)] flex items-center gap-2">
-          <span class="inline-flex items-center gap-1"><span class="h-2 w-2 rounded-full" style="background:radial-gradient(circle,#ff79da 0%,#b36bff 50%,transparent 65%);box-shadow:0 0 12px rgba(255,121,218,0.8)"></span> Response &lt; 1s</span>
+          <span class="inline-flex items-center gap-1"><span class="h-2 w-2 rounded-full"
+              style="background:radial-gradient(circle,#ff79da 0%,#b36bff 50%,transparent 65%);box-shadow:0 0 12px rgba(255,121,218,0.8)"></span>
+            Response &lt; 1s</span>
           <span aria-hidden="true">•</span>
           <span>10M+ prompts answered</span>
         </div>
@@ -404,9 +497,11 @@
 
       <!-- Right: 3D Orb -->
       <div class="relative">
-        <div class="absolute -inset-6 blur-3xl opacity-50 pointer-events-none" style="background: radial-gradient(circle at 50% 50%, rgba(179,107,255,0.35), transparent 60%);"></div>
+        <div class="absolute -inset-6 blur-3xl opacity-50 pointer-events-none"
+          style="background: radial-gradient(circle at 50% 50%, rgba(179,107,255,0.35), transparent 60%);"></div>
         <div class="relative neo rounded-3xl p-2">
-          <canvas id="orb" class="w-full h-[380px] md:h-[520px] rounded-2xl block" role="img" aria-label="A rotating purple orb with glowing neural pathways"></canvas>
+          <canvas id="orb" class="w-full h-[380px] md:h-[520px] rounded-2xl block" role="img"
+            aria-label="A rotating purple orb with glowing neural pathways"></canvas>
           <div class="absolute inset-0 pointer-events-none">
             <canvas id="particleCanvas" class="w-full h-full"></canvas>
           </div>
@@ -419,97 +514,114 @@
   <section id="features" class="relative py-16 md:py-24">
     <div class="container max-w-mega">
       <div class="max-w-2xl">
-        <h2 class="text-3xl md:text-4xl font-extrabold">Everything you need. In one <span class="morph">mind</span>.</h2>
+        <h2 class="text-3xl md:text-4xl font-extrabold">Everything you need. In one <span class="morph">mind</span>.
+        </h2>
         <p class="mt-3 text-[color:var(--muted)]">Interactive, glowing, and intelligent — Salmar adapts to you.</p>
       </div>
 
       <div class="mt-10 grid md:grid-cols-2 xl:grid-cols-4 gap-5">
         <!-- Card 1 -->
-        <article class="feature group relative rounded-2xl p-5 neo neon-hover focus-within:shadow-lg" tabindex="0" aria-label="Personal Assistant Feature">
+        <article class="feature group relative rounded-2xl p-5 neo neon-hover focus-within:shadow-lg" tabindex="0"
+          aria-label="Personal Assistant Feature">
           <div class="ripple"></div>
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl glass">
                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fill="currentColor" d="M12 3a6 6 0 0 0-6 6v2a4 4 0 0 0-4 4v1h20v-1a4 4 0 0 0-4-4V9a6 6 0 0 0-6-6Zm0 18a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3Z"/>
+                  <path fill="currentColor"
+                    d="M12 3a6 6 0 0 0-6 6v2a4 4 0 0 0-4 4v1h20v-1a4 4 0 0 0-4-4V9a6 6 0 0 0-6-6Zm0 18a3 3 0 0 0 3-3H9a3 3 0 0 0 3 3Z" />
                 </svg>
               </span>
               <h3 class="font-semibold">Personal Assistant</h3>
             </div>
           </div>
-          <p class="mt-3 text-sm text-[color:var(--muted)]">Manage life, reminders, knowledge, and conversations seamlessly.</p>
+          <p class="mt-3 text-sm text-[color:var(--muted)]">Manage life, reminders, knowledge, and conversations
+            seamlessly.</p>
           <ul class="mt-3 text-sm space-y-1">
             <li>• Smart scheduling + memory</li>
             <li>• Context-aware conversations</li>
             <li>• Ambient reminders</li>
           </ul>
-          <div class="absolute inset-0 pointer-events-none rounded-2xl" style="box-shadow: inset 0 0 40px rgba(179,107,255,0.08);"></div>
+          <div class="absolute inset-0 pointer-events-none rounded-2xl"
+            style="box-shadow: inset 0 0 40px rgba(179,107,255,0.08);"></div>
         </article>
 
         <!-- Card 2 -->
-        <article class="feature group relative rounded-2xl p-5 neo neon-hover" tabindex="0" aria-label="Creative Partner Feature">
+        <article class="feature group relative rounded-2xl p-5 neo neon-hover" tabindex="0"
+          aria-label="Creative Partner Feature">
           <div class="ripple"></div>
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl glass">
                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fill="currentColor" d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25Zm2.92 1.83l-.99-.99 9.19-9.19.99.99-9.19 9.19ZM20.71 7.04a1.003 1.003 0 0 0 0-1.42L18.37 3.29a1.003 1.003 0 0 0-1.42 0l-1.34 1.34 3.75 3.75 1.35-1.34Z"/>
+                  <path fill="currentColor"
+                    d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25Zm2.92 1.83l-.99-.99 9.19-9.19.99.99-9.19 9.19ZM20.71 7.04a1.003 1.003 0 0 0 0-1.42L18.37 3.29a1.003 1.003 0 0 0-1.42 0l-1.34 1.34 3.75 3.75 1.35-1.34Z" />
                 </svg>
               </span>
               <h3 class="font-semibold">Creative Partner</h3>
             </div>
           </div>
-          <p class="mt-3 text-sm text-[color:var(--muted)]">Write, brainstorm, design, compose — with you, not just for you.</p>
+          <p class="mt-3 text-sm text-[color:var(--muted)]">Write, brainstorm, design, compose — with you, not just for
+            you.</p>
           <ul class="mt-3 text-sm space-y-1">
             <li>• Story ideation & editing</li>
             <li>• Visual & audio prompts</li>
             <li>• Moodboards & styles</li>
           </ul>
-          <div class="absolute inset-0 pointer-events-none rounded-2xl" style="box-shadow: inset 0 0 40px rgba(255,121,218,0.08);"></div>
+          <div class="absolute inset-0 pointer-events-none rounded-2xl"
+            style="box-shadow: inset 0 0 40px rgba(255,121,218,0.08);"></div>
         </article>
 
         <!-- Card 3 -->
-        <article class="feature group relative rounded-2xl p-5 neo neon-hover" tabindex="0" aria-label="Business Genius Feature">
+        <article class="feature group relative rounded-2xl p-5 neo neon-hover" tabindex="0"
+          aria-label="Business Genius Feature">
           <div class="ripple"></div>
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl glass">
                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fill="currentColor" d="M3 13h2v8H3v-8Zm4-4h2v12H7V9Zm4-6h2v18h-2V3Zm4 8h2v10h-2V11Zm4-4h2v14h-2V7Z"/>
+                  <path fill="currentColor"
+                    d="M3 13h2v8H3v-8Zm4-4h2v12H7V9Zm4-6h2v18h-2V3Zm4 8h2v10h-2V11Zm4-4h2v14h-2V7Z" />
                 </svg>
               </span>
               <h3 class="font-semibold">Business Genius</h3>
             </div>
           </div>
-          <p class="mt-3 text-sm text-[color:var(--muted)]">Automate workflows, analyze data, and support customers 24/7.</p>
+          <p class="mt-3 text-sm text-[color:var(--muted)]">Automate workflows, analyze data, and support customers
+            24/7.</p>
           <ul class="mt-3 text-sm space-y-1">
             <li>• KPI dashboards</li>
             <li>• Automations & agents</li>
             <li>• Customer support copilot</li>
           </ul>
-          <div class="absolute inset-0 pointer-events-none rounded-2xl" style="box-shadow: inset 0 0 40px rgba(138,92,255,0.08);"></div>
+          <div class="absolute inset-0 pointer-events-none rounded-2xl"
+            style="box-shadow: inset 0 0 40px rgba(138,92,255,0.08);"></div>
         </article>
 
         <!-- Card 4 -->
-        <article class="feature group relative rounded-2xl p-5 neo neon-hover" tabindex="0" aria-label="Universal Connector Feature">
+        <article class="feature group relative rounded-2xl p-5 neo neon-hover" tabindex="0"
+          aria-label="Universal Connector Feature">
           <div class="ripple"></div>
           <div class="flex items-center justify-between">
             <div class="flex items-center gap-3">
               <span class="inline-flex h-10 w-10 items-center justify-center rounded-xl glass">
                 <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true">
-                  <path fill="currentColor" d="M7 2h10v2H7V2Zm0 18h10v2H7v-2ZM4 7h2v10H4V7Zm14 0h2v10h-2V7ZM8 9h8v6H8V9Z"/>
+                  <path fill="currentColor"
+                    d="M7 2h10v2H7V2Zm0 18h10v2H7v-2ZM4 7h2v10H4V7Zm14 0h2v10h-2V7ZM8 9h8v6H8V9Z" />
                 </svg>
               </span>
               <h3 class="font-semibold">Universal Connector</h3>
             </div>
           </div>
-          <p class="mt-3 text-sm text-[color:var(--muted)]">Integrate tools, apps, and APIs — effortlessly and securely.</p>
+          <p class="mt-3 text-sm text-[color:var(--muted)]">Integrate tools, apps, and APIs — effortlessly and securely.
+          </p>
           <ul class="mt-3 text-sm space-y-1">
             <li>• OAuth & Webhooks</li>
             <li>• Multi-app actions</li>
             <li>• One-click recipes</li>
           </ul>
-          <div class="absolute inset-0 pointer-events-none rounded-2xl" style="box-shadow: inset 0 0 40px rgba(106,56,255,0.08);"></div>
+          <div class="absolute inset-0 pointer-events-none rounded-2xl"
+            style="box-shadow: inset 0 0 40px rgba(106,56,255,0.08);"></div>
         </article>
       </div>
     </div>
@@ -521,7 +633,8 @@
       <div class="grid lg:grid-cols-2 gap-12 items-center">
         <div>
           <h2 class="text-3xl md:text-4xl font-extrabold mb-3">How Salmar thinks</h2>
-          <p class="text-[color:var(--muted)]">Transparency first: every result flows through a clear pipeline built for accuracy, speed, and control.</p>
+          <p class="text-[color:var(--muted)]">Transparency first: every result flows through a clear pipeline built for
+            accuracy, speed, and control.</p>
           <ul class="mt-6 space-y-3 text-sm">
             <li class="neo p-4 rounded-xl">Input — Your natural language, files, data, or APIs</li>
             <li class="neo p-4 rounded-xl">Salmar Thinks — reasoning, planning, and tool-using agents</li>
@@ -529,69 +642,80 @@
           </ul>
         </div>
         <div class="relative">
-          <div class="absolute -inset-6 blur-3xl opacity-50 pointer-events-none" style="background: radial-gradient(circle at 50% 50%, rgba(179,107,255,0.25), transparent 60%);"></div>
-          <svg class="w-full neo rounded-2xl p-4" viewBox="0 0 800 380" role="img" aria-label="Animated flow diagram showing Input to Salmar Thinks to Result">
+          <div class="absolute -inset-6 blur-3xl opacity-50 pointer-events-none"
+            style="background: radial-gradient(circle at 50% 50%, rgba(179,107,255,0.25), transparent 60%);"></div>
+          <svg class="w-full neo rounded-2xl p-4" viewBox="0 0 800 380" role="img"
+            aria-label="Animated flow diagram showing Input to Salmar Thinks to Result">
             <defs>
               <linearGradient id="flow" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stop-color="#6a38ff"/>
-                <stop offset="100%" stop-color="#ff79da"/>
+                <stop offset="0%" stop-color="#6a38ff" />
+                <stop offset="100%" stop-color="#ff79da" />
               </linearGradient>
               <filter id="glow">
-                <feGaussianBlur stdDeviation="3.5" result="coloredBlur"/>
+                <feGaussianBlur stdDeviation="3.5" result="coloredBlur" />
                 <feMerge>
-                  <feMergeNode in="coloredBlur"/>
-                  <feMergeNode in="SourceGraphic"/>
+                  <feMergeNode in="coloredBlur" />
+                  <feMergeNode in="SourceGraphic" />
                 </feMerge>
               </filter>
             </defs>
 
             <!-- Nodes -->
             <g class="pulse">
-              <rect x="50" y="120" rx="16" ry="16" width="180" height="140" fill="url(#flow)" opacity="0.12" stroke="url(#flow)" stroke-opacity="0.6"></rect>
-              <text x="140" y="195" text-anchor="middle" fill="var(--text)" font-size="18" font-weight="700">Input</text>
+              <rect x="50" y="120" rx="16" ry="16" width="180" height="140" fill="url(#flow)" opacity="0.12"
+                stroke="url(#flow)" stroke-opacity="0.6"></rect>
+              <text x="140" y="195" text-anchor="middle" fill="var(--text)" font-size="18"
+                font-weight="700">Input</text>
             </g>
 
             <g class="pulse">
-              <rect x="310" y="80" rx="16" ry="16" width="180" height="220" fill="url(#flow)" opacity="0.12" stroke="url(#flow)" stroke-opacity="0.6"></rect>
-              <text x="400" y="160" text-anchor="middle" fill="var(--text)" font-size="18" font-weight="700">Salmar</text>
-              <text x="400" y="185" text-anchor="middle" fill="var(--text)" font-size="16" font-weight="500">Thinks</text>
+              <rect x="310" y="80" rx="16" ry="16" width="180" height="220" fill="url(#flow)" opacity="0.12"
+                stroke="url(#flow)" stroke-opacity="0.6"></rect>
+              <text x="400" y="160" text-anchor="middle" fill="var(--text)" font-size="18"
+                font-weight="700">Salmar</text>
+              <text x="400" y="185" text-anchor="middle" fill="var(--text)" font-size="16"
+                font-weight="500">Thinks</text>
             </g>
 
             <g class="pulse">
-              <rect x="570" y="120" rx="16" ry="16" width="180" height="140" fill="url(#flow)" opacity="0.12" stroke="url(#flow)" stroke-opacity="0.6"></rect>
-              <text x="660" y="195" text-anchor="middle" fill="var(--text)" font-size="18" font-weight="700">Your Result</text>
+              <rect x="570" y="120" rx="16" ry="16" width="180" height="140" fill="url(#flow)" opacity="0.12"
+                stroke="url(#flow)" stroke-opacity="0.6"></rect>
+              <text x="660" y="195" text-anchor="middle" fill="var(--text)" font-size="18" font-weight="700">Your
+                Result</text>
             </g>
 
             <!-- Flow lines -->
-            <path id="line1" d="M230,190 C280,190 300,190 310,190" stroke="url(#flow)" stroke-width="3" fill="none" filter="url(#glow)"></path>
-            <path id="line2" d="M490,190 C520,190 550,190 570,190" stroke="url(#flow)" stroke-width="3" fill="none" filter="url(#glow)"></path>
+            <path id="line1" d="M230,190 C280,190 300,190 310,190" stroke="url(#flow)" stroke-width="3" fill="none"
+              filter="url(#glow)"></path>
+            <path id="line2" d="M490,190 C520,190 550,190 570,190" stroke="url(#flow)" stroke-width="3" fill="none"
+              filter="url(#glow)"></path>
 
             <!-- Energy particles -->
             <circle id="p1" r="6" fill="url(#flow)"></circle>
             <circle id="p2" r="6" fill="url(#flow)"></circle>
             <script>
-              (function(){
-                const p1 = document.getElementById('p1');
-                const p2 = document.getElementById('p2');
-                const l1 = document.getElementById('line1');
-                const l2 = document.getElementById('line2');
-                function animateParticle(circle, path, dur) {
-                  const len = path.getTotalLength();
-                  let start = null;
-                  const loop = (t) => {
-                    if (!start) start = t;
-                    const d = (t - start) / dur;
-                    const p = path.getPointAtLength((d % 1) * len);
-                    circle.setAttribute('cx', p.x);
-                    circle.setAttribute('cy', p.y);
+                (function () {
+                  const p1 = document.getElementById('p1');
+                  const p2 = document.getElementById('p2');
+                  const l1 = document.getElementById('line1');
+                  const l2 = document.getElementById('line2');
+                  function animateParticle(circle, path, dur) {
+                    const len = path.getTotalLength();
+                    let start = null;
+                    const loop = (t) => {
+                      if (!start) start = t;
+                      const d = (t - start) / dur;
+                      const p = path.getPointAtLength((d % 1) * len);
+                      circle.setAttribute('cx', p.x);
+                      circle.setAttribute('cy', p.y);
+                      requestAnimationFrame(loop);
+                    };
                     requestAnimationFrame(loop);
-                  };
-                  requestAnimationFrame(loop);
-                }
-                if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-                animateParticle(p1, l1, 1800);
-                animateParticle(p2, l2, 1800);
-              })();
+                  }
+                  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+                  animateParticle(p1, l1, 1800);
+                  animateParticle(p2, l2, 1800);
+                })();
             </script>
           </svg>
         </div>
@@ -604,24 +728,30 @@
     <div class="container max-w-mega">
       <div class="max-w-2xl">
         <h2 class="text-3xl md:text-4xl font-extrabold">Integration Universe</h2>
-        <p class="mt-3 text-[color:var(--muted)]">A constellation of tools connected by Salmar — hover to discover benefits.</p>
+        <p class="mt-3 text-[color:var(--muted)]">A constellation of tools connected by Salmar — hover to discover
+          benefits.</p>
       </div>
       <div class="relative mt-10 neo rounded-2xl p-2">
-        <div class="absolute -inset-8 blur-3xl opacity-40 pointer-events-none" style="background: radial-gradient(50% 50% at 50% 50%, rgba(138,92,255,0.35), transparent 70%);"></div>
+        <div class="absolute -inset-8 blur-3xl opacity-40 pointer-events-none"
+          style="background: radial-gradient(50% 50% at 50% 50%, rgba(138,92,255,0.35), transparent 70%);"></div>
 
-        <div id="tooltip" role="tooltip" class="hidden absolute z-20 px-3 py-2 rounded-lg glass text-sm pointer-events-none"></div>
+        <div id="tooltip" role="tooltip"
+          class="hidden absolute z-20 px-3 py-2 rounded-lg glass text-sm pointer-events-none"></div>
 
-        <svg id="constellation" class="w-full rounded-xl block" viewBox="0 0 1100 540" role="img" aria-label="Constellation map of integrations">
+        <svg id="constellation" class="w-full rounded-xl block" viewBox="0 0 1100 540" role="img"
+          aria-label="Constellation map of integrations">
           <defs>
             <radialGradient id="nodeGlow" r="65%">
-              <stop offset="0%" stop-color="#ffffff"/>
-              <stop offset="100%" stop-color="#b36bff"/>
+              <stop offset="0%" stop-color="#ffffff" />
+              <stop offset="100%" stop-color="#b36bff" />
             </radialGradient>
             <linearGradient id="link" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#6a38ff"/>
-              <stop offset="100%" stop-color="#ff79da"/>
+              <stop offset="0%" stop-color="#6a38ff" />
+              <stop offset="100%" stop-color="#ff79da" />
             </linearGradient>
-            <filter id="softGlow"><feGaussianBlur stdDeviation="2"/></filter>
+            <filter id="softGlow">
+              <feGaussianBlur stdDeviation="2" />
+            </filter>
           </defs>
 
           <!-- Links (pre-drawn) -->
@@ -644,31 +774,34 @@
 
           <div class="mt-6 grid sm:grid-cols-2 gap-4">
             <div class="neo rounded-xl p-4 floaty">
-              <p class="text-sm">“Salmar redefined how I run my business. It’s my strategist, writer, and operator — all in one.”</p>
+              <p class="text-sm">“Salmar redefined how I run my business. It’s my strategist, writer, and operator — all
+                in one.”</p>
               <div class="mt-3 flex items-center gap-3">
-                <div class="h-8 w-8 rounded-full neo flex items-center justify-center font-bold">AR</div>
-                <span class="text-sm text-[color:var(--muted)]">Amira R. — Founder</span>
+                <div class="h-8 w-8 rounded-full neo flex items-center justify-center font-bold">AN</div>
+                <span class="text-sm text-[color:var(--muted)]">Abdulrahman Nassir. — Founder</span>
               </div>
             </div>
             <div class="neo rounded-xl p-4 floaty" style="animation-delay: .6s">
-              <p class="text-sm">“As a developer, it became my universal connector. Integrations that took days now take minutes.”</p>
+              <p class="text-sm">“As a developer, it became my universal connector. Integrations that took days now take
+                minutes.”</p>
               <div class="mt-3 flex items-center gap-3">
-                <div class="h-8 w-8 rounded-full neo flex items-center justify-center font-bold">JS</div>
-                <span class="text-sm text-[color:var(--muted)]">J. Sun — Software Engineer</span>
+                <div class="h-8 w-8 rounded-full neo flex items-center justify-center font-bold">AN</div>
+                <span class="text-sm text-[color:var(--muted)]">A. Nassir — Software Engineer</span>
               </div>
             </div>
             <div class="neo rounded-xl p-4 floaty" style="animation-delay: .2s">
-              <p class="text-sm">“Creative flow on tap. Brainstorms feel like co-writing with a genius collaborator.”</p>
+              <p class="text-sm">“Creative flow on tap. Brainstorms feel like co-writing with a genius collaborator.”
+              </p>
               <div class="mt-3 flex items-center gap-3">
-                <div class="h-8 w-8 rounded-full neo flex items-center justify-center font-bold">LT</div>
-                <span class="text-sm text-[color:var(--muted)]">L. Tran — Creator</span>
+                <div class="h-8 w-8 rounded-full neo flex items-center justify-center font-bold">AN</div>
+                <span class="text-sm text-[color:var(--muted)]">Abdulrahman Nassir — Creator</span>
               </div>
             </div>
             <div class="neo rounded-xl p-4 floaty" style="animation-delay: .8s">
               <p class="text-sm">“Support, analytics, automation — truly all of AI, in one place.”</p>
               <div class="mt-3 flex items-center gap-3">
-                <div class="h-8 w-8 rounded-full neo flex items-center justify-center font-bold">GH</div>
-                <span class="text-sm text-[color:var(--muted)]">Global Holdings — Ops</span>
+                <div class="h-8 w-8 rounded-full neo flex items-center justify-center font-bold">AN</div>
+                <span class="text-sm text-[color:var(--muted)]">A.Nassir — Ops</span>
               </div>
             </div>
           </div>
@@ -712,9 +845,10 @@
     <div class="container max-w-mega">
       <div class="blackhole neo rounded-3xl p-10 md:p-16 text-center">
         <h2 class="text-3xl md:text-5xl font-extrabold">The Future is Purple. The Future is Salmar.</h2>
-        <p class="mt-4 text-[color:var(--muted)] max-w-2xl mx-auto">Start building with an AI that adapts to your goals — from thought to result, instantly.</p>
+        <p class="mt-4 text-[color:var(--muted)] max-w-2xl mx-auto">Start building with an AI that adapts to your goals
+          — from thought to result, instantly.</p>
         <div class="mt-8 flex justify-center">
-          <a href="#" class="btn-primary text-lg">
+          <a href="login.html" class="btn-primary text-lg">
             <span class="relative h-2 w-2 rounded-full bg-white/90 shadow-[0_0_18px_rgba(255,255,255,0.8)]"></span>
             Get Early Access
           </a>
@@ -731,10 +865,11 @@
           <div class="flex items-center gap-2 mb-3">
             <span class="relative flex h-8 w-8 items-center justify-center rounded-xl neo">
               <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
-                <path fill="url(#g1)" d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Z"/>
+                <path fill="url(#g1)" d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Z" />
               </svg>
             </span>
-            <span class="font-extrabold" style="background:linear-gradient(90deg,#b36bff,#ff79da);-webkit-background-clip:text;background-clip:text;color:transparent;">Salmar</span>
+            <span class="font-extrabold"
+              style="background:linear-gradient(90deg,#b36bff,#ff79da);-webkit-background-clip:text;background-clip:text;color:transparent;">Salmar</span>
           </div>
           <p class="text-sm text-[color:var(--muted)]">One intelligent system, infinite possibilities.</p>
         </div>
@@ -749,9 +884,9 @@
         <nav aria-label="Company">
           <h3 class="font-semibold mb-3">Company</h3>
           <ul class="space-y-2 text-sm">
-            <li><a class="btn-ghost block text-left" href="blog.html">Blog</a></li>
-            <li><a class="btn-ghost block text-left" href="careers.html">Careers</a></li>
-            <li><a class="btn-ghost block text-left" href="press.html">Press</a></li>
+            <li><a class="btn-ghost block text-left" href="About.html">About</a></li>
+            <li><a class="btn-ghost block text-left" href="accessibility.html">Accessibility</a></li>
+            <li><a class="btn-ghost block text-left" href="road.html">Roadmap</a></li>
           </ul>
         </nav>
         <nav aria-label="Legal">
@@ -768,13 +903,22 @@
         <p class="text-xs text-[color:var(--muted)]">© <span id="year"></span> Salmar. All rights reserved.</p>
         <div class="flex items-center gap-2">
           <a href="#" class="btn-ghost" aria-label="Twitter">
-            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M22 5.8c-.8.3-1.6.6-2.5.7c.9-.5 1.6-1.3 2-2.3c-.9.5-1.9.9-3 1.1C17.6 4.5 16.3 4 15 4c-2.7 0-4.8 2.3-4.2 4.9C7.2 8.8 4.1 7.2 2 4.7c-1 1.8-.5 4.1 1.2 5.3c-.7 0-1.3-.2-1.8-.5c0 2.1 1.5 3.9 3.5 4.3c-.6.2-1.3.2-1.9.1c.6 1.8 2.3 3.1 4.3 3.1C5.9 18.9 3.7 19.6 2 19c2 1.3 4.5 2 7.1 2c8.6 0 13.5-7.4 13.2-14.1c.9-.6 1.6-1.3 2.2-2.1Z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor"
+                d="M22 5.8c-.8.3-1.6.6-2.5.7c.9-.5 1.6-1.3 2-2.3c-.9.5-1.9.9-3 1.1C17.6 4.5 16.3 4 15 4c-2.7 0-4.8 2.3-4.2 4.9C7.2 8.8 4.1 7.2 2 4.7c-1 1.8-.5 4.1 1.2 5.3c-.7 0-1.3-.2-1.8-.5c0 2.1 1.5 3.9 3.5 4.3c-.6.2-1.3.2-1.9.1c.6 1.8 2.3 3.1 4.3 3.1C5.9 18.9 3.7 19.6 2 19c2 1.3 4.5 2 7.1 2c8.6 0 13.5-7.4 13.2-14.1c.9-.6 1.6-1.3 2.2-2.1Z" />
+            </svg>
           </a>
           <a href="#" class="btn-ghost" aria-label="Discord">
-            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M20.3 4.3A16.2 16.2 0 0 0 15.9 3l-.4.8c-1.3-.2-2.6-.2-3.9 0L11.2 3c-1.5.3-2.9.8-4.2 1.4a17.1 17.1 0 0 0-2.9 14.9A16.8 16.8 0 0 0 9 21l.6-.8c-1.7-.6-3.3-1.4-4.7-2.5l1.1.6c.4.3.9.5 1.4.7c1 .4 2 .7 3 .9l.3-.6c1.3.2 2.6.2 3.9 0l.3.6c1-.2 2-.5 3-.9c.5-.2 1-.5 1.4-.7l1.1-.6c-1.4 1.1-3 2-4.7 2.5l.6.8a16.8 16.8 0 0 0 4.9-1.7A17.1 17.1 0 0 0 20.3 4.3ZM9.6 14c-.8 0-1.5-.7-1.5-1.6c0-.9.7-1.6 1.5-1.6c.9 0 1.6.7 1.6 1.6c0 .9-.7 1.6-1.6 1.6Zm4.8 0c-.9 0-1.6-.7-1.6-1.6c0-.9.7-1.6 1.6-1.6c.8 0 1.5.7 1.5 1.6c-.1.9-.7 1.6-1.5 1.6Z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor"
+                d="M20.3 4.3A16.2 16.2 0 0 0 15.9 3l-.4.8c-1.3-.2-2.6-.2-3.9 0L11.2 3c-1.5.3-2.9.8-4.2 1.4a17.1 17.1 0 0 0-2.9 14.9A16.8 16.8 0 0 0 9 21l.6-.8c-1.7-.6-3.3-1.4-4.7-2.5l1.1.6c.4.3.9.5 1.4.7c1 .4 2 .7 3 .9l.3-.6c1.3.2 2.6.2 3.9 0l.3.6c1-.2 2-.5 3-.9c.5-.2 1-.5 1.4-.7l1.1-.6c-1.4 1.1-3 2-4.7 2.5l.6.8a16.8 16.8 0 0 0 4.9-1.7A17.1 17.1 0 0 0 20.3 4.3ZM9.6 14c-.8 0-1.5-.7-1.5-1.6c0-.9.7-1.6 1.5-1.6c.9 0 1.6.7 1.6 1.6c0 .9-.7 1.6-1.6 1.6Zm4.8 0c-.9 0-1.6-.7-1.6-1.6c0-.9.7-1.6 1.6-1.6c.8 0 1.5.7 1.5 1.6c-.1.9-.7 1.6-1.5 1.6Z" />
+            </svg>
           </a>
           <a href="#" class="btn-ghost" aria-label="GitHub">
-            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M12 2A10 10 0 0 0 2 12c0 4.4 2.9 8.1 6.9 9.4c.5.1.7-.2.7-.5v-2c-2.8.6-3.4-1.2-3.4-1.2c-.5-1.1-1.1-1.4-1.1-1.4c-.9-.6.1-.6.1-.6c1 .1 1.6 1 1.6 1c.9 1.6 2.5 1.1 3.1.8c.1-.7.3-1.1.5-1.4c-2.2-.2-4.6-1.1-4.6-5c0-1.1.4-2 1-2.7c-.1-.3-.4-1.4.1-2.9c0 0 .8-.2 2.8 1c.8-.2 1.7-.3 2.6-.3s1.8.1 2.6.3c2-1.2 2.8-1 2.8-1c.5 1.5.2 2.6.1 2.9c.6.7 1 1.6 1 2.7c0 4-2.3 4.8-4.6 5c.3.3.6.8.6 1.6v2.3c0 .2.2.6.7.5C19.1 20.1 22 16.4 22 12A10 10 0 0 0 12 2Z"/></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
+              <path fill="currentColor"
+                d="M12 2A10 10 0 0 0 2 12c0 4.4 2.9 8.1 6.9 9.4c.5.1.7-.2.7-.5v-2c-2.8.6-3.4-1.2-3.4-1.2c-.5-1.1-1.1-1.4-1.1-1.4c-.9-.6.1-.6.1-.6c1 .1 1.6 1 1.6 1c.9 1.6 2.5 1.1 3.1.8c.1-.7.3-1.1.5-1.4c-2.2-.2-4.6-1.1-4.6-5c0-1.1.4-2 1-2.7c-.1-.3-.4-1.4.1-2.9c0 0 .8-.2 2.8 1c.8-.2 1.7-.3 2.6-.3s1.8.1 2.6.3c2-1.2 2.8-1 2.8-1c.5 1.5.2 2.6.1 2.9c.6.7 1 1.6 1 2.7c0 4-2.3 4.8-4.6 5c.3.3.6.8.6 1.6v2.3c0 .2.2.6.7.5C19.1 20.1 22 16.4 22 12A10 10 0 0 0 12 2Z" />
+            </svg>
           </a>
         </div>
       </div>
@@ -905,11 +1049,11 @@
       const img = gctx.createImageData(120, 80);
       for (let i = 0; i < img.data.length; i += 4) {
         const v = Math.random() * 255;
-        img.data[i] = v; img.data[i+1] = v; img.data[i+2] = v; img.data[i+3] = 16;
+        img.data[i] = v; img.data[i + 1] = v; img.data[i + 2] = v; img.data[i + 3] = 16;
       }
       gctx.clearRect(0, 0, w, h);
       gctx.imageSmoothingEnabled = false;
-      gctx.drawImage((() => { const c = document.createElement('canvas'); c.width=120; c.height=80; c.getContext('2d').putImageData(img,0,0); return c; })(), 0, 0, w, h);
+      gctx.drawImage((() => { const c = document.createElement('canvas'); c.width = 120; c.height = 80; c.getContext('2d').putImageData(img, 0, 0); return c; })(), 0, 0, w, h);
       grainFrame++;
       if (!prefersReduced) requestAnimationFrame(drawGrain);
     }
@@ -952,7 +1096,7 @@
       for (const p of particles) {
         if (mouse.active) {
           const dx = p.x - mouse.x, dy = p.y - mouse.y;
-          const d2 = dx*dx + dy*dy;
+          const d2 = dx * dx + dy * dy;
           const f = Math.min(50 / (d2 + 10), 0.3);
           p.vx += dx * f; p.vy += dy * f;
         }
@@ -961,11 +1105,11 @@
         if (p.x < 0 || p.x > rect.width) p.vx *= -1;
         if (p.y < 0 || p.y > rect.height) p.vy *= -1;
         pctx.beginPath();
-        const grad = pctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r*4);
+        const grad = pctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 4);
         grad.addColorStop(0, 'rgba(200,155,255,0.8)');
         grad.addColorStop(1, 'rgba(200,155,255,0.0)');
         pctx.fillStyle = grad;
-        pctx.arc(p.x, p.y, p.r*3, 0, Math.PI*2);
+        pctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
         pctx.fill();
       }
       if (!prefersReduced) requestAnimationFrame(stepParticles);
@@ -1073,8 +1217,8 @@
       const state = { mx: 0, my: 0 };
       canvas.addEventListener('pointermove', (e) => {
         const r = canvas.getBoundingClientRect();
-        state.mx = ((e.clientX - r.left)/r.width - 0.5) * 2;
-        state.my = ((e.clientY - r.top)/r.height - 0.5) * 2;
+        state.mx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+        state.my = ((e.clientY - r.top) / r.height - 0.5) * 2;
       });
 
       function onResize() {
@@ -1100,7 +1244,7 @@
     });
 
     // Constellation Map
-    (function(){
+    (function () {
       const svg = document.getElementById('constellation');
       const nodesG = document.getElementById('nodes');
       const linksG = document.getElementById('links');
@@ -1118,14 +1262,14 @@
         { id: 'APIs', x: 540, y: 260, info: 'Plug in any API with recipes.' }
       ];
       const links = [
-        ['APIs','Google'], ['APIs','Slack'], ['APIs','Discord'], ['APIs','Notion'], ['APIs','GitHub'], ['APIs','Zapier'], ['APIs','Stripe'], ['APIs','Gmail'], ['APIs','Calendar'],
-        ['Google','Gmail'], ['Google','Calendar'], ['GitHub','Slack'], ['Notion','Slack'], ['Zapier','Gmail']
+        ['APIs', 'Google'], ['APIs', 'Slack'], ['APIs', 'Discord'], ['APIs', 'Notion'], ['APIs', 'GitHub'], ['APIs', 'Zapier'], ['APIs', 'Stripe'], ['APIs', 'Gmail'], ['APIs', 'Calendar'],
+        ['Google', 'Gmail'], ['Google', 'Calendar'], ['GitHub', 'Slack'], ['Notion', 'Slack'], ['Zapier', 'Gmail']
       ];
 
       // Draw links
-      links.forEach(([a,b]) => {
-        const A = nodes.find(n => n.id===a), B = nodes.find(n => n.id===b);
-        const line = document.createElementNS('http://www.w3.org/2000/svg','line');
+      links.forEach(([a, b]) => {
+        const A = nodes.find(n => n.id === a), B = nodes.find(n => n.id === b);
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
         line.setAttribute('x1', A.x); line.setAttribute('y1', A.y);
         line.setAttribute('x2', B.x); line.setAttribute('y2', B.y);
         line.setAttribute('stroke-width', '1.6');
@@ -1134,24 +1278,24 @@
       });
 
       // Draw nodes
-      nodes.forEach(({id, x, y, info}) => {
-        const g = document.createElementNS('http://www.w3.org/2000/svg','g');
+      nodes.forEach(({ id, x, y, info }) => {
+        const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
         g.setAttribute('class', 'node');
         g.setAttribute('tabindex', '0');
         g.setAttribute('role', 'button');
         g.setAttribute('aria-label', id + ' integration');
 
-        const glow = document.createElementNS('http://www.w3.org/2000/svg','circle');
+        const glow = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         glow.setAttribute('cx', x); glow.setAttribute('cy', y); glow.setAttribute('r', 18);
-        glow.setAttribute('fill', 'url(#nodeGlow)'); glow.setAttribute('opacity','0.35');
+        glow.setAttribute('fill', 'url(#nodeGlow)'); glow.setAttribute('opacity', '0.35');
 
-        const circle = document.createElementNS('http://www.w3.org/2000/svg','circle');
+        const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
         circle.setAttribute('cx', x); circle.setAttribute('cy', y); circle.setAttribute('r', 8.5);
         circle.setAttribute('fill', 'url(#nodeGlow)');
         circle.setAttribute('stroke', 'white');
         circle.setAttribute('stroke-opacity', '0.35');
 
-        const label = document.createElementNS('http://www.w3.org/2000/svg','text');
+        const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
         label.setAttribute('x', x + 14); label.setAttribute('y', y + 4);
         label.setAttribute('fill', 'var(--text)'); label.setAttribute('font-size', '12');
         label.textContent = id;
@@ -1181,7 +1325,8 @@
       gsap.utils.toArray('section').forEach((sec, i) => {
         gsap.fromTo(sec.querySelectorAll('.neo, h2, p, .feature'),
           { y: 24, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.9, stagger: 0.05, ease: 'power2.out',
+          {
+            y: 0, opacity: 1, duration: 0.9, stagger: 0.05, ease: 'power2.out',
             scrollTrigger: { trigger: sec, start: 'top 80%' }
           }
         );
@@ -1193,4 +1338,5 @@
     document.addEventListener('keydown', e => { if (e.key === 'Tab') document.body.classList.remove('using-mouse'); });
   </script>
 </body>
+
 </html>

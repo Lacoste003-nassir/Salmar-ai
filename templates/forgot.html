@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dark">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -72,10 +73,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- zxcvbn for password strength -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js" integrity="sha512-dQ34tOb2ZxGfg8cQAk3DpTisBhtj0fUPoUtgM9K+zC+8m9yhoTIc3qf4+Zf9Ts6r6QAbH8Y7Gkv5E4usE5Olpg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"
+    integrity="sha512-dQ34tOb2ZxGfg8cQAk3DpTisBhtj0fUPoUtgM9K+zC+8m9yhoTIc3qf4+Zf9Ts6r6QAbH8Y7Gkv5E4usE5Olpg=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <!-- Anime.js for subtle finishing effects -->
-  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha512-98w8eU3r4xvG7BD4IUyJQd3r7V3rQ+0nQQQzNDPQ0jAbJly3CphwTrxH9XoWkqQzU+f1c3dMfx0JXWZr9b5Y2w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"
+    integrity="sha512-98w8eU3r4xvG7BD4IUyJQd3r7V3rQ+0nQQQzNDPQ0jAbJly3CphwTrxH9XoWkqQzU+f1c3dMfx0JXWZr9b5Y2w=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
   <style>
     :root {
@@ -84,42 +89,47 @@
       --bg-end: #3a0e6e;
       --text-primary: #EDE9FE;
       --text-muted: #C4B5FD;
-      --card-bg: rgba(255,255,255,0.08);
-      --card-border: rgba(167,139,250,0.45);
-      --glass: rgba(255,255,255,0.06);
+      --card-bg: rgba(255, 255, 255, 0.08);
+      --card-border: rgba(167, 139, 250, 0.45);
+      --glass: rgba(255, 255, 255, 0.06);
       --accent: #8b5cf6;
       --accent-strong: #a78bfa;
       --success: #14b8a6;
       --warning: #f59e0b;
       --danger: #ef4444;
     }
+
     [data-theme="light"] {
       --bg-start: #f5f3ff;
       --bg-mid: #ede9fe;
       --bg-end: #e9d5ff;
       --text-primary: #1f1147;
       --text-muted: #4c1d95;
-      --card-bg: rgba(255,255,255,0.72);
-      --card-border: rgba(139,92,246,0.45);
-      --glass: rgba(255,255,255,0.5);
+      --card-bg: rgba(255, 255, 255, 0.72);
+      --card-border: rgba(139, 92, 246, 0.45);
+      --glass: rgba(255, 255, 255, 0.5);
       --accent: #7c3aed;
       --accent-strong: #6d28d9;
       --success: #0ea5e9;
       --warning: #d97706;
       --danger: #dc2626;
     }
-    html, body {
+
+    html,
+    body {
       height: 100%;
     }
+
     body {
-      background: radial-gradient(1200px 800px at 10% 10%, rgba(167,139,250,0.12), transparent 60%),
-                  radial-gradient(900px 600px at 90% 80%, rgba(139,92,246,0.10), transparent 60%),
-                  linear-gradient(135deg, var(--bg-start), var(--bg-mid) 40%, var(--bg-end));
+      background: radial-gradient(1200px 800px at 10% 10%, rgba(167, 139, 250, 0.12), transparent 60%),
+        radial-gradient(900px 600px at 90% 80%, rgba(139, 92, 246, 0.10), transparent 60%),
+        linear-gradient(135deg, var(--bg-start), var(--bg-mid) 40%, var(--bg-end));
       color: var(--text-primary);
       font-family: Inter, ui-sans-serif, system-ui, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans;
       transition: background 600ms ease, color 400ms ease;
       overflow-x: hidden;
     }
+
     /* Soft glowing wave layers */
     .wave-layer {
       position: absolute;
@@ -129,38 +139,44 @@
       mix-blend-mode: screen;
       opacity: 0.45;
     }
+
     .wave-1 {
-      background: radial-gradient(60% 60% at 20% 30%, rgba(167,139,250,0.25), transparent 60%),
-                  radial-gradient(40% 40% at 80% 70%, rgba(139,92,246,0.20), transparent 60%);
+      background: radial-gradient(60% 60% at 20% 30%, rgba(167, 139, 250, 0.25), transparent 60%),
+        radial-gradient(40% 40% at 80% 70%, rgba(139, 92, 246, 0.20), transparent 60%);
       animation: wave 22s ease-in-out infinite;
     }
+
     .wave-2 {
-      background: radial-gradient(30% 30% at 70% 20%, rgba(236,72,153,0.16), transparent 60%),
-                  radial-gradient(30% 30% at 15% 85%, rgba(59,130,246,0.12), transparent 60%);
+      background: radial-gradient(30% 30% at 70% 20%, rgba(236, 72, 153, 0.16), transparent 60%),
+        radial-gradient(30% 30% at 15% 85%, rgba(59, 130, 246, 0.12), transparent 60%);
       animation: wave 26s ease-in-out infinite reverse;
       opacity: 0.35;
     }
+
     /* Glassmorphism card base */
     .glass {
       background: var(--card-bg);
       backdrop-filter: saturate(160%) blur(16px);
       -webkit-backdrop-filter: saturate(160%) blur(16px);
       border: 1px solid var(--card-border);
-      box-shadow: 0 0 0 1px rgba(167,139,250,0.15), 0 30px 80px rgba(0,0,0,0.35), inset 0 0 24px rgba(167,139,250,0.05);
+      box-shadow: 0 0 0 1px rgba(167, 139, 250, 0.15), 0 30px 80px rgba(0, 0, 0, 0.35), inset 0 0 24px rgba(167, 139, 250, 0.05);
     }
+
     .neon-outline {
       position: relative;
     }
+
     .neon-outline::before {
       content: '';
       position: absolute;
       inset: -2px;
       border-radius: inherit;
-      background: conic-gradient(from 90deg, rgba(139,92,246,0.0), rgba(139,92,246,0.35), rgba(167,139,250,0.45), rgba(139,92,246,0.35), rgba(139,92,246,0.0));
+      background: conic-gradient(from 90deg, rgba(139, 92, 246, 0.0), rgba(139, 92, 246, 0.35), rgba(167, 139, 250, 0.45), rgba(139, 92, 246, 0.35), rgba(139, 92, 246, 0.0));
       filter: blur(16px);
       z-index: -1;
       opacity: 0.75;
     }
+
     .sr-only-focusable:focus {
       position: static !important;
       width: auto;
@@ -170,6 +186,7 @@
       overflow: visible;
       white-space: normal;
     }
+
     /* OTP inputs style */
     .otp-input {
       width: 3rem;
@@ -177,63 +194,74 @@
       text-align: center;
       font-size: 1.25rem;
       border-radius: 0.75rem;
-      border: 1px solid rgba(167,139,250,0.35);
+      border: 1px solid rgba(167, 139, 250, 0.35);
       background: var(--glass);
       color: var(--text-primary);
       outline: none;
       transition: transform .15s ease, border-color .2s ease, box-shadow .2s ease, background .2s ease;
     }
+
     .otp-input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(139,92,246,0.25);
+      box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.25);
       transform: translateY(-2px);
-      background: rgba(255,255,255,0.62);
+      background: rgba(255, 255, 255, 0.62);
     }
+
     [data-theme="dark"] .otp-input:focus {
-      background: rgba(255,255,255,0.12);
+      background: rgba(255, 255, 255, 0.12);
     }
+
     /* Progress Bar */
     .progress-track {
       height: 8px;
       border-radius: 9999px;
-      background: linear-gradient(90deg, rgba(255,255,255,0.14), rgba(255,255,255,0.06));
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.06));
       overflow: hidden;
       position: relative;
     }
+
     .progress-fill {
       height: 100%;
       width: 0%;
-      background: linear-gradient(90deg, rgba(167,139,250,0.15), rgba(139,92,246,0.95), rgba(167,139,250,0.65));
-      box-shadow: 0 0 24px rgba(167,139,250,0.65);
-      transition: width .6s cubic-bezier(.2,.9,.2,1);
+      background: linear-gradient(90deg, rgba(167, 139, 250, 0.15), rgba(139, 92, 246, 0.95), rgba(167, 139, 250, 0.65));
+      box-shadow: 0 0 24px rgba(167, 139, 250, 0.65);
+      transition: width .6s cubic-bezier(.2, .9, .2, 1);
     }
+
     /* Strength meter */
     .strength-bar {
       height: 10px;
       border-radius: 9999px;
-      background: linear-gradient(90deg, rgba(239,68,68,0.3), rgba(234,179,8,0.3), rgba(20,184,166,0.3));
+      background: linear-gradient(90deg, rgba(239, 68, 68, 0.3), rgba(234, 179, 8, 0.3), rgba(20, 184, 166, 0.3));
       overflow: hidden;
     }
+
     .strength-fill {
       height: 100%;
       width: 0%;
       background: linear-gradient(90deg, #ef4444, #f59e0b, #14b8a6);
       transition: width .45s ease, filter .35s ease, box-shadow .35s ease;
       filter: saturate(90%);
-      box-shadow: 0 0 18px rgba(20,184,166,0.35);
+      box-shadow: 0 0 18px rgba(20, 184, 166, 0.35);
     }
+
     /* Lock animation */
     .lock {
-      width: 80px; height: 100px;
-      filter: drop-shadow(0 0 10px rgba(167,139,250,0.35));
+      width: 80px;
+      height: 100px;
+      filter: drop-shadow(0 0 10px rgba(167, 139, 250, 0.35));
     }
+
     .lock .shackle {
       transform-origin: 40px 35px;
       transition: transform 0.6s ease;
     }
+
     .lock.unlocked .shackle {
       transform: rotate(-30deg) translateX(8px);
     }
+
     /* Floating particles canvas takes clicks through */
     #particles {
       position: fixed;
@@ -241,21 +269,25 @@
       z-index: 0;
       pointer-events: none;
     }
+
     /* Card glow when step completes */
     .card-glow {
       animation: glowPulse 1.5s ease-in-out;
     }
+
     /* Focus rings consistency */
     :focus-visible {
-      outline: 3px solid rgba(139,92,246,0.55);
+      outline: 3px solid rgba(139, 92, 246, 0.55);
       outline-offset: 2px;
       border-radius: 0.75rem;
     }
+
     /* Tiny noise layer for texture */
     .noise {
-      position: fixed; inset: 0;
+      position: fixed;
+      inset: 0;
       pointer-events: none;
-      background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+      background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px);
       background-size: 3px 3px;
       opacity: .35;
       mix-blend-mode: overlay;
@@ -263,8 +295,11 @@
     }
   </style>
 </head>
+
 <body class="min-h-screen antialiased selection:bg-accent-600/40 selection:text-white">
-  <a href="#main" class="sr-only sr-only-focusable absolute left-2 top-2 z-[1000] px-3 py-2 rounded-md bg-accent-600 text-white">Skip to content</a>
+  <a href="#main"
+    class="sr-only sr-only-focusable absolute left-2 top-2 z-[1000] px-3 py-2 rounded-md bg-accent-600 text-white">Skip
+    to content</a>
 
   <!-- Animated background layers -->
   <canvas id="particles" aria-hidden="true"></canvas>
@@ -276,7 +311,8 @@
   <header class="relative z-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-accent-700 to-accent-400 shadow-neon flex items-center justify-center">
+        <div
+          class="h-10 w-10 rounded-xl bg-gradient-to-tr from-accent-700 to-accent-400 shadow-neon flex items-center justify-center">
           <span aria-hidden="true" class="font-extrabold text-white">S</span>
         </div>
         <div>
@@ -285,9 +321,13 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <button id="themeToggle" type="button" class="group inline-flex items-center gap-2 rounded-xl px-3 py-2 glass neon-outline shadow-neo-sm hover:shadow-neon transition">
-          <svg class="w-5 h-5 text-accent-200 group-hover:rotate-12 transition-transform" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path id="icon-sun" d="M12 4V2M12 22v-2M4.93 4.93L3.52 3.52M20.48 20.48l-1.41-1.41M4 12H2M22 12h-2M4.93 19.07L3.52 20.48M20.48 3.52l-1.41 1.41M12 8a4 4 0 100 8 4 4 0 000-8z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+        <button id="themeToggle" type="button"
+          class="group inline-flex items-center gap-2 rounded-xl px-3 py-2 glass neon-outline shadow-neo-sm hover:shadow-neon transition">
+          <svg class="w-5 h-5 text-accent-200 group-hover:rotate-12 transition-transform" viewBox="0 0 24 24"
+            fill="none" aria-hidden="true">
+            <path id="icon-sun"
+              d="M12 4V2M12 22v-2M4.93 4.93L3.52 3.52M20.48 20.48l-1.41-1.41M4 12H2M22 12h-2M4.93 19.07L3.52 20.48M20.48 3.52l-1.41 1.41M12 8a4 4 0 100 8 4 4 0 000-8z"
+              stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
           </svg>
           <span class="text-sm">Theme</span>
         </button>
@@ -308,7 +348,8 @@
             </p>
             <p id="deviceHint" class="text-xs text-accent-200/70"></p>
           </div>
-          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Recovery progress">
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"
+            aria-label="Recovery progress">
             <div id="progressFill" class="progress-fill"></div>
           </div>
           <div class="mt-2 grid grid-cols-3 text-center text-[11px] sm:text-xs text-accent-200/80">
@@ -321,7 +362,8 @@
         <!-- Recovery Card -->
         <div id="card" class="glass neon-outline rounded-3xl p-5 sm:p-8 shadow-neo-sm">
           <!-- Top warning/device/location -->
-          <div id="securityBanner" class="rounded-2xl p-4 sm:p-5 mb-5 sm:mb-8 border border-accent-400/30 bg-gradient-to-br from-white/5 to-transparent relative overflow-hidden">
+          <div id="securityBanner"
+            class="rounded-2xl p-4 sm:p-5 mb-5 sm:mb-8 border border-accent-400/30 bg-gradient-to-br from-white/5 to-transparent relative overflow-hidden">
             <div class="absolute -top-10 -right-10 w-36 h-36 rounded-full bg-accent-500/10 blur-2xl"></div>
             <div class="flex items-start gap-3">
               <svg class="w-5 h-5 flex-none text-warning mt-0.5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
@@ -334,10 +376,12 @@
                   Checking device and approximate location...
                 </p>
                 <div class="mt-2 flex flex-wrap gap-2 text-xs">
-                  <span id="deviceChip" class="px-2 py-1 rounded-full bg-white/10 border border-accent-400/30">Device: —</span>
+                  <span id="deviceChip" class="px-2 py-1 rounded-full bg-white/10 border border-accent-400/30">Device:
+                    —</span>
                   <span id="osChip" class="px-2 py-1 rounded-full bg-white/10 border border-accent-400/30">OS: —</span>
                   <span id="tzChip" class="px-2 py-1 rounded-full bg-white/10 border border-accent-400/30">TZ: —</span>
-                  <span id="locChip" class="px-2 py-1 rounded-full bg-white/10 border border-accent-400/30">Location: —</span>
+                  <span id="locChip" class="px-2 py-1 rounded-full bg-white/10 border border-accent-400/30">Location:
+                    —</span>
                 </div>
               </div>
             </div>
@@ -348,12 +392,15 @@
             <h2 class="text-xl sm:text-2xl font-bold tracking-tight">Choose how to verify your identity</h2>
             <div class="grid sm:grid-cols-2 gap-4 sm:gap-5" role="listbox" aria-label="Verification methods">
               <!-- Email -->
-              <button data-method="email" class="method-btn group rounded-2xl p-4 sm:p-5 bg-white/5 hover:bg-white/10 border border-accent-400/30 hover:border-accent-400/60 transition flex items-center gap-4 shadow-neo-sm focus-visible:shadow-neon" role="option" aria-selected="false">
+              <button data-method="email"
+                class="method-btn group rounded-2xl p-4 sm:p-5 bg-white/5 hover:bg-white/10 border border-accent-400/30 hover:border-accent-400/60 transition flex items-center gap-4 shadow-neo-sm focus-visible:shadow-neon"
+                role="option" aria-selected="false">
                 <div class="p-3 rounded-xl bg-accent-600/30 text-accent-100 shadow-neon group-hover:animate-floaty">
                   <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M4 6h16a2 2 0 012 2v.3l-10 6-10-6V8a2 2 0 012-2z" stroke="currentColor" stroke-width="1.5"/>
-                    <path d="M22 10l-10 6L2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                    <path d="M2 9.5V16a2 2 0 002 2h16a2 2 0 002-2V9.5" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M4 6h16a2 2 0 012 2v.3l-10 6-10-6V8a2 2 0 012-2z" stroke="currentColor"
+                      stroke-width="1.5" />
+                    <path d="M22 10l-10 6L2 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                    <path d="M2 9.5V16a2 2 0 002 2h16a2 2 0 002-2V9.5" stroke="currentColor" stroke-width="1.5" />
                   </svg>
                 </div>
                 <div class="text-left">
@@ -363,12 +410,16 @@
               </button>
 
               <!-- Biometric -->
-              <button data-method="biometric" class="method-btn group rounded-2xl p-4 sm:p-5 bg-white/5 hover:bg-white/10 border border-accent-400/30 hover:border-accent-400/60 transition flex items-center gap-4 shadow-neo-sm focus-visible:shadow-neon" role="option" aria-selected="false">
+              <button data-method="biometric"
+                class="method-btn group rounded-2xl p-4 sm:p-5 bg-white/5 hover:bg-white/10 border border-accent-400/30 hover:border-accent-400/60 transition flex items-center gap-4 shadow-neo-sm focus-visible:shadow-neon"
+                role="option" aria-selected="false">
                 <div class="p-3 rounded-xl bg-accent-600/30 text-accent-100 shadow-neon group-hover:animate-floaty">
                   <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M12 2a7 7 0 00-7 7v2a7 7 0 1014 0V9a7 7 0 00-7-7z" stroke="currentColor" stroke-width="1.6"/>
-                    <path d="M8 11a4 4 0 108 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-                    <path d="M10 14c0 1.1.9 2 2 2s2-.9 2-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    <path d="M12 2a7 7 0 00-7 7v2a7 7 0 1014 0V9a7 7 0 00-7-7z" stroke="currentColor"
+                      stroke-width="1.6" />
+                    <path d="M8 11a4 4 0 108 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
+                    <path d="M10 14c0 1.1.9 2 2 2s2-.9 2-2" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" />
                   </svg>
                 </div>
                 <div class="text-left">
@@ -378,11 +429,14 @@
               </button>
 
               <!-- Backup Phrase -->
-              <button data-method="phrase" class="method-btn group rounded-2xl p-4 sm:p-5 bg-white/5 hover:bg-white/10 border border-accent-400/30 hover:border-accent-400/60 transition flex items-center gap-4 shadow-neo-sm focus-visible:shadow-neon" role="option" aria-selected="false">
+              <button data-method="phrase"
+                class="method-btn group rounded-2xl p-4 sm:p-5 bg-white/5 hover:bg-white/10 border border-accent-400/30 hover:border-accent-400/60 transition flex items-center gap-4 shadow-neo-sm focus-visible:shadow-neon"
+                role="option" aria-selected="false">
                 <div class="p-3 rounded-xl bg-accent-600/30 text-accent-100 shadow-neon group-hover:animate-floaty">
                   <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M4 7a2 2 0 012-2h12a2 2 0 012 2v12l-4-3-4 3-4-3-4 3V7z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                    <path d="M8 9h8M8 12h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    <path d="M4 7a2 2 0 012-2h12a2 2 0 012 2v12l-4-3-4 3-4-3-4 3V7z" stroke="currentColor"
+                      stroke-width="1.6" stroke-linejoin="round" />
+                    <path d="M8 9h8M8 12h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
                   </svg>
                 </div>
                 <div class="text-left">
@@ -392,11 +446,13 @@
               </button>
 
               <!-- Authenticator -->
-              <button data-method="authapp" class="method-btn group rounded-2xl p-4 sm:p-5 bg-white/5 hover:bg-white/10 border border-accent-400/30 hover:border-accent-400/60 transition flex items-center gap-4 shadow-neo-sm focus-visible:shadow-neon" role="option" aria-selected="false">
+              <button data-method="authapp"
+                class="method-btn group rounded-2xl p-4 sm:p-5 bg-white/5 hover:bg-white/10 border border-accent-400/30 hover:border-accent-400/60 transition flex items-center gap-4 shadow-neo-sm focus-visible:shadow-neon"
+                role="option" aria-selected="false">
                 <div class="p-3 rounded-xl bg-accent-600/30 text-accent-100 shadow-neon group-hover:animate-floaty">
                   <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6"/>
-                    <path d="M12 7v5l4 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                    <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.6" />
+                    <path d="M12 7v5l4 2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
                   </svg>
                 </div>
                 <div class="text-left">
@@ -414,13 +470,16 @@
                   <label class="block">
                     <span class="text-sm font-medium">Email address</span>
                     <input type="email" inputmode="email" autocomplete="email" required placeholder="you@example.com"
-                      class="mt-1 w-full rounded-xl px-4 py-3 bg-white/10 border border-accent-400/40 focus:border-accent-400 focus:ring-0 outline-none transition text-base" aria-describedby="emailHelp">
+                      class="mt-1 w-full rounded-xl px-4 py-3 bg-white/10 border border-accent-400/40 focus:border-accent-400 focus:ring-0 outline-none transition text-base"
+                      aria-describedby="emailHelp">
                   </label>
                   <p id="emailHelp" class="text-xs text-accent-200/80">We’ll send a one-time code to this email.</p>
                   <div class="flex items-center gap-3">
-                    <button type="submit" class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-accent-600 text-white shadow-neon hover:brightness-110 transition">
+                    <button type="submit"
+                      class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-accent-600 text-white shadow-neon hover:brightness-110 transition">
                       <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M3 12l7-7m0 0v4a6 6 0 006 6h5M10 5l7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path d="M3 12l7-7m0 0v4a6 6 0 006 6h5M10 5l7 7" stroke="currentColor" stroke-width="1.6"
+                          stroke-linecap="round" stroke-linejoin="round" />
                       </svg>
                       Send code
                     </button>
@@ -438,8 +497,11 @@
                     <input class="otp-input" inputmode="numeric" maxlength="1" aria-label="Digit 6">
                   </div>
                   <div class="flex items-center gap-3">
-                    <button type="submit" class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-accent-600 text-white shadow-neon hover:brightness-110 transition">Verify</button>
-                    <button type="button" id="resendEmail" class="text-sm underline decoration-accent-400/70 decoration-2 underline-offset-4 hover:text-accent-200">Resend code</button>
+                    <button type="submit"
+                      class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-accent-600 text-white shadow-neon hover:brightness-110 transition">Verify</button>
+                    <button type="button" id="resendEmail"
+                      class="text-sm underline decoration-accent-400/70 decoration-2 underline-offset-4 hover:text-accent-200">Resend
+                      code</button>
                     <span id="otpStatus" class="text-sm text-accent-200/90" aria-live="polite"></span>
                   </div>
                 </form>
@@ -450,10 +512,12 @@
                 <div class="space-y-4">
                   <p class="text-sm">Use your device’s built-in biometric authentication to continue.</p>
                   <div class="flex items-center gap-3">
-                    <button id="btnBiometric" type="button" class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-accent-600 text-white shadow-neon hover:brightness-110 transition">
+                    <button id="btnBiometric" type="button"
+                      class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-accent-600 text-white shadow-neon hover:brightness-110 transition">
                       <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 2a7 7 0 00-7 7v2a7 7 0 1014 0V9a7 7 0 00-7-7z" stroke="currentColor" stroke-width="1.6"/>
-                        <path d="M8 11a4 4 0 108 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        <path d="M12 2a7 7 0 00-7 7v2a7 7 0 1014 0V9a7 7 0 00-7-7z" stroke="currentColor"
+                          stroke-width="1.6" />
+                        <path d="M8 11a4 4 0 108 0" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
                       </svg>
                       Use FaceID / TouchID
                     </button>
@@ -472,7 +536,9 @@
                       class="mt-1 w-full rounded-xl px-4 py-3 bg-white/10 border border-accent-400/40 focus:border-accent-400 focus:ring-0 outline-none transition text-base"></textarea>
                   </label>
                   <div class="flex items-center gap-3">
-                    <button type="submit" class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-accent-600 text-white shadow-neon hover:brightness-110 transition">Verify phrase</button>
+                    <button type="submit"
+                      class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-accent-600 text-white shadow-neon hover:brightness-110 transition">Verify
+                      phrase</button>
                     <span id="phraseStatus" class="text-sm text-accent-200/90" aria-live="polite"></span>
                   </div>
                 </form>
@@ -487,7 +553,8 @@
                       class="mt-1 w-40 rounded-xl px-4 py-3 bg-white/10 border border-accent-400/40 focus:border-accent-400 focus:ring-0 outline-none transition text-base tracking-widest text-center">
                   </label>
                   <div class="flex items-center gap-3">
-                    <button type="submit" class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-accent-600 text-white shadow-neon hover:brightness-110 transition">Verify</button>
+                    <button type="submit"
+                      class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-accent-600 text-white shadow-neon hover:brightness-110 transition">Verify</button>
                     <span id="authStatus" class="text-sm text-accent-200/90" aria-live="polite"></span>
                   </div>
                   <p class="text-xs text-accent-200/80">Time-based codes refresh every 30 seconds in your app.</p>
@@ -505,16 +572,22 @@
                   <label class="block">
                     <span class="text-sm font-medium">New password</span>
                     <div class="mt-1 relative">
-                      <input id="newPass" type="password" required autocomplete="new-password" aria-describedby="passHelp"
+                      <input id="newPass" type="password" required autocomplete="new-password"
+                        aria-describedby="passHelp"
                         class="w-full rounded-xl px-4 py-3 bg-white/10 border border-accent-400/40 focus:border-accent-400 focus:ring-0 outline-none transition text-base pr-12">
-                      <button type="button" id="togglePass" class="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-white/10 border border-white/10 hover:bg-white/20" aria-label="Toggle password visibility">
-                        <svg id="eyeIcon" class="w-5 h-5 text-accent-200" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" stroke="currentColor" stroke-width="1.6"/>
-                          <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6"/>
+                      <button type="button" id="togglePass"
+                        class="absolute right-2 top-1/2 -translate-y-1/2 p-2 rounded-lg bg-white/10 border border-white/10 hover:bg-white/20"
+                        aria-label="Toggle password visibility">
+                        <svg id="eyeIcon" class="w-5 h-5 text-accent-200" viewBox="0 0 24 24" fill="none"
+                          aria-hidden="true">
+                          <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" stroke="currentColor"
+                            stroke-width="1.6" />
+                          <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6" />
                         </svg>
                       </button>
                     </div>
-                    <p id="passHelp" class="text-xs text-accent-200/80 mt-1">Use at least 8 characters, including upper, lower, number, and symbol.</p>
+                    <p id="passHelp" class="text-xs text-accent-200/80 mt-1">Use at least 8 characters, including upper,
+                      lower, number, and symbol.</p>
                   </label>
                   <label class="block">
                     <span class="text-sm font-medium">Confirm password</span>
@@ -534,9 +607,12 @@
                 </div>
 
                 <div class="flex flex-wrap items-center gap-3">
-                  <button type="button" id="btnSuggest" class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-white/10 border border-accent-400/40 text-accent-50 hover:bg-white/20 transition shadow-neo-sm">
+                  <button type="button" id="btnSuggest"
+                    class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-white/10 border border-accent-400/40 text-accent-50 hover:bg-white/20 transition shadow-neo-sm">
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M12 3v3M12 18v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M3 12h3M18 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                      <path
+                        d="M12 3v3M12 18v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M3 12h3M18 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"
+                        stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
                     </svg>
                     Suggest strong password
                   </button>
@@ -545,27 +621,35 @@
 
                 <div class="flex items-center gap-2 mt-4">
                   <input id="ackKey" type="checkbox" class="h-4 w-4 rounded border-accent-400/40 bg-white/10">
-                  <label for="ackKey" class="text-xs text-accent-200/90">I have stored my one-time recovery key safely.</label>
-                  <button type="button" id="btnShowKey" class="ml-auto text-xs underline decoration-accent-400/70 decoration-2 underline-offset-4 hover:text-accent-200">Generate recovery key</button>
+                  <label for="ackKey" class="text-xs text-accent-200/90">I have stored my one-time recovery key
+                    safely.</label>
+                  <button type="button" id="btnShowKey"
+                    class="ml-auto text-xs underline decoration-accent-400/70 decoration-2 underline-offset-4 hover:text-accent-200">Generate
+                    recovery key</button>
                 </div>
 
                 <div id="recoveryKeyWrap" class="hidden mt-3">
-                  <div class="rounded-xl p-3 border border-accent-400/30 bg-white/5 flex items-center justify-between gap-3">
+                  <div
+                    class="rounded-xl p-3 border border-accent-400/30 bg-white/5 flex items-center justify-between gap-3">
                     <div class="flex items-center gap-2">
                       <svg class="w-5 h-5 text-accent-200" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                        <path d="M12 3l9 4.5v9L12 21 3 16.5v-9L12 3z" stroke="currentColor" stroke-width="1.6"/>
-                        <path d="M9 12h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                        <path d="M12 3l9 4.5v9L12 21 3 16.5v-9L12 3z" stroke="currentColor" stroke-width="1.6" />
+                        <path d="M9 12h6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
                       </svg>
                       <span class="text-sm">Your recovery key:</span>
                     </div>
-                    <code id="recoveryKey" class="text-xs px-2 py-1 rounded bg-white/10 border border-white/10 select-all"></code>
+                    <code id="recoveryKey"
+                      class="text-xs px-2 py-1 rounded bg-white/10 border border-white/10 select-all"></code>
                   </div>
                 </div>
 
                 <div class="pt-2">
-                  <button id="btnReset" type="submit" class="inline-flex items-center gap-2 rounded-2xl px-5 py-3 bg-accent-600 text-white shadow-neon hover:brightness-110 transition disabled:opacity-60 disabled:cursor-not-allowed" disabled>
+                  <button id="btnReset" type="submit"
+                    class="inline-flex items-center gap-2 rounded-2xl px-5 py-3 bg-accent-600 text-white shadow-neon hover:brightness-110 transition disabled:opacity-60 disabled:cursor-not-allowed"
+                    disabled>
                     <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                      <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                        stroke-linejoin="round" />
                     </svg>
                     Reset password
                   </button>
@@ -577,18 +661,21 @@
 
           <!-- Final Secure Step -->
           <div id="step-secure" class="hidden mt-8">
-            <div class="rounded-3xl p-8 border border-accent-400/30 bg-gradient-to-br from-white/5 to-transparent text-center">
+            <div
+              class="rounded-3xl p-8 border border-accent-400/30 bg-gradient-to-br from-white/5 to-transparent text-center">
               <div class="flex items-center justify-center mb-5">
                 <svg id="lockIcon" class="lock" viewBox="0 0 80 100" fill="none" role="img" aria-label="Lock">
                   <g class="shackle">
-                    <path d="M25 35a15 15 0 1130 0v10" stroke="url(#gradLock)" stroke-width="6" stroke-linecap="round"/>
+                    <path d="M25 35a15 15 0 1130 0v10" stroke="url(#gradLock)" stroke-width="6"
+                      stroke-linecap="round" />
                   </g>
-                  <rect x="15" y="40" width="50" height="50" rx="10" stroke="url(#gradLock)" stroke-width="6" fill="rgba(139,92,246,0.08)"/>
-                  <circle cx="40" cy="65" r="4" fill="url(#gradLock)"/>
+                  <rect x="15" y="40" width="50" height="50" rx="10" stroke="url(#gradLock)" stroke-width="6"
+                    fill="rgba(139,92,246,0.08)" />
+                  <circle cx="40" cy="65" r="4" fill="url(#gradLock)" />
                   <defs>
                     <linearGradient id="gradLock" x1="0" y1="0" x2="1" y2="1">
-                      <stop offset="0%" stop-color="#a78bfa"/>
-                      <stop offset="100%" stop-color="#8b5cf6"/>
+                      <stop offset="0%" stop-color="#a78bfa" />
+                      <stop offset="100%" stop-color="#8b5cf6" />
                     </linearGradient>
                   </defs>
                 </svg>
@@ -596,15 +683,19 @@
               <h3 class="text-xl sm:text-2xl font-bold mb-2">Your password has been successfully reset</h3>
               <p class="text-accent-200/90 mb-6">You can now use your new password to sign in securely.</p>
               <div class="flex items-center justify-center gap-3">
-                <a href="#" class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-white/10 border border-accent-400/40 text-accent-50 hover:bg-white/20 transition shadow-neo-sm">
+                <a href="login.html"
+                  class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-white/10 border border-accent-400/40 text-accent-50 hover:bg-white/20 transition shadow-neo-sm">
                   <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M4 12l6-6M4 12h12M10 6v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M4 12l6-6M4 12h12M10 6v12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+                      stroke-linejoin="round" />
                   </svg>
                   Back to sign in
                 </a>
-                <button id="downloadKey" type="button" class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-accent-600 text-white shadow-neon hover:brightness-110 transition">
+                <button id="downloadKey" type="button"
+                  class="inline-flex items-center gap-2 rounded-xl px-4 py-2 bg-accent-600 text-white shadow-neon hover:brightness-110 transition">
                   <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke="currentColor" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round" />
                   </svg>
                   Download recovery key
                 </button>
@@ -625,8 +716,8 @@
 
   <script>
     // Utilities and State
-    const qs = (s, el=document) => el.querySelector(s);
-    const qsa = (s, el=document) => Array.from(el.querySelectorAll(s));
+    const qs = (s, el = document) => el.querySelector(s);
+    const qsa = (s, el = document) => Array.from(el.querySelectorAll(s));
     const card = qs('#card');
     const guidance = qs('#guidanceText');
     const progressFill = qs('#progressFill');
@@ -647,13 +738,13 @@
       try {
         const stored = window && window.localStorage ? localStorage.getItem('theme-preference') : null;
         if (stored) htmlEl.setAttribute('data-theme', stored);
-      } catch (e) {}
+      } catch (e) { }
     })();
     themeToggle.addEventListener('click', () => {
       const cur = htmlEl.getAttribute('data-theme') || 'dark';
       const next = cur === 'dark' ? 'light' : 'dark';
       htmlEl.setAttribute('data-theme', next);
-      try { if (window && window.localStorage) localStorage.setItem('theme-preference', next); } catch(e) {}
+      try { if (window && window.localStorage) localStorage.setItem('theme-preference', next); } catch (e) { }
     });
 
     // Device & location check
@@ -788,8 +879,8 @@
     function focusOtp(i) { if (otpInputs[i]) otpInputs[i].focus(); }
     otpInputs.forEach((el, idx) => {
       el.addEventListener('input', (e) => {
-        e.target.value = e.target.value.replace(/\\D/g, '').slice(0,1);
-        if (e.target.value && idx < otpInputs.length - 1) focusOtp(idx+1);
+        e.target.value = e.target.value.replace(/\\D/g, '').slice(0, 1);
+        if (e.target.value && idx < otpInputs.length - 1) focusOtp(idx + 1);
         if (otpInputs.every(i => i.value.length === 1)) {
           // Auto-submit
           formEmailOtp.requestSubmit();
@@ -797,12 +888,12 @@
       });
       el.addEventListener('keydown', (e) => {
         if (e.key === 'Backspace' && !e.target.value && idx > 0) {
-          focusOtp(idx-1);
+          focusOtp(idx - 1);
         }
       });
       // Paste support
       el.addEventListener('paste', (e) => {
-        const txt = (e.clipboardData || window.clipboardData).getData('text').replace(/\\D/g, '').slice(0,6);
+        const txt = (e.clipboardData || window.clipboardData).getData('text').replace(/\\D/g, '').slice(0, 6);
         if (txt) {
           e.preventDefault();
           otpInputs.forEach((inp, i) => inp.value = txt[i] || '');
@@ -911,11 +1002,11 @@
         feedback = r.feedback.warning || r.feedback.suggestions?.[0] || '';
       } else {
         // Fallback heuristic
-        score = Math.min(4, Math.floor((pwd.length/3)) + (/[A-Z]/.test(pwd)) + (/[0-9]/.test(pwd)) + (/[\\W_]/.test(pwd)));
+        score = Math.min(4, Math.floor((pwd.length / 3)) + (/[A-Z]/.test(pwd)) + (/[0-9]/.test(pwd)) + (/[\\W_]/.test(pwd)));
       }
       const pct = [10, 30, 55, 78, 100][score] || 10;
       strengthFill.style.width = pct + '%';
-      strengthFill.style.filter = `saturate(${60 + score*20}%)`;
+      strengthFill.style.filter = `saturate(${60 + score * 20}%)`;
       strengthFill.style.boxShadow = score >= 3 ? '0 0 18px rgba(20,184,166,0.55)' : '0 0 12px rgba(234,179,8,0.45)';
       const labels = ['Very weak', 'Weak', 'Fair', 'Strong', 'Excellent'];
       strengthLabel.textContent = labels[score] + (feedback ? ' — ' + feedback : '');
@@ -989,10 +1080,10 @@
       if (crypto && crypto.getRandomValues) crypto.getRandomValues(bytes);
       const base32 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567';
       let bits = '';
-      bytes.forEach(b => bits += b.toString(2).padStart(8,'0'));
+      bytes.forEach(b => bits += b.toString(2).padStart(8, '0'));
       let out = '';
       for (let i = 0; i < bits.length; i += 5) {
-        const chunk = bits.slice(i, i+5);
+        const chunk = bits.slice(i, i + 5);
         if (chunk.length < 5) break;
         out += base32[parseInt(chunk, 2)];
       }
@@ -1026,7 +1117,7 @@
         burstContainer.style.zIndex = '20';
         document.body.appendChild(burstContainer);
 
-        for (let i=0;i<24;i++) {
+        for (let i = 0; i < 24; i++) {
           const dot = document.createElement('div');
           dot.style.position = 'absolute';
           dot.style.left = '50%';
@@ -1037,16 +1128,16 @@
           dot.style.background = i % 2 === 0 ? '#a78bfa' : '#8b5cf6';
           dot.style.boxShadow = '0 0 12px rgba(167,139,250,0.7)';
           burstContainer.appendChild(dot);
-          const angle = (Math.PI * 2) * (i/24);
-          const dist = 80 + Math.random()*80;
+          const angle = (Math.PI * 2) * (i / 24);
+          const dist = 80 + Math.random() * 80;
           anime({
             targets: dot,
             translateX: Math.cos(angle) * dist,
             translateY: Math.sin(angle) * dist,
-            scale: [{value: 1}, {value: 0, delay: 200}],
-            opacity: [{value: 1}, {value: 0, delay: 150}],
+            scale: [{ value: 1 }, { value: 0, delay: 200 }],
+            opacity: [{ value: 1 }, { value: 0, delay: 150 }],
             easing: 'easeOutExpo',
-            duration: 1200 + Math.random()*400,
+            duration: 1200 + Math.random() * 400,
             complete: () => dot.remove()
           });
         }
@@ -1085,7 +1176,7 @@
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas, { passive: true });
 
-    const particles = Array.from({length: 60}, () => ({
+    const particles = Array.from({ length: 60 }, () => ({
       x: Math.random() * W,
       y: Math.random() * H,
       r: Math.random() * 1.8 + 0.6,
@@ -1116,11 +1207,12 @@
     drawParticles();
 
     // Helper
-    function generateMockCode(n=6) {
+    function generateMockCode(n = 6) {
       let s = '';
-      for (let i=0;i<n;i++) s += Math.floor(Math.random()*10);
+      for (let i = 0; i < n; i++) s += Math.floor(Math.random() * 10);
       return s;
     }
   </script>
 </body>
+
 </html>
