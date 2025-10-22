@@ -321,16 +321,6 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <button id="themeToggle" type="button"
-          class="group inline-flex items-center gap-2 rounded-xl px-3 py-2 glass neon-outline shadow-neo-sm hover:shadow-neon transition">
-          <svg class="w-5 h-5 text-accent-200 group-hover:rotate-12 transition-transform" viewBox="0 0 24 24"
-            fill="none" aria-hidden="true">
-            <path id="icon-sun"
-              d="M12 4V2M12 22v-2M4.93 4.93L3.52 3.52M20.48 20.48l-1.41-1.41M4 12H2M22 12h-2M4.93 19.07L3.52 20.48M20.48 3.52l-1.41 1.41M12 8a4 4 0 100 8 4 4 0 000-8z"
-              stroke="currentColor" stroke-width="1.6" stroke-linecap="round" />
-          </svg>
-          <span class="text-sm">Theme</span>
-        </button>
       </div>
     </div>
   </header>
@@ -731,21 +721,7 @@
     let selectedMethod = null;
     let lastGeneratedKey = '';
 
-    // Theme toggle with safe storage
-    const themeToggle = qs('#themeToggle');
-    const htmlEl = document.documentElement;
-    (function initTheme() {
-      try {
-        const stored = window && window.localStorage ? localStorage.getItem('theme-preference') : null;
-        if (stored) htmlEl.setAttribute('data-theme', stored);
-      } catch (e) { }
-    })();
-    themeToggle.addEventListener('click', () => {
-      const cur = htmlEl.getAttribute('data-theme') || 'dark';
-      const next = cur === 'dark' ? 'light' : 'dark';
-      htmlEl.setAttribute('data-theme', next);
-      try { if (window && window.localStorage) localStorage.setItem('theme-preference', next); } catch (e) { }
-    });
+    // Theme toggle removed; dark theme enforced via <html data-theme="dark">
 
     // Device & location check
     const secMsg = qs('#securityMsg');

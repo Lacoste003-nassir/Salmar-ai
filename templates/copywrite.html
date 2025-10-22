@@ -603,9 +603,7 @@
 <body>
   <div class="particles" id="particles"></div>
 
-  <div class="theme-toggle" id="themeToggle">
-    <i class="fas fa-moon" id="themeIcon"></i>
-  </div>
+  
 
   <div class="container">
     <header>
@@ -837,22 +835,7 @@
       }
     }
 
-    // Theme Toggle
-    const themeToggle = document.getElementById('themeToggle');
-    const themeIcon = document.getElementById('themeIcon');
-    const body = document.body;
-
-    themeToggle.addEventListener('click', () => {
-      const currentTheme = body.getAttribute('data-theme');
-
-      if (currentTheme === 'light') {
-        body.removeAttribute('data-theme');
-        themeIcon.className = 'fas fa-moon';
-      } else {
-        body.setAttribute('data-theme', 'light');
-        themeIcon.className = 'fas fa-sun';
-      }
-    });
+    // Theme toggle removed: dark mode enforced by default
 
     // Scroll Animations
     const observerOptions = {

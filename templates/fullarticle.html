@@ -1140,7 +1140,7 @@
     </style>
 </head>
 
-<body>
+<body class="dark-mode">
     <!-- Particle Canvas -->
     <canvas id="particles-canvas"></canvas>
 
@@ -1162,9 +1162,6 @@
                 <li><a href="#contact">Contact</a></li>
             </ul>
             <div style="display: flex; align-items: center; gap: 1rem;">
-                <button class="theme-toggle" id="themeToggle">
-                    <i class="fas fa-moon"></i>
-                </button>
                 <button class="mobile-menu-btn" id="mobileMenuBtn">
                     <i class="fas fa-bars"></i>
                 </button>
@@ -2241,16 +2238,7 @@
             canvas.height = window.innerHeight;
         });
 
-        // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        const body = document.body;
-        let isDark = false;
-
-        themeToggle.addEventListener('click', () => {
-            isDark = !isDark;
-            body.classList.toggle('dark-mode');
-            themeToggle.innerHTML = isDark ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-        });
+        // Theme fixed to dark mode by default
 
         // Mobile Menu
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');

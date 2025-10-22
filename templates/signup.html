@@ -628,18 +628,7 @@
       const fingerBtn = document.getElementById('fingerBtn');
       const faceBtn = document.getElementById('faceBtn');
 
-      // Theme toggle initial state
-      modeToggle.setAttribute('data-on', html.getAttribute('data-theme') !== 'light');
-      modeToggle.setAttribute('aria-pressed', html.getAttribute('data-theme') !== 'light');
-
-      modeToggle.addEventListener('click', () => {
-        const on = modeToggle.getAttribute('data-on') !== 'true';
-        modeToggle.setAttribute('data-on', on);
-        modeToggle.setAttribute('aria-pressed', on);
-        html.setAttribute('data-theme', on ? 'dark' : 'light');
-        // Redraw noise slightly to match theme contrast
-        drawNoise();
-      });
+      // Theme toggle removed; dark mode enforced via <html data-theme="dark">
 
       // CTA ripple effect
       createBtn.addEventListener('pointerenter', (e) => {

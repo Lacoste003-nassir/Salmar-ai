@@ -498,28 +498,7 @@
             text-shadow: 0 0 10px var(--light-purple);
         }
 
-        /* Light Mode */
-        body.light-mode {
-            --deep-purple: #F8F9FA;
-            --neon-violet: #7209B7;
-            --light-purple: #9D4EDD;
-            --ultra-violet: #5A189A;
-            --dark-purple: #240046;
-            --accent-pink: #C77DFF;
-            --text-light: #240046;
-            --text-muted: #5A189A;
-            --glass-bg: rgba(157, 78, 221, 0.05);
-            --glass-border: rgba(157, 78, 221, 0.2);
-        }
-
-        body.light-mode .nebula-cloud {
-            opacity: 0.1;
-        }
-
-        body.light-mode .star {
-            background: #7209B7;
-            opacity: 0.2;
-        }
+        
 
         /* Responsive Design */
         @media (max-width: 768px) {
@@ -598,9 +577,7 @@
                 <div class="orb-icon"></div>
                 <span>Salmar AI</span>
             </div>
-            <button class="theme-toggle" id="themeToggle">
-                <i class="fas fa-sun"></i> Light Mode
-            </button>
+            
         </div>
     </header>
 
@@ -1019,20 +996,7 @@
 
         createNebula();
 
-        // Theme Toggle
-        const themeToggle = document.getElementById('themeToggle');
-        let isLightMode = false;
-
-        themeToggle.addEventListener('click', () => {
-            isLightMode = !isLightMode;
-            document.body.classList.toggle('light-mode');
-
-            if (isLightMode) {
-                themeToggle.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
-            } else {
-                themeToggle.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
-            }
-        });
+        
 
         // Timeline Navigation
         const timelineBtns = document.querySelectorAll('.timeline-btn');

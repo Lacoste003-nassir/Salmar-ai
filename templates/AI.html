@@ -487,6 +487,24 @@
             --glass-strong: rgba(255, 255, 255, 0.18);
         }
 
+        /* Thinking box animations */
+        .thinking-dots::after {
+            content: '';
+            animation: thinking-pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes thinking-pulse {
+
+            0%,
+            100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+        }
+
         /* Toasts */
         #toastContainer {
             pointer-events: none;
@@ -549,10 +567,6 @@
             <div class="flex items-center gap-2">
                 <button id="helpBtn" class="btn glass px-3 py-2 rounded-xl hover:shadow-lavender" aria-label="Help">
                     <i data-lucide="help-circle" class="w-5 h-5"></i>
-                </button>
-                <button id="themeToggle" class="btn glass px-3 py-2 rounded-xl hover:shadow-lavender"
-                    aria-label="Toggle theme">
-                    <i data-lucide="sun-moon" class="w-5 h-5"></i>
                 </button>
                 <div class="relative">
                     <button id="profileBtn"
@@ -725,6 +739,29 @@
                         </div>
                     </div>
                 </div>
+                <!-- Hero state (visible when no messages) -->
+                <div id="heroState" class="absolute inset-x-0 top-40 flex flex-col items-center gap-6 px-4">
+                    <div class="flex flex-col items-center gap-2">
+                        <div class="text-2xl sm:text-3xl font-semibold opacity-90">What can I help with?</div>
+                    </div>
+                    <form id="heroForm" class="w-full max-w-3xl">
+                        <div class="glass-strong rounded-full px-4 py-2 flex items-center gap-2">
+                            <i data-lucide="paperclip" class="w-5 h-5 opacity-70"></i>
+                            <input id="heroInput" type="text"
+                                class="flex-1 bg-transparent outline-none text-base sm:text-lg"
+                                placeholder="Ask anything" aria-label="Ask anything" />
+                            <button type="button" id="heroModelBtn"
+                                class="btn glass px-3 py-1.5 rounded-full text-sm flex items-center gap-1">
+                                <i id="heroModelIcon" data-lucide="rocket" class="w-4 h-4"></i>
+                                <span id="heroModelLabel">Auto</span>
+                                <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                            </button>
+                            <button type="submit" class="btn px-3 py-2 rounded-full bg-white/10 hover:bg-white/15">
+                                <i data-lucide="send" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
                 <!-- Conversation -->
                 <div id="chatScroll" class="mt-40 flex-1 overflow-auto px-4 sm:px-6 py-6 space-y-4"></div>
                 <!-- Input Bar -->
@@ -770,8 +807,99 @@
                             <div class="relative flex-1">
                                 <label for="chatInput" class="sr-only">Ask me anything</label>
                                 <textarea id="chatInput" rows="1"
-                                    class="w-full bg-transparent resize-none outline-none text-base sm:text-lg placeholder:opacity-60"
+                                    class="w-full bg-transparent resize-none outline-none text-base sm:text-lg placeholder:opacity-60 border-0 focus:ring-0"
                                     placeholder="Ask me anything…" aria-multiline="true"></textarea>
+                            </div>
+                            <!-- Model selector -->
+                            <div class="relative">
+                                <button type="button" id="modelBtn"
+                                    class="btn glass px-3 py-2 rounded-xl flex items-center gap-1" aria-haspopup="true"
+                                    aria-expanded="false" aria-controls="modelMenu">
+                                    <i id="modelIcon" data-lucide="rocket" class="w-4 h-4"></i>
+                                    <span id="modelLabel">Auto</span>
+                                    <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                                </button>
+                                <div id="modelMenu" class="menu absolute right-0 mt-2 w-72 glass-strong rounded-xl p-2"
+                                    data-open="false" role="menu">
+                                    <button
+                                        class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 flex items-start gap-3"
+                                        role="menuitem" data-mode="auto">
+                                        <i data-lucide="rocket" class="w-4 h-4 mt-0.5"></i>
+                                        <div class="text-left">
+                                            <div class="font-medium">Auto</div>
+                                            <div class="text-xs opacity-70">Chooses Fast or Expert</div>
+                                        </div>
+                                        <i data-lucide="check" class="w-4 h-4 ml-auto opacity-90" data-check></i>
+                                    </button>
+                                    <button
+                                        class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 flex items-start gap-3"
+                                        role="menuitem" data-mode="fast">
+                                        <i data-lucide="zap" class="w-4 h-4 mt-0.5"></i>
+                                        <div class="text-left">
+                                            <div class="font-medium">Fast</div>
+                                            <div class="text-xs opacity-70">Quick responses</div>
+                                        </div>
+                                        <i data-lucide="check" class="w-4 h-4 ml-auto opacity-90 hidden" data-check></i>
+                                    </button>
+                                    <button
+                                        class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 flex items-start gap-3"
+                                        role="menuitem" data-mode="expert">
+                                        <i data-lucide="lightbulb" class="w-4 h-4 mt-0.5"></i>
+                                        <div class="text-left">
+                                            <div class="font-medium">Expert</div>
+                                            <div class="text-xs opacity-70">Thinks hard</div>
+                                        </div>
+                                        <i data-lucide="check" class="w-4 h-4 ml-auto opacity-90 hidden" data-check></i>
+                                    </button>
+                                    <button
+                                        class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 flex items-start gap-3"
+                                        role="menuitem" data-mode="grok4fast">
+                                        <i data-lucide="moon" class="w-4 h-4 mt-0.5"></i>
+                                        <div class="text-left">
+                                            <div class="font-medium">Grok 4 Fast</div>
+                                            <div class="text-xs opacity-70">Beta</div>
+                                        </div>
+                                        <i data-lucide="check" class="w-4 h-4 ml-auto opacity-90 hidden" data-check></i>
+                                    </button>
+                                    <button
+                                        class="w-full text-left px-3 py-2 rounded-lg flex items-start gap-3 opacity-50 pointer-events-none"
+                                        role="menuitem" data-mode="heavy" data-disabled="true">
+                                        <i data-lucide="grid-3x3" class="w-4 h-4 mt-0.5"></i>
+                                        <div class="text-left">
+                                            <div class="font-medium">Heavy</div>
+                                            <div class="text-xs opacity-70">Team of experts</div>
+                                        </div>
+                                        <i data-lucide="check" class="w-4 h-4 ml-auto opacity-90 hidden" data-check></i>
+                                    </button>
+                                    <div class="my-2 border-t border-white/10"></div>
+                                    <div class="glass px-3 py-3 rounded-xl flex items-center justify-between">
+                                        <div class="flex items-center gap-2">
+                                            <i data-lucide="orbit" class="w-4 h-4"></i>
+                                            <div>
+                                                <div class="font-medium">SuperGrok</div>
+                                                <div class="text-xs opacity-70">Unlock extended capabilities</div>
+                                            </div>
+                                        </div>
+                                        <button type="button"
+                                            class="btn px-3 py-1.5 rounded-full bg-white text-black text-xs">Upgrade</button>
+                                    </div>
+                                    <div class="my-2 border-t border-white/10"></div>
+                                    <button
+                                        class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 flex items-center justify-between"
+                                        role="menuitem" data-aux="custom">
+                                        <span class="flex items-center gap-2"><i data-lucide="shield"
+                                                class="w-4 h-4"></i><span class="font-medium">Custom
+                                                Instructions</span></span>
+                                        <span class="text-xs glass px-2 py-1 rounded-lg">Customize</span>
+                                    </button>
+                                    <button
+                                        class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 flex items-center justify-between"
+                                        role="menuitem" data-aux="models">
+                                        <span class="flex items-center gap-2"><i data-lucide="box"
+                                                class="w-4 h-4"></i><span class="font-medium">Models</span></span>
+                                        <i data-lucide="chevron-right" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
                             </div>
                             <!-- Send -->
                             <button type="submit" id="sendBtn"
@@ -779,13 +907,15 @@
                                 aria-label="Send">
                                 <i data-lucide="send" class="w-5 h-5"></i>
                             </button>
-                        </div>
-                        <div class="flex items-center justify-between">
+                            <!-- Advanced Options (relocated here for aesthetics) -->
                             <button type="button" id="advancedBtn"
-                                class="btn glass px-3 py-2 rounded-xl flex items-center gap-2">
+                                class="btn glass px-3 py-2 rounded-xl flex items-center gap-2"
+                                aria-label="Advanced options">
                                 <i data-lucide="settings-2" class="w-5 h-5"></i>
-                                <span class="hidden xs:inline">Advanced Options</span>
+                                <span class="hidden sm:inline">Options</span>
                             </button>
+                        </div>
+                        <div class="flex items-center justify-end">
                             <div class="text-xs opacity-70">Enter = Send • Shift+Enter = New line • / = Focus</div>
                         </div>
                     </div>
@@ -1148,9 +1278,8 @@
             <footer class="mt-3">
                 <div class="glass rounded-2xl px-4 py-3 flex flex-col sm:flex-row items-center justify-between">
                     <div class="flex items-center gap-4 text-sm opacity-80">
-                        <a href="helpcenter.html" class="hover:opacity-100">Help Center</a>
                         <a href="report.html" class="hover:opacity-100">Report Issue</a>
-                        <a href="securitystatus.html" class="hover:opacity-100">Security Status</a>
+                        <a href="security.html" class="hover:opacity-100">Security</a>
                     </div>
                     <div class="text-sm opacity-80">The Future is Purple. The Future is Salmar.</div>
                 </div>
@@ -1387,13 +1516,6 @@
                 <div class="glass rounded-2xl p-4 space-y-3 md:col-span-1">
                     <div class="text-sm uppercase tracking-wider opacity-70">Preferences</div>
                     <label class="flex items-center justify-between glass rounded-xl px-3 py-2">
-                        <span class="flex items-center gap-2"><i data-lucide="moon-star" class="w-4 h-4"></i>
-                            Theme</span>
-                        <button id="modalThemeToggle" class="btn glass h-8 w-8 rounded-lg" aria-label="Toggle theme">
-                            <i data-lucide="sun-moon" class="w-4 h-4"></i>
-                        </button>
-                    </label>
-                    <label class="flex items-center justify-between glass rounded-xl px-3 py-2">
                         <span class="flex items-center gap-2"><i data-lucide="bell" class="w-4 h-4"></i> Notifications
                             (toasts)</span>
                         <input id="modalToastsToggle" type="checkbox" class="accent-neon-violet" />
@@ -1476,6 +1598,7 @@
             pii: false,
             safety: 2, ctxWindow: 2,
             autorunWorkflow: false,
+            isGenerating: false, // Track if AI is currently generating
             ui: {
                 fontScale: 1,
                 density: 'comfortable', // comfortable | compact
@@ -1651,14 +1774,7 @@
         }
         detectBiometricSupport();
 
-        /* Theme toggle */
-        $('#themeToggle').addEventListener('click', () => {
-            document.body.classList.toggle('theme-light');
-            announce('Theme toggled');
-        });
-        // Modal theme toggle mirrors header toggle
-        const modalThemeToggle = $('#modalThemeToggle');
-        if (modalThemeToggle) modalThemeToggle.addEventListener('click', () => $('#themeToggle').click());
+        /* Theme toggle removed: enforce dark mode by default */
 
         /* Help */
         $('#helpBtn').addEventListener('click', () => {
@@ -1745,7 +1861,7 @@
             const list = $('#historyList');
             list.innerHTML = '';
             state.sessions.forEach((s, idx) => {
-                const row = el('div', 'glass rounded-xl px-3 py-2 border border-white/10 flex items-center gap-2 justify-between', { role: 'listitem' });
+                const row = el('div', 'group glass rounded-xl px-3 py-2 border border-white/10 flex items-center gap-2 justify-between', { role: 'listitem' });
                 if (state.currentSessionId === s.id) row.classList.add('ring-2', 'ring-neon-violet/50');
                 const left = el('button', 'flex items-center gap-2 min-w-0 text-left flex-1', { title: 'Open session' });
                 left.innerHTML = `
@@ -1760,7 +1876,7 @@
                     toast(`Opened "${s.title}"`, 'success');
                 });
                 const rightWrap = el('div', 'relative');
-                const moreBtn = el('button', 'btn glass h-8 w-8 rounded-lg', { 'aria-label': 'Session actions' });
+                const moreBtn = el('button', 'btn glass h-8 w-8 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity', { 'aria-label': 'Session actions' });
                 moreBtn.innerHTML = `<i data-lucide="more-vertical" class="w-4 h-4"></i>`;
                 const menu = el('div', 'menu absolute right-0 mt-2 w-48 glass-strong rounded-xl p-1', { 'data-open': 'false', role: 'menu' });
                 menu.innerHTML = `
@@ -1772,6 +1888,9 @@
      </button>
      <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 flex items-center gap-2" role="menuitem" data-action="share">
       <i data-lucide="share-2" class="w-4 h-4"></i> Share
+     </button>
+     <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 flex items-center gap-2" role="menuitem" data-action="ai">
+      <i data-lucide="sparkles" class="w-4 h-4"></i> Ask AI about this
      </button>
      <button class="w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 flex items-center gap-2" role="menuitem" data-action="delete">
       <i data-lucide="trash-2" class="w-4 h-4"></i> Delete
@@ -1798,6 +1917,20 @@
                             if (navigator.share) await navigator.share({ title: 'Salmar Session', text: shareText });
                             else { await navigator.clipboard?.writeText(shareText); announce('Copied to clipboard'); toast('Copied summary to clipboard', 'success'); }
                         } catch (e) { }
+                    } else if (act === 'ai') {
+                        ctl.close();
+                        // Create a cleaner prompt for session analysis
+                        let prompt = `Please analyze this conversation session: "${s.title}" (${s.count || 0} messages from ${s.time})`;
+
+                        // If there are messages, include a brief sample
+                        if (s.messages && s.messages.length > 0) {
+                            const sampleMessages = s.messages.slice(0, 3).map(m => `${m.role}: ${m.text.slice(0, 100)}${m.text.length > 100 ? '...' : ''}`).join('\n');
+                            prompt += `\n\nContext:\n${sampleMessages}`;
+                        }
+
+                        pushUserMessage(prompt);
+                        simulateAI(prompt);
+                        toast('Asked AI to analyze this session', 'success');
                     } else if (act === 'delete') {
                         ctl.close();
                         const delIdx = state.sessions.findIndex(x => x.id === s.id);
@@ -2006,7 +2139,8 @@
         const chatScroll = $('#chatScroll');
 
         function getCardText(card) {
-            const contentEl = card.querySelector('.message-content');
+            // Check for new format with response-content first, then fallback to message-content
+            const contentEl = card.querySelector('.response-content') || card.querySelector('.message-content');
             return (contentEl?.textContent || '').trim();
         }
 
@@ -2210,6 +2344,21 @@
             toast('Branched into a new chat', 'success');
         }
 
+        function askAIAboutMessage(card) {
+            const text = getCardText(card);
+            if (!text) { announce('Nothing to analyze'); toast('Nothing to analyze', 'warn'); return; }
+
+            // Create a cleaner prompt for analysis
+            const prompt = `Please analyze and explain this message: "${text}"`;
+
+            // Add the prompt as a user message and get AI response
+            pushUserMessage(prompt);
+            simulateAI(prompt);
+
+            toast('Asked AI to analyze this message', 'success');
+            announce('AI analyzing message');
+        }
+
         /* Wire buttons in a card */
         function wireMessageActionButtons(card) {
             const row = card.parentElement;
@@ -2233,8 +2382,10 @@
                 if (moreBtn && moreMenu) setupMenu(moreBtn, moreMenu);
                 const readBtn = card.querySelector('[data-action="read"]');
                 const branchBtn = card.querySelector('[data-action="branch"]');
+                const aiBtn = card.querySelector('[data-action="ai"]');
                 readBtn?.addEventListener('click', () => readAloudText(getCardText(card)));
                 branchBtn?.addEventListener('click', () => branchFromCard(card));
+                aiBtn?.addEventListener('click', () => askAIAboutMessage(card));
             } else {
                 const copyBtn = card.querySelector('[data-action="copy"]');
                 const editBtn = card.querySelector('[data-action="edit"]');
@@ -2350,7 +2501,10 @@
                 const itemBranch = el('button', 'w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 flex items-center gap-2', { role: 'menuitem' });
                 itemBranch.innerHTML = `<i data-lucide="git-branch" class="w-4 h-4"></i> Branch in new chat`;
                 itemBranch.dataset.action = 'branch';
-                moreMenu.append(itemRead, itemBranch);
+                const itemAI = el('button', 'w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 flex items-center gap-2', { role: 'menuitem' });
+                itemAI.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i> Ask AI about this`;
+                itemAI.dataset.action = 'ai';
+                moreMenu.append(itemRead, itemBranch, itemAI);
                 moreWrap.append(bMore, moreMenu);
                 bar.append(bCopy, bLike, bDis, bShare, bRegen, moreWrap);
             }
@@ -2363,6 +2517,262 @@
             return card;
         }
 
+        function createMessageWithThinking({ role, prompt }) {
+            const padX = state.ui.density === 'compact' ? 'px-3' : 'px-4';
+            const padY = state.ui.density === 'compact' ? 'py-2' : 'py-3';
+            const row = el('div', `flex ${role === 'user' ? 'message-user' : 'message-salmar'}`);
+            const card = el('div', `group max-w-[90%] sm:max-w-[70%] ${padX} ${padY} rounded-2xl glass bg-[var(--card)] shadow-lavender relative border border-white/10`);
+
+            // Header
+            const head = el('div', 'flex items-center gap-2 mb-3');
+            const orbDot = el('div', 'h-2.5 w-2.5 rounded-full', {});
+            orbDot.style.background = state.mode === 'security' ? '#23d18b' : orbCoreAccentByMode();
+            head.appendChild(orbDot);
+            const name = el('div', 'text-sm opacity-90 font-medium', { text: 'Salmar' });
+            head.appendChild(name);
+
+            // Personality label
+            const hue = personalityHues[state.personality] ?? 275;
+            const pill = el('span', 'ml-2 text-xs px-2 py-0.5 rounded-full', { text: personalities[state.personality] });
+            pill.style.background = `hsla(${hue},100%,70%,0.15)`;
+            pill.style.color = `hsla(${hue},100%,75%,0.95)`;
+            pill.style.border = `1px solid hsla(${hue},100%,60%,0.3)`;
+            head.appendChild(pill);
+
+            card.appendChild(head);
+
+            // Thinking box (collapsible)
+            const thinkingContainer = el('div', 'mb-3');
+            const thinkingHeader = el('div', 'flex items-center gap-2 cursor-pointer', {
+                'aria-expanded': 'true',
+                'role': 'button',
+                'tabindex': '0'
+            });
+
+            // Get mode color
+            const modeColors = {
+                knowledge: { bg: 'bg-blue-950/20', border: 'border-blue-500/30', text: 'text-blue-300', icon: 'text-blue-400' },
+                creative: { bg: 'bg-pink-950/20', border: 'border-pink-500/30', text: 'text-pink-300', icon: 'text-pink-400' },
+                business: { bg: 'bg-amber-950/20', border: 'border-amber-500/30', text: 'text-amber-300', icon: 'text-amber-400' },
+                security: { bg: 'bg-emerald-950/20', border: 'border-emerald-500/30', text: 'text-emerald-300', icon: 'text-emerald-400' },
+                integrations: { bg: 'bg-purple-950/20', border: 'border-purple-500/30', text: 'text-purple-300', icon: 'text-purple-400' }
+            };
+            const colors = modeColors[state.mode] || modeColors.knowledge;
+
+            thinkingHeader.innerHTML = `
+                <i data-lucide="brain" class="w-4 h-4 ${colors.icon}"></i>
+                <span class="text-sm font-medium ${colors.icon}">Thinking...</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 ${colors.icon} transition-transform thinking-chevron"></i>
+            `;
+
+            const thinkingBox = el('div', `thinking-box mt-2 p-3 ${colors.bg} border ${colors.border} rounded-xl text-sm ${colors.text} leading-relaxed`);
+            thinkingBox.innerHTML = '<span class="thinking-dots">Analyzing your question...</span>';
+
+            thinkingContainer.append(thinkingHeader, thinkingBox);
+
+            // Toggle thinking box
+            thinkingHeader.addEventListener('click', () => {
+                const isExpanded = thinkingHeader.getAttribute('aria-expanded') === 'true';
+                thinkingHeader.setAttribute('aria-expanded', String(!isExpanded));
+                thinkingBox.style.display = isExpanded ? 'none' : 'block';
+                const chevron = thinkingHeader.querySelector('.thinking-chevron');
+                chevron.style.transform = isExpanded ? 'rotate(-90deg)' : 'rotate(0deg)';
+            });
+
+            card.appendChild(thinkingContainer);
+
+            // Response content area
+            const responseContent = el('div', 'response-content whitespace-pre-wrap leading-relaxed message-content');
+            card.appendChild(responseContent);
+
+            // Action buttons (same as regular AI messages)
+            const bar = el('div', 'message-actions mt-3 pt-2 border-t border-white/10 flex items-center gap-1 flex-wrap opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity');
+            const bCopy = actionButton('copy', 'Copy', () => copyMessage(card));
+            const bLike = actionIcon('thumbs-up', 'Like', () => { }, false); bLike.dataset.action = 'like';
+            const bDis = actionIcon('thumbs-down', 'Dislike', () => { }, false); bDis.dataset.action = 'dislike';
+            bLike.addEventListener('click', () => applyReactionToggle(bLike, bDis, 'like'));
+            bDis.addEventListener('click', () => applyReactionToggle(bLike, bDis, 'dislike'));
+            const bShare = actionButton('share-2', 'Share', () => shareMessage(card));
+            const bRegen = actionButton('refresh-ccw', 'Regenerate', () => {
+                const prompt = getPreviousUserTextFromRow(row) || getCardText(card);
+                regenerateAIInto(card, prompt);
+            });
+            const moreWrap = el('div', 'relative');
+            const bMore = actionButton('more-horizontal', 'More', () => { }, '');
+            bMore.dataset.action = 'more';
+            bMore.setAttribute('aria-haspopup', 'true');
+            bMore.setAttribute('aria-expanded', 'false');
+            const moreMenu = el('div', 'menu ai-more-menu absolute right-0 mt-2 w-52 glass-strong rounded-xl p-1', { 'data-open': 'false', role: 'menu' });
+            const itemRead = el('button', 'w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 flex items-center gap-2', { role: 'menuitem' });
+            itemRead.innerHTML = `<i data-lucide="volume-2" class="w-4 h-4"></i> Read aloud`;
+            itemRead.dataset.action = 'read';
+            const itemBranch = el('button', 'w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 flex items-center gap-2', { role: 'menuitem' });
+            itemBranch.innerHTML = `<i data-lucide="git-branch" class="w-4 h-4"></i> Branch in new chat`;
+            itemBranch.dataset.action = 'branch';
+            const itemAI = el('button', 'w-full text-left px-3 py-2 rounded-lg hover:bg-white/5 flex items-center gap-2', { role: 'menuitem' });
+            itemAI.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i> Ask AI about this`;
+            itemAI.dataset.action = 'ai';
+            moreMenu.append(itemRead, itemBranch, itemAI);
+            moreWrap.append(bMore, moreMenu);
+            bar.append(bCopy, bLike, bDis, bShare, bRegen, moreWrap);
+
+            card.appendChild(bar);
+            row.appendChild(card);
+            chatScroll.appendChild(row);
+            lucide.createIcons();
+            wireMessageActionButtons(card);
+            scrollToBottom();
+            return card;
+        }
+
+        function createDualResponseMessage({ role, prompt }) {
+            const padX = state.ui.density === 'compact' ? 'px-3' : 'px-4';
+            const padY = state.ui.density === 'compact' ? 'py-2' : 'py-3';
+            const row = el('div', `flex ${role === 'user' ? 'message-user' : 'message-salmar'}`);
+            const card = el('div', `group max-w-[95%] ${padX} ${padY} rounded-2xl glass bg-[var(--card)] shadow-lavender relative border border-white/10`);
+
+            // Header
+            const head = el('div', 'flex items-center gap-2 mb-3');
+            const orbDot = el('div', 'h-2.5 w-2.5 rounded-full', {});
+            orbDot.style.background = state.mode === 'security' ? '#23d18b' : orbCoreAccentByMode();
+            head.appendChild(orbDot);
+            const name = el('div', 'text-sm opacity-90 font-medium', { text: 'Salmar' });
+            head.appendChild(name);
+
+            // Get mode colors for thinking box
+            const modeColors = {
+                knowledge: { bg: 'bg-blue-950/20', border: 'border-blue-500/30', text: 'text-blue-300', icon: 'text-blue-400' },
+                creative: { bg: 'bg-pink-950/20', border: 'border-pink-500/30', text: 'text-pink-300', icon: 'text-pink-400' },
+                business: { bg: 'bg-amber-950/20', border: 'border-amber-500/30', text: 'text-amber-300', icon: 'text-amber-400' },
+                security: { bg: 'bg-emerald-950/20', border: 'border-emerald-500/30', text: 'text-emerald-300', icon: 'text-emerald-400' },
+                integrations: { bg: 'bg-purple-950/20', border: 'border-purple-500/30', text: 'text-purple-300', icon: 'text-purple-400' }
+            };
+            const colors = modeColors[state.mode] || modeColors.knowledge;
+
+            card.appendChild(head);
+
+            // Thinking box (same as single response)
+            const thinkingContainer = el('div', 'mb-3');
+            const thinkingHeader = el('div', 'flex items-center gap-2 cursor-pointer', {
+                'aria-expanded': 'true',
+                'role': 'button',
+                'tabindex': '0'
+            });
+            thinkingHeader.innerHTML = `
+                <i data-lucide="brain" class="w-4 h-4 ${colors.icon}"></i>
+                <span class="text-sm font-medium ${colors.icon}">Thinking...</span>
+                <i data-lucide="chevron-down" class="w-4 h-4 ${colors.icon} transition-transform thinking-chevron"></i>
+            `;
+
+            const thinkingBox = el('div', `thinking-box mt-2 p-3 ${colors.bg} border ${colors.border} rounded-xl text-sm ${colors.text} leading-relaxed`);
+            thinkingBox.innerHTML = '<span class="thinking-dots">Analyzing complex query...</span>';
+
+            thinkingContainer.append(thinkingHeader, thinkingBox);
+
+            // Toggle thinking box
+            thinkingHeader.addEventListener('click', () => {
+                const isExpanded = thinkingHeader.getAttribute('aria-expanded') === 'true';
+                thinkingHeader.setAttribute('aria-expanded', String(!isExpanded));
+                thinkingBox.style.display = isExpanded ? 'none' : 'block';
+                const chevron = thinkingHeader.querySelector('.thinking-chevron');
+                chevron.style.transform = isExpanded ? 'rotate(-90deg)' : 'rotate(0deg)';
+            });
+
+            card.appendChild(thinkingContainer);
+
+            // Choice header
+            const choiceHeader = el('div', 'text-center mb-4');
+            choiceHeader.innerHTML = `
+                <div class="text-lg font-medium mb-1">Which response do you prefer?</div>
+                <div class="text-sm opacity-70">This will help make Salmar better.</div>
+                <button class="mt-2 px-3 py-1 text-xs rounded-full glass hover:bg-white/10 transition-colors" id="skipSelection">
+                    Skip Selection
+                </button>
+            `;
+
+            // Response choice container
+            const choiceUI = el('div', 'response-choice mb-4', { style: 'display: none;' });
+            choiceUI.appendChild(choiceHeader);
+
+            // Two response options side by side
+            const optionsContainer = el('div', 'grid grid-cols-1 lg:grid-cols-2 gap-4');
+
+            // Response A
+            const optionA = el('div', 'response-option-a glass-strong rounded-xl p-4 cursor-pointer hover:ring-2 hover:ring-neon-violet/50 transition-all');
+            optionA.innerHTML = `
+                <div class="flex items-center justify-between mb-3">
+                    <div class="font-medium">Response A</div>
+                    <div class="text-xs opacity-70">Detailed Analysis</div>
+                </div>
+                <div class="response-content whitespace-pre-wrap leading-relaxed text-sm"></div>
+            `;
+
+            // Response B
+            const optionB = el('div', 'response-option-b glass-strong rounded-xl p-4 cursor-pointer hover:ring-2 hover:ring-neon-violet/50 transition-all');
+            optionB.innerHTML = `
+                <div class="flex items-center justify-between mb-3">
+                    <div class="font-medium">Response B</div>
+                    <div class="text-xs opacity-70">Step-by-Step Guide</div>
+                </div>
+                <div class="response-content whitespace-pre-wrap leading-relaxed text-sm"></div>
+            `;
+
+            optionsContainer.append(optionA, optionB);
+            choiceUI.appendChild(optionsContainer);
+            card.appendChild(choiceUI);
+
+            // Handle response selection
+            optionA.addEventListener('click', () => selectResponse(card, 'A', optionA));
+            optionB.addEventListener('click', () => selectResponse(card, 'B', optionB));
+
+            const skipBtn = choiceUI.querySelector('#skipSelection');
+            skipBtn?.addEventListener('click', () => {
+                choiceUI.style.display = 'none';
+                // Show both responses in final format
+                const finalResponse = el('div', 'final-response');
+                finalResponse.innerHTML = `
+                    <div class="mb-3 text-sm opacity-80">Both response options:</div>
+                    <div class="space-y-4">
+                        <div><strong>Detailed Analysis:</strong><br>${optionA.querySelector('.response-content').textContent}</div>
+                        <div><strong>Step-by-Step Guide:</strong><br>${optionB.querySelector('.response-content').textContent}</div>
+                    </div>
+                `;
+                card.appendChild(finalResponse);
+            });
+
+            row.appendChild(card);
+            chatScroll.appendChild(row);
+            lucide.createIcons();
+            scrollToBottom();
+            return card;
+        }
+
+        function selectResponse(card, option, selectedElement) {
+            const choiceUI = card.querySelector('.response-choice');
+            const selectedContent = selectedElement.querySelector('.response-content').textContent;
+
+            // Hide choice UI
+            choiceUI.style.display = 'none';
+
+            // Show selected response as final
+            const finalResponse = el('div', 'final-response response-content whitespace-pre-wrap leading-relaxed');
+            finalResponse.textContent = selectedContent;
+            card.appendChild(finalResponse);
+
+            // Add action buttons
+            const bar = el('div', 'message-actions mt-3 pt-2 border-t border-white/10 flex items-center gap-1 flex-wrap opacity-0 group-hover:opacity-100 pointer-events-none group-hover:pointer-events-auto transition-opacity');
+            const bCopy = actionButton('copy', 'Copy', () => copyMessage(card));
+            const bLike = actionIcon('thumbs-up', 'Like', () => { }, false); bLike.dataset.action = 'like';
+            const bDis = actionIcon('thumbs-down', 'Dislike', () => { }, false); bDis.dataset.action = 'dislike';
+            bLike.addEventListener('click', () => applyReactionToggle(bLike, bDis, 'like'));
+            bDis.addEventListener('click', () => applyReactionToggle(bLike, bDis, 'dislike'));
+            bar.append(bCopy, bLike, bDis);
+            card.appendChild(bar);
+
+            lucide.createIcons();
+            toast(`Selected Response ${option}`, 'success');
+        }
+
         function pushUserMessage(text, attachments = []) {
             const card = createMessage({ role: 'user', text, attachments });
             ensureSessionForUserText(text);
@@ -2373,6 +2783,18 @@
             ensureSessionExists();
             const card = createMessage({ role: 'salmar', text });
             saveMessage('salmar', text, [], state.encrypted);
+            return card;
+        }
+
+        function pushSalmarMessageWithThinking(prompt) {
+            ensureSessionExists();
+            const card = createMessageWithThinking({ role: 'salmar', prompt });
+            return card;
+        }
+
+        function pushDualResponseMessage(prompt) {
+            ensureSessionExists();
+            const card = createDualResponseMessage({ role: 'salmar', prompt });
             return card;
         }
         function pushSystemMessage(text) {
@@ -2415,28 +2837,66 @@
             return String(str).replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
         }
 
-        /* Input auto-resize */
+        /* Input auto-resize and Enter key handling */
         const chatInput = $('#chatInput');
         chatInput.addEventListener('input', () => {
             chatInput.style.height = 'auto';
             chatInput.style.height = Math.min(200, chatInput.scrollHeight) + 'px';
         });
 
-        /* Send handler (avoids double response) */
+        // Handle Enter key - send message, Shift+Enter - new line
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                $('#chatForm').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        /* Send handler with stop functionality */
         $('#chatForm').addEventListener('submit', async (e) => {
             e.preventDefault();
+
+            const sendBtn = $('#sendBtn');
+
+            // If currently generating, stop the generation
+            if (state.isGenerating) {
+                state.isGenerating = false;
+                sendBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i>';
+                sendBtn.setAttribute('aria-label', 'Send');
+                setOrbState('idle');
+                lucide.createIcons();
+                toast('Response stopped', 'info');
+                return;
+            }
+
             const text = chatInput.value.trim();
             if (!text) return;
+
+            // Change button to stop
+            state.isGenerating = true;
+            sendBtn.innerHTML = '<i data-lucide="square" class="w-5 h-5"></i>';
+            sendBtn.setAttribute('aria-label', 'Stop generation');
+            lucide.createIcons();
+
             chatInput.value = '';
             chatInput.style.height = 'auto';
             pushUserMessage(text);
             setOrbState('processing');
-            await simulateAI(text);
-            if (state.autorunWorkflow && state.workflow.length) {
-                runWorkflowSequence();
+
+            try {
+                await simulateAI(text);
+                if (state.autorunWorkflow && state.workflow.length) {
+                    runWorkflowSequence();
+                }
+            } finally {
+                // Reset button back to send
+                state.isGenerating = false;
+                sendBtn.innerHTML = '<i data-lucide="send" class="w-5 h-5"></i>';
+                sendBtn.setAttribute('aria-label', 'Send');
+                setOrbState('ready');
+                setTimeout(() => setOrbState('idle'), 1000);
+                lucide.createIcons();
             }
-            setOrbState('ready');
-            setTimeout(() => setOrbState('idle'), 1000);
         });
 
         /* Upload */
@@ -2817,29 +3277,129 @@
             ringReady.style.opacity = (s === 'ready' && state.orb.behaviors.radiant) ? 1 : 0;
         }
 
-        /* AI simulate (stream) — content without brackets/prompt/answer */
+        /* Simulate thinking process in the thinking box */
+        async function simulateThinking(thinkingBox, prompt) {
+            const delay = (ms) => new Promise(res => setTimeout(res, ms));
+
+            const thinkingSteps = [
+                "Analyzing your question...",
+                "Processing context and requirements...",
+                "Considering different approaches...",
+                "Formulating comprehensive response...",
+                "Ready to respond"
+            ];
+
+            for (let i = 0; i < thinkingSteps.length; i++) {
+                thinkingBox.innerHTML = `<span class="thinking-dots">${thinkingSteps[i]}</span>`;
+                await delay(800 + Math.random() * 400);
+
+                // Add some dynamic dots animation
+                if (i < thinkingSteps.length - 1) {
+                    for (let dots = 1; dots <= 3; dots++) {
+                        thinkingBox.innerHTML = `<span class="thinking-dots">${thinkingSteps[i]}${'.'.repeat(dots)}</span>`;
+                        await delay(300);
+                    }
+                }
+            }
+
+            // Update header to show "Thought process" instead of "Thinking..."
+            const header = thinkingBox.parentElement.querySelector('span');
+            if (header) {
+                header.textContent = 'Thought process';
+            }
+        }
+
+        /* Check if query needs dual responses */
+        function isComplexQuery(prompt) {
+            const complexKeywords = [
+                'create', 'build', 'develop', 'design', 'implement', 'make', 'write code', 'program',
+                'website', 'application', 'app', 'system', 'platform', 'tool', 'solution',
+                'compare', 'vs', 'versus', 'difference', 'which is better', 'pros and cons',
+                'architecture', 'structure', 'framework', 'approach', 'method', 'strategy'
+            ];
+
+            const lowerPrompt = prompt.toLowerCase();
+            return complexKeywords.some(keyword => lowerPrompt.includes(keyword)) &&
+                (lowerPrompt.length > 50 || lowerPrompt.split(' ').length > 8);
+        }
+
+        /* Generate dual response with choice UI */
+        async function generateDualResponse(prompt) {
+            const delay = (ms) => new Promise(res => setTimeout(res, ms));
+
+            // Create special dual response message
+            const card = pushDualResponseMessage(prompt);
+            const thinkingBox = card.querySelector('.thinking-box');
+
+            // Animate thinking process
+            await simulateThinking(thinkingBox, prompt);
+
+            // Generate two different response approaches
+            const responseA = generateContent('detailed', prompt);
+            const responseB = generateContent('step', prompt);
+
+            // Populate the response options
+            const optionA = card.querySelector('.response-option-a .response-content');
+            const optionB = card.querySelector('.response-option-b .response-content');
+
+            optionA.textContent = responseA;
+            optionB.textContent = responseB;
+
+            // Show the choice UI
+            const choiceUI = card.querySelector('.response-choice');
+            choiceUI.style.display = 'block';
+
+            // Save both responses to session
+            saveMessage('salmar', `Option A: ${responseA}\n\nOption B: ${responseB}`, [], state.encrypted);
+            return { responseA, responseB };
+        }
+
+        /* AI simulate (stream) with thinking box — content without brackets/prompt/answer */
         async function simulateAI(prompt) {
             const delay = (ms) => new Promise(res => setTimeout(res, ms));
             const style = state.responseStyle;
+
+            // Check if this is a complex query that needs dual responses
+            const needsDualResponse = isComplexQuery(prompt);
+
+            if (needsDualResponse) {
+                return await generateDualResponse(prompt);
+            }
+
+            // Create AI message with thinking box
+            const card = pushSalmarMessageWithThinking(prompt);
+            const thinkingBox = card.querySelector('.thinking-box');
+            const responseArea = card.querySelector('.response-content');
+
+            // Animate thinking process
+            await simulateThinking(thinkingBox, prompt);
+
+            // Generate response content (clean, no question repetition)
             let content = generateContent(style, prompt);
             if (state.pii) content = content.replace(/\b(\d{3}[- ]?\d{2}[- ]?\d{4}|\d{16})\b/g, '[REDACTED]');
             if (state.humanize) content = humanizeText(content);
+
+            // Stream response content with stop check
             const baseDelay = [80, 65, 45, 30, 18][state.genSpeed - 1] || 45;
-            const card = pushSalmarMessage('');
-            const p = card.querySelector('div.whitespace-pre-wrap') || (() => { const n = el('div', 'whitespace-pre-wrap leading-relaxed message-content'); card.insertBefore(n, card.children[1]); return n; })();
             for (let i = 0; i <= content.length; i += Math.ceil(Math.random() * 12)) {
-                p.textContent = content.slice(0, i);
+                if (!state.isGenerating) {
+                    responseArea.textContent = content.slice(0, i) + ' [stopped]';
+                    break;
+                }
+                responseArea.textContent = content.slice(0, i);
                 await delay(baseDelay + Math.random() * baseDelay * 0.6);
             }
-            p.textContent = content;
-            // Update saved AI message text
-            const s = getCurrentSession();
-            if (s) s.messages[s.messages.length - 1].text = content;
+            if (state.isGenerating) {
+                responseArea.textContent = content;
+            }
+
+            // Save the AI message to the session
+            saveMessage('salmar', content, [], state.encrypted);
             return content;
         }
 
         function generateContent(style, prompt) {
-            // Compose answer only (no brackets, no Prompt/Answer labels)
+            // Generate clean response without repeating the question
             const persona = personalities[state.personality];
             const modeFlavor = {
                 knowledge: 'Clear references and factual precision.',
@@ -2848,30 +3408,56 @@
                 security: 'Threat-aware, best practices and compliance-centric.',
                 integrations: 'Ecosystem-aware, interoperable and modular.'
             }[state.mode];
-            const sections = {
-                concise: `• ${prompt}
-• Key insight tailored to ${persona.toLowerCase()} (${state.aiMode}).`,
-                detailed: `Background
-- ${prompt}
-Key considerations
-- Audience needs
-- Constraints
-Actionable steps
-- Step 1
-- Step 2
-- Step 3
-Caveats & next steps
-- Validate outcomes
-- Iterate`,
-                step: `1) Assess: Understand "${prompt}" context
-2) Plan: Outline approach (${persona.toLowerCase()}, ${state.aiMode})
-3) Execute: Apply best practices
-4) Validate: Measure and refine`,
-                creative: `Imagine "${prompt}" unfolding like a nebula—insight threads glow in violet and magenta, weaving a graceful path to your goal.`
+
+            // Generate contextual responses based on style without repeating the prompt
+            const responses = {
+                concise: `Based on your question, here's a focused insight: This approach aligns well with ${persona.toLowerCase()} methodology and ${state.aiMode} processing. The key consideration is balancing efficiency with thoroughness while maintaining ${modeFlavor}`,
+
+                detailed: `Here's a comprehensive analysis:
+
+**Background Context**
+Your question touches on several important aspects that require careful consideration.
+
+**Key Considerations**
+• Audience needs and expectations
+• Available resources and constraints
+• Risk factors and mitigation strategies
+
+**Recommended Approach**
+1. Start by establishing clear objectives
+2. Implement systematic methodology
+3. Monitor progress and adjust as needed
+
+**Next Steps**
+• Validate the approach with stakeholders
+• Set up feedback loops for continuous improvement
+• Document lessons learned for future reference`,
+
+                step: `Here's a structured approach:
+
+**Step 1: Assessment**
+Evaluate the current situation and gather relevant information.
+
+**Step 2: Planning**
+Develop a ${persona.toLowerCase()}-oriented strategy using ${state.aiMode} principles.
+
+**Step 3: Implementation**
+Execute the plan following best practices and ${modeFlavor}
+
+**Step 4: Validation**
+Measure outcomes and refine the approach based on results.`,
+
+                creative: `Imagine this solution unfolding like a cosmic dance—each element harmonizing in violet and magenta hues. The path forward weaves through possibility space, where ${persona.toLowerCase()} wisdom meets ${state.aiMode} innovation, creating elegant patterns that illuminate the way to your goal.`
             };
-            let ans = sections[style] || sections.concise;
-            ans += `\n${state.memoryLongTerm ? 'Note: Long-term memory hints applied.' : 'Note: Short-term context only.'}`;
-            return ans.trim();
+
+            let response = responses[style] || responses.concise;
+
+            // Add memory context note if relevant
+            if (state.memoryLongTerm) {
+                response += "\n\n*Note: Enhanced with long-term context awareness.*";
+            }
+
+            return response.trim();
         }
 
         function humanizeText(txt) {
@@ -3071,6 +3657,79 @@ Caveats & next steps
         $('#menuRecordVideo').addEventListener('click', () => { voiceMenuCtl.close(); openRecorder({ mode: 'video' }); });
         $('#menuRecordAudio').addEventListener('click', () => { voiceMenuCtl.close(); openRecorder({ mode: 'audio' }); });
         tip(voiceBtn, 'Record video or audio • Dictate text • Open voice orb');
+
+        /* Model selector */
+        const modelBtn = $('#modelBtn');
+        const modelMenu = $('#modelMenu');
+        const modelMenuCtl = setupMenu(modelBtn, modelMenu);
+        const modelLabel = $('#modelLabel');
+        const modelIcon = $('#modelIcon');
+        const heroModelBtn = $('#heroModelBtn');
+        const heroModelLabel = $('#heroModelLabel');
+        const heroModelIcon = $('#heroModelIcon');
+
+        const modeMeta = {
+            auto: { label: 'Auto', icon: 'rocket' },
+            fast: { label: 'Fast', icon: 'zap' },
+            expert: { label: 'Expert', icon: 'lightbulb' },
+            grok4fast: { label: 'Grok 4 Fast', icon: 'moon' },
+            heavy: { label: 'Heavy', icon: 'grid-3x3' },
+        };
+
+        function setMode(val) {
+            const meta = modeMeta[val] || modeMeta.auto;
+            state.aiMode = val;
+            modelLabel.textContent = meta.label;
+            modelIcon.setAttribute('data-lucide', meta.icon);
+            if (heroModelLabel) heroModelLabel.textContent = meta.label;
+            if (heroModelIcon) heroModelIcon.setAttribute('data-lucide', meta.icon);
+            // update checks
+            modelMenu.querySelectorAll('[data-mode]').forEach(b => {
+                const check = b.querySelector('[data-check]');
+                if (check) check.classList.toggle('hidden', b.getAttribute('data-mode') !== val);
+            });
+            try { lucide.createIcons(); } catch (e) { }
+        }
+
+        modelMenu.querySelectorAll('[data-mode]').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const val = btn.getAttribute('data-mode');
+                if (btn.hasAttribute('data-disabled')) return;
+                setMode(val);
+                modelMenuCtl.close();
+            });
+        });
+
+        // Default mode
+        setMode('auto');
+
+        // Open same menu when hero's model button is clicked
+        if (heroModelBtn) {
+            heroModelBtn.addEventListener('click', () => {
+                // Positioning remains relative to composer button; just toggle open
+                modelBtn.focus();
+                modelBtn.click();
+            });
+        }
+
+        /* Hero state logic */
+        const hero = $('#heroState');
+        const heroForm = $('#heroForm');
+        const heroInput = $('#heroInput');
+        function updateHero() {
+            const hasMsgs = $('#chatScroll').children.length > 0;
+            hero.style.display = hasMsgs ? 'none' : 'flex';
+        }
+        updateHero();
+        const chatObserver = new MutationObserver(updateHero);
+        chatObserver.observe($('#chatScroll'), { childList: true });
+        heroForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const v = (heroInput.value || '').trim();
+            if (!v) return;
+            $('#chatInput').value = v;
+            $('#chatForm').dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        });
 
         /* Recorder: Video/Audio capture and attach */
         let recModalOpen = false;
@@ -3578,7 +4237,6 @@ Caveats & next steps
 
             // Tooltips
             tip($('#advancedBtn'), 'Open advanced controls');
-            tip($('#themeToggle'), 'Toggle light/dark');
             tip($('#uploadBtn'), 'Upload files');
             tip($('#radialMain'), 'Quick actions');
 
