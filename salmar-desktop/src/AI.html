@@ -516,7 +516,14 @@
     </style>
 </head>
 
-<body class="font-sans antialiased noise-overlay selection:bg-neon-violet/30">
+<body class="min-h-screen antialiased relative" data-theme="dark">
+  <script type="module">
+    import { getSession } from './auth.js';
+    (async () => {
+      const session = await getSession();
+      if (!session) window.location.replace('login.html');
+    })();
+  </script>
     <a href="#main" class="sr-only sr-only-focusable bg-cosmic-700 text-white px-3 py-2 rounded-md">Skip to content</a>
 
     <!-- Toast Container -->

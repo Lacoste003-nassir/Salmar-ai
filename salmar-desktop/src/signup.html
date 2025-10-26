@@ -48,6 +48,123 @@
     }
   </script>
 
+  <!-- Cloudflare Turnstile (CAPTCHA) -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+
+  <!-- Auth wiring -->
+  <script type="module">
+    import { getSession, signUpEmail, isPasskeySupported, markPasskeyEnrolled, signInWithProvider, supabase, exchangeCodeFromUrl } from './auth.js';
+    import { TURNSTILE_SITE_KEY } from './auth.config.js';
+
+    const form = document.getElementById('signupForm');
+    const nameInput = document.getElementById('username');
+    const emailInput = document.getElementById('email');
+    const passInput = document.getElementById('password');
+    const confirmInput = document.getElementById('confirmPassword');
+    const fingerBtn = document.getElementById('fingerBtn');
+    const faceBtn = document.getElementById('faceBtn');
+    const bioStatus = document.getElementById('bioStatus');
+    const startExploring = document.getElementById('startExploring');
+    const successOverlay = document.getElementById('successOverlay');
+    const googleBtn = document.querySelector('button[aria-label="Continue with Google"]');
+    const githubBtn = document.querySelector('button[aria-label="Continue with GitHub"]');
+    const discordBtn = document.querySelector('button[aria-label="Continue with Discord"]');
+    const redirectTo = 'salmar://auth-callback';
+
+    // Turnstile handling
+    let captchaToken = null;
+    function renderCaptcha() {
+      try {
+        if (!TURNSTILE_SITE_KEY) return;
+        const el = document.getElementById('cf-signup');
+        if (!el) return;
+        window.turnstile?.render(el, {
+          sitekey: TURNSTILE_SITE_KEY,
+          callback: (token) => { captchaToken = token; },
+          'error-callback': () => { captchaToken = null; },
+          'expired-callback': () => { captchaToken = null; },
+          size: 'invisible'
+        });
+      } catch {}
+    }
+    window.addEventListener('load', renderCaptcha);
+
+    // Redirect if already authenticated
+    (async () => {
+      const session = await getSession();
+      if (session) window.location.replace('AI.html');
+    })();
+
+    // Biometric availability
+    const supported = await isPasskeySupported();
+    if (!supported) {
+      [fingerBtn, faceBtn].forEach(b => { b.setAttribute('disabled', 'true'); b.style.opacity = '0.5'; b.style.cursor = 'not-allowed'; });
+      bioStatus.textContent = 'Biometric login is not supported on this device.';
+    } else {
+      let enrolled = false;
+      fingerBtn.addEventListener('click', async () => { enrolled = true; await markPasskeyEnrolled(true); bioStatus.textContent = 'Biometric login enabled.'; });
+      faceBtn.addEventListener('click', async () => { enrolled = true; await markPasskeyEnrolled(true); bioStatus.textContent = 'Biometric login enabled.'; });
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const password = passInput.value;
+      if (!username || !email || !password || password !== confirmInput.value) return;
+      try { window.turnstile?.execute?.(); } catch {}
+      const { data, error } = await signUpEmail({ email, password, username, captchaToken });
+      if (error) {
+        alert(error.message);
+        return;
+      }
+      try {
+        const user = (data && data.user) || (await (await import('./auth.js')).getSession()).user;
+        if (user) {
+          await supabase.from('profiles').upsert({ id: user.id, email, username }, { onConflict: 'id' });
+        }
+      } catch {}
+      // Show success overlay then go to AI.html
+      successOverlay.classList.add('active');
+      startExploring.addEventListener('click', () => window.location.replace('AI.html'));
+      setTimeout(() => window.location.replace('AI.html'), 1500);
+    });
+
+    // Social providers (desktop OAuth deep link + CAPTCHA)
+    googleBtn?.addEventListener('click', async () => { try { window.turnstile?.execute?.(); } catch {} await signInWithProvider('google', { redirectTo, captchaToken }); });
+    githubBtn?.addEventListener('click', async () => { try { window.turnstile?.execute?.(); } catch {} await signInWithProvider('github', { redirectTo, captchaToken }); });
+    discordBtn?.addEventListener('click', async () => { try { window.turnstile?.execute?.(); } catch {} await signInWithProvider('discord', { redirectTo, captchaToken }); });
+
+    // Deep link listener to complete OAuth session
+    try {
+      const unlisten = await window.__TAURI__?.event?.listen('deep-link-url', async (e) => {
+        const url = (typeof e?.payload === 'string') ? e.payload : '';
+        if (!url) return;
+        const { data, error } = await exchangeCodeFromUrl(url);
+        if (error) { console.error(error); return; }
+        try {
+          const { data: { user } } = await supabase.auth.getUser();
+          if (user) {
+            const email = user.email || '';
+            await supabase.from('profiles').upsert({ id: user.id, email, username: user.user_metadata?.username }, { onConflict: 'id' });
+          }
+        } catch {}
+        window.location.replace('AI.html');
+      });
+      // Fallback event names
+      await window.__TAURI__?.event?.listen('deep-link://url', async (e) => {
+        const url = (typeof e?.payload === 'string') ? e.payload : '';
+        if (!url) return; await exchangeCodeFromUrl(url); window.location.replace('AI.html');
+      });
+      await window.__TAURI__?.event?.listen('tauri://deep-link', async (e) => {
+        const url = (typeof e?.payload === 'string') ? e.payload : '';
+        if (!url) return; await exchangeCodeFromUrl(url); window.location.replace('AI.html');
+      });
+    } catch {}
+
+    // (Guest sign-in removed per request)
+  </script>
+
   <style>
     :root {
       --bg: #0b0614;
@@ -151,7 +268,7 @@
 
     /* Layout helpers */
     .container-max {
-      max-width: 28rem;
+      max-width: 60rem;
     }
 
     /* Glassmorphic Card */
@@ -326,6 +443,22 @@
       text-underline-offset: 3px;
     }
 
+    /* Social icon chip (match login) */
+    .btn-social {
+      display: inline-grid;
+      place-items: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 9999px;
+      border: 1px solid var(--card-strong);
+      background: var(--card);
+      color: var(--text);
+      transition: transform .12s ease, border-color .2s ease, background .2s ease;
+    }
+    .btn-social:hover { transform: translateY(-1px) scale(1.03); border-color: #b38cff; }
+    .btn-social:active { transform: translateY(0) scale(0.98); }
+    .btn-social svg { display: inline-block; }
+
     /* Toggle */
     .toggle {
       --size: 28px;
@@ -423,8 +556,9 @@
         <span class="text-lg sm:text-xl font-semibold tracking-wide" aria-label="Salmar">Salmar</span>
       </div>
       <div class="flex items-center gap-3">
-        <span class="text-xs sm:text-sm text-purple-200/70 select-none">Future Mode</span>
-        <button id="modeToggle" class="toggle" type="button" aria-label="Toggle future mode" aria-pressed="true"></button>
+        <button id="futureModeBtn" class="icon-chip px-3 h-9" type="button" aria-label="Toggle Future Mode">
+          <span class="text-sm">Future Mode</span>
+        </button>
       </div>
     </div>
   </header>
@@ -435,76 +569,91 @@
       <div class="mx-auto container-max">
         <!-- Center Card -->
         <div class="glass-card p-6 sm:p-8">
-          <div class="flex flex-col items-center text-center gap-4">
-            <div class="orb" id="heroOrb" aria-hidden="true"></div>
+          <div class="flex flex-col items-center text-center gap-2">
+            <div class="flex items-center justify-center gap-3">
+              <span class="relative flex h-9 w-9 items-center justify-center rounded-xl neo" style="box-shadow: 0 8px 24px rgba(181,129,255,.25);">
+                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                  <defs>
+                    <linearGradient id="g1-signup" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#9a5bff" />
+                      <stop offset="100%" stop-color="#ff79da" />
+                    </linearGradient>
+                  </defs>
+                  <path fill="url(#g1-signup)" d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Zm0 2a8 8 0 0 1 0 16 8 8 0 0 1 0-16Zm-2 5.5c0-.828.672-1.5 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5V12c0 .828-.672 1.5-1.5 1.5h-1A1.5 1.5 0 0 1 10 12V9.5Zm1.25 5.75h1.5A2.25 2.25 0 0 1 15 17.5v.25H9v-.25a2.25 2.25 0 0 1 2.25-2.25Z" />
+                </svg>
+              </span>
+              <div class="leading-tight">
+                <span class="text-lg font-extrabold tracking-tight" style="background:linear-gradient(90deg,#b36bff,#ff79da);-webkit-background-clip:text;background-clip:text;color:transparent;">Salmar</span>
+                <span class="block text-xs text-purple-100/80">The AI That Does Everything</span>
+              </div>
+            </div>
+            <!-- Keep heroOrb hidden to avoid breaking existing scripts -->
+            <div class="orb" id="heroOrb" aria-hidden="true" style="display:none"></div>
             <h1 class="text-2xl sm:text-3xl font-bold">Begin your journey with Salmar.</h1>
             <p class="text-sm sm:text-base text-purple-100/80">One account. Infinite intelligence.</p>
           </div>
 
           <form id="signupForm" class="mt-6 space-y-4" novalidate>
-            <!-- Full Name -->
-            <div class="space-y-2">
-              <label for="fullName" class="block text-sm font-medium">Full Name</label>
-              <div class="relative">
-                <input id="fullName" name="fullName" type="text" autocomplete="name" required placeholder="Ada Lovelace"
-                       class="input w-full rounded-xl py-3 px-4 pr-10" />
-                <span class="absolute right-3 top-1/2 transform -translate-y-1/2 opacity-80" aria-hidden="true">
-                  <!-- User Icon -->
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-5 0-9 2.5-9 5.5A1.5 1.5 0 0 0 4.5 21h15A1.5 1.5 0 0 0 21 19.5C21 16.5 17 14 12 14Z" fill="currentColor" />
-                  </svg>
-                </span>
+            <!-- Name + Email on same row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="space-y-2">
+                <label for="username" class="block text-sm font-medium">Username</label>
+                <div class="relative">
+                  <input id="username" name="username" type="text" autocomplete="username" required placeholder="e.g. nova"
+                         class="input w-full rounded-xl py-3 px-4 pr-10" />
+                  <span class="absolute right-3 top-1/2 transform -translate-y-1/2 opacity-80" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M12 12a5 5 0 1 0-5-5 5 5 0 0 0 5 5Zm0 2c-5 0-9 2.5-9 5.5A1.5 1.5 0 0 0 4.5 21h15A1.5 1.5 0 0 0 21 19.5C21 16.5 17 14 12 14Z" fill="currentColor" />
+                    </svg>
+                  </span>
+                </div>
+                <p id="nameError" class="sr-only" role="status" aria-live="polite"></p>
               </div>
-              <p id="nameError" class="sr-only" role="status" aria-live="polite"></p>
+              <div class="space-y-2">
+                <label for="email" class="block text-sm font-medium">Email Address</label>
+                <div class="relative">
+                  <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@domain.com"
+                         class="input w-full rounded-xl py-3 px-4 pr-10" />
+                  <span class="absolute right-3 top-1/2 transform -translate-y-1/2 opacity-80" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M4 5h16a2 2 0 0 1 2 2v.25L12 13 2 7.25V7a2 2 0 0 1 2-2Zm18 5.25-10 6.25L2 10.25V17a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6.75Z" fill="currentColor"/>
+                    </svg>
+                  </span>
+                </div>
+                <p id="emailError" class="sr-only" role="status" aria-live="polite"></p>
+              </div>
             </div>
 
-            <!-- Email -->
-            <div class="space-y-2">
-              <label for="email" class="block text-sm font-medium">Email Address</label>
-              <div class="relative">
-                <input id="email" name="email" type="email" autocomplete="email" required placeholder="you@domain.com"
-                       class="input w-full rounded-xl py-3 px-4 pr-10" />
-                <span class="absolute right-3 top-1/2 transform -translate-y-1/2 opacity-80" aria-hidden="true">
-                  <!-- Mail Icon -->
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M4 5h16a2 2 0 0 1 2 2v.25L12 13 2 7.25V7a2 2 0 0 1 2-2Zm18 5.25-10 6.25L2 10.25V17a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6.75Z" fill="currentColor"/>
-                  </svg>
-                </span>
+            <!-- Password + Confirm on same row -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+              <div class="space-y-2">
+                <div class="flex items-center justify-between">
+                  <label for="password" class="block text-sm font-medium">Password</label>
+                  <span id="strengthLabel" class="text-xs text-purple-100/80">Strength: —</span>
+                </div>
+                <div class="relative">
+                  <input id="password" name="password" type="password" autocomplete="new-password" required
+                         placeholder="Create a strong password"
+                         class="input w-full rounded-xl py-3 px-4 pr-16" />
+                  <button type="button" id="togglePass" class="absolute right-2 top-1/2 transform -translate-y-1/2 icon-chip w-9 h-9" aria-label="Show password">
+                    <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M12 5C7 5 3.27 8.11 2 12c1.27 3.89 5 7 10 7s8.73-3.11 10-7c-1.27-3.89-5-7-10-7Zm0 11a4 4 0 1 1 4-4 4 4 0 0 1-4 4Z" fill="currentColor"/>
+                    </svg>
+                  </button>
+                </div>
+                <div class="meter mt-2" aria-hidden="false" aria-label="Password strength meter">
+                  <div class="meter-fill" id="meterFill"></div>
+                  <div class="meter-glow" id="meterGlow"></div>
+                </div>
+                <p id="passError" class="sr-only" role="status" aria-live="polite"></p>
               </div>
-              <p id="emailError" class="sr-only" role="status" aria-live="polite"></p>
-            </div>
-
-            <!-- Password -->
-            <div class="space-y-2">
-              <div class="flex items-center justify-between">
-                <label for="password" class="block text-sm font-medium">Password</label>
-                <span id="strengthLabel" class="text-xs text-purple-100/80">Strength: —</span>
+              <div class="space-y-2">
+                <label for="confirmPassword" class="block text-sm font-medium">Confirm Password</label>
+                <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required
+                       placeholder="Re-enter your password"
+                       class="input w-full rounded-xl py-3 px-4" />
+                <p id="confirmError" class="sr-only" role="status" aria-live="polite"></p>
               </div>
-              <div class="relative">
-                <input id="password" name="password" type="password" autocomplete="new-password" required
-                       placeholder="Create a strong password"
-                       class="input w-full rounded-xl py-3 px-4 pr-16" />
-                <button type="button" id="togglePass" class="absolute right-2 top-1/2 transform -translate-y-1/2 icon-chip w-9 h-9" aria-label="Show password">
-                  <!-- Eye Icon -->
-                  <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                    <path d="M12 5C7 5 3.27 8.11 2 12c1.27 3.89 5 7 10 7s8.73-3.11 10-7c-1.27-3.89-5-7-10-7Zm0 11a4 4 0 1 1 4-4 4 4 0 0 1-4 4Z" fill="currentColor"/>
-                  </svg>
-                </button>
-              </div>
-              <div class="meter mt-2" aria-hidden="false" aria-label="Password strength meter">
-                <div class="meter-fill" id="meterFill"></div>
-                <div class="meter-glow" id="meterGlow"></div>
-              </div>
-              <p id="passError" class="sr-only" role="status" aria-live="polite"></p>
-            </div>
-
-            <!-- Confirm Password -->
-            <div class="space-y-2">
-              <label for="confirmPassword" class="block text-sm font-medium">Confirm Password</label>
-              <input id="confirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required
-                     placeholder="Re-enter your password"
-                     class="input w-full rounded-xl py-3 px-4" />
-              <p id="confirmError" class="sr-only" role="status" aria-live="polite"></p>
             </div>
 
             <!-- Biometric Setup -->
@@ -548,7 +697,7 @@
 
             <!-- Social -->
             <div class="flex items-center justify-center gap-3">
-              <button type="button" class="icon-chip" aria-label="Continue with Google">
+              <button type="button" class="btn-social focus-ring" aria-label="Continue with Google">
                 <!-- Google -->
                 <svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true">
                   <path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.8 31.4 29.3 34 24 34c-7 0-12.8-5.8-12.8-12.8S17 8.5 24 8.5c3.1 0 5.9 1.1 8 3.1l5.6-5.6C34.6 2.7 29.6.7 24 .7 11 .7.7 11 .7 24S11 47.3 24 47.3c12.3 0 23.3-9 23.3-23.3 0-1.8-.2-3.5-.7-5.1z"/>
@@ -557,14 +706,13 @@
                   <path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-1.3 3.4-4 6-7.4 7.4l6.3 5.2c-.5.3 9.8-4.1 9.8-16.6 0-1.8-.2-3.5-.7-5.1z"/>
                 </svg>
               </button>
-              <button type="button" class="icon-chip" aria-label="Continue with Discord">
-                <!-- Discord -->
-                <svg width="22" height="22" viewBox="0 0 245 240" fill="currentColor" aria-hidden="true">
-                  <path d="M104.4 104.9c-5.7 0-10.2 5-10.2 11.1s4.6 11.1 10.2 11.1c5.7 0 10.2-5 10.2-11.1s-4.6-11.1-10.2-11.1zm36.2 0c-5.7 0-10.2 5-10.2 11.1s4.6 11.1 10.2 11.1 10.2-5 10.2-11.1c.1-6.1-4.5-11.1-10.2-11.1z"/>
-                  <path d="M189.5 20h-134C24.3 20 14 30.3 14 42.8v132.9c0 12.5 10.3 22.8 22.8 22.8h113l-5.3-18.5 12.8 11.9 12.1 11.2 21.1 19.4V42.8c.1-12.5-10.2-22.8-22.7-22.8zM157 145s-4.6-5.5-8.4-10.3c16.7-4.7 23-15.2 23-15.2-5.2 3.4-10.2 5.8-14.8 7.4-6.5 2.8-12.8 4.6-19 5.7-12.6 2.3-24.1 1.7-33.8-.1-7.4-1.4-13.8-3.4-19-5.7-2.9-1.1-6.1-2.6-9.3-4.5-.4-.2-.8-.4-1.2-.6-.3-.2-.5-.3-.6-.4 0 0 6.1 10.2 22.3 15 3.8 4.8 8.5 10.6 8.5 10.6-28.1-.8-38.8-19.3-38.8-19.3 0-40.8 18.4-73.9 18.4-73.9 18.4-13.6 36-13.2 36-13.2l1.3 1.5C69 49 58 63.2 58 63.2s4.1-2.3 11-5.5c19.9-8.7 35.8-11 42.2-11.6 1-.1 1.8-.2 2.7-.2 9.8-1.3 20.8-1.6 32.1-.3 15.1 1.8 31.3 6.3 47.8 15.6 0 0-10.6-13.9-33.6-23.1l1.8-2.1s17.6-.4 36 13.2c0 0 18.4 33.1 18.4 73.9 0 0-10.8 18.5-38.8 19.3z"/>
+              <button type="button" class="btn-social focus-ring" aria-label="Continue with Discord">
+                <!-- Discord (explicit white fill to avoid theme conflicts) -->
+                <svg width="22" height="22" viewBox="0 0 71 55" aria-hidden="true">
+                  <path fill="#ffffff" d="M60.1 4.9A58.5 58.5 0 0046.9 1a41.1 41.1 0 00-2 4.2 56 56 0 00-17.8 0 41.2 41.2 0 00-2-4.2A58.8 58.8 0 0012 4.9C1.7 20.8-.9 36.3.3 51.7a58.9 58.9 0 0018.2 3.3c1.4-1.9 2.7-3.9 3.8-6a37.4 37.4 0 01-6-2.9c.5-.3 1-.6 1.5-.9a40.9 40.9 0 0015.3 3.8 40.9 40.9 0 0015.3-3.8l1.5.9a37.4 37.4 0 01-6 2.9 42.7 42.7 0 003.8 6 58.9 58.9 0 0018.2-3.3c1.4-17.1-2.3-32.7-12.9-46.8zM23.8 37.2c-3 0-5.5-2.8-5.5-6.2 0-3.5 2.4-6.2 5.5-6.2 3 0 5.5 2.8 5.5 6.2 0 3.5-2.4 6.2-5.5 6.2zm23.4 0c-3 0-5.5-2.8-5.5-6.2 0-3.5 2.4-6.2 5.5-6.2 3 0 5.5 2.8 5.5 6.2 0 3.5-2.4 6.2-5.5 6.2z"/>
                 </svg>
               </button>
-              <button type="button" class="icon-chip" aria-label="Continue with GitHub">
+              <button type="button" class="btn-social focus-ring" aria-label="Continue with GitHub">
                 <!-- GitHub -->
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                   <path fill-rule="evenodd" clip-rule="evenodd" d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.94c.58.11.79-.25.79-.56v-2.17c-3.2.7-3.87-1.37-3.87-1.37-.53-1.35-1.3-1.71-1.3-1.71-1.07-.73.08-.72.08-.72 1.18.08 1.8 1.22 1.8 1.22 1.05 1.8 2.75 1.28 3.42.98.11-.77.41-1.28.75-1.57-2.55-.29-5.23-1.27-5.23-5.65 0-1.25.45-2.27 1.2-3.07-.12-.29-.52-1.45.11-3.02 0 0 .98-.31 3.2 1.17a11.03 11.03 0 0 1 5.83 0c2.21-1.48 3.19-1.17 3.19-1.17.64 1.57.24 2.73.12 3.02.75.8 1.2 1.82 1.2 3.07 0 4.4-2.68 5.35-5.24 5.64.42.36.8 1.07.8 2.16v3.2c0 .31.21.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5Z"/>
@@ -581,6 +729,9 @@
       </div>
     </section>
   </main>
+
+  <!-- Turnstile container (invisible) -->
+  <div id="cf-signup" class="sr-only" aria-hidden="true"></div>
 
   <!-- Success Overlay -->
   <div class="overlay" id="successOverlay" role="dialog" aria-modal="true" aria-labelledby="welcomeTitle" aria-describedby="welcomeDesc">
@@ -599,7 +750,7 @@
       const prefersReducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
       const html = document.documentElement;
-      const modeToggle = document.getElementById('modeToggle');
+      const futureModeBtn = document.getElementById('futureModeBtn');
       const form = document.getElementById('signupForm');
       const createBtn = document.getElementById('createBtn');
       const heroOrb = document.getElementById('heroOrb');
@@ -609,7 +760,7 @@
       const successOverlay = document.getElementById('successOverlay');
       const startExploring = document.getElementById('startExploring');
 
-      const nameInput = document.getElementById('fullName');
+      const nameInput = document.getElementById('username');
       const emailInput = document.getElementById('email');
       const passInput = document.getElementById('password');
       const confirmInput = document.getElementById('confirmPassword');
@@ -628,7 +779,17 @@
       const fingerBtn = document.getElementById('fingerBtn');
       const faceBtn = document.getElementById('faceBtn');
 
-      // Theme toggle removed; dark mode enforced via <html data-theme="dark">
+      // Theme persistence and toggle
+      try {
+        const saved = localStorage.getItem('salmar_theme');
+        if (saved === 'light' || saved === 'dark') html.setAttribute('data-theme', saved);
+      } catch {}
+      futureModeBtn?.addEventListener('click', () => {
+        const cur = html.getAttribute('data-theme') || 'dark';
+        const next = cur === 'dark' ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        try { localStorage.setItem('salmar_theme', next); } catch {}
+      });
 
       // CTA ripple effect
       createBtn.addEventListener('pointerenter', (e) => {
@@ -769,7 +930,7 @@
         });
       });
 
-      // Submit handler
+      // Submit handler placeholder (actual signup handled in module script below)
       form.addEventListener('submit', (e) => {
         e.preventDefault();
         const ok = [validateName(), validateEmail(), validatePassword(), validateConfirm()].every(Boolean);

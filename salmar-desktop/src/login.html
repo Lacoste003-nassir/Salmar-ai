@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" class="h-full">
 <head>
@@ -8,6 +7,8 @@
 
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Cloudflare Turnstile (CAPTCHA) -->
+  <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
   <!-- GSAP for animations -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js" integrity="sha512-f2M8+dF6qUqBqLMF+Xz2oPPKocK/2r5v9f8DO/vyGaTnQwo0YWZ5B6CGeSUX7lM2o5iFQkX2+7x7C3gSqcE4XA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -141,7 +142,9 @@
       position: relative;
       overflow: hidden;
       isolation: isolate;
+      animation: floaty 6s ease-in-out infinite;
     }
+    @keyframes floaty { 0%,100%{ transform: translateY(0) } 50%{ transform: translateY(-6px) } }
     .glass-card::before {
       content: "";
       position: absolute;
@@ -149,6 +152,7 @@
       border-radius: inherit;
       padding: 1px;
       background: linear-gradient(135deg, rgba(255,255,255,0.35), rgba(165,108,255,0.5), rgba(138,44,255,0.5), rgba(255,255,255,0.35));
+      mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask-composite: xor;
               mask-composite: exclude;
@@ -464,7 +468,13 @@
 <body class="theme-dark">
 
   <!-- Subtle moving nebula background -->
-  <div class="nebula" aria-hidden="true"></div>
+  <div id="cf-login" class="sr-only" aria-hidden="true"></div>
+
+  <style>
+    @keyframes floaty { 0%{ transform: translateY(0) } 50%{ transform: translateY(-6px) } 100%{ transform: translateY(0) } }
+    .floaty { animation: floaty 6s ease-in-out infinite; }
+    .btn-social svg { display: inline-block; }
+  </style>
 
   <!-- Particles canvas -->
   <canvas id="particles" aria-hidden="true"></canvas>
@@ -480,14 +490,34 @@
 
   <!-- Header actions -->
   <div class="actions">
+    <button id="futureModeBtn" class="toggle-theme" type="button" aria-label="Toggle Future Mode">
+      <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a9 9 0 1 0 9 9A9.01 9.01 0 0 0 12 3Z" fill="currentColor"/></svg>
+      <span>Future Mode</span>
+    </button>
   </div>
 
   <!-- Main container -->
   <main class="container">
     <section class="glass-card" role="form" aria-labelledby="welcomeTitle" aria-describedby="welcomeDesc">
       <div class="inner">
-        <!-- Small glowing Salmar orb (logo) -->
-        <div class="logo-orb" id="logoOrb" aria-hidden="true"></div>
+        <!-- Brand logo (matches home.html) -->
+        <div class="flex items-center justify-center gap-3 mb-2">
+          <span class="relative flex h-9 w-9 items-center justify-center rounded-xl" style="background:linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02)); border:1px solid rgba(209,178,255,.25); box-shadow: 0 8px 24px rgba(181,129,255,.25);">
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+              <defs>
+                <linearGradient id="g1-login" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#9a5bff" />
+                  <stop offset="100%" stop-color="#ff79da" />
+                </linearGradient>
+              </defs>
+              <path fill="url(#g1-login)" d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Zm0 2a8 8 0 0 1 0 16 8 8 0 0 1 0-16Zm-2 5.5c0-.828.672-1.5 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5V12c0 .828-.672 1.5-1.5 1.5h-1A1.5 1.5 0 0 1 10 12V9.5Zm1.25 5.75h1.5A2.25 2.25 0 0 1 15 17.5v.25H9v-.25a2.25 2.25 0 0 1 2.25-2.25Z" />
+            </svg>
+          </span>
+          <div class="leading-tight">
+            <span class="text-lg font-extrabold tracking-tight" style="background:linear-gradient(90deg,#b36bff,#ff79da);-webkit-background-clip:text;background-clip:text;color:transparent;">Salmar</span>
+            <span class="block text-xs" style="color: var(--muted)">The AI That Does Everything</span>
+          </div>
+        </div>
 
         <!-- Welcome messages -->
         <h1 id="welcomeTitle" class="text-center text-2xl sm:text-3xl font-extrabold tracking-tight mb-1" style="color: var(--text);">
@@ -582,7 +612,7 @@
           <!-- Social login -->
           <div class="flex items-center justify-center gap-3 mb-1">
             <!-- Google -->
-            <button type="button" class="btn-social focus-ring" aria-label="Continue with Google">
+            <button type="button" id="googleBtn" class="btn-social focus-ring" aria-label="Continue with Google">
               <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
                 <path fill="#FFC107" d="M43.611 20.083h-1.611V20H24v8h11.303c-1.651 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.844 1.156 7.949 3.051l5.657-5.657C33.136 6.053 28.805 4 24 4 12.954 4 4 12.954 4 24s8.954 20 20 20 20-8.954 20-20c0-1.341-.138-2.651-.389-3.917z"/>
                 <path fill="#FF3D00" d="M6.306 14.691l6.571 4.818C14.455 15.376 18.808 12 24 12c3.059 0 5.844 1.156 7.949 3.051l5.657-5.657C33.136 6.053 28.805 4 24 4 16.318 4 9.734 8.337 6.306 14.691z"/>
@@ -590,16 +620,14 @@
                 <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-0.793 2.235-2.232 4.174-4.123 5.557L36.652 39.6C40.407 36.168 43 30.977 43 25c0-1.341-.138-2.651-.389-3.917z"/>
               </svg>
             </button>
-
             <!-- Discord -->
-            <button type="button" class="btn-social focus-ring" aria-label="Continue with Discord">
+            <button type="button" id="discordBtn" class="btn-social focus-ring" aria-label="Continue with Discord">
               <svg width="20" height="20" viewBox="0 0 71 55" aria-hidden="true">
                 <path fill="currentColor" d="M60.1 4.9A58.5 58.5 0 0046.9 1a41.1 41.1 0 00-2 4.2 56 56 0 00-17.8 0 41.2 41.2 0 00-2-4.2A58.8 58.8 0 0012 4.9C1.7 20.8-.9 36.3.3 51.7a58.9 58.9 0 0018.2 3.3c1.4-1.9 2.7-3.9 3.8-6a37.4 37.4 0 01-6-2.9c.5-.3 1-.6 1.5-.9a40.9 40.9 0 0015.3 3.8 40.9 40.9 0 0015.3-3.8l1.5.9a37.4 37.4 0 01-6 2.9 42.7 42.7 0 003.8 6 58.9 58.9 0 0018.2-3.3c1.4-17.1-2.3-32.7-12.9-46.8zM23.8 37.2c-3 0-5.5-2.8-5.5-6.2 0-3.5 2.4-6.2 5.5-6.2 3 0 5.5 2.8 5.5 6.2 0 3.5-2.4 6.2-5.5 6.2zm23.4 0c-3 0-5.5-2.8-5.5-6.2 0-3.5 2.4-6.2 5.5-6.2 3 0 5.5 2.8 5.5 6.2 0 3.5-2.4 6.2-5.5 6.2z"/>
               </svg>
             </button>
-
             <!-- GitHub -->
-            <button type="button" class="btn-social focus-ring" aria-label="Continue with GitHub">
+            <button type="button" id="githubBtn" class="btn-social focus-ring" aria-label="Continue with GitHub">
               <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
                 <path fill="currentColor" d="M12 2a10 10 0 00-3.162 19.492c.5.093.683-.217.683-.483l-.013-1.695c-2.777.603-3.362-1.188-3.362-1.188-.455-1.158-1.112-1.467-1.112-1.467-.91-.622.069-.609.069-.609 1.005.07 1.533 1.032 1.533 1.032.894 1.53 2.347 1.088 2.917.833.092-.663.35-1.088.636-1.338-2.22-.252-4.555-1.11-4.555-4.942 0-1.09.39-1.984 1.029-2.682-.103-.253-.446-1.268.098-2.643 0 0 .84-.269 2.75 1.025A9.56 9.56 0 0112 6.844c.85.004 1.707.115 2.507.337 1.91-1.294 2.75-1.025 2.75-1.025.545 1.375.202 2.39.1 2.643.64.698 1.028 1.592 1.028 2.682 0 3.842-2.338 4.687-4.565 4.935.36.31.682.921.682 1.856l-.013 2.753c0 .269.18.58.69.481A10 10 0 0012 2z"/>
               </svg>
@@ -637,24 +665,24 @@
     });
 
     // Password visibility toggle
-    const pass = document.getElementById('password');
+    const passInputUI = document.getElementById('password');
     const togglePass = document.getElementById('togglePass');
     const eyeIcon = document.getElementById('eyeIcon');
     togglePass.addEventListener('click', () => {
-      const isPassword = pass.getAttribute('type') === 'password';
-      pass.setAttribute('type', isPassword ? 'text' : 'password');
+      const isPassword = passInputUI.getAttribute('type') === 'password';
+      passInputUI.setAttribute('type', isPassword ? 'text' : 'password');
       // Toggle "eye" to "eye-off" by morphing paths simply by toggling a slash overlay
       eyeIcon.innerHTML = isPassword
         ? '<path d="M3 3l18 18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M12 5c-5 0-9 5-9 7s4 7 9 7 9-5 9-7-4-7-9-7Z" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6" fill="none"/>'
         : '<path d="M12 5c-5 0-9 5-9 7s4 7 9 7 9-5 9-7-4-7-9-7Z" stroke="currentColor" stroke-width="1.6" fill="none"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.6" fill="none"/>';
-      pass.focus();
+      passInputUI.focus();
     });
 
     // Real-time form validation (accessible)
-    const email = document.getElementById('email');
-    const emailHelp = document.getElementById('emailHelp');
-    const passwordHelp = document.getElementById('passwordHelp');
-    const loginForm = document.getElementById('loginForm');
+    const emailInputUI = document.getElementById('email');
+    const emailHelpUI = document.getElementById('emailHelp');
+    const passwordHelpUI = document.getElementById('passwordHelp');
+    const loginFormUI = document.getElementById('loginForm');
 
     function validateEmail(value) {
       const hasAt = /@/.test(value);
@@ -670,31 +698,20 @@
       messageEl.style.color = valid ? 'var(--muted)' : '#ff8296';
     }
 
-    email.addEventListener('input', () => {
-      const v = email.value.trim();
-      setValidity(email, validateEmail(v), emailHelp, 'Please enter a valid email or username (min 3 chars).');
-      spawnSparks(email.closest('.field'));
+    emailInputUI.addEventListener('input', () => {
+      const v = emailInputUI.value.trim();
+      setValidity(emailInputUI, validateEmail(v), emailHelpUI, 'Please enter a valid email or username (min 3 chars).');
+      spawnSparks(emailInputUI.closest('.field'));
     });
-    pass.addEventListener('input', () => {
-      const v = pass.value;
-      setValidity(pass, validatePassword(v), passwordHelp, 'Password must be at least 6 characters.');
-      spawnSparks(pass.closest('.field'));
+    passInputUI.addEventListener('input', () => {
+      const v = passInputUI.value;
+      setValidity(passInputUI, validatePassword(v), passwordHelpUI, 'Password must be at least 6 characters.');
+      spawnSparks(passInputUI.closest('.field'));
     });
 
-    loginForm.addEventListener('submit', (e) => {
+    // simple UI validation remains; actual auth handled below in module script
+    loginFormUI.addEventListener('submit', (e) => {
       e.preventDefault();
-      const ev = email.value.trim();
-      const pv = pass.value;
-      const emailValid = validateEmail(ev);
-      const passValid = validatePassword(pv);
-      setValidity(email, emailValid, emailHelp, 'Please enter a valid email or username (min 3 chars).');
-      setValidity(pass, passValid, passwordHelp, 'Password must be at least 6 characters.');
-      if (emailValid && passValid) {
-        // Simulate a subtle confirmation animation
-        gsap.to('#loginBtn', { y: -2, duration: 0.1, yoyo: true, repeat: 1 });
-        waveBackground();
-        // Focus next or show success (demo)
-      }
     });
 
     // Subtle sparks when typing
@@ -900,6 +917,7 @@
           gsap.to(orb.scale, { x: 1.06, y: 1.06, z: 1.06, duration: 0.6, yoyo: true, repeat: 1, ease: 'sine.inOut' });
         }
       } catch {}
+
       setTimeout(() => logoOrb.classList.remove('unlocked'), 1200);
     }
 
@@ -970,6 +988,90 @@
     }
     if (mediaReduce) applyReducedMotion(mediaReduce);
     mediaReduce.addEventListener?.('change', applyReducedMotion);
+  </script>
+
+  <!-- Auth wiring -->
+  <script type="module">
+    import { getSession, signInIdentifier, signInWithProvider, exchangeCodeFromUrl, supabase } from './auth.js';
+    import { TURNSTILE_SITE_KEY } from './auth.config.js';
+
+    const email = document.getElementById('email');
+    const pass = document.getElementById('password');
+    const loginForm = document.getElementById('loginForm');
+    const emailHelp = document.getElementById('emailHelp');
+    const passwordHelp = document.getElementById('passwordHelp');
+    const googleBtn = document.getElementById('googleBtn');
+    const githubBtn = document.getElementById('githubBtn');
+    const discordBtn = document.getElementById('discordBtn');
+    const redirectTo = 'salmar://auth-callback';
+
+    let captchaToken = null;
+    try {
+      window.turnstile?.render?.('#cf-login', {
+        sitekey: TURNSTILE_SITE_KEY,
+        size: 'invisible',
+        callback: (t) => { captchaToken = t; }
+      });
+    } catch {}
+
+    function setValidity(el, valid, messageEl, message) {
+      el.setAttribute('aria-invalid', valid ? 'false' : 'true');
+      messageEl.textContent = valid ? '' : message;
+      messageEl.style.color = valid ? 'var(--muted)' : '#ff8296';
+    }
+    function validateEmailUsername(value) {
+      const hasAt = /@/.test(value);
+      const basic = value.trim().length >= 3;
+      return basic && (hasAt ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) : true);
+    }
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const identifier = email.value.trim();
+      const password = pass.value;
+      const idOk = validateEmailUsername(identifier);
+      const pwOk = password.length >= 6;
+      setValidity(email, idOk, emailHelp, 'Please enter a valid email or username (min 3 chars).');
+      setValidity(pass, pwOk, passwordHelp, 'Password must be at least 6 characters.');
+      if (!idOk || !pwOk) return;
+      try { window.turnstile?.execute?.(); } catch {}
+      const { data, error } = await signInIdentifier({ identifier, password, captchaToken });
+      if (error) {
+        const msg = error?.message;
+        if (msg === 'user_not_found') {
+          alert('You are not in the server, signup to proceed.');
+        } else {
+          alert(msg || 'Login failed');
+        }
+        return;
+      }
+      window.location.replace('AI.html');
+    });
+
+    // Social providers
+    const withCaptcha = async (fn) => { try { window.turnstile?.execute?.(); } catch {} return fn(); };
+    googleBtn?.addEventListener('click', async () => { await withCaptcha(() => signInWithProvider('google', { redirectTo, captchaToken })); });
+    githubBtn?.addEventListener('click', async () => { await withCaptcha(() => signInWithProvider('github', { redirectTo, captchaToken })); });
+    discordBtn?.addEventListener('click', async () => { await withCaptcha(() => signInWithProvider('discord', { redirectTo, captchaToken })); });
+
+    // Complete OAuth PKCE session from deep link
+    try {
+      const listen = async (event) => {
+        const url = (typeof event?.payload === 'string') ? event.payload : '';
+        if (!url) return;
+        const { error } = await exchangeCodeFromUrl(url);
+        if (!error) window.location.replace('AI.html');
+      };
+      await window.__TAURI__?.event?.listen('deep-link-url', listen);
+      await window.__TAURI__?.event?.listen('deep-link://url', listen);
+      await window.__TAURI__?.event?.listen('tauri://deep-link', listen);
+    } catch {}
+
+    // If already authenticated, go directly to AI.html
+    (async () => {
+      const session = await getSession();
+      if (session) window.location.replace('AI.html');
+    })();
   </script>
 </body>
 </html>
