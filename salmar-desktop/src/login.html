@@ -19,19 +19,20 @@
   <style>
     /* CSS Variables for themes */
     :root {
-      --bg-1: #0b0013;     /* deep space */
-      --bg-2: #2b0051;     /* cosmic purple */
-      --bg-3: #51007e;     /* nebula accent */
-      --accent: #a56cff;   /* neon lavender */
-      --accent-2: #8a2cff; /* neon purple */
-      --text: #f4efff;
-      --muted: #cbb6ff;
-      --glass: rgba(255, 255, 255, 0.06);
-      --glass-border: rgba(165, 108, 255, 0.35);
-      --shadow-strong: 0 10px 30px rgba(119, 56, 255, 0.35), 0 2px 8px rgba(0, 0, 0, 0.35);
+      /* copied from signup page for parity */
+      --bg: #0b0614;
+      --bg-2: #110a22;
+      --text: #F4F3FF;
+      --muted: #CFC7FF;
+      --card: rgba(255,255,255,0.06);
+      --card-strong: rgba(255,255,255,0.12);
+      --outline: rgba(202, 191, 253, 0.45);
+      --accent: #9A6CFF;
+      --accent-2: #CF28FF;
+      --accent-3: #8A2BE2;
+      --shadow-strong: 0 10px 30px rgba(107, 61, 252, 0.25), 0 2px 8px rgba(0, 0, 0, 0.08);
       --shadow-soft: 0 8px 24px rgba(165, 108, 255, 0.25), inset 0 1px 0 rgba(255,255,255,0.08);
-      --ring: 0 0 0 3px rgba(165, 108, 255, 0.45);
-      --outline: rgba(165,108,255,.65);
+      --ring: 0 0 0 3px rgba(154,108,255,0.35);
     }
     .theme-light {
       --bg-1: #f6f2ff;
@@ -52,7 +53,7 @@
     /* Global resets and typography */
     html, body {
       height: 100%;
-      background: #0b0b0b !important;
+      background: linear-gradient(180deg, var(--bg), #06040a) !important;
       color: var(--text);
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -88,10 +89,12 @@
     .container {
       position: relative;
       z-index: 5;
-      display: grid;
-      place-items: center;
+      display: flex;
+      align-items: center;           /* vertical center */
+      justify-content: flex-start;   /* push form to the left */
       min-height: 100vh;
       padding: 1.5rem;
+      padding-left: 10vw;            /* nudge form a bit more right */
       width: 50vw;
       margin-right: 50vw; /* form on left */
     }
@@ -116,6 +119,7 @@
         radial-gradient(100% 60% at 50% 50%, rgba(255,255,255,0.06), rgba(0,0,0,0) 60%),
         linear-gradient(90deg, rgba(0,0,0,0.75), rgba(0,0,0,0.25) 40%, rgba(0,0,0,0));
       filter: saturate(110%);
+      z-index: 0;
     }
     .logo-panel::after {
       content: "";
@@ -124,15 +128,17 @@
       transform: rotate(-4deg);
       filter: blur(24px) saturate(110%);
       opacity: .85;
+      z-index: 0;
     }
     .logo-panel img {
       position: absolute; inset: 0; margin: auto; right: 8%;
       height: min(82vh, 880px); width: auto;
-      opacity: .16;
-      mix-blend-mode: soft-light; /* soften whites */
-      filter: contrast(1.1) saturate(1.05) drop-shadow(0 8px 40px rgba(0,0,0,.5));
+      opacity: .18;
+      filter: contrast(1.15) saturate(1.05) drop-shadow(0 8px 40px rgba(0,0,0,.5));
+      z-index: 1;
+      mix-blend-mode: normal;
     }
-    @media (max-width: 1024px) {
+    @media (max-width: 768px) {
       .logo-panel { display: none; }
       .container { width: 100vw; margin-right: 0; }
     }
@@ -233,7 +239,7 @@
 
     /* Buttons */
     .btn-primary {
-      background: linear-gradient(135deg, var(--accent-2), var(--accent));
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: white;
       border: none;
       width: 100%;
@@ -369,15 +375,37 @@
       100% { clip-path: polygon(48% 0, 50% 0, 50% 100%, 48% 100%); }
     }
 
-    /* Links */
+    /* Links (CTA gradient text, underline on hover only) */
     a.link {
-      color: var(--accent);
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      position: relative;
       text-decoration: none;
       font-weight: 600;
+      display: inline-block;
+      padding-bottom: 2px;
     }
-    a.link:hover {
-      text-decoration: underline;
-      text-underline-offset: 3px;
+    a.link::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 2px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      border-radius: 999px;
+      opacity: 0;              /* hidden by default */
+      transform: translateY(0);
+      transition: opacity .2s ease, transform .2s ease;
+    }
+    a.link:hover::after { opacity: 1; transform: translateY(-1px); }
+
+    /* Headline gradient to match CTA */
+    .glass-card h1 {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
     }
 
     /* Accessibility focus */
@@ -467,15 +495,7 @@
 
   <!-- Left half-page logo panel -->
   <aside class="logo-panel" aria-hidden="true">
-    <svg viewBox="0 0 24 24" aria-hidden="true" style="position:absolute;inset:0;margin:auto;right:8%;height:min(82vh,880px);width:auto;opacity:.16;mix-blend-mode:soft-light;filter:contrast(1.1) saturate(1.05) drop-shadow(0 8px 40px rgba(0,0,0,.5));">
-      <defs>
-        <linearGradient id="g1-stage-login" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="#9a5bff" />
-          <stop offset="100%" stop-color="#ff79da" />
-        </linearGradient>
-      </defs>
-      <path fill="url(#g1-stage-login)" d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Zm0 2a8 8 0 0 1 0 16 8 8 0 0 1 0-16Zm-2 5.5c0-.828.672-1.5 1.5-1.5h1a1.5 1.5 0 0 1 1.5 1.5V12c0 .828-.672 1.5-1.5 1.5h-1A1.5 1.5 0 0 1 10 12V9.5Zm1.25 5.75h1.5A2.25 2.25 0 0 1 15 17.5v.25H9v-.25a2.25 2.25 0 0 1 2.25-2.25Z" />
-    </svg>
+    <img src="./logo.png" alt="Salmar" />
   </aside>
 
   <!-- Main container -->
@@ -485,7 +505,7 @@
         <!-- Center heading only (logo moved to top-left) -->
 
         <!-- Welcome messages -->
-        <h1 id="welcomeTitle" class="text-center text-2xl sm:text-3xl font-extrabold tracking-tight mb-1" style="color: var(--text);">
+        <h1 id="welcomeTitle" class="text-center text-2xl sm:text-3xl font-extrabold tracking-tight mb-1">
           Welcome back, Explorer.
         </h1>
         <p id="welcomeDesc" class="text-center text-sm sm:text-base mb-5" style="color: var(--muted);">
@@ -922,15 +942,13 @@
     fingerBtn.addEventListener('click', async () => {
       gsap.fromTo(fingerBtn, { scale: 1 }, { scale: 0.96, duration: 0.12, yoyo: true, repeat: 1 });
       waveBackground();
-      const res = await triggerWebAuthn({ userVerification: 'required' });
-      if (res.ok) unlockOrb();
+      try { await window.authenticateViaPasskey?.(); unlockOrb(); } catch {}
     });
 
     faceBtn.addEventListener('click', async () => {
       gsap.fromTo(faceBtn, { scale: 1 }, { scale: 0.96, duration: 0.12, yoyo: true, repeat: 1 });
       waveBackground();
-      const res = await triggerWebAuthn({ userVerification: 'required' });
-      if (res.ok) unlockOrb();
+      try { await window.authenticateViaPasskey?.(); unlockOrb(); } catch {}
     });
 
     // Accessibility: keyboard "Enter" on bio buttons triggers click
@@ -957,98 +975,93 @@
     mediaReduce.addEventListener?.('change', applyReducedMotion);
   </script>
 
-  <!-- Auth wiring -->
   <script type="module">
-    import { getSession, signInIdentifier, signInWithProvider, exchangeCodeFromUrl, supabase } from './auth.js';
+    import { getSession, signInIdentifier, signInWithProvider, authenticatePasskey } from './auth.js';
     import { TURNSTILE_SITE_KEY } from './auth.config.js';
 
-    const email = document.getElementById('email');
-    const pass = document.getElementById('password');
-    const loginForm = document.getElementById('loginForm');
-    const emailHelp = document.getElementById('emailHelp');
-    const passwordHelp = document.getElementById('passwordHelp');
-    const googleBtn = document.getElementById('googleBtn');
-    const githubBtn = document.getElementById('githubBtn');
-    const discordBtn = document.getElementById('discordBtn');
-    const redirectTo = 'salmar://auth-callback';
+    const mLoginForm = document.getElementById('loginForm');
+    const mEmailInput = document.getElementById('email');
+    const mPassInput = document.getElementById('password');
+    const mEmailHelp = document.getElementById('emailHelp');
+    const mPasswordHelp = document.getElementById('passwordHelp');
+    const mGoogleBtn = document.getElementById('googleBtn');
+    const mGithubBtn = document.getElementById('githubBtn');
+    const mDiscordBtn = document.getElementById('discordBtn');
 
+    // Redirect if already authenticated
+    (async () => {
+      const session = await getSession();
+      if (session) window.location.replace('AI.html');
+    })();
+
+    // Invisible Turnstile on login page
     let captchaToken = null;
-    try {
-      window.turnstile?.render?.('#cf-login', {
-        sitekey: TURNSTILE_SITE_KEY,
-        size: 'invisible',
-        callback: (t) => { captchaToken = t; }
-      });
-    } catch {}
-
-    function setValidity(el, valid, messageEl, message) {
-      el.setAttribute('aria-invalid', valid ? 'false' : 'true');
-      messageEl.textContent = valid ? '' : message;
-      messageEl.style.color = valid ? 'var(--muted)' : '#ff8296';
+    function renderCaptcha() {
+      try {
+        if (!TURNSTILE_SITE_KEY) return;
+        const el = document.getElementById('cf-login');
+        if (!el) return;
+        window.turnstile?.render(el, {
+          sitekey: TURNSTILE_SITE_KEY,
+          callback: (token) => { captchaToken = token; },
+          'error-callback': () => { captchaToken = null; },
+          'expired-callback': () => { captchaToken = null; },
+          size: 'invisible'
+        });
+      } catch {}
     }
-    function validateEmailUsername(value) {
-      const hasAt = /@/.test(value);
-      const basic = value.trim().length >= 3;
-      return basic && (hasAt ? /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) : true);
-    }
+    window.addEventListener('load', renderCaptcha);
 
-    loginForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const identifier = email.value.trim();
-      const password = pass.value;
-      const idOk = validateEmailUsername(identifier);
-      const pwOk = password.length >= 6;
-      setValidity(email, idOk, emailHelp, 'Please enter a valid email or username (min 3 chars).');
-      setValidity(pass, pwOk, passwordHelp, 'Password must be at least 6 characters.');
-      if (!idOk || !pwOk) return;
+    async function ensureCaptchaToken(maxMs = 2000) {
+      if (!TURNSTILE_SITE_KEY) return null; // captcha disabled
+      // trigger execution; token will be set in callback
       try { window.turnstile?.execute?.(); } catch {}
+      const started = Date.now();
+      while (!captchaToken && Date.now() - started < maxMs) {
+        await new Promise(r => setTimeout(r, 50));
+      }
+      return captchaToken;
+    }
+
+    // Expose passkey auth
+    window.authenticateViaPasskey = async () => {
+      try {
+        mPasswordHelp.textContent = '';
+        const identifier = mEmailInput.value.trim();
+        await authenticatePasskey(identifier);
+        window.location.replace('AI.html');
+      } catch (e) {
+        const msg = e?.message === 'user_not_found' ? 'User not found for biometric login.' : (e?.message || 'Biometric login failed.');
+        mPasswordHelp.textContent = msg;
+        mPasswordHelp.style.color = '#ff8296';
+      }
+    };
+
+    // Submit handler
+    mLoginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      mEmailHelp.textContent = '';
+      mPasswordHelp.textContent = '';
+      const identifier = mEmailInput.value.trim();
+      const password = mPassInput.value;
+      if (!identifier || !password) return;
+
+      await ensureCaptchaToken();
       const { data, error } = await signInIdentifier({ identifier, password, captchaToken });
       if (error) {
-        const msg = error?.message;
-        if (msg === 'user_not_found') {
-          alert('You are not in the server, signup to proceed.');
-        } else {
-          alert(msg || 'Login failed');
-        }
+        const msg = error?.message || 'Invalid credentials. Please try again.';
+        mPasswordHelp.textContent = msg;
+        mPasswordHelp.style.color = '#ff8296';
         return;
       }
       window.location.replace('AI.html');
     });
 
-    // Social providers
-    const withCaptcha = async (fn) => { try { window.turnstile?.execute?.(); } catch {} return fn(); };
-    googleBtn?.addEventListener('click', async () => { await withCaptcha(() => signInWithProvider('google', { redirectTo, captchaToken })); });
-    githubBtn?.addEventListener('click', async () => { await withCaptcha(() => signInWithProvider('github', { redirectTo, captchaToken })); });
-    discordBtn?.addEventListener('click', async () => { await withCaptcha(() => signInWithProvider('discord', { redirectTo, captchaToken })); });
-
-    // Complete OAuth PKCE session from deep link
-    try {
-      const listen = async (event) => {
-        const url = (typeof event?.payload === 'string') ? event.payload : '';
-        if (!url) return;
-        const { error } = await exchangeCodeFromUrl(url);
-        if (!error) {
-          try {
-            const { data: { user } } = await supabase.auth.getUser();
-            if (user) {
-              const email = user.email || '';
-              const username = user.user_metadata?.username || (email ? email.split('@')[0] : null);
-              await supabase.from('profiles').upsert({ id: user.id, email, username }, { onConflict: 'id' });
-            }
-          } catch {}
-          window.location.replace('AI.html');
-        }
-      };
-      await window.__TAURI__?.event?.listen('deep-link-url', listen);
-      await window.__TAURI__?.event?.listen('deep-link://url', listen);
-      await window.__TAURI__?.event?.listen('tauri://deep-link', listen);
-    } catch {}
-
-    // If already authenticated, go directly to AI.html
-    (async () => {
-      const session = await getSession();
-      if (session) window.location.replace('AI.html');
-    })();
+    // Social providers (optional)
+    const redirectTo = 'salmar://auth-callback';
+    mGoogleBtn?.addEventListener('click', async () => { try { window.turnstile?.execute?.(); } catch {} await signInWithProvider('google', { redirectTo, captchaToken }); });
+    mGithubBtn?.addEventListener('click', async () => { try { window.turnstile?.execute?.(); } catch {} await signInWithProvider('github', { redirectTo, captchaToken }); });
+    mDiscordBtn?.addEventListener('click', async () => { try { window.turnstile?.execute?.(); } catch {} await signInWithProvider('discord', { redirectTo, captchaToken }); });
   </script>
 </body>
 </html>

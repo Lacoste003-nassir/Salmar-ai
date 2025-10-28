@@ -122,3 +122,66 @@ export async function exchangeCodeFromUrl(url) {
     return { error: e };
   }
 }
+
+// WebAuthn (Passkeys) via Supabase Edge Functions
+// Requires you to deploy functions at: https://<project-ref>.functions.supabase.co/webauthn/*
+function functionsBase() {
+  try {
+    const u = new URL(SUPABASE_URL);
+    const ref = u.hostname.split('.')[0];
+    return `https://${ref}.functions.supabase.co`;
+  } catch {
+    return '';
+  }
+}
+
+async function postJson(path, body) {
+  const base = functionsBase();
+  if (!base) throw new Error('Invalid Supabase URL for functions');
+  const res = await fetch(`${base}${path}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body || {})
+  });
+  const json = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(json?.error || res.statusText);
+  return json;
+}
+
+export async function registerPasskey() {
+  const { startRegistration } = await import('https://esm.sh/@simplewebauthn/browser@8?bundle');
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) throw new Error('Not authenticated');
+  const email = user.email || '';
+  const username = user.user_metadata?.username || (email ? email.split('@')[0] : 'user');
+  const options = await postJson('/webauthn/generate-registration-options', {
+    user_id: user.id,
+    username,
+    email
+  });
+  const attestation = await startRegistration(options);
+  await postJson('/webauthn/verify-registration', { attestation, user_id: user.id });
+  return { ok: true };
+}
+
+export async function authenticatePasskey(identifier) {
+  const { startAuthentication } = await import('https://esm.sh/@simplewebauthn/browser@8?bundle');
+  let email = identifier || '';
+  if (email && !/@/.test(email)) {
+    const r = await resolveEmailByUsername(email.trim());
+    if (r?.data?.email) email = r.data.email; else throw new Error('user_not_found');
+  }
+  const options = await postJson('/webauthn/generate-authentication-options', { email });
+  const assertion = await startAuthentication(options);
+  const out = await postJson('/webauthn/verify-authentication', { assertion, email });
+  if (out?.access_token && out?.refresh_token) {
+    await supabase.auth.setSession({ access_token: out.access_token, refresh_token: out.refresh_token });
+    return { ok: true };
+  }
+  if (out?.action_link) {
+    // Use Supabase to exchange the generated magic link for a session
+    await withRetry(() => supabase.auth.exchangeCodeForSession(out.action_link));
+    return { ok: true };
+  }
+  throw new Error('auth_failed');
+}
